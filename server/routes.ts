@@ -277,34 +277,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(403).json({ message: "Access denied" });
       }
       
-      console.log('기존 데이터:', JSON.stringify(existingReturn.deductions, null, 2));
-      console.log('새 데이터:', JSON.stringify(req.body.deductions, null, 2));
+      console.log(`사용자 ${userId} 세금 데이터 업데이트 요청 (ID: ${id})`);
+      console.log('업데이트 필드:', Object.keys(req.body).join(', '));
       
-      // Deep merge existing data with new data to preserve all fields
-      const mergedData = { ...req.body };
-      
-      // Specifically handle deductions merge
-      if (existingReturn.deductions && req.body.deductions) {
-        mergedData.deductions = {
-          ...existingReturn.deductions,
-          ...req.body.deductions
-        };
+      // Deep merge function to preserve all existing data
+      const deepMerge = (target: any, source: any) => {
+        if (!source) return target;
+        if (!target) return source;
         
-        // Handle itemizedDeductions specifically to preserve medical expenses
-        if (existingReturn.deductions.itemizedDeductions && req.body.deductions.itemizedDeductions) {
-          mergedData.deductions.itemizedDeductions = {
-            ...existingReturn.deductions.itemizedDeductions,
-            ...req.body.deductions.itemizedDeductions
-          };
+        const result = { ...target };
+        
+        for (const key in source) {
+          if (source[key] !== null && typeof source[key] === 'object' && !Array.isArray(source[key])) {
+            result[key] = deepMerge(target[key] || {}, source[key]);
+          } else {
+            result[key] = source[key];
+          }
         }
-      } else if (existingReturn.deductions && !req.body.deductions) {
-        // If req.body doesn't have deductions but existing data does, preserve existing
-        mergedData.deductions = existingReturn.deductions;
-      }
+        
+        return result;
+      };
+
+      // Deep merge all data to preserve existing information
+      const mergedData = {
+        ...existingReturn,
+        ...req.body,
+        updatedAt: new Date().toISOString(),
+        personalInfo: req.body.personalInfo ? deepMerge(existingReturn.personalInfo, req.body.personalInfo) : existingReturn.personalInfo,
+        income: req.body.income ? deepMerge(existingReturn.income, req.body.income) : existingReturn.income,
+        deductions: req.body.deductions ? deepMerge(existingReturn.deductions, req.body.deductions) : existingReturn.deductions,
+        taxCredits: req.body.taxCredits ? deepMerge(existingReturn.taxCredits, req.body.taxCredits) : existingReturn.taxCredits,
+        retirementContributions: req.body.retirementContributions ? deepMerge(existingReturn.retirementContributions, req.body.retirementContributions) : existingReturn.retirementContributions,
+        additionalTax: req.body.additionalTax ? deepMerge(existingReturn.additionalTax, req.body.additionalTax) : existingReturn.additionalTax,
+        calculatedResults: req.body.calculatedResults || existingReturn.calculatedResults
+      };
       
-      console.log('병합된 데이터:', JSON.stringify(mergedData.deductions, null, 2));
+      console.log('데이터 업데이트 완료 - 시간:', mergedData.updatedAt);
       
       const updatedTaxReturn = await storage.updateTaxReturn(id, mergedData);
+      console.log(`사용자 ${userId} 데이터 저장 성공 - 다음 로그인 시 복원됨`);
       res.json(updatedTaxReturn);
     } catch (error) {
       console.error("Error updating tax return:", error);

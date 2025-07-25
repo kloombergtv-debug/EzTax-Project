@@ -285,7 +285,7 @@ export const TaxProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         if (finalData.id) {
           // Update existing tax return
           console.log(`기존 세금 신고서 업데이트 중 (ID: ${finalData.id})`);
-          await fetch(`/api/tax-return/${finalData.id}`, {
+          const response = await fetch(`/api/tax-return/${finalData.id}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
@@ -293,6 +293,19 @@ export const TaxProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             credentials: 'include',
             body: JSON.stringify(finalData),
           });
+          
+          if (response.ok) {
+            const savedData = await response.json();
+            console.log('서버 자동 저장 성공 - 업데이트 시간:', savedData.updatedAt);
+            console.log('저장된 데이터 확인:', {
+              personalInfo: !!savedData.personalInfo,
+              income: !!savedData.income,
+              deductions: !!savedData.deductions,
+              taxCredits: !!savedData.taxCredits
+            });
+          } else {
+            console.error('서버 자동 저장 실패:', response.statusText);
+          }
         } else {
           // Create new tax return for user
           console.log(`새 사용자를 위한 세금 신고서 생성 중 (사용자 ID: ${currentUserId})`);
