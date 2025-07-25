@@ -13,6 +13,7 @@ import { useTaxContext } from "@/context/TaxContext";
 import { personalInfoSchema, type PersonalInformation } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
 import { Trash2, Plus, RefreshCw } from "lucide-react";
+import ProgressTracker from "@/components/ProgressTracker";
 
 const US_STATES = [
   "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA",
@@ -198,33 +199,8 @@ export default function PersonalInfo() {
   return (
     <div className="max-w-5xl mx-auto px-4 py-6">
       {/* 진행 단계 표시 */}
-      <div className="flex items-center justify-center mb-8">
-        <div className="flex items-center space-x-8">
-          {[
-            { step: 1, label: "개인 정보", active: true },
-            { step: 2, label: "소득", active: false },
-            { step: 3, label: "공제 항목", active: false },
-            { step: 4, label: "세액 공제", active: false },
-            { step: 5, label: "추가 세금", active: false },
-            { step: 6, label: "검토", active: false },
-          ].map((item, index) => (
-            <div key={item.step} className="flex items-center">
-              <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium ${
-                item.active ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600'
-              }`}>
-                {item.step}
-              </div>
-              <span className={`ml-2 text-sm font-medium ${
-                item.active ? 'text-gray-900' : 'text-gray-500'
-              }`}>
-                {item.label}
-              </span>
-              {index < 5 && (
-                <div className="w-8 h-0.5 bg-gray-200 mx-4"></div>
-              )}
-            </div>
-          ))}
-        </div>
+      <div className="mb-8">
+        <ProgressTracker currentStep={1} />
       </div>
 
       <Card>
