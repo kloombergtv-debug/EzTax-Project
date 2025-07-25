@@ -31,7 +31,7 @@ import {
 
 export default function IncomePage() {
   const [, setLocation] = useLocation();
-  const { taxData, updateTaxData, resetToZero, saveTaxReturn } = useTaxContext();
+  const { taxData, updateTaxData, isDataReady } = useTaxContext();
   const { toast } = useToast();
   const [isUploading, setIsUploading] = useState(false);
   
@@ -144,36 +144,36 @@ export default function IncomePage() {
     defaultValues,
   });
 
-  // taxData 변경 감지하여 QBI 데이터 적용
+  // 서버 데이터로 폼 업데이트 (PersonalInfo와 동일한 로직)
   useEffect(() => {
-    // taxData가 로드되고 QBI 데이터가 있을 때만 실행
-    if (taxData.id && taxData.income?.qbi?.totalQBI) {
-      const qbiTotalIncome = taxData.income.qbi.totalQBI;
-      const currentBusinessIncome = form.getValues('businessIncome');
+    if (isDataReady && taxData.income) {
+      console.log('Income - 서버 데이터로 폼 초기화:', taxData.income);
       
-      console.log('taxData 로드 완료 - QBI 데이터 적용:', {
-        taxDataId: taxData.id,
-        qbiTotalIncome,
-        currentBusinessIncome
-      });
+      const serverData: Income = {
+        wages: taxData.income.wages || 0,
+        otherEarnedIncome: taxData.income.otherEarnedIncome || 0,
+        interestIncome: taxData.income.interestIncome || 0,
+        dividends: taxData.income.dividends || 0,
+        businessIncome: taxData.income.businessIncome || 0,
+        capitalGains: taxData.income.capitalGains || 0,
+        rentalIncome: taxData.income.rentalIncome || 0,
+        retirementIncome: taxData.income.retirementIncome || 0,
+        unemploymentIncome: taxData.income.unemploymentIncome || 0,
+        otherIncome: taxData.income.otherIncome || 0,
+        additionalIncomeItems: taxData.income.additionalIncomeItems || [],
+        totalIncome: taxData.income.totalIncome || 0,
+        adjustments: {
+          studentLoanInterest: taxData.income.adjustments?.studentLoanInterest || 0,
+          retirementContributions: taxData.income.adjustments?.retirementContributions || 0,
+          otherAdjustments: taxData.income.adjustments?.otherAdjustments || 0,
+        },
+        adjustedGrossIncome: taxData.income.adjustedGrossIncome || 0
+      };
       
-      // QBI 값과 현재 값이 다를 때만 업데이트
-      if (Math.abs(currentBusinessIncome - qbiTotalIncome) > 0.01) {
-        console.log('QBI → businessIncome 자동 업데이트:', qbiTotalIncome);
-        
-        form.setValue('businessIncome', qbiTotalIncome, { 
-          shouldValidate: true, 
-          shouldDirty: true,
-          shouldTouch: true
-        });
-        
-        // 총소득 재계산
-        setTimeout(() => {
-          calculateTotals();
-        }, 50);
-      }
+      console.log('Income - 최종 폼 데이터:', serverData);
+      form.reset(serverData);
     }
-  }, [taxData.id, taxData.income?.qbi?.totalQBI]); // taxData.id와 QBI 데이터 변경 감지
+  }, [isDataReady, taxData.income, form]);
   
   // 총소득과 조정 총소득을 계산하는 함수
   // 심플하게 합계만 리턴하는 함수로 변경
