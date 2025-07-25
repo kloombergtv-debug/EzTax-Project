@@ -332,13 +332,19 @@ export const dependentSchema = z.object({
 });
 
 export const spouseInfoSchema = z.object({
-  firstName: z.string().min(1, "Spouse's first name is required"),
-  middleInitial: z.string().max(1).optional(),
-  lastName: z.string().min(1, "Spouse's last name is required"),
-  ssn: z.string().regex(/^\d{3}-\d{2}-\d{4}$/, "SSN must be in format XXX-XX-XXXX"),
-  dateOfBirth: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Date must be in YYYY-MM-DD format"),
+  firstName: z.string().optional(),
+  middleInitial: z.string().optional(),
+  lastName: z.string().optional(),
+  ssn: z.string().optional(),
+  dateOfBirth: z.string().optional(),
   isDisabled: z.boolean().default(false),
   isNonresidentAlien: z.boolean().default(false),
+  differentAddress: z.boolean().optional(),
+  address1: z.string().optional(),
+  address2: z.string().optional(),
+  city: z.string().optional(),
+  state: z.string().optional(),
+  zipCode: z.string().optional(),
 });
 
 export const personalInfoSchema = z.object({
