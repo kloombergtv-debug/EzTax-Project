@@ -131,7 +131,7 @@ export const TaxProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             firstName: serverTaxData.personalInfo?.firstName
           });
           
-          if (serverTaxData && serverTaxData.personalInfo) {
+          if (serverTaxData && (serverTaxData.personalInfo || serverTaxData.income)) {
             console.log('서버 데이터를 TaxContext에 로드 중...');
             setTaxData(serverTaxData);
           } else {
