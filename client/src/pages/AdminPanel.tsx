@@ -80,7 +80,7 @@ export default function AdminPanel() {
 
   // Query for user tax data
   const { data: taxData, isLoading: isTaxDataLoading } = useQuery({
-    queryKey: ['/api/admin/users', selectedUserId, 'tax-data'],
+    queryKey: [`/api/admin/users/${selectedUserId}/tax-data`],
     queryFn: getQueryFn({ on401: "returnNull" }),
     enabled: !!selectedUserId && !!isAdmin,
   });
@@ -183,6 +183,9 @@ export default function AdminPanel() {
     console.log(`Admin attempting to view tax data for user ID: ${userId}`);
     setSelectedUserId(userId);
     setShowTaxDataDialog(true);
+    
+    // Force refetch the tax data
+    queryClient.invalidateQueries({ queryKey: [`/api/admin/users/${userId}/tax-data`] });
   };
 
   const formatCurrency = (amount: number | null | undefined) => {
