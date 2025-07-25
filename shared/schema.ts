@@ -321,11 +321,11 @@ export interface CalculatedResults {
 
 // Zod schemas for validation
 export const dependentSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
-  ssn: z.string().regex(/^\d{3}-\d{2}-\d{4}$/, "SSN must be in format XXX-XX-XXXX"),
-  relationship: z.string().min(1, "Relationship is required"),
-  dateOfBirth: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Date must be in YYYY-MM-DD format"),
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
+  ssn: z.string().optional(),
+  relationship: z.string().optional(),
+  dateOfBirth: z.string().min(1, "생년월일은 필수입니다"),
   isDisabled: z.boolean().default(false),
   isNonresidentAlien: z.boolean().default(false),
   isQualifyingChild: z.boolean().default(false),
@@ -336,7 +336,7 @@ export const spouseInfoSchema = z.object({
   middleInitial: z.string().optional(),
   lastName: z.string().optional(),
   ssn: z.string().optional(),
-  dateOfBirth: z.string().optional(),
+  dateOfBirth: z.string().min(1, "배우자 생년월일은 필수입니다"),
   isDisabled: z.boolean().default(false),
   isNonresidentAlien: z.boolean().default(false),
   differentAddress: z.boolean().optional(),

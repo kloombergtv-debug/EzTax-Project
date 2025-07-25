@@ -238,7 +238,7 @@ export default function PersonalInfo() {
                   ⚠️ 필수 입력 사항: <span className="font-bold">생년월일</span>과 <span className="font-bold">주(State)</span>만 입력하시면 다음 페이지로 진행할 수 있습니다.
                 </p>
                 <p className="text-xs text-blue-600 mt-1">
-                  이름, 사회보장번호, 주소 등은 선택사항입니다.
+                  이름, 사회보장번호, 주소 등은 선택사항입니다. 배우자와 부양가족도 생년월일만 필수입니다.
                 </p>
               </div>
             </div>
@@ -522,7 +522,7 @@ export default function PersonalInfo() {
                       name="spouseInfo.firstName"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>배우자 이름</FormLabel>
+                          <FormLabel>배우자 이름 <span className="text-gray-400 text-sm">(선택사항)</span></FormLabel>
                           <FormControl>
                             <Input placeholder="배우자 이름" {...field} />
                           </FormControl>
@@ -535,7 +535,7 @@ export default function PersonalInfo() {
                       name="spouseInfo.lastName"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>배우자 성</FormLabel>
+                          <FormLabel>배우자 성 <span className="text-gray-400 text-sm">(선택사항)</span></FormLabel>
                           <FormControl>
                             <Input placeholder="배우자 성" {...field} />
                           </FormControl>
@@ -550,7 +550,7 @@ export default function PersonalInfo() {
                       name="spouseInfo.ssn"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>배우자 SSN</FormLabel>
+                          <FormLabel>배우자 SSN <span className="text-gray-400 text-sm">(선택사항)</span></FormLabel>
                           <FormControl>
                             <Input placeholder="XXX-XX-XXXX" {...field} />
                           </FormControl>
@@ -563,7 +563,7 @@ export default function PersonalInfo() {
                       name="spouseInfo.dateOfBirth"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>배우자 생년월일</FormLabel>
+                          <FormLabel>배우자 생년월일 <span className="text-red-500">*필수</span></FormLabel>
                           <FormControl>
                             <Input type="date" {...field} />
                           </FormControl>
@@ -605,7 +605,7 @@ export default function PersonalInfo() {
                         name={`dependents.${index}.firstName`}
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>이름</FormLabel>
+                            <FormLabel>이름 <span className="text-gray-400 text-sm">(선택사항)</span></FormLabel>
                             <FormControl>
                               <Input placeholder="이름" {...field} />
                             </FormControl>
@@ -618,7 +618,7 @@ export default function PersonalInfo() {
                         name={`dependents.${index}.lastName`}
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>성</FormLabel>
+                            <FormLabel>성 <span className="text-gray-400 text-sm">(선택사항)</span></FormLabel>
                             <FormControl>
                               <Input placeholder="성" {...field} />
                             </FormControl>
@@ -631,7 +631,7 @@ export default function PersonalInfo() {
                         name={`dependents.${index}.ssn`}
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>SSN</FormLabel>
+                            <FormLabel>SSN <span className="text-gray-400 text-sm">(선택사항)</span></FormLabel>
                             <FormControl>
                               <Input placeholder="XXX-XX-XXXX" {...field} />
                             </FormControl>
@@ -647,7 +647,7 @@ export default function PersonalInfo() {
                         name={`dependents.${index}.relationship`}
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>관계</FormLabel>
+                            <FormLabel>관계 <span className="text-gray-400 text-sm">(선택사항)</span></FormLabel>
                             <Select onValueChange={field.onChange} value={field.value}>
                               <FormControl>
                                 <SelectTrigger>
@@ -670,7 +670,7 @@ export default function PersonalInfo() {
                         name={`dependents.${index}.dateOfBirth`}
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>생년월일</FormLabel>
+                            <FormLabel>생년월일 <span className="text-red-500">*필수</span></FormLabel>
                             <FormControl>
                               <Input type="date" {...field} />
                             </FormControl>
