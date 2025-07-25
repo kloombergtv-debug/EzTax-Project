@@ -6,9 +6,11 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getQueryFn, apiRequest } from '@/lib/queryClient';
-import { Users, Search, Calendar, Mail, User, Shield, AlertTriangle, Edit, Trash2, Key } from 'lucide-react';
+import { Users, Search, Calendar, Mail, User, Shield, AlertTriangle, Edit, Trash2, Key, FileText, DollarSign, Receipt, CreditCard, Calculator } from 'lucide-react';
 import { useAuth } from '@/hooks/use-auth';
 import { useLocation } from 'wouter';
 import { useToast } from '@/hooks/use-toast';
@@ -33,6 +35,8 @@ export default function AdminPanel() {
   const [passwordForm, setPasswordForm] = useState({ newPassword: '', confirmPassword: '' });
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [showPasswordDialog, setShowPasswordDialog] = useState(false);
+  const [showTaxDataDialog, setShowTaxDataDialog] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
   const { user } = useAuth();
   const [location, navigate] = useLocation();
   const { toast } = useToast();
@@ -72,6 +76,13 @@ export default function AdminPanel() {
     queryKey: ['/api/admin/users'],
     queryFn: getQueryFn({ on401: "returnNull" }),
     enabled: !!isAdmin, // Only fetch if user is admin
+  });
+
+  // Query for user tax data
+  const { data: taxData, isLoading: isTaxDataLoading } = useQuery({
+    queryKey: ['/api/admin/users', selectedUserId, 'tax-data'],
+    queryFn: getQueryFn({ on401: "returnNull" }),
+    enabled: !!selectedUserId && !!isAdmin,
   });
 
   // Mutations for admin actions
@@ -166,6 +177,22 @@ export default function AdminPanel() {
       });
     }
   });
+
+  // Functions to handle tax data viewing
+  const handleViewTaxData = (userId: number) => {
+    setSelectedUserId(userId);
+    setShowTaxDataDialog(true);
+  };
+
+  const formatCurrency = (amount: number | null | undefined) => {
+    if (amount === null || amount === undefined) return 'N/A';
+    return `$${amount.toLocaleString()}`;
+  };
+
+  const formatDate = (dateString: string | null | undefined) => {
+    if (!dateString) return 'N/A';
+    return new Date(dateString).toLocaleDateString('ko-KR');
+  };
 
   // Handler functions
   const handleEditUser = (user: AdminUser) => {
@@ -431,6 +458,14 @@ export default function AdminPanel() {
                         >
                           <Key className="h-3 w-3" />
                         </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => handleViewTaxData(user.id)}
+                          className="h-8 w-8 p-0 text-blue-600 hover:text-blue-700"
+                        >
+                          <FileText className="h-3 w-3" />
+                        </Button>
                         {user.taxReturnsCount > 0 && (
                           <Button
                             size="sm"
@@ -557,6 +592,248 @@ export default function AdminPanel() {
                 {resetPasswordMutation.isPending ? '재설정 중...' : '재설정'}
               </Button>
             </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Tax Data Viewing Dialog */}
+      <Dialog open={showTaxDataDialog} onOpenChange={setShowTaxDataDialog}>
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <FileText className="h-5 w-5" />
+              사용자 세금 정보
+            </DialogTitle>
+          </DialogHeader>
+          
+          {isTaxDataLoading ? (
+            <div className="flex justify-center py-8">
+              <div className="text-lg">세금 정보를 불러오는 중...</div>
+            </div>
+          ) : taxData ? (
+            <Tabs defaultValue="personal" className="w-full">
+              <TabsList className="grid w-full grid-cols-5">
+                <TabsTrigger value="personal">개인정보</TabsTrigger>
+                <TabsTrigger value="income">소득</TabsTrigger>
+                <TabsTrigger value="deductions">공제</TabsTrigger>
+                <TabsTrigger value="credits">세액공제</TabsTrigger>
+                <TabsTrigger value="results">계산결과</TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="personal" className="space-y-4">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <User className="h-4 w-4" />
+                      개인정보
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    {taxData.personalInfo ? (
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <Label className="text-sm font-medium">이름</Label>
+                          <p className="text-sm">{taxData.personalInfo.firstName || 'N/A'} {taxData.personalInfo.lastName || ''}</p>
+                        </div>
+                        <div>
+                          <Label className="text-sm font-medium">생년월일</Label>
+                          <p className="text-sm">{formatDate(taxData.personalInfo.dateOfBirth)}</p>
+                        </div>
+                        <div>
+                          <Label className="text-sm font-medium">이메일</Label>
+                          <p className="text-sm">{taxData.personalInfo.email || 'N/A'}</p>
+                        </div>
+                        <div>
+                          <Label className="text-sm font-medium">전화번호</Label>
+                          <p className="text-sm">{taxData.personalInfo.phone || 'N/A'}</p>
+                        </div>
+                        <div>
+                          <Label className="text-sm font-medium">주소</Label>
+                          <p className="text-sm">
+                            {taxData.personalInfo.address1 || 'N/A'}
+                            {taxData.personalInfo.address2 && `, ${taxData.personalInfo.address2}`}
+                            <br />
+                            {taxData.personalInfo.city || ''}, {taxData.personalInfo.state || ''} {taxData.personalInfo.zipCode || ''}
+                          </p>
+                        </div>
+                        <div>
+                          <Label className="text-sm font-medium">신고유형</Label>
+                          <p className="text-sm">{taxData.personalInfo.filingStatus || 'N/A'}</p>
+                        </div>
+                      </div>
+                    ) : (
+                      <p className="text-gray-500">개인정보가 입력되지 않았습니다.</p>
+                    )}
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="income" className="space-y-4">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <DollarSign className="h-4 w-4" />
+                      소득 정보
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    {taxData.income ? (
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <Label className="text-sm font-medium">급여 소득</Label>
+                          <p className="text-sm">{formatCurrency(taxData.income.wages)}</p>
+                        </div>
+                        <div>
+                          <Label className="text-sm font-medium">사업 소득</Label>
+                          <p className="text-sm">{formatCurrency(taxData.income.businessIncome)}</p>
+                        </div>
+                        <div>
+                          <Label className="text-sm font-medium">이자 소득</Label>
+                          <p className="text-sm">{formatCurrency(taxData.income.interest)}</p>
+                        </div>
+                        <div>
+                          <Label className="text-sm font-medium">배당 소득</Label>
+                          <p className="text-sm">{formatCurrency(taxData.income.dividends)}</p>
+                        </div>
+                        <div>
+                          <Label className="text-sm font-medium">기타 소득</Label>
+                          <p className="text-sm">{formatCurrency(taxData.income.otherIncome)}</p>
+                        </div>
+                        <div>
+                          <Label className="text-sm font-medium">총 소득</Label>
+                          <p className="text-sm font-bold">{formatCurrency(taxData.income.totalIncome)}</p>
+                        </div>
+                      </div>
+                    ) : (
+                      <p className="text-gray-500">소득 정보가 입력되지 않았습니다.</p>
+                    )}
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="deductions" className="space-y-4">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Receipt className="h-4 w-4" />
+                      공제 정보
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    {taxData.deductions ? (
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <Label className="text-sm font-medium">공제 유형</Label>
+                          <p className="text-sm">{taxData.deductions.deductionType === 'standard' ? '표준공제' : '항목별공제'}</p>
+                        </div>
+                        <div>
+                          <Label className="text-sm font-medium">총 공제액</Label>
+                          <p className="text-sm font-bold">{formatCurrency(taxData.deductions.totalDeductions)}</p>
+                        </div>
+                      </div>
+                    ) : (
+                      <p className="text-gray-500">공제 정보가 입력되지 않았습니다.</p>
+                    )}
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="credits" className="space-y-4">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <CreditCard className="h-4 w-4" />
+                      세액공제 정보
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    {taxData.taxCredits ? (
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <Label className="text-sm font-medium">아동세액공제</Label>
+                          <p className="text-sm">{formatCurrency(taxData.taxCredits.childTaxCredit)}</p>
+                        </div>
+                        <div>
+                          <Label className="text-sm font-medium">기타 부양가족 공제</Label>
+                          <p className="text-sm">{formatCurrency(taxData.taxCredits.creditForOtherDependents)}</p>
+                        </div>
+                        <div>
+                          <Label className="text-sm font-medium">근로소득세액공제</Label>
+                          <p className="text-sm">{formatCurrency(taxData.taxCredits.earnedIncomeCredit)}</p>
+                        </div>
+                        <div>
+                          <Label className="text-sm font-medium">총 세액공제</Label>
+                          <p className="text-sm font-bold">{formatCurrency(taxData.taxCredits.totalCredits)}</p>
+                        </div>
+                      </div>
+                    ) : (
+                      <p className="text-gray-500">세액공제 정보가 입력되지 않았습니다.</p>
+                    )}
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="results" className="space-y-4">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Calculator className="h-4 w-4" />
+                      계산 결과
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    {taxData.calculatedResults ? (
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <Label className="text-sm font-medium">총 소득</Label>
+                          <p className="text-sm">{formatCurrency(taxData.calculatedResults.totalIncome)}</p>
+                        </div>
+                        <div>
+                          <Label className="text-sm font-medium">수정총소득(AGI)</Label>
+                          <p className="text-sm">{formatCurrency(taxData.calculatedResults.adjustedGrossIncome)}</p>
+                        </div>
+                        <div>
+                          <Label className="text-sm font-medium">과세소득</Label>
+                          <p className="text-sm">{formatCurrency(taxData.calculatedResults.taxableIncome)}</p>
+                        </div>
+                        <div>
+                          <Label className="text-sm font-medium">연방세</Label>
+                          <p className="text-sm">{formatCurrency(taxData.calculatedResults.federalTax)}</p>
+                        </div>
+                        <div>
+                          <Label className="text-sm font-medium">세액공제</Label>
+                          <p className="text-sm">{formatCurrency(taxData.calculatedResults.credits)}</p>
+                        </div>
+                        <div>
+                          <Label className="text-sm font-medium">최종 세액</Label>
+                          <p className="text-sm font-bold">{formatCurrency(taxData.calculatedResults.taxDue)}</p>
+                        </div>
+                        <div>
+                          <Label className="text-sm font-medium">환급액</Label>
+                          <p className="text-sm text-green-600 font-bold">{formatCurrency(taxData.calculatedResults.refundAmount)}</p>
+                        </div>
+                        <div>
+                          <Label className="text-sm font-medium">납부액</Label>
+                          <p className="text-sm text-red-600 font-bold">{formatCurrency(taxData.calculatedResults.amountOwed)}</p>
+                        </div>
+                      </div>
+                    ) : (
+                      <p className="text-gray-500">계산 결과가 없습니다.</p>
+                    )}
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            </Tabs>
+          ) : (
+            <div className="text-center py-8">
+              <p className="text-gray-500">해당 사용자의 세금 정보가 없습니다.</p>
+            </div>
+          )}
+          
+          <div className="flex justify-end pt-4">
+            <Button onClick={() => setShowTaxDataDialog(false)}>
+              닫기
+            </Button>
           </div>
         </DialogContent>
       </Dialog>

@@ -604,6 +604,22 @@ ${message || '상담 요청'}
     }
   });
 
+  // Admin API - Get User Tax Data
+  app.get('/api/admin/users/:id/tax-data', async (req, res) => {
+    if (!req.isAuthenticated() || (req.user as any).username !== 'admin') {
+      return res.status(403).json({ message: 'Admin access required' });
+    }
+
+    try {
+      const userId = parseInt(req.params.id);
+      const taxData = await storage.getTaxReturnByUserId(userId);
+      res.json(taxData);
+    } catch (error) {
+      console.error('Error getting user tax data:', error);
+      res.status(500).json({ message: 'Failed to get tax data' });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
