@@ -417,24 +417,38 @@ export default function IncomePage() {
   // 수동 저장 함수 추가
   const handleManualSave = async () => {
     try {
+      console.log('🔍 Income 수동 저장 시작');
+      
       // 먼저 계산 수행
       calculateTotals();
       
       // 현재 폼 데이터 가져오기
       const currentFormData = form.getValues();
       
+      console.log('📊 Income 폼 데이터 확인:', {
+        dividends: currentFormData.dividends,
+        wages: currentFormData.wages,
+        totalIncome: currentFormData.totalIncome,
+        adjustedGrossIncome: currentFormData.adjustedGrossIncome
+      });
+      
       // additionalIncomeItems와 additionalAdjustmentItems 추가
       currentFormData.additionalIncomeItems = additionalIncomeItems;
       currentFormData.additionalAdjustmentItems = additionalAdjustmentItems;
       
+      console.log('💾 TaxContext로 데이터 전송 중...', { income: currentFormData });
+      
       // TaxContext 업데이트
-      updateTaxData({ income: currentFormData });
+      await updateTaxData({ income: currentFormData });
+      
+      console.log('✅ Income 데이터 저장 완료');
       
       toast({
         title: "저장 완료",
         description: "소득 정보가 성공적으로 저장되었습니다.",
       });
     } catch (error) {
+      console.error('❌ Income 저장 오류:', error);
       toast({
         title: "저장 실패",
         description: "소득 정보 저장 중 오류가 발생했습니다.",
