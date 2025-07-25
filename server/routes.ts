@@ -190,7 +190,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const userId = (req.user as any).id;
       console.log(`GET /api/tax-return - 사용자 ID: ${userId} 데이터 요청`);
       
-      const taxReturn = await storage.getCurrentTaxReturn(userId);
+      const taxReturn = await storage.getTaxReturnByUserId(userId);
       
       if (!taxReturn) {
         console.log(`사용자 ID ${userId}의 세금 신고서 없음 - 새 빈 신고서 생성`);
