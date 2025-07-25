@@ -128,10 +128,20 @@ export const TaxProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           setCurrentUserId(currentUser.id);
         }
         
-        const taxResponse = await fetch('/api/tax-return', {
+        // 기존 엔드포인트 먼저 시도
+        let taxResponse = await fetch('/api/tax-return', {
           credentials: 'include',
           cache: 'no-cache'
         });
+        
+        // 인증 실패 시 사용자별 엔드포인트 시도  
+        if (!taxResponse.ok && taxResponse.status === 401) {
+          console.log('기존 엔드포인트 인증 실패 - 사용자별 엔드포인트 시도');
+          taxResponse = await fetch(`/api/tax-return/user/${currentUser.id}`, {
+            credentials: 'include',
+            cache: 'no-cache'
+          });
+        }
         
         if (taxResponse.ok) {
           const serverTaxData = await taxResponse.json();

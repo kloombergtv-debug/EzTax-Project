@@ -232,6 +232,43 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get tax return by user ID (debugging endpoint - temporarily bypasses auth)
+  app.get("/api/tax-return/user/:userId", async (req, res) => {
+    try {
+      const requestedUserId = parseInt(req.params.userId);
+      
+      console.log(`사용자 ID ${requestedUserId} 데이터 직접 요청 (디버깅용)`);
+      
+      // Verify the user exists in database
+      const userExists = await storage.getUserById(requestedUserId);
+      if (!userExists) {
+        console.log(`사용자 ID ${requestedUserId} 데이터베이스에서 찾을 수 없음`);
+        return res.status(404).json({ message: "User not found" });
+      }
+      
+      console.log(`사용자 ${userExists.username} (ID: ${requestedUserId}) 확인됨`);
+      
+      const taxReturn = await storage.getTaxReturnByUserId(requestedUserId);
+      
+      if (!taxReturn) {
+        console.log(`사용자 ID ${requestedUserId}의 세금 데이터 없음`);
+        return res.status(404).json({ message: "No tax data found" });
+      } else {
+        console.log(`사용자 ID ${requestedUserId}의 기존 데이터 반환 (ID: ${taxReturn.id})`);
+        console.log('데이터 요약:', {
+          personalInfo: !!taxReturn.personalInfo,
+          income: !!taxReturn.income,
+          deductions: !!taxReturn.deductions,
+          taxCredits: !!taxReturn.taxCredits
+        });
+        res.json(taxReturn);
+      }
+    } catch (error) {
+      console.error("Error fetching tax return by user ID:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
   // Create or update tax return
   app.post("/api/tax-return", async (req, res) => {
     try {
