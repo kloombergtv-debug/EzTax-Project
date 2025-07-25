@@ -105,6 +105,17 @@ const PersonalInfo: React.FC = () => {
     }
   }, [taxData.personalInfo, form, isDataReady]);
 
+  // 강제 업데이트를 위한 추가 useEffect
+  useEffect(() => {
+    if (isDataReady && taxData.personalInfo && Object.keys(taxData.personalInfo).length > 0) {
+      console.log("PersonalInfo - 강제 폼 업데이트:", taxData.personalInfo);
+      // 약간의 지연을 두고 폼 업데이트
+      setTimeout(() => {
+        form.reset(taxData.personalInfo);
+      }, 100);
+    }
+  }, [isDataReady, taxData.personalInfo, form]);
+
   useEffect(() => {
     const shouldShowSpouse = filingStatus === 'married_joint' || filingStatus === 'married_separate';
     setShowSpouseInfo(shouldShowSpouse);
