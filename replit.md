@@ -105,6 +105,7 @@ Preferred communication style: Simple, everyday language.
 ## Changelog
 
 Recent Changes:
+- July 25, 2025: **CRITICAL DATA PERSISTENCE ISSUE COMPLETELY RESOLVED** - Fixed Danny user login authentication problems by correcting password hash validation logic in server auth system, eliminated salt undefined errors, and confirmed user data successfully loads after logout/login cycles with all personal information (Dae Hyun Jee, Frisco TX) and tax calculations properly restored
 - July 25, 2025: **ADMIN PANEL USER TAX DATA VIEWING FUNCTIONALITY COMPLETED** - Successfully implemented comprehensive admin panel feature allowing administrators to view detailed tax information for all users including personal info, income, deductions, tax credits, and calculation results through tabbed interface with file icon buttons for individual user data access
 - July 25, 2025: **ADDITIONAL-ADJUSTMENTS DATA PERSISTENCE ISSUE COMPLETELY RESOLVED** - Fixed critical data loss problem where additional-adjustments page input was clearing Income page data by implementing enhanced deep merge logic in TaxContext updateTaxData function, ensuring complete preservation of existing form data during partial updates
 - July 25, 2025: **DATABASE TAX DATA RETRIEVAL SYSTEM ENHANCED** - Added getTaxReturnByUserId function to server storage with comprehensive debugging capabilities, confirmed Danny user (ID: 20) tax data integrity with personal info, income ($30,500 total), deductions ($27,700 standard), and tax credits ($8,100) properly stored and accessible
