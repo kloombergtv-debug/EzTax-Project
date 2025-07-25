@@ -97,14 +97,35 @@ export const TaxProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         
         if (!userResponse.ok) {
           console.log(`사용자 인증 실패 (status: ${userResponse.status}) - 현재 사용자 ID: ${currentUserId}`);
-          // 이미 로그인된 사용자가 있다면 데이터를 즉시 삭제하지 않고 잠시 대기
+          // 로그인 후 인증 실패 시 데이터를 바로 삭제하지 않고 재시도
           if (currentUserId !== null) {
             console.log("기존 로그인 사용자 존재 - 데이터 보존하며 재시도 대기");
             setIsLoading(false);
+            setIsDataReady(true);
             return;
           }
-          console.log("새 사용자 또는 완전 로그아웃 - 데이터 초기화");
-          clearAllData();
+          
+          // 완전히 새로운 사용자만 데이터 초기화
+          console.log("완전히 새로운 사용자 - 빈 데이터로 시작");
+          setTaxData({
+            taxYear: 2025,
+            status: 'in_progress',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            calculatedResults: {
+              totalIncome: 0,
+              adjustments: 0,
+              adjustedGrossIncome: 0,
+              deductions: 0,
+              taxableIncome: 0,
+              federalTax: 0,
+              credits: 0,
+              taxDue: 0,
+              payments: 0,
+              refundAmount: 0,
+              amountOwed: 0
+            }
+          });
           setIsDataReady(true);
           return;
         }
@@ -116,13 +137,13 @@ export const TaxProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         const isFirstLogin = currentUserId === null;
         
         if (currentUserId !== currentUser.id) {
-          console.log(`사용자 로그인: ${currentUser.id} (이전: ${currentUserId})`);
+          console.log(`사용자 로그인: ${currentUser.username} (ID: ${currentUser.id}, 이전: ${currentUserId})`);
           
           if (isUserChange) {
             console.log("다른 사용자로 변경 - 기존 데이터 삭제");
             clearAllData();
           } else if (isFirstLogin) {
-            console.log("첫 로그인 - 서버에서 데이터 로드 준비");
+            console.log(`첫 로그인 - ${currentUser.username} 서버 데이터 로드 준비`);
           }
           
           setCurrentUserId(currentUser.id);
@@ -145,9 +166,15 @@ export const TaxProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         
         if (taxResponse.ok) {
           const serverTaxData = await taxResponse.json();
-          console.log(`사용자 ${currentUser.username}의 세금 데이터 로드:`, serverTaxData);
+          console.log(`사용자 ${currentUser.username}의 세금 데이터 로드 성공:`, {
+            hasPersonalInfo: !!serverTaxData.personalInfo,
+            hasIncome: !!serverTaxData.income,
+            hasDeductions: !!serverTaxData.deductions,
+            hasTaxCredits: !!serverTaxData.taxCredits,
+            dataId: serverTaxData.id
+          });
           
-          if (serverTaxData?.userId === currentUser.id) {
+          if (serverTaxData?.userId === currentUser.id && serverTaxData.personalInfo) {
             const calculatedResults = calculateTaxes(serverTaxData);
             
             // 서버 데이터 구조 유지하며 병합
@@ -167,11 +194,35 @@ export const TaxProvider: React.FC<{ children: React.ReactNode }> = ({ children 
               calculatedResults
             };
             
-            console.log(`데이터 복원 완료:`, restoredData);
+            console.log(`${currentUser.username} 데이터 복원 완료 - 개인정보:`, serverTaxData.personalInfo?.firstName);
             setTaxData(restoredData);
             setIsDataReady(true);
+          } else if (serverTaxData?.userId === currentUser.id && !serverTaxData.personalInfo) {
+            console.log(`사용자 ${currentUser.username}는 빈 데이터 - 새로 시작`);
+            setTaxData({
+              id: serverTaxData.id,
+              userId: serverTaxData.userId,
+              taxYear: 2025,
+              status: 'in_progress',
+              createdAt: serverTaxData.createdAt || new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+              calculatedResults: {
+                totalIncome: 0,
+                adjustments: 0,
+                adjustedGrossIncome: 0,
+                deductions: 0,
+                taxableIncome: 0,
+                federalTax: 0,
+                credits: 0,
+                taxDue: 0,
+                payments: 0,
+                refundAmount: 0,
+                amountOwed: 0
+              }
+            });
+            setIsDataReady(true);
           } else {
-            console.error("데이터 사용자 ID 불일치");
+            console.error("데이터 사용자 ID 불일치 또는 데이터 없음");
             setTaxData({
               taxYear: 2025,
               status: 'in_progress',
