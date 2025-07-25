@@ -55,7 +55,7 @@ const PersonalInfo: React.FC = () => {
 
   const form = useForm<PersonalInformation>({
     resolver: zodResolver(personalInfoSchema),
-    defaultValues: taxData.personalInfo || emptyDefaults
+    defaultValues: emptyDefaults
   });
 
   const { fields: dependentFields, append, remove } = useFieldArray({
@@ -105,14 +105,37 @@ const PersonalInfo: React.FC = () => {
     }
   }, [taxData.personalInfo, form, isDataReady]);
 
-  // 강제 업데이트를 위한 추가 useEffect
+  // Income 페이지와 동일한 데이터 로딩 로직
   useEffect(() => {
     if (isDataReady && taxData.personalInfo && Object.keys(taxData.personalInfo).length > 0) {
-      console.log("PersonalInfo - 강제 폼 업데이트:", taxData.personalInfo);
-      // 약간의 지연을 두고 폼 업데이트
-      setTimeout(() => {
-        form.reset(taxData.personalInfo);
-      }, 100);
+      console.log("PersonalInfo - 직접 폼 업데이트:", taxData.personalInfo);
+      
+      const serverData: PersonalInformation = {
+        firstName: taxData.personalInfo.firstName || '',
+        middleInitial: taxData.personalInfo.middleInitial || '',
+        lastName: taxData.personalInfo.lastName || '',
+        ssn: taxData.personalInfo.ssn || '',
+        dateOfBirth: taxData.personalInfo.dateOfBirth || '',
+        email: taxData.personalInfo.email || '',
+        phone: taxData.personalInfo.phone || '',
+        address1: taxData.personalInfo.address1 || '',
+        address2: taxData.personalInfo.address2 || '',
+        city: taxData.personalInfo.city || '',
+        state: taxData.personalInfo.state || '',
+        zipCode: taxData.personalInfo.zipCode || '',
+        filingStatus: taxData.personalInfo.filingStatus || 'single',
+        isDisabled: taxData.personalInfo.isDisabled || false,
+        isNonresidentAlien: taxData.personalInfo.isNonresidentAlien || false,
+        dependents: taxData.personalInfo.dependents || [],
+        spouseInfo: taxData.personalInfo.spouseInfo
+      };
+      
+      console.log("PersonalInfo - 서버 데이터로 직접 리셋:", serverData);
+      form.reset(serverData);
+      
+      // 배우자 정보 표시 설정
+      const shouldShowSpouse = serverData.filingStatus === 'married_joint' || serverData.filingStatus === 'married_separate';
+      setShowSpouseInfo(shouldShowSpouse);
     }
   }, [isDataReady, taxData.personalInfo, form]);
 
