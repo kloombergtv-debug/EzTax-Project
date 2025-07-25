@@ -1,36 +1,39 @@
-import React, { useEffect, useState } from 'react';
-import { useForm, useFieldArray } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { personalInfoSchema, type PersonalInformation } from '@shared/schema';
-import { Card, CardContent } from '@/components/ui/card';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Button } from '@/components/ui/button';
-import { useToast } from '@/hooks/use-toast';
-import { PlusCircle, Trash2, Save } from 'lucide-react';
-import ProgressTracker from '@/components/ProgressTracker';
-import { useTaxContext } from '@/context/TaxContext';
-import { useLocation } from 'wouter';
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState, useEffect } from "react";
+import { useLocation } from "wouter";
+import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Badge } from "@/components/ui/badge";
+import { useTaxContext } from "@/context/TaxContext";
+import { personalInfoSchema, type PersonalInformation } from "../../../shared/schema";
+import { useToast } from "@/hooks/use-toast";
+import { Trash2, Plus } from "lucide-react";
 
-const relationshipOptions = [
-  { value: "child", label: "자녀 (Child)" },
-  { value: "parent", label: "부모 (Parent)" },
-  { value: "grandparent", label: "조부모 (Grandparent)" },
-  { value: "sibling", label: "형제자매 (Sibling)" },
-  { value: "grandchild", label: "손자녀 (Grandchild)" },
-  { value: "niece_nephew", label: "조카 (Niece/Nephew)" },
-  { value: "aunt_uncle", label: "삼촌/이모/고모 (Aunt/Uncle)" },
-  { value: "in_law", label: "인척 (In-law)" },
-  { value: "foster_child", label: "위탁 자녀 (Foster Child)" },
-  { value: "other", label: "기타 (Other)" },
+const US_STATES = [
+  "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA",
+  "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD",
+  "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ",
+  "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC",
+  "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"
 ];
 
-const PersonalInfo: React.FC = () => {
-  // 모든 Hook을 최상단에 선언 (조건부 호출 금지)
+const FILING_STATUS_OPTIONS = [
+  { value: "single", label: "미혼(Single)" },
+  { value: "married_joint", label: "부부합산(Married Filing Jointly)" },
+  { value: "married_separate", label: "부부별산(Married Filing Separately)" },
+  { value: "head_of_household", label: "세대주(Head of Household)" },
+  { value: "qualifying_widow", label: "적격과부(Qualifying Widow)" }
+];
+
+export default function PersonalInfo() {
+  const [, setLocation] = useLocation();
   const { taxData, updateTaxData, isDataReady } = useTaxContext();
   const { toast } = useToast();
-  const [, navigate] = useLocation();
   const [showSpouseInfo, setShowSpouseInfo] = useState(false);
 
   const emptyDefaults: PersonalInformation = {
@@ -58,59 +61,14 @@ const PersonalInfo: React.FC = () => {
     defaultValues: emptyDefaults
   });
 
-  const { fields: dependentFields, append, remove } = useFieldArray({
-    control: form.control,
-    name: 'dependents'
-  });
+  const filingStatus = form.watch("filingStatus");
 
-  const filingStatus = form.watch('filingStatus');
-
-  // 모든 useEffect를 조건부 렌더링 이전에 선언
-  useEffect(() => {
-    // 우선순위: TaxContext 서버 데이터 > localStorage > 기본값
-    const restoreFormData = () => {
-      let dataToUse = emptyDefaults;
-      
-      // 1. TaxContext 서버 데이터가 있으면 최우선 적용
-      if (taxData.personalInfo && Object.keys(taxData.personalInfo).length > 0) {
-        console.log("PersonalInfo - TaxContext 서버 데이터로 폼 초기화:", taxData.personalInfo);
-        dataToUse = { ...emptyDefaults, ...taxData.personalInfo };
-      } else {
-        // 2. 서버 데이터가 없을 때만 localStorage에서 임시 저장된 데이터 확인
-        try {
-          const tempPersonalInfo = localStorage.getItem('tempPersonalInfo');
-          const tempFilingStatus = localStorage.getItem('tempFilingStatus');
-          
-          if (tempPersonalInfo) {
-            const parsedData = JSON.parse(tempPersonalInfo);
-            console.log("PersonalInfo - localStorage에서 데이터 복원:", parsedData);
-            dataToUse = { ...emptyDefaults, ...parsedData };
-          } else if (tempFilingStatus) {
-            const parsedStatus = JSON.parse(tempFilingStatus);
-            console.log("PersonalInfo - localStorage에서 Filing Status 복원:", parsedStatus);
-            dataToUse = { ...emptyDefaults, ...parsedStatus };
-          }
-        } catch (error) {
-          console.error("localStorage 데이터 복원 오류:", error);
-        }
-      }
-      
-      console.log("PersonalInfo - 최종 폼 데이터:", dataToUse);
-      form.reset(dataToUse);
-    };
-    
-    // isDataReady가 true일 때만 실행
-    if (isDataReady) {
-      restoreFormData();
-    }
-  }, [taxData.personalInfo, form, isDataReady]);
-
-  // Income 페이지와 동일한 데이터 로딩 로직
+  // Income 페이지와 완전히 동일한 데이터 로딩 로직
   useEffect(() => {
     if (isDataReady && taxData.personalInfo && Object.keys(taxData.personalInfo).length > 0) {
-      console.log("PersonalInfo - 직접 폼 업데이트:", taxData.personalInfo);
+      console.log("PersonalInfo - 서버 데이터로 폼 초기화:", taxData.personalInfo);
       
-      const serverData: PersonalInformation = {
+      const serverData = {
         firstName: taxData.personalInfo.firstName || '',
         middleInitial: taxData.personalInfo.middleInitial || '',
         lastName: taxData.personalInfo.lastName || '',
@@ -130,7 +88,7 @@ const PersonalInfo: React.FC = () => {
         spouseInfo: taxData.personalInfo.spouseInfo
       };
       
-      console.log("PersonalInfo - 서버 데이터로 직접 리셋:", serverData);
+      console.log("PersonalInfo - 최종 폼 데이터:", serverData);
       form.reset(serverData);
       
       // 배우자 정보 표시 설정
@@ -168,10 +126,8 @@ const PersonalInfo: React.FC = () => {
         title: "저장 완료",
         description: "개인정보가 성공적으로 저장되었습니다.",
       });
-      
-      setTimeout(() => {
-        navigate('/income');
-      }, 1000);
+
+      setLocation("/income");
     } catch (error) {
       console.error("개인정보 저장 오류:", error);
       toast({
@@ -183,185 +139,174 @@ const PersonalInfo: React.FC = () => {
   };
 
   const addDependent = () => {
-    append({
-      firstName: '',
-      lastName: '',
-      ssn: '',
-      relationship: relationshipOptions[0].value,
-      dateOfBirth: '',
-      isDisabled: false,
-      isNonresidentAlien: false,
-      isQualifyingChild: true
-    });
+    const currentDependents = form.getValues("dependents") || [];
+    form.setValue("dependents", [
+      ...currentDependents,
+      {
+        firstName: "",
+        lastName: "",
+        ssn: "",
+        relationship: "child",
+        dateOfBirth: "",
+        isDisabled: false,
+        isNonresidentAlien: false,
+        isQualifyingChild: false
+      }
+    ]);
   };
 
-  const formatSSN = (value: string) => {
-    const digits = value.replace(/\D/g, '');
-    if (digits.length <= 3) {
-      return digits;
-    } else if (digits.length <= 5) {
-      return `${digits.slice(0, 3)}-${digits.slice(3)}`;
-    } else {
-      return `${digits.slice(0, 3)}-${digits.slice(3, 5)}-${digits.slice(5, 9)}`;
-    }
-  };
-
-  const formatPhone = (value: string) => {
-    const digits = value.replace(/\D/g, '');
-    if (digits.length <= 3) {
-      return digits;
-    } else if (digits.length <= 6) {
-      return `${digits.slice(0, 3)}-${digits.slice(3)}`;
-    } else {
-      return `${digits.slice(0, 3)}-${digits.slice(3, 6)}-${digits.slice(6, 10)}`;
-    }
+  const removeDependent = (index: number) => {
+    const currentDependents = form.getValues("dependents") || [];
+    form.setValue("dependents", currentDependents.filter((_, i) => i !== index));
   };
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-6">
-      <ProgressTracker currentStep="personal-info" />
-      
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">개인정보 (Personal Information)</h1>
-        <p className="text-gray-600">세금 신고서 작성을 위해 개인정보를 입력해주세요.</p>
+      {/* 진행 단계 표시 */}
+      <div className="flex items-center justify-center mb-8">
+        <div className="flex items-center space-x-8">
+          {[
+            { step: 1, label: "개인 정보", active: true },
+            { step: 2, label: "소득", active: false },
+            { step: 3, label: "공제 항목", active: false },
+            { step: 4, label: "세액 공제", active: false },
+            { step: 5, label: "추가 세금", active: false },
+            { step: 6, label: "검토", active: false },
+          ].map((item, index) => (
+            <div key={item.step} className="flex items-center">
+              <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium ${
+                item.active ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600'
+              }`}>
+                {item.step}
+              </div>
+              <span className={`ml-2 text-sm font-medium ${
+                item.active ? 'text-gray-900' : 'text-gray-500'
+              }`}>
+                {item.label}
+              </span>
+              {index < 5 && (
+                <div className="w-8 h-0.5 bg-gray-200 mx-4"></div>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
 
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          
-          {/* 기본 개인정보 */}
-          <Card>
-            <CardContent className="pt-6">
-              <h2 className="text-xl font-semibold mb-4">기본 정보</h2>
-              
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                <FormField
-                  control={form.control}
-                  name="firstName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>이름 (First Name)</FormLabel>
-                      <FormControl>
-                        <Input placeholder="이름을 입력하세요" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="middleInitial"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>중간 이름 (Middle Initial)</FormLabel>
-                      <FormControl>
-                        <Input placeholder="중간 이름 (선택사항)" maxLength={1} {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="lastName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>성 (Last Name)</FormLabel>
-                      <FormControl>
-                        <Input placeholder="성을 입력하세요" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-2xl font-bold">개인정보 (Personal Information)</CardTitle>
+          <p className="text-muted-foreground">세금 신고서 작성을 위해 개인정보를 입력해주세요.</p>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              {/* 기본 정보 */}
+              <div className="space-y-6">
+                <h3 className="text-lg font-semibold">기본 정보</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="firstName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>이름 (First Name)</FormLabel>
+                        <FormControl>
+                          <Input placeholder="이름을 입력하세요" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="middleInitial"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>중간 이름 (Middle Initial)</FormLabel>
+                        <FormControl>
+                          <Input placeholder="중간 이름 (선택사항)" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="lastName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>성 (Last Name)</FormLabel>
+                        <FormControl>
+                          <Input placeholder="성을 입력하세요" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="ssn"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>사회보장번호 (SSN)</FormLabel>
+                        <FormControl>
+                          <Input placeholder="XXX-XX-XXXX" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="dateOfBirth"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>생년월일 (Date of Birth)</FormLabel>
+                        <FormControl>
+                          <Input type="date" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>이메일 (Email)</FormLabel>
+                        <FormControl>
+                          <Input type="email" placeholder="이메일 주소" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="phone"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>전화번호 (Phone)</FormLabel>
+                        <FormControl>
+                          <Input placeholder="XXX-XXX-XXXX" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <FormField
-                  control={form.control}
-                  name="ssn"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>사회보장번호 (SSN)</FormLabel>
-                      <FormControl>
-                        <Input 
-                          placeholder="XXX-XX-XXXX" 
-                          maxLength={11}
-                          {...field}
-                          onChange={(e) => {
-                            const formatted = formatSSN(e.target.value);
-                            field.onChange(formatted);
-                          }}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="dateOfBirth"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>생년월일 (Date of Birth)</FormLabel>
-                      <FormControl>
-                        <Input type="date" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>이메일 (Email)</FormLabel>
-                      <FormControl>
-                        <Input type="email" placeholder="이메일 주소" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="phone"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>전화번호 (Phone)</FormLabel>
-                      <FormControl>
-                        <Input 
-                          placeholder="XXX-XXX-XXXX" 
-                          maxLength={12}
-                          {...field}
-                          onChange={(e) => {
-                            const formatted = formatPhone(e.target.value);
-                            field.onChange(formatted);
-                          }}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* 주소 정보 */}
-          <Card>
-            <CardContent className="pt-6">
-              <h2 className="text-xl font-semibold mb-4">주소 정보</h2>
-              
-              <div className="space-y-4">
+              {/* 주소 정보 */}
+              <div className="space-y-6">
+                <h3 className="text-lg font-semibold">주소 정보</h3>
                 <FormField
                   control={form.control}
                   name="address1"
@@ -375,7 +320,6 @@ const PersonalInfo: React.FC = () => {
                     </FormItem>
                   )}
                 />
-                
                 <FormField
                   control={form.control}
                   name="address2"
@@ -389,7 +333,6 @@ const PersonalInfo: React.FC = () => {
                     </FormItem>
                   )}
                 />
-                
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <FormField
                     control={form.control}
@@ -404,21 +347,28 @@ const PersonalInfo: React.FC = () => {
                       </FormItem>
                     )}
                   />
-                  
                   <FormField
                     control={form.control}
                     name="state"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>주 (State)</FormLabel>
-                        <FormControl>
-                          <Input placeholder="주 코드 (예: TX)" {...field} />
-                        </FormControl>
+                        <Select onValueChange={field.onChange} value={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="주 코드 (예: TX)" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {US_STATES.map(state => (
+                              <SelectItem key={state} value={state}>{state}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-                  
                   <FormField
                     control={form.control}
                     name="zipCode"
@@ -434,271 +384,260 @@ const PersonalInfo: React.FC = () => {
                   />
                 </div>
               </div>
-            </CardContent>
-          </Card>
 
-          {/* 신고 상태 */}
-          <Card>
-            <CardContent className="pt-6">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-semibold">신고 상태 (Filing Status)</h2>
-                <Button 
-                  type="button" 
-                  variant="outline" 
-                  onClick={() => {
-                    // 현재 폼 데이터를 localStorage에 저장
-                    const currentFormData = form.getValues();
-                    localStorage.setItem('tempPersonalInfo', JSON.stringify(currentFormData));
-                    console.log("Filing Status 확인 전 데이터 저장:", currentFormData);
-                    navigate('/filing-status-checker');
-                  }}
-                  className="text-sm"
-                >
-                  Filing Status 확인
-                </Button>
-              </div>
-              
-              <FormField
-                control={form.control}
-                name="filingStatus"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>신고 상태</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="신고 상태를 선택하세요" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="single">미혼 (Single)</SelectItem>
-                        <SelectItem value="married_joint">부부합산신고 (Married Filing Jointly)</SelectItem>
-                        <SelectItem value="married_separate">부부개별신고 (Married Filing Separately)</SelectItem>
-                        <SelectItem value="head_of_household">세대주 (Head of Household)</SelectItem>
-                        <SelectItem value="qualifying_widow">적격미망인 (Qualifying Widow(er))</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </CardContent>
-          </Card>
-
-          {/* 배우자 정보 (결혼한 경우에만 표시) */}
-          {showSpouseInfo && (
-            <Card>
-              <CardContent className="pt-6">
-                <h2 className="text-xl font-semibold mb-4">배우자 정보 (Spouse Information)</h2>
-                
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                  <FormField
-                    control={form.control}
-                    name="spouseInfo.firstName"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>배우자 이름 (Spouse First Name)</FormLabel>
-                        <FormControl>
-                          <Input placeholder="배우자 이름" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  
-                  <FormField
-                    control={form.control}
-                    name="spouseInfo.lastName"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>배우자 성 (Spouse Last Name)</FormLabel>
-                        <FormControl>
-                          <Input placeholder="배우자 성" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  
-                  <FormField
-                    control={form.control}
-                    name="spouseInfo.ssn"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>배우자 SSN (Spouse SSN)</FormLabel>
-                        <FormControl>
-                          <Input 
-                            placeholder="XXX-XX-XXXX" 
-                            maxLength={11}
-                            {...field}
-                            onChange={(e) => {
-                              const formatted = formatSSN(e.target.value);
-                              field.onChange(formatted);
-                            }}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                
+              {/* Filing Status */}
+              <div className="space-y-6">
+                <h3 className="text-lg font-semibold">Filing Status</h3>
                 <FormField
                   control={form.control}
-                  name="spouseInfo.dateOfBirth"
+                  name="filingStatus"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>배우자 생년월일 (Spouse Date of Birth)</FormLabel>
-                      <FormControl>
-                        <Input type="date" {...field} />
-                      </FormControl>
+                      <FormLabel>신고 형태를 선택하세요</FormLabel>
+                      <Select onValueChange={field.onChange} value={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Filing Status를 선택하세요" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {FILING_STATUS_OPTIONS.map(option => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-              </CardContent>
-            </Card>
-          )}
-
-          {/* 부양가족 정보 */}
-          <Card>
-            <CardContent className="pt-6">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-semibold">부양가족 (Dependents)</h2>
-                <Button type="button" onClick={addDependent} variant="outline" size="sm">
-                  <PlusCircle className="h-4 w-4 mr-2" />
-                  부양가족 추가
-                </Button>
               </div>
 
-              {dependentFields.length === 0 ? (
-                <p className="text-gray-500 text-center py-4">
-                  부양가족이 없습니다. 위의 버튼을 클릭하여 추가하세요.
-                </p>
-              ) : (
+              {/* 특수 상황 */}
+              <div className="space-y-6">
+                <h3 className="text-lg font-semibold">특수 상황</h3>
                 <div className="space-y-4">
-                  {dependentFields.map((field, index) => (
-                    <div key={field.id} className="p-4 border rounded-lg">
-                      <div className="flex justify-between items-center mb-4">
-                        <h3 className="font-medium">부양가족 {index + 1}</h3>
-                        <Button
-                          type="button"
-                          onClick={() => remove(index)}
-                          variant="destructive"
-                          size="sm"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
+                  <FormField
+                    control={form.control}
+                    name="isDisabled"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+                        <div className="space-y-1 leading-none">
+                          <FormLabel>장애인 여부</FormLabel>
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="isNonresidentAlien"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+                        <div className="space-y-1 leading-none">
+                          <FormLabel>비거주 외국인 여부</FormLabel>
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
 
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <FormField
-                          control={form.control}
-                          name={`dependents.${index}.firstName`}
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>이름</FormLabel>
-                              <FormControl>
-                                <Input placeholder="부양가족 이름" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-
-                        <FormField
-                          control={form.control}
-                          name={`dependents.${index}.lastName`}
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>성</FormLabel>
-                              <FormControl>
-                                <Input placeholder="부양가족 성" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-
-                        <FormField
-                          control={form.control}
-                          name={`dependents.${index}.ssn`}
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>SSN</FormLabel>
-                              <FormControl>
-                                <Input 
-                                  placeholder="XXX-XX-XXXX" 
-                                  maxLength={11}
-                                  {...field}
-                                  onChange={(e) => {
-                                    const formatted = formatSSN(e.target.value);
-                                    field.onChange(formatted);
-                                  }}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-
-                        <FormField
-                          control={form.control}
-                          name={`dependents.${index}.relationship`}
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>관계</FormLabel>
-                              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                <FormControl>
-                                  <SelectTrigger>
-                                    <SelectValue placeholder="관계 선택" />
-                                  </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                  {relationshipOptions.map((option) => (
-                                    <SelectItem key={option.value} value={option.value}>
-                                      {option.label}
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-
-                        <FormField
-                          control={form.control}
-                          name={`dependents.${index}.dateOfBirth`}
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>생년월일</FormLabel>
-                              <FormControl>
-                                <Input type="date" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-                    </div>
-                  ))}
+              {/* 배우자 정보 */}
+              {showSpouseInfo && (
+                <div className="space-y-6">
+                  <h3 className="text-lg font-semibold">배우자 정보</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="spouseInfo.firstName"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>배우자 이름</FormLabel>
+                          <FormControl>
+                            <Input placeholder="배우자 이름" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="spouseInfo.lastName"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>배우자 성</FormLabel>
+                          <FormControl>
+                            <Input placeholder="배우자 성" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="spouseInfo.ssn"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>배우자 SSN</FormLabel>
+                          <FormControl>
+                            <Input placeholder="XXX-XX-XXXX" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="spouseInfo.dateOfBirth"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>배우자 생년월일</FormLabel>
+                          <FormControl>
+                            <Input type="date" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                 </div>
               )}
-            </CardContent>
-          </Card>
 
-          {/* 저장 버튼 */}
-          <div className="flex justify-center mt-8">
-            <Button type="submit" className="bg-blue-600 hover:bg-blue-700 px-8 py-3 text-lg">
-              <Save className="h-5 w-5 mr-3" />
-              저장하고 계속
-            </Button>
-          </div>
-        </form>
-      </Form>
+              {/* 부양가족 정보 */}
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-semibold">부양가족 정보</h3>
+                  <Button type="button" onClick={addDependent} size="sm">
+                    <Plus className="w-4 h-4 mr-2" />
+                    부양가족 추가
+                  </Button>
+                </div>
+                
+                {form.watch("dependents")?.map((_, index) => (
+                  <div key={index} className="border rounded-lg p-4 space-y-4">
+                    <div className="flex items-center justify-between">
+                      <Badge variant="secondary">부양가족 {index + 1}</Badge>
+                      <Button
+                        type="button"
+                        onClick={() => removeDependent(index)}
+                        size="sm"
+                        variant="destructive"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <FormField
+                        control={form.control}
+                        name={`dependents.${index}.firstName`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>이름</FormLabel>
+                            <FormControl>
+                              <Input placeholder="이름" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name={`dependents.${index}.lastName`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>성</FormLabel>
+                            <FormControl>
+                              <Input placeholder="성" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name={`dependents.${index}.ssn`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>SSN</FormLabel>
+                            <FormControl>
+                              <Input placeholder="XXX-XX-XXXX" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <FormField
+                        control={form.control}
+                        name={`dependents.${index}.relationship`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>관계</FormLabel>
+                            <Select onValueChange={field.onChange} value={field.value}>
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="관계 선택" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="child">자녀</SelectItem>
+                                <SelectItem value="parent">부모</SelectItem>
+                                <SelectItem value="sibling">형제/자매</SelectItem>
+                                <SelectItem value="other">기타</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name={`dependents.${index}.dateOfBirth`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>생년월일</FormLabel>
+                            <FormControl>
+                              <Input type="date" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex justify-between">
+                <Button type="button" variant="outline" onClick={() => setLocation("/")}>
+                  이전
+                </Button>
+                <Button type="submit">
+                  다음: 소득 정보
+                </Button>
+              </div>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
     </div>
   );
-};
-
-export default PersonalInfo;
+}
