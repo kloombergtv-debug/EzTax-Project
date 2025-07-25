@@ -155,6 +155,7 @@ const formSchema = z.object({
 });
 
 const TaxCredits3Page: React.FC = () => {
+  // 모든 Hook을 컴포넌트 최상위에 배치
   const { taxData, updateTaxData, isDataReady } = useTaxContext();
   const { toast } = useToast();
   
@@ -187,6 +188,48 @@ const TaxCredits3Page: React.FC = () => {
       name: "careProviders"
     });
   
+  // 총 기여금 감시 - form.watch는 Hook이므로 최상위에 배치
+  const retirementContributionsTotal = form.watch('retirementContributions.totalContributions') || 0;
+  
+  // 페이지 로드 시 데이터 초기화 - useEffect Hook
+  useEffect(() => {
+    if (taxData.taxCredits || taxData.retirementContributions) {
+      const parsedValues: TaxCreditsFormData = {
+        ...defaultFormData,
+        ...taxData.taxCredits,
+        retirementContributions: {
+          ...defaultRetirementContributions,
+          ...(taxData.retirementContributions || {})
+        },
+        careProviders: (taxData.taxCredits as any)?.careProviders || [defaultCareProvider],
+        careExpenses: (taxData.taxCredits as any)?.careExpenses || 0
+      };
+      
+      form.reset(parsedValues);
+      
+      // 돌봄 비용이 있으면 해당 필드 표시
+      if (parsedValues.careExpenses > 0 || (parsedValues.careProviders && parsedValues.careProviders.length > 1)) {
+        setShowCareExpenseFields(true);
+      }
+      
+      // 페이지 로드 시 은퇴 기여금이 있다면 저축공제액 자동 계산
+      if (parsedValues.retirementContributions?.totalContributions > 0) {
+        console.log("페이지 로드 시 은퇴저축공제 자동 계산 실행");
+        // 은퇴저축 관련 필드 표시
+        setShowRetirementFields(true);
+        setTimeout(() => calculateRetirementCredit(), 1500);
+      }
+      
+      // 페이지 로드 시 부양가족이 있다면 Child Tax Credit 자동 계산
+      if (taxData.personalInfo?.dependents && taxData.personalInfo.dependents.length > 0) {
+        console.log("페이지 로드 시 자녀 세액공제 자동 계산 실행");
+        setTimeout(() => calculateChildTaxCreditAuto(), 500);
+      }
+      
+      setPendingChanges(false);
+    }
+  }, [taxData]);
+  
   // 데이터가 로드되지 않았으면 로딩 표시
   if (!isDataReady) {
     return (
@@ -195,9 +238,6 @@ const TaxCredits3Page: React.FC = () => {
       </div>
     );
   }
-  
-  // 총 기여금 감시
-  const retirementContributionsTotal = form.watch('retirementContributions.totalContributions') || 0;
   
   // 은퇴저축공제 대상 기여금만 합산 (로스 IRA 제외)
   const calculateAllRetirementContributions = () => {
@@ -509,44 +549,7 @@ const TaxCredits3Page: React.FC = () => {
     return credit;
   };
   
-  // 페이지 로드 시 데이터 초기화
-  useEffect(() => {
-    if (taxData.taxCredits || taxData.retirementContributions) {
-      const parsedValues: TaxCreditsFormData = {
-        ...defaultFormData,
-        ...taxData.taxCredits,
-        retirementContributions: {
-          ...defaultRetirementContributions,
-          ...(taxData.retirementContributions || {})
-        },
-        careProviders: (taxData.taxCredits as any)?.careProviders || [defaultCareProvider],
-        careExpenses: (taxData.taxCredits as any)?.careExpenses || 0
-      };
-      
-      form.reset(parsedValues);
-      
-      // 돌봄 비용이 있으면 해당 필드 표시
-      if (parsedValues.careExpenses > 0 || (parsedValues.careProviders && parsedValues.careProviders.length > 1)) {
-        setShowCareExpenseFields(true);
-      }
-      
-      // 페이지 로드 시 은퇴 기여금이 있다면 저축공제액 자동 계산
-      if (parsedValues.retirementContributions?.totalContributions > 0) {
-        console.log("페이지 로드 시 은퇴저축공제 자동 계산 실행");
-        // 은퇴저축 관련 필드 표시
-        setShowRetirementFields(true);
-        setTimeout(() => calculateRetirementCredit(), 1500);
-      }
-      
-      // 페이지 로드 시 부양가족이 있다면 Child Tax Credit 자동 계산
-      if (taxData.personalInfo?.dependents && taxData.personalInfo.dependents.length > 0) {
-        console.log("페이지 로드 시 자녀 세액공제 자동 계산 실행");
-        setTimeout(() => calculateChildTaxCreditAuto(), 500);
-      }
-      
-      setPendingChanges(false);
-    }
-  }, [taxData]);
+
   
   // 총 세액공제 합계 계산
   const calculateTotalCredits = () => {
