@@ -619,6 +619,10 @@ ${message || '상담 요청'}
       
       if (taxData) {
         console.log(`Tax data ID: ${taxData.id}, User ID: ${taxData.userId}`);
+        console.log(`Personal info exists: ${!!taxData.personalInfo}`);
+        console.log(`Income exists: ${!!taxData.income}`);
+        console.log(`Deductions exists: ${!!taxData.deductions}`);
+        console.log(`Tax credits exists: ${!!taxData.taxCredits}`);
       }
       
       res.json(taxData || null);
