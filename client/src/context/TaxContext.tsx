@@ -236,6 +236,24 @@ export const TaxProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, []); // 의존성 배열을 비워서 무한 루프 방지
 
   const updateTaxData = async (data: Partial<TaxData>) => {
+    // 깊은 병합을 위한 헬퍼 함수
+    const deepMerge = (target: any, source: any) => {
+      if (!source) return target;
+      if (!target) return source;
+      
+      const result = { ...target };
+      
+      for (const key in source) {
+        if (source[key] !== null && typeof source[key] === 'object' && !Array.isArray(source[key])) {
+          result[key] = deepMerge(target[key] || {}, source[key]);
+        } else {
+          result[key] = source[key];
+        }
+      }
+      
+      return result;
+    };
+
     // 데이터 깊은 병합
     const updatedData = {
       id: taxData.id,
@@ -244,12 +262,12 @@ export const TaxProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       status: taxData.status || 'in_progress',
       createdAt: taxData.createdAt || new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      personalInfo: data.personalInfo ? { ...taxData.personalInfo, ...data.personalInfo } : taxData.personalInfo,
-      income: data.income ? { ...taxData.income, ...data.income } : taxData.income,
-      deductions: data.deductions ? { ...taxData.deductions, ...data.deductions } : taxData.deductions,
-      taxCredits: data.taxCredits ? { ...taxData.taxCredits, ...data.taxCredits } : taxData.taxCredits,
-      retirementContributions: data.retirementContributions ? { ...taxData.retirementContributions, ...data.retirementContributions } : taxData.retirementContributions,
-      additionalTax: data.additionalTax ? { ...taxData.additionalTax, ...data.additionalTax } : taxData.additionalTax,
+      personalInfo: data.personalInfo ? deepMerge(taxData.personalInfo, data.personalInfo) : taxData.personalInfo,
+      income: data.income ? deepMerge(taxData.income, data.income) : taxData.income,
+      deductions: data.deductions ? deepMerge(taxData.deductions, data.deductions) : taxData.deductions,
+      taxCredits: data.taxCredits ? deepMerge(taxData.taxCredits, data.taxCredits) : taxData.taxCredits,
+      retirementContributions: data.retirementContributions ? deepMerge(taxData.retirementContributions, data.retirementContributions) : taxData.retirementContributions,
+      additionalTax: data.additionalTax ? deepMerge(taxData.additionalTax, data.additionalTax) : taxData.additionalTax,
     };
     
     const calculatedResults = calculateTaxes(updatedData);

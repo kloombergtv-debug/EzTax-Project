@@ -60,6 +60,8 @@ export default function AdditionalAdjustmentsPage() {
   const [amount, setAmount] = useState<number>(0);
   const [description, setDescription] = useState<string>('');
 
+  console.log("컴포넌트 마운트: 기존 조정 항목 로드", taxData.income?.additionalAdjustmentItems);
+
   const addAdjustmentItem = () => {
     if (!selectedType || amount <= 0) {
       toast({
@@ -99,54 +101,46 @@ export default function AdditionalAdjustmentsPage() {
     setAddedItems(updatedItems);
   };
 
-  const saveAndReturn = () => {
+  const saveAndReturn = async () => {
     try {
       // 추가 조정 항목의 총액 계산
       const totalAmount = addedItems.reduce((sum, item) => sum + item.amount, 0);
 
-      // 기존 소득 데이터 가져오기
-      const currentIncome = taxData.income || {
-        wages: 0,
-        otherEarnedIncome: 0,
-        interestIncome: 0,
-        dividends: 0,
-        businessIncome: 0,
-        capitalGains: 0,
-        rentalIncome: 0,
-        retirementIncome: 0,
-        unemploymentIncome: 0,
-        otherIncome: 0,
-        additionalIncomeItems: [],
-        totalIncome: 0,
-        adjustments: {
-          studentLoanInterest: 0,
-          retirementContributions: 0,
-          healthSavingsAccount: 0,
-          otherAdjustments: 0,
-        },
-        adjustedGrossIncome: 0,
-      };
+      console.log("현재 세금 데이터:", taxData);
+      console.log("현재 소득 데이터:", taxData.income);
 
-      // 기타 조정 항목에 추가 조정 항목의 총액 할당
+      // 기존 소득 데이터가 없으면 알림
+      if (!taxData.income) {
+        toast({
+          title: "알림",
+          description: "먼저 기본 소득 정보를 입력해주세요.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // 기존 소득 데이터를 완전히 보존하면서 조정 항목만 업데이트
       const updatedIncome = {
-        ...currentIncome,
+        ...taxData.income, // 기존 모든 소득 데이터 보존
         additionalAdjustmentItems: addedItems,
         adjustments: {
-          ...currentIncome.adjustments,
-          otherAdjustments: totalAmount
+          ...taxData.income.adjustments, // 기존 조정 데이터 보존
+          otherAdjustments: totalAmount // 기타 조정만 업데이트
         }
       };
 
       // AGI 재계산
       updatedIncome.adjustedGrossIncome = 
-        updatedIncome.totalIncome - 
-        (updatedIncome.adjustments.studentLoanInterest + 
-         updatedIncome.adjustments.retirementContributions + 
-         updatedIncome.adjustments.healthSavingsAccount + 
-         updatedIncome.adjustments.otherAdjustments);
+        (updatedIncome.totalIncome || 0) - 
+        ((updatedIncome.adjustments?.studentLoanInterest || 0) + 
+         (updatedIncome.adjustments?.retirementContributions || 0) + 
+         (updatedIncome.adjustments?.healthSavingsAccount || 0) + 
+         (updatedIncome.adjustments?.otherAdjustments || 0));
 
-      // 컨텍스트 업데이트
-      updateTaxData({ income: updatedIncome });
+      console.log("업데이트된 소득 데이터:", updatedIncome);
+
+      // 컨텍스트 업데이트 - income 필드만 업데이트
+      await updateTaxData({ income: updatedIncome });
 
       // 메인 소득 페이지로 돌아가기
       navigate('/income');
