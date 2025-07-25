@@ -381,37 +381,61 @@ const TaxCredits3Page: React.FC = () => {
     console.log("자녀 세액공제 계산 - 조정총소득(AGI):", agi, "신고유형:", filingStatus);
     
     if (!dependents || dependents.length === 0) {
-      toast({
-        title: "계산할 수 없습니다",
-        description: "부양가족 정보가 없습니다. 개인정보 페이지에서 부양가족을 먼저 추가해주세요.",
-        variant: "destructive"
-      });
-      return;
+      console.log("부양가족 정보가 없음");
+      form.setValue('childTaxCredit', 0);
+      setPendingChanges(true);
+      return 0;
     }
     
-    const qualifyingChildren = dependents.filter(dependent => 
-      dependent.isQualifyingChild && !dependent.isNonresidentAlien
-    );
+    // 17세 미만 자녀 필터링 (나이 기준으로 자동 판단)
+    const qualifyingChildren = dependents.filter(dependent => {
+      const birthDate = new Date(dependent.dateOfBirth);
+      const taxYearEnd = new Date('2024-12-31');
+      let age = taxYearEnd.getFullYear() - birthDate.getFullYear();
+      const monthDiff = taxYearEnd.getMonth() - birthDate.getMonth();
+      if (monthDiff < 0 || (monthDiff === 0 && taxYearEnd.getDate() < birthDate.getDate())) {
+        age--;
+      }
+      
+      const isQualifying = age < 17 && !dependent.isNonresidentAlien;
+      console.log(`자녀 세액공제 대상 확인 - 생년월일: ${dependent.dateOfBirth}, 나이: ${age}세, 적격 여부: ${isQualifying}`);
+      return isQualifying;
+    });
     
-    if (qualifyingChildren.length === 0) {
-      toast({
-        title: "계산할 수 없습니다",
-        description: "적격 자녀가 없습니다. 개인정보 페이지에서 '적격 자녀 여부'에 체크한 부양가족을 추가해주세요.",
-        variant: "destructive"
-      });
-      return;
+    console.log(`총 ${dependents.length}명 중 ${qualifyingChildren.length}명이 자녀 세액공제 대상`);
+    
+    // 계산 로직: $2,000 per qualifying child
+    const creditPerChild = 2000;
+    const totalCredit = qualifyingChildren.length * creditPerChild;
+    
+    // AGI에 따른 phase-out 적용 (2024년 기준)
+    const phaseOutThreshold = filingStatus === 'married_joint' ? 400000 : 200000;
+    let finalCredit = totalCredit;
+    
+    if (agi > phaseOutThreshold) {
+      const excessAgi = agi - phaseOutThreshold;
+      const reduction = Math.ceil(excessAgi / 1000) * 50; // $50 per $1,000 of excess AGI
+      finalCredit = Math.max(0, totalCredit - reduction);
+      console.log(`AGI ${agi}로 인한 phase-out 적용: ${totalCredit} - ${reduction} = ${finalCredit}`);
     }
     
-    // 적격 자녀에 기반한 세액공제 계산
-    const credit = calculateChildTaxCredit(qualifyingChildren, agi, filingStatus);
-    form.setValue('childTaxCredit', credit);
+    form.setValue('childTaxCredit', finalCredit);
     setPendingChanges(true);
     
     // 총 세액공제 업데이트
     setTimeout(() => calculateTotalCredits(), 100);
     
-    console.log("계산된 자녀 세액공제액:", credit);
-    return credit;
+    console.log("계산된 자녀 세액공제액:", finalCredit);
+    
+    if (finalCredit > 0) {
+      toast({
+        title: "자녀 세액공제 자동 계산 완료",
+        description: `${qualifyingChildren.length}명의 17세 미만 자녀에 대해 $${finalCredit.toLocaleString()}이 계산되었습니다.`,
+        variant: "default"
+      });
+    }
+    
+    return finalCredit;
   };
   
   // 기타 부양가족 공제 자동 계산
@@ -496,6 +520,12 @@ const TaxCredits3Page: React.FC = () => {
         // 은퇴저축 관련 필드 표시
         setShowRetirementFields(true);
         setTimeout(() => calculateRetirementCredit(), 1500);
+      }
+      
+      // 페이지 로드 시 부양가족이 있다면 Child Tax Credit 자동 계산
+      if (taxData.personalInfo?.dependents && taxData.personalInfo.dependents.length > 0) {
+        console.log("페이지 로드 시 자녀 세액공제 자동 계산 실행");
+        setTimeout(() => calculateChildTaxCreditAuto(), 500);
       }
       
       setPendingChanges(false);
