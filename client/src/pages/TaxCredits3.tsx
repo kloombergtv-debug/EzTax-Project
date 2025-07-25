@@ -419,7 +419,14 @@ const TaxCredits3Page: React.FC = () => {
       console.log(`AGI ${agi}로 인한 phase-out 적용: ${totalCredit} - ${reduction} = ${finalCredit}`);
     }
     
-    form.setValue('childTaxCredit', finalCredit);
+    // 폼 값 설정 및 강제 리렌더링
+    console.log("폼에 값 설정 시도:", finalCredit);
+    form.setValue('childTaxCredit', finalCredit, { shouldDirty: true, shouldTouch: true, shouldValidate: true });
+    
+    // 폼 값이 실제로 설정되었는지 확인
+    const currentValue = form.getValues('childTaxCredit');
+    console.log("폼에 설정된 현재 값:", currentValue);
+    
     setPendingChanges(true);
     
     // 총 세액공제 업데이트
@@ -629,10 +636,12 @@ const TaxCredits3Page: React.FC = () => {
                                     <Input 
                                       placeholder="0.00"
                                       className="pl-8"
-                                      value={field.value || ''}
+                                      value={field.value !== undefined ? field.value.toString() : ''}
                                       onChange={(e) => {
                                         const formatted = formatNumberInput(e.target.value);
-                                        field.onChange(formatted ? Number(formatted) : 0);
+                                        const numValue = formatted ? Number(formatted) : 0;
+                                        console.log("Child Tax Credit 필드 값 변경:", numValue);
+                                        field.onChange(numValue);
                                         setPendingChanges(true);
                                       }}
                                     />
