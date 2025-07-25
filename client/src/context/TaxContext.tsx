@@ -32,6 +32,7 @@ interface TaxContextType {
   isDataReady: boolean;
   updateTaxData: (data: Partial<TaxData>) => Promise<void>;
   saveTaxData: () => Promise<void>;
+  loadTaxData: () => Promise<void>;
 }
 
 const TaxContext = createContext<TaxContextType | undefined>(undefined);
@@ -252,6 +253,55 @@ export const TaxProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   };
 
+  const loadTaxData = async () => {
+    try {
+      setIsLoading(true);
+      console.log('수동 데이터 로딩 시작');
+      
+      // 먼저 사용자 확인
+      const userResponse = await fetch('/api/user', {
+        credentials: 'include'
+      });
+      
+      if (!userResponse.ok) {
+        console.log('사용자 인증 실패 - 빈 데이터로 시작');
+        setIsLoading(false);
+        setIsDataReady(true);
+        return;
+      }
+      
+      const user = await userResponse.json();
+      console.log(`사용자 로그인 확인: ${user.username} (ID: ${user.id})`);
+      setCurrentUserId(user.id);
+      
+      // 세금 데이터 로드
+      const taxResponse = await fetch('/api/tax-return', {
+        credentials: 'include'
+      });
+      
+      if (taxResponse.ok) {
+        const serverData = await taxResponse.json();
+        console.log("수동 새로고침 - 서버 데이터 로드:", {
+          hasPersonalInfo: !!serverData.personalInfo,
+          hasIncome: !!serverData.income,
+          firstName: serverData.personalInfo?.firstName
+        });
+        
+        console.log("서버 데이터를 TaxContext에 로드 중...");
+        setTaxData(serverData);
+      } else {
+        console.log('세금 데이터 없음 - 새 사용자로 시작');
+      }
+      
+      setIsLoading(false);
+      setIsDataReady(true);
+    } catch (error) {
+      console.error('수동 데이터 로딩 오류:', error);
+      setIsLoading(false);
+      setIsDataReady(true);
+    }
+  };
+
   return (
     <TaxContext.Provider
       value={{
@@ -260,6 +310,7 @@ export const TaxProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         isDataReady,
         updateTaxData,
         saveTaxData,
+        loadTaxData,
       }}
     >
       {children}

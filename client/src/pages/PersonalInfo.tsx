@@ -12,7 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { useTaxContext } from "@/context/TaxContext";
 import { personalInfoSchema, type PersonalInformation } from "../../../shared/schema";
 import { useToast } from "@/hooks/use-toast";
-import { Trash2, Plus } from "lucide-react";
+import { Trash2, Plus, RefreshCw } from "lucide-react";
 
 const US_STATES = [
   "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA",
@@ -32,9 +32,10 @@ const FILING_STATUS_OPTIONS = [
 
 export default function PersonalInfo() {
   const [, setLocation] = useLocation();
-  const { taxData, updateTaxData, isDataReady } = useTaxContext();
+  const { taxData, updateTaxData, isDataReady, loadTaxData } = useTaxContext();
   const { toast } = useToast();
   const [showSpouseInfo, setShowSpouseInfo] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const emptyDefaults: PersonalInformation = {
     firstName: '',
@@ -138,6 +139,40 @@ export default function PersonalInfo() {
     }
   };
 
+  const handleRefreshData = async () => {
+    setIsRefreshing(true);
+    try {
+      console.log("수동 데이터 새로고침 시작");
+      await loadTaxData();
+      
+      // 잠시 후 폼 데이터 강제 업데이트
+      setTimeout(() => {
+        if (taxData.personalInfo && Object.keys(taxData.personalInfo).length > 0) {
+          console.log("새로고침 후 폼 업데이트:", taxData.personalInfo);
+          form.reset(taxData.personalInfo);
+          
+          const shouldShowSpouse = taxData.personalInfo.filingStatus === 'married_joint' || 
+                                   taxData.personalInfo.filingStatus === 'married_separate';
+          setShowSpouseInfo(shouldShowSpouse);
+        }
+      }, 500);
+      
+      toast({
+        title: "데이터 새로고침 완료",
+        description: "저장된 개인정보를 성공적으로 불러왔습니다.",
+      });
+    } catch (error) {
+      console.error("데이터 새로고침 오류:", error);
+      toast({
+        title: "새로고침 실패",
+        description: "데이터를 불러오는 중 오류가 발생했습니다.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
+
   const addDependent = () => {
     const currentDependents = form.getValues("dependents") || [];
     form.setValue("dependents", [
@@ -194,8 +229,22 @@ export default function PersonalInfo() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl font-bold">개인정보 (Personal Information)</CardTitle>
-          <p className="text-muted-foreground">세금 신고서 작성을 위해 개인정보를 입력해주세요.</p>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="text-2xl font-bold">개인정보 (Personal Information)</CardTitle>
+              <p className="text-muted-foreground">세금 신고서 작성을 위해 개인정보를 입력해주세요.</p>
+            </div>
+            <Button 
+              type="button" 
+              variant="outline" 
+              onClick={handleRefreshData}
+              disabled={isRefreshing}
+              className="flex items-center gap-2"
+            >
+              <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+              {isRefreshing ? '불러오는 중...' : '저장된 데이터 불러오기'}
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
           <Form {...form}>
