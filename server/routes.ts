@@ -188,9 +188,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       const userId = (req.user as any).id;
-      console.log(`GET /api/tax-return - 사용자 ID: ${userId} 데이터 요청`);
+      console.log(`GET /api/tax-return - 인증된 사용자 ID: ${userId} 데이터 요청`);
       
       const taxReturn = await storage.getTaxReturnByUserId(userId);
+      console.log(`사용자 ${userId} 세금 데이터 조회 결과:`, taxReturn ? `발견됨 (ID: ${taxReturn.id})` : '없음');
       
       if (!taxReturn) {
         console.log(`사용자 ID ${userId}의 세금 신고서 없음 - 새 빈 신고서 생성`);
