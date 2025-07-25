@@ -67,40 +67,43 @@ const PersonalInfo: React.FC = () => {
 
   // 모든 useEffect를 조건부 렌더링 이전에 선언
   useEffect(() => {
-    // 우선순위: localStorage > TaxContext > 기본값
+    // 우선순위: TaxContext 서버 데이터 > localStorage > 기본값
     const restoreFormData = () => {
       let dataToUse = emptyDefaults;
       
-      // 1. localStorage에서 임시 저장된 데이터 확인
-      try {
-        const tempPersonalInfo = localStorage.getItem('tempPersonalInfo');
-        const tempFilingStatus = localStorage.getItem('tempFilingStatus');
-        
-        if (tempPersonalInfo) {
-          const parsedData = JSON.parse(tempPersonalInfo);
-          console.log("PersonalInfo - localStorage에서 데이터 복원:", parsedData);
-          dataToUse = { ...emptyDefaults, ...parsedData };
-        } else if (tempFilingStatus) {
-          const parsedStatus = JSON.parse(tempFilingStatus);
-          console.log("PersonalInfo - localStorage에서 Filing Status 복원:", parsedStatus);
-          dataToUse = { ...emptyDefaults, ...parsedStatus };
+      // 1. TaxContext 서버 데이터가 있으면 최우선 적용
+      if (taxData.personalInfo && Object.keys(taxData.personalInfo).length > 0) {
+        console.log("PersonalInfo - TaxContext 서버 데이터로 폼 초기화:", taxData.personalInfo);
+        dataToUse = { ...emptyDefaults, ...taxData.personalInfo };
+      } else {
+        // 2. 서버 데이터가 없을 때만 localStorage에서 임시 저장된 데이터 확인
+        try {
+          const tempPersonalInfo = localStorage.getItem('tempPersonalInfo');
+          const tempFilingStatus = localStorage.getItem('tempFilingStatus');
+          
+          if (tempPersonalInfo) {
+            const parsedData = JSON.parse(tempPersonalInfo);
+            console.log("PersonalInfo - localStorage에서 데이터 복원:", parsedData);
+            dataToUse = { ...emptyDefaults, ...parsedData };
+          } else if (tempFilingStatus) {
+            const parsedStatus = JSON.parse(tempFilingStatus);
+            console.log("PersonalInfo - localStorage에서 Filing Status 복원:", parsedStatus);
+            dataToUse = { ...emptyDefaults, ...parsedStatus };
+          }
+        } catch (error) {
+          console.error("localStorage 데이터 복원 오류:", error);
         }
-      } catch (error) {
-        console.error("localStorage 데이터 복원 오류:", error);
-      }
-      
-      // 2. TaxContext 데이터가 있으면 우선 적용
-      if (taxData.personalInfo) {
-        console.log("PersonalInfo - TaxContext 데이터로 폼 초기화:", taxData.personalInfo);
-        dataToUse = { ...dataToUse, ...taxData.personalInfo };
       }
       
       console.log("PersonalInfo - 최종 폼 데이터:", dataToUse);
       form.reset(dataToUse);
     };
     
-    restoreFormData();
-  }, [taxData.personalInfo, form]);
+    // isDataReady가 true일 때만 실행
+    if (isDataReady) {
+      restoreFormData();
+    }
+  }, [taxData.personalInfo, form, isDataReady]);
 
   useEffect(() => {
     const shouldShowSpouse = filingStatus === 'married_joint' || filingStatus === 'married_separate';
