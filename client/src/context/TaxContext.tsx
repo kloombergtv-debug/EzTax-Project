@@ -195,12 +195,14 @@ export const TaxProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         console.log('세금 자동 계산 완료:', calculatedResults);
       } catch (error) {
         console.error('세금 계산 오류:', error);
+        // 계산 오류가 있어도 데이터는 저장
       }
 
       setTaxData(mergedData);
       
       // Auto-save to server
       if (currentUserId && mergedData.id) {
+        console.log(`사용자 ${currentUserId} 데이터 업데이트 시작 (세금신고서 ID: ${mergedData.id})`);
         const response = await fetch(`/api/tax-return/${mergedData.id}`, {
           method: 'PUT',
           headers: {
@@ -211,11 +213,14 @@ export const TaxProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         });
         
         if (response.ok) {
-          console.log('데이터가 성공적으로 저장되었습니다');
+          console.log('✅ 데이터가 성공적으로 저장되었습니다');
         } else {
-          console.error('자동 저장 실패:', response.statusText);
+          console.error('❌ 자동 저장 실패:', response.statusText);
+          const errorText = await response.text();
+          console.error('응답 내용:', errorText);
         }
       } else if (currentUserId) {
+        console.log(`사용자 ${currentUserId} 새 세금신고서 생성 시작`);
         // Create new tax return for user
         const response = await fetch('/api/tax-return', {
           method: 'POST',
@@ -228,9 +233,16 @@ export const TaxProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         
         if (response.ok) {
           const newTaxReturn = await response.json();
-          console.log(`새 세금 신고서 생성됨 (ID: ${newTaxReturn.id})`);
+          console.log(`✅ 새 세금 신고서 생성됨 (ID: ${newTaxReturn.id})`);
           setTaxData(prev => ({ ...prev, id: newTaxReturn.id }));
+        } else {
+          console.error('❌ 세금신고서 생성 실패:', response.statusText);
+          const errorText = await response.text();
+          console.error('응답 내용:', errorText);
         }
+      } else {
+        console.warn('⚠️ 사용자 ID 또는 세금신고서 ID가 없어 저장을 건너뜁니다');
+        console.log('현재 상태:', { currentUserId, taxReturnId: mergedData.id });
       }
     } catch (error) {
       console.error('데이터 업데이트 실패:', error);
