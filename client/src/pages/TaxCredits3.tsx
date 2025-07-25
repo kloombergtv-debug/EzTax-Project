@@ -467,19 +467,26 @@ const TaxCredits3Page: React.FC = () => {
     console.log("폼에 값 설정 시도:", finalCredit);
     form.setValue('childTaxCredit', finalCredit, { shouldDirty: true, shouldTouch: true, shouldValidate: true });
     
-    // 기타 부양가족 공제 값 복원 (덮어쓰지 않도록)
-    form.setValue('otherCredits', currentOtherCredits, { shouldDirty: false });
+    // 기타 부양가족 공제 값 복원 (강제 업데이트)
+    if (currentOtherCredits > 0) {
+      setTimeout(() => {
+        form.setValue('otherCredits', currentOtherCredits, { 
+          shouldDirty: true, 
+          shouldTouch: true, 
+          shouldValidate: true 
+        });
+        console.log("기타 부양가족 공제 값 강제 복원:", currentOtherCredits);
+      }, 50);
+    }
     
     // 폼 값이 실제로 설정되었는지 확인
     const currentValue = form.getValues('childTaxCredit');
-    const restoredOtherCredits = form.getValues('otherCredits');
     console.log("폼에 설정된 현재 값:", currentValue);
-    console.log("복원된 기타 부양가족 공제 값:", restoredOtherCredits);
     
     setPendingChanges(true);
     
-    // 총 세액공제 업데이트 (기타 부양가족 공제 값은 변경하지 않음)
-    setTimeout(() => calculateTotalCredits(), 100);
+    // 총 세액공제 업데이트 (약간 지연시켜 값 복원 후 실행)
+    setTimeout(() => calculateTotalCredits(), 200);
     
     console.log("계산된 자녀 세액공제액:", finalCredit);
     
