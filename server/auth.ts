@@ -210,13 +210,22 @@ export function setupAuth(app: Express) {
   });
 
   app.post("/api/login", (req, res, next) => {
+    console.log('Login attempt for user:', req.body.username);
     passport.authenticate("local", (err: Error | null, user: SelectUser | false, info: { message: string }) => {
-      if (err) return next(err);
+      if (err) {
+        console.error('Authentication error:', err);
+        return next(err);
+      }
       if (!user) {
+        console.log('Authentication failed for user:', req.body.username);
         return res.status(401).json({ message: "아이디나 비밀번호가 올바르지 않습니다(Invalid username or password)" });
       }
       req.login(user, (err) => {
-        if (err) return next(err);
+        if (err) {
+          console.error('Session login error:', err);
+          return next(err);
+        }
+        console.log('Login successful for user:', user.username, 'Session ID:', req.sessionID);
         res.status(200).json(user);
       });
     })(req, res, next);
