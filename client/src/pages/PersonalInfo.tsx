@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { useTaxContext } from "@/context/TaxContext";
-import { personalInfoSchema, type PersonalInformation } from "../../../shared/schema";
+import { personalInfoSchema, type PersonalInformation } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
 import { Trash2, Plus, RefreshCw } from "lucide-react";
 
@@ -233,6 +233,14 @@ export default function PersonalInfo() {
             <div>
               <CardTitle className="text-2xl font-bold">개인정보 (Personal Information)</CardTitle>
               <p className="text-muted-foreground">세금 신고서 작성을 위해 개인정보를 입력해주세요.</p>
+              <div className="mt-2 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                <p className="text-sm text-blue-700 font-medium">
+                  ⚠️ 필수 입력 사항: <span className="font-bold">생년월일</span>과 <span className="font-bold">주(State)</span>만 입력하시면 다음 페이지로 진행할 수 있습니다.
+                </p>
+                <p className="text-xs text-blue-600 mt-1">
+                  이름, 사회보장번호, 주소 등은 선택사항입니다.
+                </p>
+              </div>
             </div>
             <Button 
               type="button" 
@@ -258,7 +266,7 @@ export default function PersonalInfo() {
                     name="firstName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>이름 (First Name)</FormLabel>
+                        <FormLabel>이름 (First Name) <span className="text-gray-400 text-sm">(선택사항)</span></FormLabel>
                         <FormControl>
                           <Input placeholder="이름을 입력하세요" {...field} />
                         </FormControl>
@@ -284,7 +292,7 @@ export default function PersonalInfo() {
                     name="lastName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>성 (Last Name)</FormLabel>
+                        <FormLabel>성 (Last Name) <span className="text-gray-400 text-sm">(선택사항)</span></FormLabel>
                         <FormControl>
                           <Input placeholder="성을 입력하세요" {...field} />
                         </FormControl>
@@ -300,7 +308,7 @@ export default function PersonalInfo() {
                     name="ssn"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>사회보장번호 (SSN)</FormLabel>
+                        <FormLabel>사회보장번호 (SSN) <span className="text-gray-400 text-sm">(선택사항)</span></FormLabel>
                         <FormControl>
                           <Input placeholder="XXX-XX-XXXX" {...field} />
                         </FormControl>
@@ -313,7 +321,7 @@ export default function PersonalInfo() {
                     name="dateOfBirth"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>생년월일 (Date of Birth)</FormLabel>
+                        <FormLabel>생년월일 (Date of Birth) <span className="text-red-500">*필수</span></FormLabel>
                         <FormControl>
                           <Input type="date" {...field} />
                         </FormControl>
@@ -329,7 +337,7 @@ export default function PersonalInfo() {
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>이메일 (Email)</FormLabel>
+                        <FormLabel>이메일 (Email) <span className="text-gray-400 text-sm">(선택사항)</span></FormLabel>
                         <FormControl>
                           <Input type="email" placeholder="이메일 주소" {...field} />
                         </FormControl>
@@ -342,7 +350,7 @@ export default function PersonalInfo() {
                     name="phone"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>전화번호 (Phone)</FormLabel>
+                        <FormLabel>전화번호 (Phone) <span className="text-gray-400 text-sm">(선택사항)</span></FormLabel>
                         <FormControl>
                           <Input placeholder="XXX-XXX-XXXX" {...field} />
                         </FormControl>
@@ -361,7 +369,7 @@ export default function PersonalInfo() {
                   name="address1"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>주소 1 (Address Line 1)</FormLabel>
+                      <FormLabel>주소 1 (Address Line 1) <span className="text-gray-400 text-sm">(선택사항)</span></FormLabel>
                       <FormControl>
                         <Input placeholder="주소를 입력하세요" {...field} />
                       </FormControl>
@@ -388,7 +396,7 @@ export default function PersonalInfo() {
                     name="city"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>시/군 (City)</FormLabel>
+                        <FormLabel>시/군 (City) <span className="text-gray-400 text-sm">(선택사항)</span></FormLabel>
                         <FormControl>
                           <Input placeholder="도시명" {...field} />
                         </FormControl>
@@ -401,7 +409,7 @@ export default function PersonalInfo() {
                     name="state"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>주 (State)</FormLabel>
+                        <FormLabel>주 (State) <span className="text-red-500">*필수</span></FormLabel>
                         <Select onValueChange={field.onChange} value={field.value}>
                           <FormControl>
                             <SelectTrigger>
@@ -423,7 +431,7 @@ export default function PersonalInfo() {
                     name="zipCode"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>우편번호 (ZIP Code)</FormLabel>
+                        <FormLabel>우편번호 (ZIP Code) <span className="text-gray-400 text-sm">(선택사항)</span></FormLabel>
                         <FormControl>
                           <Input placeholder="우편번호" {...field} />
                         </FormControl>
