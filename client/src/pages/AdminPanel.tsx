@@ -180,6 +180,7 @@ export default function AdminPanel() {
 
   // Functions to handle tax data viewing
   const handleViewTaxData = (userId: number) => {
+    console.log(`Admin attempting to view tax data for user ID: ${userId}`);
     setSelectedUserId(userId);
     setShowTaxDataDialog(true);
   };

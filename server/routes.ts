@@ -612,8 +612,16 @@ ${message || '상담 요청'}
 
     try {
       const userId = parseInt(req.params.id);
+      console.log(`Admin requesting tax data for user ID: ${userId}`);
+      
       const taxData = await storage.getTaxReturnByUserId(userId);
-      res.json(taxData);
+      console.log(`Retrieved tax data for user ${userId}:`, taxData ? 'Found' : 'Not found');
+      
+      if (taxData) {
+        console.log(`Tax data ID: ${taxData.id}, User ID: ${taxData.userId}`);
+      }
+      
+      res.json(taxData || null);
     } catch (error) {
       console.error('Error getting user tax data:', error);
       res.status(500).json({ message: 'Failed to get tax data' });
