@@ -371,7 +371,7 @@ const TaxCredits3Page: React.FC = () => {
     return result;
   };
   
-  // 자녀 세액공제 자동 계산
+  // 자녀 세액공제 자동 계산 (기타 부양가족 공제에 영향 주지 않음)
   const calculateChildTaxCreditAuto = () => {
     const filingStatus = taxData.personalInfo?.filingStatus || 'single';
     const agi = taxData.income?.adjustedGrossIncome || 0;
@@ -419,17 +419,26 @@ const TaxCredits3Page: React.FC = () => {
       console.log(`AGI ${agi}로 인한 phase-out 적용: ${totalCredit} - ${reduction} = ${finalCredit}`);
     }
     
+    // 현재 기타 부양가족 공제 값 보존
+    const currentOtherCredits = form.getValues('otherCredits') || 0;
+    console.log("Child Tax Credit 계산 전 기타 부양가족 공제 값:", currentOtherCredits);
+    
     // 폼 값 설정 및 강제 리렌더링
     console.log("폼에 값 설정 시도:", finalCredit);
     form.setValue('childTaxCredit', finalCredit, { shouldDirty: true, shouldTouch: true, shouldValidate: true });
     
+    // 기타 부양가족 공제 값 복원 (덮어쓰지 않도록)
+    form.setValue('otherCredits', currentOtherCredits, { shouldDirty: false });
+    
     // 폼 값이 실제로 설정되었는지 확인
     const currentValue = form.getValues('childTaxCredit');
+    const restoredOtherCredits = form.getValues('otherCredits');
     console.log("폼에 설정된 현재 값:", currentValue);
+    console.log("복원된 기타 부양가족 공제 값:", restoredOtherCredits);
     
     setPendingChanges(true);
     
-    // 총 세액공제 업데이트
+    // 총 세액공제 업데이트 (기타 부양가족 공제 값은 변경하지 않음)
     setTimeout(() => calculateTotalCredits(), 100);
     
     console.log("계산된 자녀 세액공제액:", finalCredit);
