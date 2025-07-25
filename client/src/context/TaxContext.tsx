@@ -1,6 +1,30 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { TaxData } from '../types/tax';
-import { calculateTaxes } from '../lib/taxCalculations';
+import {
+  PersonalInformation,
+  Income,
+  Deductions,
+  TaxCredits,
+  AdditionalTax,
+  CalculatedResults,
+  RetirementContributions
+} from '@shared/schema';
+import { calculateTaxes } from '../utils/tax-calculations';
+
+export interface TaxData {
+  id?: number;
+  userId?: number;
+  taxYear: number;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  personalInfo?: PersonalInformation;
+  income?: Income;
+  deductions?: Deductions;
+  taxCredits?: TaxCredits;
+  retirementContributions?: RetirementContributions;
+  additionalTax?: AdditionalTax;
+  calculatedResults?: CalculatedResults;
+}
 
 interface TaxContextType {
   taxData: TaxData;
@@ -45,207 +69,30 @@ export const TaxProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [isDataReady, setIsDataReady] = useState(false);
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
 
-  // 완전한 데이터 초기화 함수 (보안 중요)
-  const clearAllData = () => {
-    console.log("모든 사용자 데이터 완전 삭제 중...");
-    
-    // TaxContext 데이터 완전 초기화
-    setTaxData({
-      taxYear: 2025,
-      status: 'in_progress',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      personalInfo: undefined,
-      income: undefined,
-      deductions: undefined,
-      taxCredits: undefined,
-      additionalTax: undefined,
-      calculatedResults: {
-        totalIncome: 0,
-        adjustments: 0,
-        adjustedGrossIncome: 0,
-        deductions: 0,
-        taxableIncome: 0,
-        federalTax: 0,
-        credits: 0,
-        taxDue: 0,
-        payments: 0,
-        refundAmount: 0,
-        amountOwed: 0
-      }
-    });
-    
-    // 모든 로컬 저장소 데이터 삭제
-    localStorage.removeItem('personalInfo');
-    localStorage.removeItem('tempPersonalInfo');
-    localStorage.removeItem('tempFilingStatus');
-    localStorage.removeItem('taxData');
-    
-    setCurrentUserId(null);
-    console.log("데이터 삭제 완료 - 보안 확보됨");
-  };
-
   useEffect(() => {
-    const checkAuthAndLoadData = async () => {
+    const loadUserData = async () => {
       try {
         setIsLoading(true);
         
+        // Check user authentication
         const userResponse = await fetch('/api/user', {
           credentials: 'include',
           cache: 'no-cache'
         });
         
         if (!userResponse.ok) {
-          console.log(`사용자 인증 실패 (status: ${userResponse.status}) - 현재 사용자 ID: ${currentUserId}`);
-          // 로그인 후 인증 실패 시 데이터를 바로 삭제하지 않고 재시도
-          if (currentUserId !== null) {
-            console.log("기존 로그인 사용자 존재 - 데이터 보존하며 재시도 대기");
-            setIsLoading(false);
-            setIsDataReady(true);
-            return;
-          }
-          
-          // 완전히 새로운 사용자만 데이터 초기화
-          console.log("완전히 새로운 사용자 - 빈 데이터로 시작");
-          setTaxData({
-            taxYear: 2025,
-            status: 'in_progress',
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-            calculatedResults: {
-              totalIncome: 0,
-              adjustments: 0,
-              adjustedGrossIncome: 0,
-              deductions: 0,
-              taxableIncome: 0,
-              federalTax: 0,
-              credits: 0,
-              taxDue: 0,
-              payments: 0,
-              refundAmount: 0,
-              amountOwed: 0
-            }
-          });
+          console.log('사용자 인증 실패 - 빈 데이터로 시작');
           setIsDataReady(true);
+          setIsLoading(false);
           return;
         }
         
         const currentUser = await userResponse.json();
+        console.log(`사용자 로그인 확인: ${currentUser.username} (ID: ${currentUser.id})`);
         
-        // 사용자 ID 비교 및 데이터 처리
-        const isUserChange = currentUserId !== null && currentUserId !== currentUser.id;
-        const isFirstLogin = currentUserId === null;
-        
-        if (currentUserId !== currentUser.id) {
-          console.log(`사용자 로그인: ${currentUser.username} (ID: ${currentUser.id}, 이전: ${currentUserId})`);
-          
-          if (isUserChange) {
-            console.log("다른 사용자로 변경 - 기존 데이터 삭제");
-            clearAllData();
-          } else if (isFirstLogin) {
-            console.log(`첫 로그인 - ${currentUser.username} 서버 데이터 로드 준비`);
-          }
-          
-          setCurrentUserId(currentUser.id);
-        }
-        
-        // 기존 엔드포인트 먼저 시도
-        let taxResponse = await fetch('/api/tax-return', {
-          credentials: 'include',
-          cache: 'no-cache'
-        });
-        
-        // 인증 실패 시 사용자별 엔드포인트 시도  
-        if (!taxResponse.ok && taxResponse.status === 401) {
-          console.log('기존 엔드포인트 인증 실패 - 사용자별 엔드포인트 시도');
-          taxResponse = await fetch(`/api/tax-return/user/${currentUser.id}`, {
-            credentials: 'include',
-            cache: 'no-cache'
-          });
-        }
-        
-        if (taxResponse.ok) {
-          const serverTaxData = await taxResponse.json();
-          console.log(`사용자 ${currentUser.username}의 세금 데이터 로드 성공:`, {
-            hasPersonalInfo: !!serverTaxData.personalInfo,
-            hasIncome: !!serverTaxData.income,
-            hasDeductions: !!serverTaxData.deductions,
-            hasTaxCredits: !!serverTaxData.taxCredits,
-            dataId: serverTaxData.id
-          });
-          
-          if (serverTaxData?.userId === currentUser.id && serverTaxData.personalInfo) {
-            const calculatedResults = calculateTaxes(serverTaxData);
-            
-            // 서버 데이터 구조 유지하며 병합
-            const restoredData = {
-              id: serverTaxData.id,
-              userId: serverTaxData.userId,
-              taxYear: serverTaxData.taxYear || 2025,
-              status: serverTaxData.status || 'in_progress',
-              createdAt: serverTaxData.createdAt,
-              updatedAt: new Date().toISOString(),
-              personalInfo: serverTaxData.personalInfo,
-              income: serverTaxData.income,
-              deductions: serverTaxData.deductions,
-              taxCredits: serverTaxData.taxCredits,
-              retirementContributions: serverTaxData.retirementContributions,
-              additionalTax: serverTaxData.additionalTax,
-              calculatedResults
-            };
-            
-            console.log(`${currentUser.username} 데이터 복원 완료 - 개인정보:`, serverTaxData.personalInfo?.firstName);
-            setTaxData(restoredData);
-            setIsDataReady(true);
-          } else if (serverTaxData?.userId === currentUser.id && !serverTaxData.personalInfo) {
-            console.log(`사용자 ${currentUser.username}는 빈 데이터 - 새로 시작`);
-            setTaxData({
-              id: serverTaxData.id,
-              userId: serverTaxData.userId,
-              taxYear: 2025,
-              status: 'in_progress',
-              createdAt: serverTaxData.createdAt || new Date().toISOString(),
-              updatedAt: new Date().toISOString(),
-              calculatedResults: {
-                totalIncome: 0,
-                adjustments: 0,
-                adjustedGrossIncome: 0,
-                deductions: 0,
-                taxableIncome: 0,
-                federalTax: 0,
-                credits: 0,
-                taxDue: 0,
-                payments: 0,
-                refundAmount: 0,
-                amountOwed: 0
-              }
-            });
-            setIsDataReady(true);
-          } else {
-            console.error("데이터 사용자 ID 불일치 또는 데이터 없음");
-            setTaxData({
-              taxYear: 2025,
-              status: 'in_progress',
-              createdAt: new Date().toISOString(),
-              updatedAt: new Date().toISOString(),
-              calculatedResults: {
-                totalIncome: 0,
-                adjustments: 0,
-                adjustedGrossIncome: 0,
-                deductions: 0,
-                taxableIncome: 0,
-                federalTax: 0,
-                credits: 0,
-                taxDue: 0,
-                payments: 0,
-                refundAmount: 0,
-                amountOwed: 0
-              }
-            });
-          }
-        } else {
-          console.log(`사용자의 세금 데이터 없음 - 새로 시작`);
-          // 새 사용자 또는 데이터가 없는 경우 기본 구조만 설정
+        // If user changed, clear data
+        if (currentUserId !== null && currentUserId !== currentUser.id) {
+          console.log('사용자 변경 - 데이터 초기화');
           setTaxData({
             taxYear: 2025,
             status: 'in_progress',
@@ -265,137 +112,124 @@ export const TaxProvider: React.FC<{ children: React.ReactNode }> = ({ children 
               amountOwed: 0
             }
           });
-          setIsDataReady(true);
         }
+        
+        setCurrentUserId(currentUser.id);
+        
+        // Load tax data for this user
+        const taxResponse = await fetch('/api/tax-return', {
+          credentials: 'include',
+          cache: 'no-cache'
+        });
+        
+        if (taxResponse.ok) {
+          const serverTaxData = await taxResponse.json();
+          console.log(`사용자 ${currentUser.username}의 세금 데이터 로드:`, {
+            hasPersonalInfo: !!serverTaxData.personalInfo,
+            hasIncome: !!serverTaxData.income,
+            firstName: serverTaxData.personalInfo?.firstName
+          });
+          
+          if (serverTaxData && serverTaxData.personalInfo) {
+            console.log('서버 데이터를 TaxContext에 로드 중...');
+            setTaxData(serverTaxData);
+          } else {
+            console.log('빈 데이터 - 새 사용자로 시작');
+          }
+        } else {
+          console.log('세금 데이터 로드 실패 - 새로운 데이터로 시작');
+        }
+        
+        setIsDataReady(true);
       } catch (error) {
         console.error('데이터 로드 오류:', error);
-        setTaxData({
-          taxYear: 2025,
-          status: 'in_progress',
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-          calculatedResults: {
-            totalIncome: 0,
-            adjustments: 0,
-            adjustedGrossIncome: 0,
-            deductions: 0,
-            taxableIncome: 0,
-            federalTax: 0,
-            credits: 0,
-            taxDue: 0,
-            payments: 0,
-            refundAmount: 0,
-            amountOwed: 0
-          }
-        });
+        setIsDataReady(true);
       } finally {
         setIsLoading(false);
       }
     };
 
-    checkAuthAndLoadData();
-  }, []); // 의존성 배열을 비워서 무한 루프 방지
+    loadUserData();
+  }, [currentUserId]);
 
   const updateTaxData = async (data: Partial<TaxData>) => {
-    // 깊은 병합을 위한 헬퍼 함수
-    const deepMerge = (target: any, source: any) => {
-      if (!source) return target;
-      if (!target) return source;
+    try {
+      console.log('updateTaxData 호출됨:', Object.keys(data));
       
-      const result = { ...target };
-      
-      for (const key in source) {
-        if (source[key] !== null && typeof source[key] === 'object' && !Array.isArray(source[key])) {
-          result[key] = deepMerge(target[key] || {}, source[key]);
-        } else {
-          result[key] = source[key];
-        }
-      }
-      
-      return result;
-    };
-
-    // 데이터 깊은 병합
-    const updatedData = {
-      id: taxData.id,
-      userId: taxData.userId || currentUserId,
-      taxYear: taxData.taxYear || 2025,
-      status: taxData.status || 'in_progress',
-      createdAt: taxData.createdAt || new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      personalInfo: data.personalInfo ? deepMerge(taxData.personalInfo, data.personalInfo) : taxData.personalInfo,
-      income: data.income ? deepMerge(taxData.income, data.income) : taxData.income,
-      deductions: data.deductions ? deepMerge(taxData.deductions, data.deductions) : taxData.deductions,
-      taxCredits: data.taxCredits ? deepMerge(taxData.taxCredits, data.taxCredits) : taxData.taxCredits,
-      retirementContributions: data.retirementContributions ? deepMerge(taxData.retirementContributions, data.retirementContributions) : taxData.retirementContributions,
-      additionalTax: data.additionalTax ? deepMerge(taxData.additionalTax, data.additionalTax) : taxData.additionalTax,
-    };
-    
-    const calculatedResults = calculateTaxes(updatedData);
-    
-    const finalData = {
-      ...updatedData,
-      calculatedResults
-    };
-    
-    setTaxData(finalData);
-    
-    // Auto-save to server if user is authenticated
-    if (currentUserId) {
-      try {
-        if (finalData.id) {
-          // Update existing tax return
-          console.log(`기존 세금 신고서 업데이트 중 (ID: ${finalData.id})`);
-          const response = await fetch(`/api/tax-return/${finalData.id}`, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-            body: JSON.stringify(finalData),
-          });
-          
-          if (response.ok) {
-            const savedData = await response.json();
-            console.log('서버 자동 저장 성공 - 업데이트 시간:', savedData.updatedAt);
-            console.log('저장된 데이터 확인:', {
-              personalInfo: !!savedData.personalInfo,
-              income: !!savedData.income,
-              deductions: !!savedData.deductions,
-              taxCredits: !!savedData.taxCredits
-            });
+      // Deep merge function
+      const deepMerge = (target: any, source: any) => {
+        if (!source) return target;
+        if (!target) return source;
+        
+        const result = { ...target };
+        
+        for (const key in source) {
+          if (source[key] !== null && typeof source[key] === 'object' && !Array.isArray(source[key])) {
+            result[key] = deepMerge(target[key] || {}, source[key]);
           } else {
-            console.error('서버 자동 저장 실패:', response.statusText);
-          }
-        } else {
-          // Create new tax return for user
-          console.log(`새 사용자를 위한 세금 신고서 생성 중 (사용자 ID: ${currentUserId})`);
-          const response = await fetch('/api/tax-return', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-            body: JSON.stringify(finalData),
-          });
-          
-          if (response.ok) {
-            const newTaxReturn = await response.json();
-            console.log(`새 세금 신고서 생성됨 (ID: ${newTaxReturn.id})`);
-            // Update the local data with the new ID
-            setTaxData(prev => ({ ...prev, id: newTaxReturn.id }));
+            result[key] = source[key];
           }
         }
-      } catch (error) {
-        console.error('자동 저장 실패:', error);
+        
+        return result;
+      };
+
+      // Merge with existing data
+      const mergedData = {
+        ...taxData,
+        ...data,
+        updatedAt: new Date().toISOString(),
+        personalInfo: data.personalInfo ? deepMerge(taxData.personalInfo, data.personalInfo) : taxData.personalInfo,
+        income: data.income ? deepMerge(taxData.income, data.income) : taxData.income,
+        deductions: data.deductions ? deepMerge(taxData.deductions, data.deductions) : taxData.deductions,
+        taxCredits: data.taxCredits ? deepMerge(taxData.taxCredits, data.taxCredits) : taxData.taxCredits,
+        retirementContributions: data.retirementContributions ? deepMerge(taxData.retirementContributions, data.retirementContributions) : taxData.retirementContributions,
+        additionalTax: data.additionalTax ? deepMerge(taxData.additionalTax, data.additionalTax) : taxData.additionalTax
+      };
+
+      setTaxData(mergedData);
+      
+      // Auto-save to server
+      if (currentUserId && mergedData.id) {
+        const response = await fetch(`/api/tax-return/${mergedData.id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+          body: JSON.stringify(mergedData),
+        });
+        
+        if (response.ok) {
+          console.log('데이터가 성공적으로 저장되었습니다');
+        } else {
+          console.error('자동 저장 실패:', response.statusText);
+        }
+      } else if (currentUserId) {
+        // Create new tax return for user
+        const response = await fetch('/api/tax-return', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+          body: JSON.stringify(mergedData),
+        });
+        
+        if (response.ok) {
+          const newTaxReturn = await response.json();
+          console.log(`새 세금 신고서 생성됨 (ID: ${newTaxReturn.id})`);
+          setTaxData(prev => ({ ...prev, id: newTaxReturn.id }));
+        }
       }
+    } catch (error) {
+      console.error('데이터 업데이트 실패:', error);
     }
   };
 
   const saveTaxData = async () => {
     try {
       if (taxData.id) {
-        // Update existing tax return
         const response = await fetch(`/api/tax-return/${taxData.id}`, {
           method: 'PUT',
           headers: {
@@ -404,44 +238,30 @@ export const TaxProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           credentials: 'include',
           body: JSON.stringify(taxData),
         });
-
-        if (!response.ok) {
-          throw new Error('세금 데이터 업데이트 실패');
+        
+        if (response.ok) {
+          console.log('데이터가 성공적으로 저장되었습니다');
+        } else {
+          console.error('저장 실패:', response.statusText);
         }
       } else {
-        // Create new tax return
-        const response = await fetch('/api/tax-return', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          credentials: 'include',
-          body: JSON.stringify(taxData),
-        });
-
-        if (!response.ok) {
-          throw new Error('세금 데이터 생성 실패');
-        }
-
-        const newTaxReturn = await response.json();
-        setTaxData(prev => ({ ...prev, id: newTaxReturn.id }));
+        console.log('저장할 데이터 ID가 없습니다');
       }
-
-      console.log('세금 데이터 저장 완료');
     } catch (error) {
-      console.error('세금 데이터 저장 오류:', error);
-      throw error;
+      console.error('저장 중 오류:', error);
     }
   };
 
   return (
-    <TaxContext.Provider value={{
-      taxData,
-      isLoading,
-      isDataReady,
-      updateTaxData,
-      saveTaxData
-    }}>
+    <TaxContext.Provider
+      value={{
+        taxData,
+        isLoading,
+        isDataReady,
+        updateTaxData,
+        saveTaxData,
+      }}
+    >
       {children}
     </TaxContext.Provider>
   );
