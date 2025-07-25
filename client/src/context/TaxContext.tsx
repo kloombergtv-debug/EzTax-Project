@@ -188,6 +188,15 @@ export const TaxProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         additionalTax: data.additionalTax ? deepMerge(taxData.additionalTax, data.additionalTax) : taxData.additionalTax
       };
 
+      // Calculate taxes automatically when data changes
+      try {
+        const calculatedResults = calculateTaxes(mergedData);
+        mergedData.calculatedResults = calculatedResults;
+        console.log('세금 자동 계산 완료:', calculatedResults);
+      } catch (error) {
+        console.error('세금 계산 오류:', error);
+      }
+
       setTaxData(mergedData);
       
       // Auto-save to server
