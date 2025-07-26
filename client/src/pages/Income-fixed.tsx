@@ -553,13 +553,12 @@ export default function IncomePage() {
                             </div>
                             <FormControl>
                               <Input
-                                type="number"
-                                step="0.01"
-                                min="0"
-                                placeholder="급여 금액을 입력하세요"
-                                value={field.value === 0 ? '' : field.value}
+                                type="text"
+                                placeholder="달러 금액"
+                                value={field.value === 0 ? '$' : field.value}
                                 onChange={(e) => {
-                                  field.onChange(parseFloat(e.target.value) || 0);
+                                  const value = e.target.value.replace(/[^0-9.]/g, '');
+                                  field.onChange(value === '' ? 0 : parseFloat(value) || 0);
                                 }}
                               />
                             </FormControl>
@@ -628,13 +627,12 @@ export default function IncomePage() {
                             </div>
                             <FormControl>
                               <Input
-                                type="number"
-                                step="0.01"
-                                min="0"
-                                placeholder="기타 근로소득 금액"
-                                value={field.value === 0 ? '' : field.value}
+                                type="text"
+                                placeholder="달러 금액"
+                                value={field.value === 0 ? '$' : field.value}
                                 onChange={(e) => {
-                                  field.onChange(parseFloat(e.target.value) || 0);
+                                  const value = e.target.value.replace(/[^0-9.]/g, '');
+                                  field.onChange(value === '' ? 0 : parseFloat(value) || 0);
                                 }}
                               />
                             </FormControl>
@@ -688,10 +686,8 @@ export default function IncomePage() {
                             </div>
                             <FormControl>
                               <Input
-                                type="number"
-                                step="0.01"
-                                min="0"
-                                placeholder="사업 순소득 금액"
+                                type="text"
+                                placeholder="달러 금액"
                                 value={(() => {
                                   // QBI 데이터가 있으면 우선 사용
                                   const qbiValue = taxData.income?.qbi?.totalQBI || 0;
@@ -704,10 +700,11 @@ export default function IncomePage() {
                                     displayValue
                                   });
                                   
-                                  return displayValue === 0 ? '' : displayValue;
+                                  return displayValue === 0 ? '$' : displayValue;
                                 })()}
                                 onChange={(e) => {
-                                  const newValue = parseFloat(e.target.value) || 0;
+                                  const value = e.target.value.replace(/[^0-9.]/g, '');
+                                  const newValue = value === '' ? 0 : parseFloat(value) || 0;
                                   console.log('사업소득 필드 수동 변경:', newValue);
                                   field.onChange(newValue);
                                   
@@ -748,13 +745,12 @@ export default function IncomePage() {
                             </div>
                             <FormControl>
                               <Input
-                                type="number"
-                                step="0.01"
-                                min="0"
-                                placeholder="이자소득 금액"
-                                value={field.value === 0 ? '' : field.value}
+                                type="text"
+                                placeholder="달러 금액"
+                                value={field.value === 0 ? '$' : field.value}
                                 onChange={async (e) => {
-                                  const value = parseFloat(e.target.value) || 0;
+                                  const inputValue = e.target.value.replace(/[^0-9.]/g, '');
+                                  const value = inputValue === '' ? 0 : parseFloat(inputValue) || 0;
                                   field.onChange(value);
                                   
                                   // 즉시 계산 및 저장
@@ -795,13 +791,12 @@ export default function IncomePage() {
                             </div>
                             <FormControl>
                               <Input
-                                type="number"
-                                step="0.01"
-                                min="0"
-                                placeholder="배당소득 금액"
-                                value={field.value === 0 ? '' : field.value}
+                                type="text"
+                                placeholder="달러 금액"
+                                value={field.value === 0 ? '$' : field.value}
                                 onChange={async (e) => {
-                                  const value = parseFloat(e.target.value) || 0;
+                                  const inputValue = e.target.value.replace(/[^0-9.]/g, '');
+                                  const value = inputValue === '' ? 0 : parseFloat(inputValue) || 0;
                                   field.onChange(value);
                                   
                                   // 즉시 계산 및 저장
@@ -856,13 +851,12 @@ export default function IncomePage() {
                             </div>
                             <FormControl>
                               <Input
-                                type="number"
-                                step="0.01"
-                                min="0"
-                                placeholder="자본이득 금액"
-                                value={field.value === 0 ? '' : field.value}
+                                type="text"
+                                placeholder="달러 금액"
+                                value={field.value === 0 ? '$' : field.value}
                                 onChange={async (e) => {
-                                  const value = parseFloat(e.target.value) || 0;
+                                  const inputValue = e.target.value.replace(/[^0-9.]/g, '');
+                                  const value = inputValue === '' ? 0 : parseFloat(inputValue) || 0;
                                   field.onChange(value);
                                   
                                   // 즉시 계산 및 저장
@@ -903,13 +897,12 @@ export default function IncomePage() {
                             </div>
                             <FormControl>
                               <Input
-                                type="number"
-                                step="0.01"
-                                min="0"
-                                placeholder="임대소득 금액"
-                                value={field.value === 0 ? '' : field.value}
+                                type="text"
+                                placeholder="달러 금액"
+                                value={field.value === 0 ? '$' : field.value}
                                 onChange={async (e) => {
-                                  const value = parseFloat(e.target.value) || 0;
+                                  const inputValue = e.target.value.replace(/[^0-9.]/g, '');
+                                  const value = inputValue === '' ? 0 : parseFloat(inputValue) || 0;
                                   field.onChange(value);
                                   
                                   // 즉시 계산 및 저장
@@ -1047,14 +1040,13 @@ export default function IncomePage() {
                             </div>
                             <FormControl>
                               <Input
-                                type="number"
-                                step="0.01"
-                                min="0"
-                                max="2500"
-                                placeholder="학자금 대출 이자 금액"
-                                value={field.value === 0 ? '' : field.value}
+                                type="text"
+                                placeholder="달러 금액"
+                                value={field.value === 0 ? '$' : field.value}
                                 onChange={(e) => {
-                                  field.onChange(parseFloat(e.target.value) || 0);
+                                  const value = e.target.value.replace(/[^0-9.]/g, '');
+                                  const numValue = value === '' ? 0 : parseFloat(value) || 0;
+                                  field.onChange(Math.min(numValue, 2500));
                                 }}
                               />
                             </FormControl>
@@ -1077,13 +1069,12 @@ export default function IncomePage() {
                             </div>
                             <FormControl>
                               <Input
-                                type="number"
-                                step="0.01"
-                                min="0"
-                                placeholder="HSA 적립금 금액"
-                                value={field.value === 0 ? '' : field.value}
+                                type="text"
+                                placeholder="달러 금액"
+                                value={field.value === 0 ? '$' : field.value}
                                 onChange={(e) => {
-                                  field.onChange(parseFloat(e.target.value) || 0);
+                                  const value = e.target.value.replace(/[^0-9.]/g, '');
+                                  field.onChange(value === '' ? 0 : parseFloat(value) || 0);
                                 }}
                               />
                             </FormControl>
