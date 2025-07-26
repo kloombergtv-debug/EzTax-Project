@@ -524,9 +524,9 @@ const PersonalInfoFixed: React.FC = () => {
                     name="spouseInfo.firstName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>배우자 이름 (Spouse First Name)</FormLabel>
+                        <FormLabel>배우자 이름 (Spouse First Name) <span className="text-gray-500 text-sm font-normal">(선택사항)</span></FormLabel>
                         <FormControl>
-                          <Input placeholder="배우자 이름" {...field} />
+                          <Input placeholder="배우자 이름 (선택사항)" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -538,9 +538,9 @@ const PersonalInfoFixed: React.FC = () => {
                     name="spouseInfo.lastName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>배우자 성 (Spouse Last Name)</FormLabel>
+                        <FormLabel>배우자 성 (Spouse Last Name) <span className="text-gray-500 text-sm font-normal">(선택사항)</span></FormLabel>
                         <FormControl>
-                          <Input placeholder="배우자 성" {...field} />
+                          <Input placeholder="배우자 성 (선택사항)" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -552,10 +552,10 @@ const PersonalInfoFixed: React.FC = () => {
                     name="spouseInfo.ssn"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>배우자 SSN (Spouse SSN)</FormLabel>
+                        <FormLabel>배우자 SSN (Spouse SSN) <span className="text-gray-500 text-sm font-normal">(선택사항)</span></FormLabel>
                         <FormControl>
                           <Input 
-                            placeholder="XXX-XX-XXXX" 
+                            placeholder="XXX-XX-XXXX (선택사항)" 
                             maxLength={11}
                             {...field}
                             onChange={(e) => {
@@ -575,7 +575,7 @@ const PersonalInfoFixed: React.FC = () => {
                   name="spouseInfo.dateOfBirth"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>배우자 생년월일 (Spouse Date of Birth)</FormLabel>
+                      <FormLabel>배우자 생년월일 (Spouse Date of Birth) <span className="text-red-500">*</span></FormLabel>
                       <FormControl>
                         <Input type="date" {...field} />
                       </FormControl>
@@ -624,9 +624,9 @@ const PersonalInfoFixed: React.FC = () => {
                           name={`dependents.${index}.firstName`}
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>이름</FormLabel>
+                              <FormLabel>이름 <span className="text-gray-500 text-sm font-normal">(선택사항)</span></FormLabel>
                               <FormControl>
-                                <Input placeholder="부양가족 이름" {...field} />
+                                <Input placeholder="부양가족 이름 (선택사항)" {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -638,9 +638,9 @@ const PersonalInfoFixed: React.FC = () => {
                           name={`dependents.${index}.lastName`}
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>성</FormLabel>
+                              <FormLabel>성 <span className="text-gray-500 text-sm font-normal">(선택사항)</span></FormLabel>
                               <FormControl>
-                                <Input placeholder="부양가족 성" {...field} />
+                                <Input placeholder="부양가족 성 (선택사항)" {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -652,10 +652,10 @@ const PersonalInfoFixed: React.FC = () => {
                           name={`dependents.${index}.ssn`}
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>SSN</FormLabel>
+                              <FormLabel>SSN <span className="text-gray-500 text-sm font-normal">(선택사항)</span></FormLabel>
                               <FormControl>
                                 <Input 
-                                  placeholder="XXX-XX-XXXX" 
+                                  placeholder="XXX-XX-XXXX (선택사항)" 
                                   maxLength={11}
                                   {...field}
                                   onChange={(e) => {
@@ -699,7 +699,7 @@ const PersonalInfoFixed: React.FC = () => {
                           name={`dependents.${index}.dateOfBirth`}
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>생년월일</FormLabel>
+                              <FormLabel>생년월일 <span className="text-red-500">*</span></FormLabel>
                               <FormControl>
                                 <Input type="date" {...field} />
                               </FormControl>

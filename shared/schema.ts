@@ -57,9 +57,9 @@ export type TaxReturn = typeof taxReturns.$inferSelect;
 export type FilingStatus = "single" | "married_joint" | "married_separate" | "head_of_household" | "qualifying_widow";
 
 export interface Dependent {
-  firstName: string;
-  lastName: string;
-  ssn: string;
+  firstName?: string;
+  lastName?: string;
+  ssn?: string;
   relationship: string;
   dateOfBirth: string;
   isDisabled: boolean;
@@ -68,10 +68,10 @@ export interface Dependent {
 }
 
 export interface SpouseInformation {
-  firstName: string;
+  firstName?: string;
   middleInitial?: string;
-  lastName: string;
-  ssn: string;
+  lastName?: string;
+  ssn?: string;
   dateOfBirth: string;
   isDisabled: boolean;
   isNonresidentAlien: boolean;
@@ -321,9 +321,9 @@ export interface CalculatedResults {
 
 // Zod schemas for validation
 export const dependentSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
-  ssn: z.string().regex(/^\d{3}-\d{2}-\d{4}$/, "SSN must be in format XXX-XX-XXXX"),
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
+  ssn: z.string().optional(),
   relationship: z.string().min(1, "Relationship is required"),
   dateOfBirth: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Date must be in YYYY-MM-DD format"),
   isDisabled: z.boolean().default(false),
@@ -332,13 +332,19 @@ export const dependentSchema = z.object({
 });
 
 export const spouseInfoSchema = z.object({
-  firstName: z.string().min(1, "Spouse's first name is required"),
+  firstName: z.string().optional(),
   middleInitial: z.string().max(1).optional(),
-  lastName: z.string().min(1, "Spouse's last name is required"),
-  ssn: z.string().regex(/^\d{3}-\d{2}-\d{4}$/, "SSN must be in format XXX-XX-XXXX"),
+  lastName: z.string().optional(),
+  ssn: z.string().optional(),
   dateOfBirth: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Date must be in YYYY-MM-DD format"),
   isDisabled: z.boolean().default(false),
   isNonresidentAlien: z.boolean().default(false),
+  differentAddress: z.boolean().optional(),
+  address1: z.string().optional(),
+  address2: z.string().optional(),
+  city: z.string().optional(),
+  state: z.string().optional(),
+  zipCode: z.string().optional(),
 });
 
 export const personalInfoSchema = z.object({
