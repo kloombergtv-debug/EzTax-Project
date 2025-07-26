@@ -704,39 +704,41 @@ export default function IncomePage() {
                                   return displayValue === 0 ? '$' : displayValue.toString();
                                 })()}
                                 onChange={(e) => {
-                                  // 마이너스 기호, 숫자, 소수점만 허용
                                   let inputValue = e.target.value;
                                   
-                                  // 마이너스 기호, 숫자, 소수점만 허용하고 다른 문자 제거
+                                  // 입력값이 '$'로 시작하면 제거
+                                  if (inputValue.startsWith('$')) {
+                                    inputValue = inputValue.substring(1);
+                                  }
+                                  
+                                  // 마이너스 기호, 숫자, 소수점만 허용
                                   inputValue = inputValue.replace(/[^-0-9.]/g, '');
                                   
-                                  // 마이너스 기호는 맨 앞에만 허용
-                                  if (inputValue.includes('-')) {
-                                    const minusIndex = inputValue.indexOf('-');
-                                    if (minusIndex > 0) {
-                                      inputValue = inputValue.replace(/-/g, '');
-                                    } else {
-                                      inputValue = '-' + inputValue.substring(1).replace(/-/g, '');
-                                    }
+                                  // 마이너스는 맨 앞에만 허용
+                                  if (inputValue.indexOf('-') > 0) {
+                                    inputValue = inputValue.replace(/-/g, '');
+                                  }
+                                  
+                                  // 여러 마이너스 기호 제거 (첫 번째 제외)
+                                  const minusCount = (inputValue.match(/-/g) || []).length;
+                                  if (minusCount > 1) {
+                                    inputValue = inputValue.replace(/-/g, '');
+                                    inputValue = '-' + inputValue;
                                   }
                                   
                                   // 소수점은 하나만 허용
-                                  const dotCount = (inputValue.match(/\./g) || []).length;
-                                  if (dotCount > 1) {
-                                    const parts = inputValue.split('.');
-                                    inputValue = parts[0] + '.' + parts.slice(1).join('');
+                                  const dotParts = inputValue.split('.');
+                                  if (dotParts.length > 2) {
+                                    inputValue = dotParts[0] + '.' + dotParts.slice(1).join('');
                                   }
                                   
-                                  // 빈 문자열이거나 '-'만 있거나 '.'만 있는 경우 처리
-                                  let newValue = 0;
-                                  if (inputValue && inputValue !== '-' && inputValue !== '.') {
-                                    newValue = parseFloat(inputValue) || 0;
-                                  }
+                                  // 숫자로 변환 (빈 문자열이나 '-'만 있는 경우 0)
+                                  const numericValue = inputValue === '' || inputValue === '-' || inputValue === '.' ? 0 : parseFloat(inputValue) || 0;
                                   
-                                  console.log('사업소득 필드 수동 변경:', newValue);
-                                  field.onChange(newValue);
+                                  console.log('사업소득 입력값:', inputValue, '→ 숫자값:', numericValue);
+                                  field.onChange(numericValue);
                                   
-                                  // 사업소득 변경시 즉시 총소득 재계산
+                                  // 총소득 재계산
                                   setTimeout(() => {
                                     calculateTotals();
                                   }, 50);
