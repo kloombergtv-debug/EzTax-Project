@@ -125,7 +125,7 @@ const AdditionalTaxPage: React.FC = () => {
                                 <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-dark">$</span>
                                 <Input 
                                   {...field} 
-                                  placeholder="0.00"
+                                  placeholder="$"
                                   className="pl-8"
                                   value={field.value || ''}
                                   onChange={(e) => {
@@ -155,9 +155,9 @@ const AdditionalTaxPage: React.FC = () => {
                                 <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-dark">$</span>
                                 <Input 
                                   {...field} 
-                                  placeholder="0.00"
+                                  placeholder="$"
                                   className="pl-8 bg-gray-bg"
-                                  value={field.value?.toFixed(2) || '0.00'}
+                                  value={field.value ? `${field.value.toFixed(2)}` : ''}
                                   disabled
                                 />
                               </div>
@@ -206,7 +206,7 @@ const AdditionalTaxPage: React.FC = () => {
                                 <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-dark">$</span>
                                 <Input 
                                   {...field} 
-                                  placeholder="0.00"
+                                  placeholder="$"
                                   className="pl-8"
                                   value={field.value || ''}
                                   onChange={(e) => {
@@ -258,7 +258,7 @@ const AdditionalTaxPage: React.FC = () => {
                                 <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-dark">$</span>
                                 <Input 
                                   {...field} 
-                                  placeholder="0.00"
+                                  placeholder="$"
                                   className="pl-8"
                                   value={field.value || ''}
                                   onChange={(e) => {
