@@ -108,15 +108,26 @@ const Header: React.FC = () => {
               </Button>
             </div>
           ) : (
-            <Button 
-              variant="outline" 
-              size="sm"
-              className="text-primary-dark hover:text-primary flex items-center text-sm"
-              onClick={handleLogin}
-            >
-              <LogIn className="h-4 w-4 mr-1" />
-              <span>로그인(Login)</span>
-            </Button>
+            <div className="flex gap-2">
+              <Button 
+                variant="outline" 
+                size="sm"
+                className="text-primary-dark hover:text-primary flex items-center text-sm"
+                onClick={handleLogin}
+              >
+                <LogIn className="h-4 w-4 mr-1" />
+                <span>로그인(Login)</span>
+              </Button>
+              <Button 
+                variant="default" 
+                size="sm"
+                className="bg-primary hover:bg-primary-dark text-white flex items-center text-sm"
+                onClick={() => navigate('/auth?tab=register')}
+              >
+                <User className="h-4 w-4 mr-1" />
+                <span>회원가입</span>
+              </Button>
+            </div>
           )}
         </div>
       </div>
