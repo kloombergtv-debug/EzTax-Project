@@ -8,9 +8,9 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { PlusCircle, Trash2, Save } from 'lucide-react';
+import { PlusCircle, Trash2, Save, RefreshCw } from 'lucide-react';
 import ProgressTracker from '@/components/ProgressTracker';
-import { useTaxContext } from '@/context/TaxContext';
+import { useTaxContext } from '../context/TaxContext';
 import { useLocation } from 'wouter';
 
 const relationshipOptions = [
@@ -180,13 +180,104 @@ const PersonalInfo: React.FC = () => {
     }
   };
 
+  // 수동 데이터 불러오기 함수
+  const handleManualDataReload = async () => {
+    try {
+      const response = await fetch('/api/tax-return', {
+        credentials: 'include',
+        cache: 'no-cache'
+      });
+
+      if (response.ok) {
+        const serverData = await response.json();
+        console.log('수동 데이터 불러오기 결과:', serverData);
+        
+        if (serverData?.personalInfo) {
+          // 폼 데이터 직접 업데이트
+          const personalInfo = serverData.personalInfo;
+          
+          // 기본 필드들 설정
+          form.setValue('firstName', personalInfo.firstName || '');
+          form.setValue('middleInitial', personalInfo.middleInitial || '');
+          form.setValue('lastName', personalInfo.lastName || '');
+          form.setValue('ssn', personalInfo.ssn || '');
+          form.setValue('dateOfBirth', personalInfo.dateOfBirth || '');
+          form.setValue('email', personalInfo.email || '');
+          form.setValue('phone', personalInfo.phone || '');
+          form.setValue('address1', personalInfo.address1 || '');
+          form.setValue('address2', personalInfo.address2 || '');
+          form.setValue('city', personalInfo.city || '');
+          form.setValue('state', personalInfo.state || '');
+          form.setValue('zipCode', personalInfo.zipCode || '');
+          form.setValue('filingStatus', personalInfo.filingStatus || 'single');
+          form.setValue('isDisabled', personalInfo.isDisabled || false);
+          form.setValue('isNonresidentAlien', personalInfo.isNonresidentAlien || false);
+
+          // 배우자 정보 설정
+          if (personalInfo.spouseInfo) {
+            form.setValue('spouseInfo', personalInfo.spouseInfo);
+          }
+
+          // 부양가족 정보 설정
+          if (personalInfo.dependents && personalInfo.dependents.length > 0) {
+            // 기존 부양가족 필드 초기화
+            while (dependentFields.length > 0) {
+              remove(0);
+            }
+            // 새 부양가족 데이터 추가
+            personalInfo.dependents.forEach((dependent: any) => {
+              append(dependent);
+            });
+          }
+
+          // Filing Status에 따른 배우자 정보 표시 설정
+          const maritalStatuses = ['married_joint', 'married_separate'];
+          setShowSpouseInfo(maritalStatuses.includes(personalInfo.filingStatus));
+
+          toast({
+            title: "데이터 불러오기 완료",
+            description: "저장된 개인정보를 성공적으로 불러왔습니다.",
+          });
+        } else {
+          toast({
+            title: "저장된 데이터 없음",
+            description: "저장된 개인정보가 없습니다.",
+            variant: "destructive",
+          });
+        }
+      } else {
+        throw new Error('데이터 불러오기 실패');
+      }
+    } catch (error) {
+      console.error('수동 데이터 불러오기 오류:', error);
+      toast({
+        title: "데이터 불러오기 실패",
+        description: "저장된 데이터를 불러오는 중 오류가 발생했습니다.",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="max-w-5xl mx-auto px-4 py-6">
       <ProgressTracker currentStep="personal-info" />
       
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">개인정보 (Personal Information)</h1>
-        <p className="text-gray-600">세금 신고서 작성을 위해 개인정보를 입력해주세요.</p>
+        <div className="flex justify-between items-center mb-4">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">개인정보 (Personal Information)</h1>
+            <p className="text-gray-600">세금 신고서 작성을 위해 개인정보를 입력해주세요.</p>
+          </div>
+          <Button 
+            type="button" 
+            onClick={handleManualDataReload}
+            variant="outline"
+            className="bg-green-50 hover:bg-green-100 border-green-300 text-green-700"
+          >
+            <RefreshCw className="h-4 w-4 mr-2" />
+            저장된 데이터 불러오기
+          </Button>
+        </div>
       </div>
 
       <Form {...form}>
