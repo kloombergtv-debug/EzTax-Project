@@ -97,7 +97,7 @@ const PersonalInfoFixed: React.FC = () => {
     }
   };
 
-  // 전체 데이터 복원 함수
+  // 저장된 데이터 불러오기 함수
   const handleLoadAllData = async () => {
     try {
       const response = await fetch('/api/tax-return', {
@@ -124,8 +124,8 @@ const PersonalInfoFixed: React.FC = () => {
         });
 
         toast({
-          title: "전체 데이터 복원 완료",
-          description: "모든 세금 신고 데이터가 복원되었습니다. 이제 모든 페이지에서 데이터를 확인할 수 있습니다.",
+          title: "데이터 불러오기 완료",
+          description: "저장된 모든 세금 신고 데이터가 불러와졌습니다. 이제 모든 페이지에서 데이터를 확인할 수 있습니다.",
           duration: 3000,
         });
 
@@ -138,143 +138,16 @@ const PersonalInfoFixed: React.FC = () => {
         throw new Error('서버 오류');
       }
     } catch (error) {
-      console.error('전체 데이터 복원 오류:', error);
-      toast({
-        title: "복원 실패",
-        description: "전체 데이터 복원 중 오류가 발생했습니다.",
-        variant: "destructive",
-      });
-    }
-  };
-
-  // 간단한 데이터 불러오기 함수
-  const handleLoadData = async () => {
-    try {
-      const response = await fetch('/api/tax-return', {
-        credentials: 'include',
-        cache: 'no-cache'
-      });
-
-      if (response.ok) {
-        const serverData = await response.json();
-        console.log('불러온 데이터:', serverData);
-        
-        if (serverData?.personalInfo) {
-          const data = serverData.personalInfo;
-          
-          // 1. TaxContext에 데이터 저장 (가장 중요)
-          await updateTaxData({ 
-            personalInfo: data,
-            // 전체 서버 데이터도 함께 저장
-            income: serverData.income || {},
-            deductions: serverData.deductions || {},
-            taxCredits: serverData.taxCredits || {},
-            additionalTax: serverData.additionalTax || {}
-          });
-
-          // 2. React Hook Form 방식으로 시도
-          form.reset({
-            firstName: data.firstName || '',
-            middleInitial: data.middleInitial || '',
-            lastName: data.lastName || '',
-            ssn: data.ssn || '',
-            dateOfBirth: data.dateOfBirth || '',
-            email: data.email || '',
-            phone: data.phone || '',
-            address1: data.address1 || '',
-            address2: data.address2 || '',
-            city: data.city || '',
-            state: data.state || '',
-            zipCode: data.zipCode || '',
-            filingStatus: data.filingStatus || 'single',
-            isDisabled: data.isDisabled || false,
-            isNonresidentAlien: data.isNonresidentAlien || false,
-            spouseInfo: data.spouseInfo || undefined,
-            dependents: data.dependents || []
-          });
-
-          // 3. DOM 직접 조작으로 보강
-          setTimeout(() => {
-            fillFieldByName('firstName', data.firstName || '');
-            fillFieldByName('middleInitial', data.middleInitial || '');
-            fillFieldByName('lastName', data.lastName || '');
-            fillFieldByName('ssn', data.ssn || '');
-            fillFieldByName('dateOfBirth', data.dateOfBirth || '');
-            fillFieldByName('email', data.email || '');
-            fillFieldByName('phone', data.phone || '');
-            fillFieldByName('address1', data.address1 || '');
-            fillFieldByName('address2', data.address2 || '');
-            fillFieldByName('city', data.city || '');
-            fillFieldByName('state', data.state || '');
-            fillFieldByName('zipCode', data.zipCode || '');
-            fillFieldByName('filingStatus', data.filingStatus || 'single');
-            
-            // 배우자 정보
-            if (data.spouseInfo) {
-              fillFieldByName('spouseInfo.firstName', data.spouseInfo.firstName || '');
-              fillFieldByName('spouseInfo.lastName', data.spouseInfo.lastName || '');
-              fillFieldByName('spouseInfo.ssn', data.spouseInfo.ssn || '');
-              fillFieldByName('spouseInfo.dateOfBirth', data.spouseInfo.dateOfBirth || '');
-            }
-          }, 200);
-
-          // 부양가족 배열 업데이트
-          if (data.dependents && data.dependents.length > 0) {
-            // 기존 부양가족 제거
-            while (dependentFields.length > 0) {
-              remove(0);
-            }
-            // 새 데이터 추가
-            data.dependents.forEach((dependent: any) => {
-              append({
-                firstName: dependent.firstName || '',
-                lastName: dependent.lastName || '',
-                ssn: dependent.ssn || '',
-                relationship: dependent.relationship || 'child',
-                dateOfBirth: dependent.dateOfBirth || '',
-                isDisabled: dependent.isDisabled || false,
-                isNonresidentAlien: dependent.isNonresidentAlien || false,
-                isQualifyingChild: dependent.isQualifyingChild || true
-              });
-            });
-          }
-
-          // 배우자 정보 표시 업데이트
-          const maritalStatuses = ['married_joint', 'married_separate'];
-          setShowSpouseInfo(maritalStatuses.includes(data.filingStatus || 'single'));
-
-          toast({
-            title: "성공",
-            description: `${data.firstName} ${data.lastName}님의 정보를 불러왔습니다.`,
-          });
-
-          // 디버깅용
-          setTimeout(() => {
-            console.log('폼 데이터 확인:', form.getValues());
-            console.log('실제 DOM 값들 확인:');
-            console.log('firstName:', (document.querySelector('input[name="firstName"]') as HTMLInputElement)?.value);
-            console.log('lastName:', (document.querySelector('input[name="lastName"]') as HTMLInputElement)?.value);
-          }, 500);
-
-        } else {
-          toast({
-            title: "데이터 없음",
-            description: "저장된 개인정보가 없습니다.",
-            variant: "destructive",
-          });
-        }
-      } else {
-        throw new Error('서버 오류');
-      }
-    } catch (error) {
       console.error('데이터 불러오기 오류:', error);
       toast({
-        title: "오류",
-        description: "데이터를 불러오는 중 오류가 발생했습니다.",
+        title: "불러오기 실패",
+        description: "데이터 불러오기 중 오류가 발생했습니다.",
         variant: "destructive",
       });
     }
   };
+
+
 
   const onSubmit = async (data: PersonalInformation) => {
     try {
@@ -346,24 +219,14 @@ const PersonalInfoFixed: React.FC = () => {
             <h1 className="text-3xl font-bold text-gray-900 mb-2">개인정보 (Personal Information)</h1>
             <p className="text-gray-600">세금 신고서 작성을 위해 개인정보를 입력해주세요.</p>
           </div>
-          <div className="flex gap-2">
-            <Button 
-              type="button" 
-              onClick={handleLoadData}
-              className="bg-green-600 hover:bg-green-700 text-white"
-            >
-              <RefreshCw className="h-4 w-4 mr-2" />
-              저장된 데이터 불러오기
-            </Button>
-            <Button 
-              type="button" 
-              onClick={handleLoadAllData}
-              className="bg-blue-600 hover:bg-blue-700 text-white"
-            >
-              <RefreshCw className="h-4 w-4 mr-2" />
-              전체 데이터 복원
-            </Button>
-          </div>
+          <Button 
+            type="button" 
+            onClick={handleLoadAllData}
+            className="bg-green-600 hover:bg-green-700 text-white"
+          >
+            <RefreshCw className="h-4 w-4 mr-2" />
+            저장된 데이터 불러오기
+          </Button>
         </div>
       </div>
 
