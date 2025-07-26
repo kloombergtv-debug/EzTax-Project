@@ -97,6 +97,56 @@ const PersonalInfoFixed: React.FC = () => {
     }
   };
 
+  // 전체 데이터 복원 함수
+  const handleLoadAllData = async () => {
+    try {
+      const response = await fetch('/api/tax-return', {
+        credentials: 'include',
+        cache: 'no-cache'
+      });
+
+      if (response.ok) {
+        const serverData = await response.json();
+        console.log('전체 데이터 복원:', serverData);
+        
+        // TaxContext에 모든 데이터 저장
+        await updateTaxData({
+          personalInfo: serverData.personalInfo || {},
+          income: serverData.income || {},
+          deductions: serverData.deductions || {},
+          taxCredits: serverData.taxCredits || {},
+          additionalTax: serverData.additionalTax || {},
+          // 추가 데이터도 포함
+          additionalIncomeItems: serverData.additionalIncomeItems || [],
+          additionalAdjustmentItems: serverData.additionalAdjustmentItems || [],
+          retirementContributions: serverData.retirementContributions || {},
+          qbiDetails: serverData.qbiDetails || {}
+        });
+
+        toast({
+          title: "전체 데이터 복원 완료",
+          description: "모든 세금 신고 데이터가 복원되었습니다. 이제 모든 페이지에서 데이터를 확인할 수 있습니다.",
+          duration: 3000,
+        });
+
+        // 페이지 새로고침으로 강제 업데이트
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+
+      } else {
+        throw new Error('서버 오류');
+      }
+    } catch (error) {
+      console.error('전체 데이터 복원 오류:', error);
+      toast({
+        title: "복원 실패",
+        description: "전체 데이터 복원 중 오류가 발생했습니다.",
+        variant: "destructive",
+      });
+    }
+  };
+
   // 간단한 데이터 불러오기 함수
   const handleLoadData = async () => {
     try {
@@ -112,7 +162,17 @@ const PersonalInfoFixed: React.FC = () => {
         if (serverData?.personalInfo) {
           const data = serverData.personalInfo;
           
-          // 1. React Hook Form 방식으로 시도
+          // 1. TaxContext에 데이터 저장 (가장 중요)
+          await updateTaxData({ 
+            personalInfo: data,
+            // 전체 서버 데이터도 함께 저장
+            income: serverData.income || {},
+            deductions: serverData.deductions || {},
+            taxCredits: serverData.taxCredits || {},
+            additionalTax: serverData.additionalTax || {}
+          });
+
+          // 2. React Hook Form 방식으로 시도
           form.reset({
             firstName: data.firstName || '',
             middleInitial: data.middleInitial || '',
@@ -133,7 +193,7 @@ const PersonalInfoFixed: React.FC = () => {
             dependents: data.dependents || []
           });
 
-          // 2. DOM 직접 조작으로 보강
+          // 3. DOM 직접 조작으로 보강
           setTimeout(() => {
             fillFieldByName('firstName', data.firstName || '');
             fillFieldByName('middleInitial', data.middleInitial || '');
@@ -286,14 +346,24 @@ const PersonalInfoFixed: React.FC = () => {
             <h1 className="text-3xl font-bold text-gray-900 mb-2">개인정보 (Personal Information)</h1>
             <p className="text-gray-600">세금 신고서 작성을 위해 개인정보를 입력해주세요.</p>
           </div>
-          <Button 
-            type="button" 
-            onClick={handleLoadData}
-            className="bg-green-600 hover:bg-green-700 text-white"
-          >
-            <RefreshCw className="h-4 w-4 mr-2" />
-            저장된 데이터 불러오기
-          </Button>
+          <div className="flex gap-2">
+            <Button 
+              type="button" 
+              onClick={handleLoadData}
+              className="bg-green-600 hover:bg-green-700 text-white"
+            >
+              <RefreshCw className="h-4 w-4 mr-2" />
+              저장된 데이터 불러오기
+            </Button>
+            <Button 
+              type="button" 
+              onClick={handleLoadAllData}
+              className="bg-blue-600 hover:bg-blue-700 text-white"
+            >
+              <RefreshCw className="h-4 w-4 mr-2" />
+              전체 데이터 복원
+            </Button>
+          </div>
         </div>
       </div>
 
