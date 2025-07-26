@@ -363,24 +363,21 @@ export default function IncomePage() {
   const calculateTotals = () => {
     const values = form.getValues();
     
-    // 근로소득 계산
-    const earnedIncomeTotal = 
-      Number(values.wages || 0) +
-      Number(values.otherEarnedIncome || 0);
-      
+    // 개별 소득 항목 추출
+    const wages = Number(values.wages || 0);
+    const otherEarnedIncome = Number(values.otherEarnedIncome || 0);
+    const interestIncome = Number(values.interestIncome || 0);
+    const dividends = Number(values.dividends || 0);
+    const capitalGains = Number(values.capitalGains || 0);
+    const rentalIncome = Number(values.rentalIncome || 0);
+    const retirementIncome = Number(values.retirementIncome || 0);
+    const unemploymentIncome = Number(values.unemploymentIncome || 0);
+    
     // QBI 사업소득 확인
     const qbiBusinessIncome = taxData.income?.qbi?.totalQBI || 0;
     const currentBusinessIncome = Number(values.businessIncome || 0);
-    const effectiveBusinessIncome = qbiBusinessIncome > 0 ? qbiBusinessIncome : currentBusinessIncome;
+    const effectiveBusinessIncome = qbiBusinessIncome !== 0 ? qbiBusinessIncome : currentBusinessIncome;
     
-    // 비근로소득 계산 (사업소득 포함)
-    const unearnedIncomeTotal =
-      Number(values.interestIncome || 0) +
-      Number(values.dividends || 0) +
-      effectiveBusinessIncome +
-      Number(values.capitalGains || 0) +
-      Number(values.rentalIncome || 0);
-      
     // 기타소득 계산 (사용자 직접 입력값)
     const userOtherIncome = Number(values.otherIncome || 0);
     
@@ -394,8 +391,32 @@ export default function IncomePage() {
     // 기타소득은 사용자 직접 입력값 + 추가 소득 항목의 합계
     const totalOtherIncome = userOtherIncome + additionalItemsTotal;
     
-    // 최종 총소득 계산 (근로소득 + 비근로소득 + 기타소득)
-    const totalIncome = earnedIncomeTotal + unearnedIncomeTotal + totalOtherIncome;
+    // 최종 총소득 계산 (모든 소득 항목 합계)
+    const totalIncome = wages + 
+                       otherEarnedIncome + 
+                       interestIncome + 
+                       dividends + 
+                       effectiveBusinessIncome + 
+                       capitalGains + 
+                       rentalIncome + 
+                       retirementIncome + 
+                       unemploymentIncome + 
+                       totalOtherIncome;
+    
+    // 디버깅 로그 추가
+    console.log('총소득 계산 세부사항:', {
+      wages,
+      otherEarnedIncome,
+      interestIncome,
+      dividends,
+      businessIncome: effectiveBusinessIncome,
+      capitalGains,
+      rentalIncome,
+      retirementIncome,
+      unemploymentIncome,
+      otherIncome: totalOtherIncome,
+      totalIncome
+    });
     
     // 조정 항목 계산
     const studentLoanInterest = Number(values.adjustments?.studentLoanInterest || 0);
