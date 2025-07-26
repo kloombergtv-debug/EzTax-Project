@@ -835,14 +835,14 @@ export function calculateTaxes(taxData: TaxData): CalculatedResults {
   return result;
 }
 
-// Format currency for display
+// Format currency for display (without decimal places)
 export function formatCurrency(amount: number): string {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  }).format(amount);
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  }).format(Math.round(amount));
 }
 
 // Format string input to only allow numbers and decimal point
