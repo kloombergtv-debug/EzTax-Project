@@ -84,6 +84,19 @@ const PersonalInfoFixed: React.FC = () => {
     );
   }
 
+  // DOM 직접 조작으로 필드 채우기 함수
+  const fillFieldByName = (name: string, value: string) => {
+    const input = document.querySelector(`input[name="${name}"]`) as HTMLInputElement;
+    const select = document.querySelector(`select[name="${name}"]`) as HTMLSelectElement;
+    const element = input || select;
+    
+    if (element) {
+      element.value = value;
+      element.dispatchEvent(new Event('input', { bubbles: true }));
+      element.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+  };
+
   // 간단한 데이터 불러오기 함수
   const handleLoadData = async () => {
     try {
@@ -99,7 +112,7 @@ const PersonalInfoFixed: React.FC = () => {
         if (serverData?.personalInfo) {
           const data = serverData.personalInfo;
           
-          // form.reset을 사용하여 완전히 재설정
+          // 1. React Hook Form 방식으로 시도
           form.reset({
             firstName: data.firstName || '',
             middleInitial: data.middleInitial || '',
@@ -119,6 +132,31 @@ const PersonalInfoFixed: React.FC = () => {
             spouseInfo: data.spouseInfo || undefined,
             dependents: data.dependents || []
           });
+
+          // 2. DOM 직접 조작으로 보강
+          setTimeout(() => {
+            fillFieldByName('firstName', data.firstName || '');
+            fillFieldByName('middleInitial', data.middleInitial || '');
+            fillFieldByName('lastName', data.lastName || '');
+            fillFieldByName('ssn', data.ssn || '');
+            fillFieldByName('dateOfBirth', data.dateOfBirth || '');
+            fillFieldByName('email', data.email || '');
+            fillFieldByName('phone', data.phone || '');
+            fillFieldByName('address1', data.address1 || '');
+            fillFieldByName('address2', data.address2 || '');
+            fillFieldByName('city', data.city || '');
+            fillFieldByName('state', data.state || '');
+            fillFieldByName('zipCode', data.zipCode || '');
+            fillFieldByName('filingStatus', data.filingStatus || 'single');
+            
+            // 배우자 정보
+            if (data.spouseInfo) {
+              fillFieldByName('spouseInfo.firstName', data.spouseInfo.firstName || '');
+              fillFieldByName('spouseInfo.lastName', data.spouseInfo.lastName || '');
+              fillFieldByName('spouseInfo.ssn', data.spouseInfo.ssn || '');
+              fillFieldByName('spouseInfo.dateOfBirth', data.spouseInfo.dateOfBirth || '');
+            }
+          }, 200);
 
           // 부양가족 배열 업데이트
           if (data.dependents && data.dependents.length > 0) {
@@ -153,6 +191,9 @@ const PersonalInfoFixed: React.FC = () => {
           // 디버깅용
           setTimeout(() => {
             console.log('폼 데이터 확인:', form.getValues());
+            console.log('실제 DOM 값들 확인:');
+            console.log('firstName:', (document.querySelector('input[name="firstName"]') as HTMLInputElement)?.value);
+            console.log('lastName:', (document.querySelector('input[name="lastName"]') as HTMLInputElement)?.value);
           }, 500);
 
         } else {
