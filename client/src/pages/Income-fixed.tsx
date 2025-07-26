@@ -428,8 +428,13 @@ export default function IncomePage() {
       // 먼저 계산 수행
       calculateTotals();
       
+      // 약간의 지연을 두어 계산이 완료되도록 함
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
       // 현재 폼 데이터 가져오기
       const currentFormData = form.getValues();
+      
+      console.log('저장할 소득 데이터:', currentFormData);
       
       // additionalIncomeItems와 additionalAdjustmentItems 추가
       currentFormData.additionalIncomeItems = additionalIncomeItems;
@@ -443,7 +448,7 @@ export default function IncomePage() {
       
       toast({
         title: "저장 완료",
-        description: "소득 정보가 성공적으로 저장되었습니다.",
+        description: `소득 정보가 성공적으로 저장되었습니다. (총소득: $${currentFormData.totalIncome?.toLocaleString() || 0})`,
       });
     } catch (error) {
       console.error('저장 오류:', error);
@@ -737,6 +742,10 @@ export default function IncomePage() {
                                 value={field.value === 0 ? '' : field.value}
                                 onChange={(e) => {
                                   field.onChange(parseFloat(e.target.value) || 0);
+                                  // 이자소득 변경시 즉시 총소득 재계산
+                                  setTimeout(() => {
+                                    calculateTotals();
+                                  }, 50);
                                 }}
                               />
                             </FormControl>
@@ -766,6 +775,10 @@ export default function IncomePage() {
                                 value={field.value === 0 ? '' : field.value}
                                 onChange={(e) => {
                                   field.onChange(parseFloat(e.target.value) || 0);
+                                  // 배당소득 변경시 즉시 총소득 재계산
+                                  setTimeout(() => {
+                                    calculateTotals();
+                                  }, 50);
                                 }}
                               />
                             </FormControl>
