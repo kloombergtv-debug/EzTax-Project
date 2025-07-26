@@ -188,9 +188,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       const userId = (req.user as any).id;
-      console.log(`GET /api/tax-return - 사용자 ID: ${userId} 데이터 요청`);
+      console.log(`GET /api/tax-return - 인증된 사용자 ID: ${userId} 데이터 요청`);
       
       const taxReturn = await storage.getTaxReturnByUserId(userId);
+      console.log(`사용자 ID ${userId}의 세금 신고서 조회 결과:`, taxReturn ? `ID ${taxReturn.id} 발견` : '없음');
       
       if (!taxReturn) {
         console.log(`사용자 ID ${userId}의 세금 신고서 없음 - 새 빈 신고서 생성`);
@@ -234,13 +235,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Create or update tax return
   app.post("/api/tax-return", async (req, res) => {
     try {
+      console.log(`POST /api/tax-return - 요청 받음`);
+      
       // Only authenticated users can create tax returns
       if (!req.user) {
+        console.log('인증되지 않은 사용자의 세금 신고서 생성 요청 거부');
         return res.status(401).json({ message: "Authentication required" });
       }
       
       const userId = (req.user as any).id;
+      console.log(`사용자 ID ${userId}의 세금 신고서 생성/업데이트 요청`);
+      
       const dataWithUserId = { ...req.body, userId };
+      console.log('받은 데이터 크기:', JSON.stringify(req.body).length, '바이트');
       
       const validationResult = insertTaxReturnSchema.safeParse(dataWithUserId);
       
