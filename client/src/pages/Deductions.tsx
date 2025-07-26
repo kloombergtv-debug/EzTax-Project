@@ -627,12 +627,10 @@ const Deductions: React.FC = () => {
                                       총 의료비 입력 (Total Medical Expenses)
                                     </label>
                                     <Input
-                                      type="number"
-                                      step="0.01"
-                                      min="0"
-                                      value={totalMedicalInput || ''}
+                                      type="text"
+                                      value={totalMedicalInput === 0 ? '$' : totalMedicalInput}
                                       onChange={(e) => {
-                                        const value = e.target.value;
+                                        const value = e.target.value.replace(/[^0-9.]/g, '');
                                         if (value === '') {
                                           setTotalMedicalInput(0);
                                         } else {
@@ -645,7 +643,7 @@ const Deductions: React.FC = () => {
                                         }
                                       }}
                                       disabled={isItemizedDisabled}
-                                      placeholder="실제 지출한 총 의료비를 입력하세요"
+                                      placeholder="달러 금액"
                                       className="w-full"
                                     />
                                   </div>
@@ -913,11 +911,9 @@ const Deductions: React.FC = () => {
                             <div className="flex gap-2">
                               <div className="flex-1">
                                 <Input
-                                  type="number"
-                                  step="0.01"
-                                  min="0"
-                                  max="10000"
-                                  value={totalSALTAmount === 0 ? '' : totalSALTAmount}
+                                  type="text"
+                                  placeholder="달러 금액"
+                                  value={totalSALTAmount === 0 ? '$' : totalSALTAmount}
                                   disabled={isItemizedDisabled}
                                   readOnly={true}
                                   className="bg-gray-50"
@@ -954,12 +950,12 @@ const Deductions: React.FC = () => {
                               </div>
                               <FormControl>
                                 <Input
-                                  type="number"
-                                  step="0.01"
-                                  min="0"
-                                  {...field}
+                                  type="text"
+                                  placeholder="달러 금액"
+                                  value={field.value === 0 ? '$' : field.value}
                                   onChange={(e) => {
-                                    field.onChange(parseFloat(e.target.value) || 0);
+                                    const value = e.target.value.replace(/[^0-9.]/g, '');
+                                    field.onChange(value === '' ? 0 : parseFloat(value) || 0);
                                   }}
                                   disabled={isItemizedDisabled}
                                 />
@@ -983,12 +979,12 @@ const Deductions: React.FC = () => {
                               </div>
                               <FormControl>
                                 <Input
-                                  type="number"
-                                  step="0.01"
-                                  min="0"
-                                  {...field}
+                                  type="text"
+                                  placeholder="달러 금액"
+                                  value={field.value === 0 ? '$' : field.value}
                                   onChange={(e) => {
-                                    field.onChange(parseFloat(e.target.value) || 0);
+                                    const value = e.target.value.replace(/[^0-9.]/g, '');
+                                    field.onChange(value === '' ? 0 : parseFloat(value) || 0);
                                   }}
                                   disabled={isItemizedDisabled}
                                 />
@@ -1012,12 +1008,12 @@ const Deductions: React.FC = () => {
                               </div>
                               <FormControl>
                                 <Input
-                                  type="number"
-                                  step="0.01"
-                                  min="0"
-                                  {...field}
+                                  type="text"
+                                  placeholder="달러 금액"
+                                  value={field.value === 0 ? '$' : field.value}
                                   onChange={(e) => {
-                                    field.onChange(parseFloat(e.target.value) || 0);
+                                    const value = e.target.value.replace(/[^0-9.]/g, '');
+                                    field.onChange(value === '' ? 0 : parseFloat(value) || 0);
                                   }}
                                   disabled={isItemizedDisabled}
                                 />
