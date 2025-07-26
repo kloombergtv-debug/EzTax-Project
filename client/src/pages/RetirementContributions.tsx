@@ -212,10 +212,13 @@ export default function RetirementContributions() {
                       </div>
                       <FormControl>
                         <Input
-                          type="number"
-                          placeholder="$"
-                          {...field}
-                          onChange={(e) => field.onChange(Number(e.target.value))}
+                          type="text"
+                          placeholder="달러 금액"
+                          value={field.value === 0 ? '$' : field.value}
+                          onChange={(e) => {
+                            const value = e.target.value.replace(/[^0-9]/g, '');
+                            field.onChange(value === '' ? 0 : Number(value));
+                          }}
                         />
                       </FormControl>
                       <FormMessage />
@@ -242,10 +245,13 @@ export default function RetirementContributions() {
                       </div>
                       <FormControl>
                         <Input
-                          type="number"
-                          placeholder="$"
-                          {...field}
-                          onChange={(e) => field.onChange(Number(e.target.value))}
+                          type="text"
+                          placeholder="달러 금액"
+                          value={field.value === 0 ? '$' : field.value}
+                          onChange={(e) => {
+                            const value = e.target.value.replace(/[^0-9]/g, '');
+                            field.onChange(value === '' ? 0 : Number(value));
+                          }}
                         />
                       </FormControl>
                       <FormMessage />
@@ -272,10 +278,13 @@ export default function RetirementContributions() {
                       </div>
                       <FormControl>
                         <Input
-                          type="number"
-                          placeholder="$"
-                          {...field}
-                          onChange={(e) => field.onChange(Number(e.target.value))}
+                          type="text"
+                          placeholder="달러 금액"
+                          value={field.value === 0 ? '$' : field.value}
+                          onChange={(e) => {
+                            const value = e.target.value.replace(/[^0-9]/g, '');
+                            field.onChange(value === '' ? 0 : Number(value));
+                          }}
                         />
                       </FormControl>
                       <FormMessage />
@@ -302,10 +311,13 @@ export default function RetirementContributions() {
                       </div>
                       <FormControl>
                         <Input
-                          type="number"
-                          placeholder="$"
-                          {...field}
-                          onChange={(e) => field.onChange(Number(e.target.value))}
+                          type="text"
+                          placeholder="달러 금액"
+                          value={field.value === 0 ? '$' : field.value}
+                          onChange={(e) => {
+                            const value = e.target.value.replace(/[^0-9]/g, '');
+                            field.onChange(value === '' ? 0 : Number(value));
+                          }}
                         />
                       </FormControl>
                       <FormMessage />
@@ -332,10 +344,13 @@ export default function RetirementContributions() {
                       </div>
                       <FormControl>
                         <Input
-                          type="number"
-                          placeholder="$"
-                          {...field}
-                          onChange={(e) => field.onChange(Number(e.target.value))}
+                          type="text"
+                          placeholder="달러 금액"
+                          value={field.value === 0 ? '$' : field.value}
+                          onChange={(e) => {
+                            const value = e.target.value.replace(/[^0-9]/g, '');
+                            field.onChange(value === '' ? 0 : Number(value));
+                          }}
                         />
                       </FormControl>
                       <FormMessage />
@@ -362,10 +377,13 @@ export default function RetirementContributions() {
                       </div>
                       <FormControl>
                         <Input
-                          type="number"
-                          placeholder="$"
-                          {...field}
-                          onChange={(e) => field.onChange(Number(e.target.value))}
+                          type="text"
+                          placeholder="달러 금액"
+                          value={field.value === 0 ? '$' : field.value}
+                          onChange={(e) => {
+                            const value = e.target.value.replace(/[^0-9]/g, '');
+                            field.onChange(value === '' ? 0 : Number(value));
+                          }}
                         />
                       </FormControl>
                       <FormMessage />
@@ -392,10 +410,13 @@ export default function RetirementContributions() {
                       </div>
                       <FormControl>
                         <Input
-                          type="number"
-                          placeholder="$"
-                          {...field}
-                          onChange={(e) => field.onChange(Number(e.target.value))}
+                          type="text"
+                          placeholder="달러 금액"
+                          value={field.value === 0 ? '$' : field.value}
+                          onChange={(e) => {
+                            const value = e.target.value.replace(/[^0-9]/g, '');
+                            field.onChange(value === '' ? 0 : Number(value));
+                          }}
                         />
                       </FormControl>
                       <FormMessage />
@@ -429,10 +450,13 @@ export default function RetirementContributions() {
                       </FormLabel>
                       <FormControl>
                         <Input
-                          type="number"
-                          placeholder="$"
-                          {...field}
-                          onChange={(e) => field.onChange(Number(e.target.value))}
+                          type="text"
+                          placeholder="달러 금액"
+                          value={field.value === 0 ? '$' : field.value}
+                          onChange={(e) => {
+                            const value = e.target.value.replace(/[^0-9]/g, '');
+                            field.onChange(value === '' ? 0 : Number(value));
+                          }}
                         />
                       </FormControl>
                       <FormMessage />
@@ -453,10 +477,13 @@ export default function RetirementContributions() {
                       </FormLabel>
                       <FormControl>
                         <Input
-                          type="number"
-                          placeholder="$"
-                          {...field}
-                          onChange={(e) => field.onChange(Number(e.target.value))}
+                          type="text"
+                          placeholder="달러 금액"
+                          value={field.value === 0 ? '$' : field.value}
+                          onChange={(e) => {
+                            const value = e.target.value.replace(/[^0-9]/g, '');
+                            field.onChange(value === '' ? 0 : Number(value));
+                          }}
                         />
                       </FormControl>
                       <FormMessage />
@@ -481,10 +508,13 @@ export default function RetirementContributions() {
                     <FormLabel>기타 은퇴 계획 기여금</FormLabel>
                     <FormControl>
                       <Input
-                        type="number"
-                        placeholder="$"
-                        {...field}
-                        onChange={(e) => field.onChange(Number(e.target.value))}
+                        type="text"
+                        placeholder="달러 금액"
+                        value={field.value === 0 ? '$' : field.value}
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/[^0-9]/g, '');
+                          field.onChange(value === '' ? 0 : Number(value));
+                        }}
                       />
                     </FormControl>
                     <FormMessage />
