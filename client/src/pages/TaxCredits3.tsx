@@ -597,7 +597,7 @@ const TaxCredits3Page: React.FC = () => {
                                   <div className="flex-grow relative">
                                     <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-dark">$</span>
                                     <Input 
-                                      placeholder="0.00"
+                                      placeholder="$"
                                       className="pl-8"
                                       value={field.value || ''}
                                       onChange={(e) => {
@@ -639,7 +639,7 @@ const TaxCredits3Page: React.FC = () => {
                                   <div className="flex-grow relative">
                                     <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-dark">$</span>
                                     <Input 
-                                      placeholder="0.00"
+                                      placeholder="$"
                                       className="pl-8"
                                       value={field.value || ''}
                                       onChange={(e) => {
@@ -700,7 +700,7 @@ const TaxCredits3Page: React.FC = () => {
                               <div className="relative">
                                 <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-dark">$</span>
                                 <Input 
-                                  placeholder="0.00"
+                                  placeholder="$"
                                   className="pl-8"
                                   value={field.value || ''}
                                   onChange={(e) => {
@@ -742,7 +742,7 @@ const TaxCredits3Page: React.FC = () => {
                                 <div className="relative">
                                   <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-dark">$</span>
                                   <Input 
-                                    placeholder="0.00"
+                                    placeholder="$"
                                     className="pl-8"
                                     value={field.value || ''}
                                     onChange={(e) => {
@@ -858,7 +858,7 @@ const TaxCredits3Page: React.FC = () => {
                                     <div className="relative">
                                       <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-dark">$</span>
                                       <Input 
-                                        placeholder="0.00"
+                                        placeholder="$"
                                         className="pl-8"
                                         value={field.value || ''}
                                         onChange={(e) => {
@@ -918,7 +918,7 @@ const TaxCredits3Page: React.FC = () => {
                               <div className="relative">
                                 <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-dark">$</span>
                                 <Input 
-                                  placeholder="0.00"
+                                  placeholder="$"
                                   className="pl-8"
                                   value={field.value || ''}
                                   onChange={(e) => {
@@ -952,7 +952,7 @@ const TaxCredits3Page: React.FC = () => {
                               <div className="relative">
                                 <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-dark">$</span>
                                 <Input 
-                                  placeholder="0.00"
+                                  placeholder="$"
                                   className="pl-8"
                                   value={field.value || ''}
                                   onChange={(e) => {
@@ -1034,7 +1034,7 @@ const TaxCredits3Page: React.FC = () => {
                                   <div className="relative">
                                     <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-dark">$</span>
                                     <Input 
-                                      placeholder="0.00"
+                                      placeholder="$"
                                       className="pl-8"
                                       value={field.value || ''}
                                       onChange={(e) => {
@@ -1059,7 +1059,7 @@ const TaxCredits3Page: React.FC = () => {
                                   <div className="relative">
                                     <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-dark">$</span>
                                     <Input 
-                                      placeholder="0.00"
+                                      placeholder="$"
                                       className="pl-8"
                                       value={field.value || ''}
                                       onChange={(e) => {
@@ -1089,7 +1089,7 @@ const TaxCredits3Page: React.FC = () => {
                                   <div className="relative">
                                     <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-dark">$</span>
                                     <Input 
-                                      placeholder="0.00"
+                                      placeholder="$"
                                       className="pl-8"
                                       value={field.value || ''}
                                       onChange={(e) => {
@@ -1114,7 +1114,7 @@ const TaxCredits3Page: React.FC = () => {
                                   <div className="relative">
                                     <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-dark">$</span>
                                     <Input 
-                                      placeholder="0.00"
+                                      placeholder="$"
                                       className="pl-8"
                                       value={field.value || ''}
                                       onChange={(e) => {
@@ -1141,7 +1141,7 @@ const TaxCredits3Page: React.FC = () => {
                                   <div className="relative">
                                     <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-dark">$</span>
                                     <Input 
-                                      placeholder="0.00"
+                                      placeholder="$"
                                       className="pl-8"
                                       value={field.value || ''}
                                       onChange={(e) => {
@@ -1166,7 +1166,7 @@ const TaxCredits3Page: React.FC = () => {
                                   <div className="relative">
                                     <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-dark">$</span>
                                     <Input 
-                                      placeholder="0.00"
+                                      placeholder="$"
                                       className="pl-8"
                                       value={field.value || ''}
                                       onChange={(e) => {
@@ -1193,7 +1193,7 @@ const TaxCredits3Page: React.FC = () => {
                                   <div className="relative">
                                     <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-dark">$</span>
                                     <Input 
-                                      placeholder="0.00"
+                                      placeholder="$"
                                       className="pl-8"
                                       value={field.value || ''}
                                       onChange={(e) => {
@@ -1218,7 +1218,7 @@ const TaxCredits3Page: React.FC = () => {
                                   <div className="relative">
                                     <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-dark">$</span>
                                     <Input 
-                                      placeholder="0.00"
+                                      placeholder="$"
                                       className="pl-8"
                                       value={field.value || ''}
                                       onChange={(e) => {
@@ -1245,7 +1245,7 @@ const TaxCredits3Page: React.FC = () => {
                                   <div className="relative">
                                     <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-dark">$</span>
                                     <Input 
-                                      placeholder="0.00"
+                                      placeholder="$"
                                       className="pl-8"
                                       value={field.value || ''}
                                       onChange={(e) => {
@@ -1270,7 +1270,7 @@ const TaxCredits3Page: React.FC = () => {
                                   <div className="relative">
                                     <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-dark">$</span>
                                     <Input 
-                                      placeholder="0.00"
+                                      placeholder="$"
                                       className="pl-8"
                                       value={field.value || ''}
                                       onChange={(e) => {
@@ -1298,7 +1298,7 @@ const TaxCredits3Page: React.FC = () => {
                                     <div className="flex-grow relative">
                                       <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-dark">$</span>
                                       <Input 
-                                        placeholder="0.00"
+                                        placeholder="$"
                                         className="pl-8"
                                         value={field.value || ''}
                                         onChange={(e) => {
@@ -1337,7 +1337,7 @@ const TaxCredits3Page: React.FC = () => {
                                     <div className="flex-grow relative">
                                       <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-dark">$</span>
                                       <Input 
-                                        placeholder="0.00"
+                                        placeholder="$"
                                         className="pl-8"
                                         value={field.value || ''}
                                         onChange={(e) => {
@@ -1417,7 +1417,7 @@ const TaxCredits3Page: React.FC = () => {
                               <div className="relative">
                                 <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-dark">$</span>
                                 <Input 
-                                  placeholder="0.00"
+                                  placeholder="$"
                                   className="pl-8"
                                   value={field.value || ''}
                                   onChange={(e) => {
@@ -1492,7 +1492,7 @@ const TaxCredits3Page: React.FC = () => {
                               <div className="relative">
                                 <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-dark">$</span>
                                 <Input 
-                                  placeholder="0.00"
+                                  placeholder="$"
                                   className="pl-8"
                                   value={field.value || ''}
                                   onChange={(e) => {
@@ -1600,7 +1600,7 @@ const TaxCredits3Page: React.FC = () => {
                                       <div className="relative">
                                         <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-dark">$</span>
                                         <Input 
-                                          placeholder="0.00"
+                                          placeholder="$"
                                           className="pl-8"
                                           value={field.value || ''}
                                           onChange={(e) => {
