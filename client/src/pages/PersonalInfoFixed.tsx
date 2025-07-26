@@ -237,7 +237,7 @@ const PersonalInfoFixed: React.FC = () => {
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">개인정보 (Personal Information)</h1>
             <p className="text-gray-600">
-              개인정보보호를 위해 시뮬레이션을 위해서는 
+              시뮬레이션시 
               <span className="text-red-500 font-medium">생년월일</span>과 
               <span className="text-red-500 font-medium">거주지</span>만 정확하게 입력하시고 
               나머지 정보는 작성하지 않으셔도 됩니다.
