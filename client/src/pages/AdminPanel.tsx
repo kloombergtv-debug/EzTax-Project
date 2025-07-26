@@ -634,36 +634,105 @@ export default function AdminPanel() {
                   </CardHeader>
                   <CardContent>
                     {taxData.personalInfo ? (
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-6">
+                        {/* 기본 정보 */}
                         <div>
-                          <Label className="text-sm font-medium">이름</Label>
-                          <p className="text-sm">{taxData.personalInfo.firstName || 'N/A'} {taxData.personalInfo.lastName || ''}</p>
+                          <h4 className="font-semibold text-sm mb-3 text-blue-700">기본 정보</h4>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <Label className="text-sm font-medium">이름</Label>
+                              <p className="text-sm">{taxData.personalInfo.firstName || 'N/A'} {taxData.personalInfo.lastName || ''}</p>
+                            </div>
+                            <div>
+                              <Label className="text-sm font-medium">생년월일</Label>
+                              <p className="text-sm">{formatDate(taxData.personalInfo.dateOfBirth)}</p>
+                            </div>
+                            <div>
+                              <Label className="text-sm font-medium">SSN</Label>
+                              <p className="text-sm">{taxData.personalInfo.ssn || 'N/A'}</p>
+                            </div>
+                            <div>
+                              <Label className="text-sm font-medium">신고유형</Label>
+                              <p className="text-sm">{taxData.personalInfo.filingStatus || 'N/A'}</p>
+                            </div>
+                          </div>
                         </div>
+
+                        {/* 연락처 정보 */}
                         <div>
-                          <Label className="text-sm font-medium">생년월일</Label>
-                          <p className="text-sm">{formatDate(taxData.personalInfo.dateOfBirth)}</p>
+                          <h4 className="font-semibold text-sm mb-3 text-green-700">연락처 정보</h4>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <Label className="text-sm font-medium">이메일</Label>
+                              <p className="text-sm">{taxData.personalInfo.email || 'N/A'}</p>
+                            </div>
+                            <div>
+                              <Label className="text-sm font-medium">전화번호</Label>
+                              <p className="text-sm">{taxData.personalInfo.phone || 'N/A'}</p>
+                            </div>
+                            <div className="col-span-2">
+                              <Label className="text-sm font-medium">주소</Label>
+                              <p className="text-sm">
+                                {taxData.personalInfo.address1 || 'N/A'}
+                                {taxData.personalInfo.address2 && `, ${taxData.personalInfo.address2}`}
+                                <br />
+                                {taxData.personalInfo.city || ''}, {taxData.personalInfo.state || ''} {taxData.personalInfo.zipCode || ''}
+                              </p>
+                            </div>
+                          </div>
                         </div>
-                        <div>
-                          <Label className="text-sm font-medium">이메일</Label>
-                          <p className="text-sm">{taxData.personalInfo.email || 'N/A'}</p>
-                        </div>
-                        <div>
-                          <Label className="text-sm font-medium">전화번호</Label>
-                          <p className="text-sm">{taxData.personalInfo.phone || 'N/A'}</p>
-                        </div>
-                        <div>
-                          <Label className="text-sm font-medium">주소</Label>
-                          <p className="text-sm">
-                            {taxData.personalInfo.address1 || 'N/A'}
-                            {taxData.personalInfo.address2 && `, ${taxData.personalInfo.address2}`}
-                            <br />
-                            {taxData.personalInfo.city || ''}, {taxData.personalInfo.state || ''} {taxData.personalInfo.zipCode || ''}
-                          </p>
-                        </div>
-                        <div>
-                          <Label className="text-sm font-medium">신고유형</Label>
-                          <p className="text-sm">{taxData.personalInfo.filingStatus || 'N/A'}</p>
-                        </div>
+
+                        {/* 배우자 정보 */}
+                        {taxData.personalInfo.spouseInfo && (
+                          <div>
+                            <h4 className="font-semibold text-sm mb-3 text-purple-700">배우자 정보</h4>
+                            <div className="grid grid-cols-2 gap-4">
+                              <div>
+                                <Label className="text-sm font-medium">배우자 이름</Label>
+                                <p className="text-sm">{taxData.personalInfo.spouseInfo.firstName || 'N/A'} {taxData.personalInfo.spouseInfo.lastName || ''}</p>
+                              </div>
+                              <div>
+                                <Label className="text-sm font-medium">배우자 생년월일</Label>
+                                <p className="text-sm">{formatDate(taxData.personalInfo.spouseInfo.dateOfBirth)}</p>
+                              </div>
+                              <div>
+                                <Label className="text-sm font-medium">배우자 SSN</Label>
+                                <p className="text-sm">{taxData.personalInfo.spouseInfo.ssn || 'N/A'}</p>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* 부양가족 정보 */}
+                        {taxData.personalInfo.dependents && taxData.personalInfo.dependents.length > 0 && (
+                          <div>
+                            <h4 className="font-semibold text-sm mb-3 text-orange-700">부양가족 정보 ({taxData.personalInfo.dependents.length}명)</h4>
+                            <div className="space-y-3">
+                              {taxData.personalInfo.dependents.map((dependent, index) => (
+                                <div key={index} className="bg-orange-50 p-3 rounded border-l-4 border-orange-200">
+                                  <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                      <Label className="text-xs font-medium text-orange-800">이름</Label>
+                                      <p className="text-sm">{dependent.firstName} {dependent.lastName}</p>
+                                    </div>
+                                    <div>
+                                      <Label className="text-xs font-medium text-orange-800">관계</Label>
+                                      <p className="text-sm">{dependent.relationship}</p>
+                                    </div>
+                                    <div>
+                                      <Label className="text-xs font-medium text-orange-800">생년월일</Label>
+                                      <p className="text-sm">{formatDate(dependent.dateOfBirth)}</p>
+                                    </div>
+                                    <div>
+                                      <Label className="text-xs font-medium text-orange-800">자격 아동</Label>
+                                      <p className="text-sm">{dependent.isQualifyingChild ? '예' : '아니오'}</p>
+                                    </div>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
                       </div>
                     ) : (
                       <p className="text-gray-500">개인정보가 입력되지 않았습니다.</p>
@@ -682,31 +751,108 @@ export default function AdminPanel() {
                   </CardHeader>
                   <CardContent>
                     {taxData.income ? (
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-6">
+                        {/* 주요 소득 */}
                         <div>
-                          <Label className="text-sm font-medium">급여 소득</Label>
-                          <p className="text-sm">{formatCurrency(taxData.income.wages)}</p>
+                          <h4 className="font-semibold text-sm mb-3 text-blue-700">주요 소득</h4>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <Label className="text-sm font-medium">급여 소득 (Wages)</Label>
+                              <p className="text-sm">{formatCurrency(taxData.income.wages)}</p>
+                            </div>
+                            <div>
+                              <Label className="text-sm font-medium">사업 소득 (Business)</Label>
+                              <p className="text-sm">{formatCurrency(taxData.income.businessIncome)}</p>
+                            </div>
+                            <div>
+                              <Label className="text-sm font-medium">이자 소득 (Interest)</Label>
+                              <p className="text-sm">{formatCurrency(taxData.income.interestIncome)}</p>
+                            </div>
+                            <div>
+                              <Label className="text-sm font-medium">배당 소득 (Dividends)</Label>
+                              <p className="text-sm">{formatCurrency(taxData.income.dividends)}</p>
+                            </div>
+                            <div>
+                              <Label className="text-sm font-medium">자본 이득 (Capital Gains)</Label>
+                              <p className="text-sm">{formatCurrency(taxData.income.capitalGains)}</p>
+                            </div>
+                            <div>
+                              <Label className="text-sm font-medium">임대 소득 (Rental)</Label>
+                              <p className="text-sm">{formatCurrency(taxData.income.rentalIncome)}</p>
+                            </div>
+                            <div>
+                              <Label className="text-sm font-medium">은퇴 소득 (Retirement)</Label>
+                              <p className="text-sm">{formatCurrency(taxData.income.retirementIncome)}</p>
+                            </div>
+                            <div>
+                              <Label className="text-sm font-medium">실업 급여 (Unemployment)</Label>
+                              <p className="text-sm">{formatCurrency(taxData.income.unemploymentIncome)}</p>
+                            </div>
+                            <div>
+                              <Label className="text-sm font-medium">기타 소득 (Other)</Label>
+                              <p className="text-sm">{formatCurrency(taxData.income.otherIncome)}</p>
+                            </div>
+                            <div className="bg-blue-50 p-3 rounded">
+                              <Label className="text-sm font-medium">총 소득 (Total Income)</Label>
+                              <p className="text-lg font-bold text-blue-700">{formatCurrency(taxData.income.totalIncome)}</p>
+                            </div>
+                          </div>
                         </div>
-                        <div>
-                          <Label className="text-sm font-medium">사업 소득</Label>
-                          <p className="text-sm">{formatCurrency(taxData.income.businessIncome)}</p>
-                        </div>
-                        <div>
-                          <Label className="text-sm font-medium">이자 소득</Label>
-                          <p className="text-sm">{formatCurrency(taxData.income.interest)}</p>
-                        </div>
-                        <div>
-                          <Label className="text-sm font-medium">배당 소득</Label>
-                          <p className="text-sm">{formatCurrency(taxData.income.dividends)}</p>
-                        </div>
-                        <div>
-                          <Label className="text-sm font-medium">기타 소득</Label>
-                          <p className="text-sm">{formatCurrency(taxData.income.otherIncome)}</p>
-                        </div>
-                        <div>
-                          <Label className="text-sm font-medium">총 소득</Label>
-                          <p className="text-sm font-bold">{formatCurrency(taxData.income.totalIncome)}</p>
-                        </div>
+
+                        {/* 소득 조정 */}
+                        {taxData.income.adjustments && (
+                          <div>
+                            <h4 className="font-semibold text-sm mb-3 text-orange-700">소득 조정 (Income Adjustments)</h4>
+                            <div className="grid grid-cols-2 gap-4">
+                              <div>
+                                <Label className="text-sm font-medium">학자금 대출 이자</Label>
+                                <p className="text-sm">{formatCurrency(taxData.income.adjustments.studentLoanInterest)}</p>
+                              </div>
+                              <div>
+                                <Label className="text-sm font-medium">은퇴 기여금</Label>
+                                <p className="text-sm">{formatCurrency(taxData.income.adjustments.retirementContributions)}</p>
+                              </div>
+                              <div>
+                                <Label className="text-sm font-medium">기타 조정</Label>
+                                <p className="text-sm">{formatCurrency(taxData.income.adjustments.otherAdjustments)}</p>
+                              </div>
+                              <div className="bg-orange-50 p-3 rounded">
+                                <Label className="text-sm font-medium">수정총소득 (AGI)</Label>
+                                <p className="text-lg font-bold text-orange-700">{formatCurrency(taxData.income.adjustedGrossIncome)}</p>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* 추가 소득 항목 */}
+                        {taxData.income.additionalIncomeItems && taxData.income.additionalIncomeItems.length > 0 && (
+                          <div>
+                            <h4 className="font-semibold text-sm mb-3 text-green-700">추가 소득 항목</h4>
+                            <div className="space-y-2">
+                              {taxData.income.additionalIncomeItems.map((item, index) => (
+                                <div key={index} className="flex justify-between items-center bg-green-50 p-2 rounded">
+                                  <span className="text-sm">{item.type}</span>
+                                  <span className="text-sm font-medium">{formatCurrency(item.amount)}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* 추가 조정 항목 */}
+                        {taxData.income.additionalAdjustmentItems && taxData.income.additionalAdjustmentItems.length > 0 && (
+                          <div>
+                            <h4 className="font-semibold text-sm mb-3 text-purple-700">추가 조정 항목</h4>
+                            <div className="space-y-2">
+                              {taxData.income.additionalAdjustmentItems.map((item, index) => (
+                                <div key={index} className="flex justify-between items-center bg-purple-50 p-2 rounded">
+                                  <span className="text-sm">{item.type}</span>
+                                  <span className="text-sm font-medium">-{formatCurrency(item.amount)}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
                       </div>
                     ) : (
                       <p className="text-gray-500">소득 정보가 입력되지 않았습니다.</p>
@@ -725,15 +871,84 @@ export default function AdminPanel() {
                   </CardHeader>
                   <CardContent>
                     {taxData.deductions ? (
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-6">
+                        {/* 공제 유형 */}
                         <div>
-                          <Label className="text-sm font-medium">공제 유형</Label>
-                          <p className="text-sm">{taxData.deductions.deductionType === 'standard' ? '표준공제' : '항목별공제'}</p>
+                          <h4 className="font-semibold text-sm mb-3 text-blue-700">공제 방식</h4>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <Label className="text-sm font-medium">선택한 공제 유형</Label>
+                              <p className="text-sm">{taxData.deductions.useStandardDeduction ? '표준공제' : '항목별공제'}</p>
+                            </div>
+                            <div className="bg-blue-50 p-3 rounded">
+                              <Label className="text-sm font-medium">총 공제액</Label>
+                              <p className="text-lg font-bold text-blue-700">{formatCurrency(taxData.deductions.totalDeductions)}</p>
+                            </div>
+                          </div>
                         </div>
-                        <div>
-                          <Label className="text-sm font-medium">총 공제액</Label>
-                          <p className="text-sm font-bold">{formatCurrency(taxData.deductions.totalDeductions)}</p>
-                        </div>
+
+                        {/* 표준공제 */}
+                        {taxData.deductions.useStandardDeduction && (
+                          <div>
+                            <h4 className="font-semibold text-sm mb-3 text-green-700">표준공제</h4>
+                            <div className="bg-green-50 p-3 rounded">
+                              <Label className="text-sm font-medium">표준공제액</Label>
+                              <p className="text-sm">{formatCurrency(taxData.deductions.standardDeductionAmount)}</p>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* 항목별공제 */}
+                        {!taxData.deductions.useStandardDeduction && taxData.deductions.itemizedDeductions && (
+                          <div>
+                            <h4 className="font-semibold text-sm mb-3 text-orange-700">항목별공제 상세</h4>
+                            <div className="grid grid-cols-2 gap-4">
+                              <div>
+                                <Label className="text-sm font-medium">의료비</Label>
+                                <p className="text-sm">{formatCurrency(taxData.deductions.itemizedDeductions.medicalExpenses)}</p>
+                              </div>
+                              <div>
+                                <Label className="text-sm font-medium">주/지방세</Label>
+                                <p className="text-sm">{formatCurrency(taxData.deductions.itemizedDeductions.stateLocalIncomeTax)}</p>
+                              </div>
+                              <div>
+                                <Label className="text-sm font-medium">부동산세</Label>
+                                <p className="text-sm">{formatCurrency(taxData.deductions.itemizedDeductions.realEstateTaxes)}</p>
+                              </div>
+                              <div>
+                                <Label className="text-sm font-medium">개인자산세</Label>
+                                <p className="text-sm">{formatCurrency(taxData.deductions.itemizedDeductions.personalPropertyTax)}</p>
+                              </div>
+                              <div>
+                                <Label className="text-sm font-medium">주택담보대출 이자</Label>
+                                <p className="text-sm">{formatCurrency(taxData.deductions.itemizedDeductions.mortgageInterest)}</p>
+                              </div>
+                              <div>
+                                <Label className="text-sm font-medium">현금 기부</Label>
+                                <p className="text-sm">{formatCurrency(taxData.deductions.itemizedDeductions.charitableCash)}</p>
+                              </div>
+                              <div>
+                                <Label className="text-sm font-medium">현물 기부</Label>
+                                <p className="text-sm">{formatCurrency(taxData.deductions.itemizedDeductions.charitableNonCash)}</p>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* 추가 공제 항목 */}
+                        {taxData.deductions.otherDeductionItems && taxData.deductions.otherDeductionItems.length > 0 && (
+                          <div>
+                            <h4 className="font-semibold text-sm mb-3 text-purple-700">기타 공제 항목</h4>
+                            <div className="space-y-2">
+                              {taxData.deductions.otherDeductionItems.map((item, index) => (
+                                <div key={index} className="flex justify-between items-center bg-purple-50 p-2 rounded">
+                                  <span className="text-sm">{item.type}</span>
+                                  <span className="text-sm font-medium">{formatCurrency(item.amount)}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
                       </div>
                     ) : (
                       <p className="text-gray-500">공제 정보가 입력되지 않았습니다.</p>
@@ -752,23 +967,56 @@ export default function AdminPanel() {
                   </CardHeader>
                   <CardContent>
                     {taxData.taxCredits ? (
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-6">
+                        {/* 주요 세액공제 */}
                         <div>
-                          <Label className="text-sm font-medium">아동세액공제</Label>
-                          <p className="text-sm">{formatCurrency(taxData.taxCredits.childTaxCredit)}</p>
+                          <h4 className="font-semibold text-sm mb-3 text-blue-700">주요 세액공제</h4>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <Label className="text-sm font-medium">아동세액공제 (CTC)</Label>
+                              <p className="text-sm">{formatCurrency(taxData.taxCredits.childTaxCredit)}</p>
+                            </div>
+                            <div>
+                              <Label className="text-sm font-medium">기타 부양가족 공제</Label>
+                              <p className="text-sm">{formatCurrency(taxData.taxCredits.creditForOtherDependents)}</p>
+                            </div>
+                            <div>
+                              <Label className="text-sm font-medium">근로소득세액공제 (EITC)</Label>
+                              <p className="text-sm">{formatCurrency(taxData.taxCredits.earnedIncomeCredit)}</p>
+                            </div>
+                            <div>
+                              <Label className="text-sm font-medium">추가 아동세액공제 (ACTC)</Label>
+                              <p className="text-sm">{formatCurrency(taxData.taxCredits.additionalChildTaxCredit || 0)}</p>
+                            </div>
+                            <div>
+                              <Label className="text-sm font-medium">은퇴저축공제</Label>
+                              <p className="text-sm">{formatCurrency(taxData.taxCredits.retirementSavingsCredit || 0)}</p>
+                            </div>
+                            <div>
+                              <Label className="text-sm font-medium">교육세액공제</Label>
+                              <p className="text-sm">{formatCurrency(taxData.taxCredits.educationCredit || 0)}</p>
+                            </div>
+                            <div className="bg-blue-50 p-3 rounded">
+                              <Label className="text-sm font-medium">총 세액공제</Label>
+                              <p className="text-lg font-bold text-blue-700">{formatCurrency(taxData.taxCredits.totalCredits)}</p>
+                            </div>
+                          </div>
                         </div>
-                        <div>
-                          <Label className="text-sm font-medium">기타 부양가족 공제</Label>
-                          <p className="text-sm">{formatCurrency(taxData.taxCredits.creditForOtherDependents)}</p>
-                        </div>
-                        <div>
-                          <Label className="text-sm font-medium">근로소득세액공제</Label>
-                          <p className="text-sm">{formatCurrency(taxData.taxCredits.earnedIncomeCredit)}</p>
-                        </div>
-                        <div>
-                          <Label className="text-sm font-medium">총 세액공제</Label>
-                          <p className="text-sm font-bold">{formatCurrency(taxData.taxCredits.totalCredits)}</p>
-                        </div>
+
+                        {/* 추가 세액공제 항목 */}
+                        {taxData.taxCredits.additionalCreditItems && taxData.taxCredits.additionalCreditItems.length > 0 && (
+                          <div>
+                            <h4 className="font-semibold text-sm mb-3 text-green-700">추가 세액공제 항목</h4>
+                            <div className="space-y-2">
+                              {taxData.taxCredits.additionalCreditItems.map((item, index) => (
+                                <div key={index} className="flex justify-between items-center bg-green-50 p-2 rounded">
+                                  <span className="text-sm">{item.type}</span>
+                                  <span className="text-sm font-medium">{formatCurrency(item.amount)}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
                       </div>
                     ) : (
                       <p className="text-gray-500">세액공제 정보가 입력되지 않았습니다.</p>
