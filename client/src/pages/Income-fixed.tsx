@@ -645,6 +645,19 @@ export default function IncomePage() {
                     </div>
                   </div>
                   
+                  {/* 수동 저장 버튼 */}
+                  <div className="flex justify-center mb-6">
+                    <Button 
+                      type="button"
+                      variant="outline"
+                      onClick={handleManualSave}
+                      className="flex items-center gap-2"
+                    >
+                      <Save className="h-4 w-4" />
+                      진행상황 저장
+                    </Button>
+                  </div>
+                  
                   <div className="mt-8">
                     <h3 className="text-lg font-semibold mb-4">사업소득 (Business Income)</h3>
                     
@@ -1173,19 +1186,6 @@ export default function IncomePage() {
                   </div>
                 </CardContent>
               </Card>
-              
-              {/* 수동 저장 버튼 */}
-              <div className="flex justify-center mb-6">
-                <Button 
-                  type="button"
-                  variant="outline"
-                  onClick={handleManualSave}
-                  className="flex items-center gap-2"
-                >
-                  <Save className="h-4 w-4" />
-                  진행상황 저장
-                </Button>
-              </div>
               
               <StepNavigation 
                 prevStep="/personal-info" 
