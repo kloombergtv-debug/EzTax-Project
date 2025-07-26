@@ -305,16 +305,7 @@ const Review: React.FC = () => {
                   </div>
                   <div>
                     <Field label="은퇴 저축 공제(Retirement Savings Credit)" value={formatCurrency(calculatedResults.retirementSavingsCredit || taxCredits.retirementSavingsCredit || 0)} />
-                    <Field 
-                      label="기타 부양가족 공제(Credit for Other Dependents)" 
-                      value={(() => {
-                        const value = calculatedResults.creditForOtherDependents || 0;
-                        console.log('기타 부양가족 공제 값:', value, 'typeof:', typeof value);
-                        const formatted = formatCurrency(value);
-                        console.log('formatCurrency 결과:', formatted);
-                        return formatted;
-                      })()} 
-                    />
+                    <Field label="기타 부양가족 공제(Credit for Other Dependents)" value={formatCurrency(calculatedResults.creditForOtherDependents || 0)} />
                     <Field label="근로소득세액공제(Earned Income Credit)" value={formatCurrency(calculatedResults.earnedIncomeCredit || 0)} />
                     <Field label="총 세액공제(Total Credits)" value={formatCurrency(calculatedResults.credits || 0)} />
                   </div>

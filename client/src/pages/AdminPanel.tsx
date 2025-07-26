@@ -974,23 +974,23 @@ export default function AdminPanel() {
                           <div className="grid grid-cols-2 gap-4">
                             <div>
                               <Label className="text-sm font-medium">아동세액공제 (CTC)</Label>
-                              <p className="text-sm">{formatCurrency(taxData.taxCredits.childTaxCredit)}</p>
+                              <p className="text-sm">{formatCurrency(taxData.calculatedResults?.childTaxCredit || taxData.taxCredits?.childTaxCredit || 0)}</p>
                             </div>
                             <div>
                               <Label className="text-sm font-medium">기타 부양가족 공제</Label>
-                              <p className="text-sm">{formatCurrency(taxData.taxCredits.creditForOtherDependents)}</p>
+                              <p className="text-sm">{formatCurrency(taxData.calculatedResults?.creditForOtherDependents || taxData.taxCredits?.creditForOtherDependents || 0)}</p>
                             </div>
                             <div>
                               <Label className="text-sm font-medium">근로소득세액공제 (EITC)</Label>
-                              <p className="text-sm">{formatCurrency(taxData.taxCredits.earnedIncomeCredit)}</p>
+                              <p className="text-sm">{formatCurrency(taxData.calculatedResults?.earnedIncomeCredit || taxData.taxCredits?.earnedIncomeCredit || 0)}</p>
                             </div>
                             <div>
                               <Label className="text-sm font-medium">추가 아동세액공제 (ACTC)</Label>
-                              <p className="text-sm">{formatCurrency(taxData.taxCredits.additionalChildTaxCredit || 0)}</p>
+                              <p className="text-sm">{formatCurrency(taxData.calculatedResults?.additionalChildTaxCredit || taxData.taxCredits?.additionalChildTaxCredit || 0)}</p>
                             </div>
                             <div>
                               <Label className="text-sm font-medium">은퇴저축공제</Label>
-                              <p className="text-sm">{formatCurrency(taxData.taxCredits.retirementSavingsCredit || 0)}</p>
+                              <p className="text-sm">{formatCurrency(taxData.calculatedResults?.retirementSavingsCredit || taxData.taxCredits?.retirementSavingsCredit || 0)}</p>
                             </div>
                             <div>
                               <Label className="text-sm font-medium">교육세액공제</Label>
