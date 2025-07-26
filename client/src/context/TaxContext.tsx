@@ -285,7 +285,7 @@ export const TaxProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         if (finalData.id) {
           // Update existing tax return
           console.log(`기존 세금 신고서 업데이트 중 (ID: ${finalData.id})`);
-          await fetch(`/api/tax-return/${finalData.id}`, {
+          const response = await fetch(`/api/tax-return/${finalData.id}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
@@ -293,6 +293,10 @@ export const TaxProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             credentials: 'include',
             body: JSON.stringify(finalData),
           });
+          
+          if (!response.ok) {
+            console.error(`세금 신고서 업데이트 실패: ${response.status} - ${response.statusText}`);
+          }
         } else {
           // Create new tax return for user
           console.log(`새 사용자를 위한 세금 신고서 생성 중 (사용자 ID: ${currentUserId})`);
@@ -310,6 +314,8 @@ export const TaxProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             console.log(`새 세금 신고서 생성됨 (ID: ${newTaxReturn.id})`);
             // Update the local data with the new ID
             setTaxData(prev => ({ ...prev, id: newTaxReturn.id }));
+          } else {
+            console.error(`새 세금 신고서 생성 실패: ${response.status} - ${response.statusText}`);
           }
         }
       } catch (error) {
@@ -360,13 +366,18 @@ export const TaxProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   };
 
+  const saveTaxReturn = async () => {
+    return await saveTaxData();
+  };
+
   return (
     <TaxContext.Provider value={{
       taxData,
       isLoading,
       isDataReady,
       updateTaxData,
-      saveTaxData
+      saveTaxData,
+      saveTaxReturn
     }}>
       {children}
     </TaxContext.Provider>
