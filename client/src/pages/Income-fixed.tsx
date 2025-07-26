@@ -740,12 +740,26 @@ export default function IncomePage() {
                                 min="0"
                                 placeholder="이자소득 금액"
                                 value={field.value === 0 ? '' : field.value}
-                                onChange={(e) => {
-                                  field.onChange(parseFloat(e.target.value) || 0);
-                                  // 이자소득 변경시 즉시 총소득 재계산
-                                  setTimeout(() => {
+                                onChange={async (e) => {
+                                  const value = parseFloat(e.target.value) || 0;
+                                  field.onChange(value);
+                                  
+                                  // 즉시 계산 및 저장
+                                  setTimeout(async () => {
                                     calculateTotals();
-                                  }, 50);
+                                    
+                                    // 현재 폼 데이터로 서버 업데이트
+                                    const currentData = form.getValues();
+                                    currentData.additionalIncomeItems = additionalIncomeItems;
+                                    currentData.additionalAdjustmentItems = additionalAdjustmentItems;
+                                    
+                                    try {
+                                      await updateTaxData({ income: currentData });
+                                      console.log('이자소득 자동 저장 완료:', value);
+                                    } catch (error) {
+                                      console.error('이자소득 자동 저장 오류:', error);
+                                    }
+                                  }, 300);
                                 }}
                               />
                             </FormControl>
@@ -773,12 +787,26 @@ export default function IncomePage() {
                                 min="0"
                                 placeholder="배당소득 금액"
                                 value={field.value === 0 ? '' : field.value}
-                                onChange={(e) => {
-                                  field.onChange(parseFloat(e.target.value) || 0);
-                                  // 배당소득 변경시 즉시 총소득 재계산
-                                  setTimeout(() => {
+                                onChange={async (e) => {
+                                  const value = parseFloat(e.target.value) || 0;
+                                  field.onChange(value);
+                                  
+                                  // 즉시 계산 및 저장
+                                  setTimeout(async () => {
                                     calculateTotals();
-                                  }, 50);
+                                    
+                                    // 현재 폼 데이터로 서버 업데이트
+                                    const currentData = form.getValues();
+                                    currentData.additionalIncomeItems = additionalIncomeItems;
+                                    currentData.additionalAdjustmentItems = additionalAdjustmentItems;
+                                    
+                                    try {
+                                      await updateTaxData({ income: currentData });
+                                      console.log('배당소득 자동 저장 완료:', value);
+                                    } catch (error) {
+                                      console.error('배당소득 자동 저장 오류:', error);
+                                    }
+                                  }, 300);
                                 }}
                               />
                             </FormControl>
@@ -820,8 +848,26 @@ export default function IncomePage() {
                                 min="0"
                                 placeholder="자본이득 금액"
                                 value={field.value === 0 ? '' : field.value}
-                                onChange={(e) => {
-                                  field.onChange(parseFloat(e.target.value) || 0);
+                                onChange={async (e) => {
+                                  const value = parseFloat(e.target.value) || 0;
+                                  field.onChange(value);
+                                  
+                                  // 즉시 계산 및 저장
+                                  setTimeout(async () => {
+                                    calculateTotals();
+                                    
+                                    // 현재 폼 데이터로 서버 업데이트
+                                    const currentData = form.getValues();
+                                    currentData.additionalIncomeItems = additionalIncomeItems;
+                                    currentData.additionalAdjustmentItems = additionalAdjustmentItems;
+                                    
+                                    try {
+                                      await updateTaxData({ income: currentData });
+                                      console.log('자본이득 자동 저장 완료:', value);
+                                    } catch (error) {
+                                      console.error('자본이득 자동 저장 오류:', error);
+                                    }
+                                  }, 300);
                                 }}
                               />
                             </FormControl>
@@ -849,8 +895,26 @@ export default function IncomePage() {
                                 min="0"
                                 placeholder="임대소득 금액"
                                 value={field.value === 0 ? '' : field.value}
-                                onChange={(e) => {
-                                  field.onChange(parseFloat(e.target.value) || 0);
+                                onChange={async (e) => {
+                                  const value = parseFloat(e.target.value) || 0;
+                                  field.onChange(value);
+                                  
+                                  // 즉시 계산 및 저장
+                                  setTimeout(async () => {
+                                    calculateTotals();
+                                    
+                                    // 현재 폼 데이터로 서버 업데이트
+                                    const currentData = form.getValues();
+                                    currentData.additionalIncomeItems = additionalIncomeItems;
+                                    currentData.additionalAdjustmentItems = additionalAdjustmentItems;
+                                    
+                                    try {
+                                      await updateTaxData({ income: currentData });
+                                      console.log('임대소득 자동 저장 완료:', value);
+                                    } catch (error) {
+                                      console.error('임대소득 자동 저장 오류:', error);
+                                    }
+                                  }, 300);
                                 }}
                               />
                             </FormControl>
