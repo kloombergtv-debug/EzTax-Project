@@ -188,10 +188,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       const userId = (req.user as any).id;
-      console.log(`GET /api/tax-return - 인증된 사용자 ID: ${userId} 데이터 요청`);
+      console.log(`GET /api/tax-return - 사용자 ID: ${userId} 데이터 요청`);
       
       const taxReturn = await storage.getTaxReturnByUserId(userId);
-      console.log(`사용자 ${userId} 세금 데이터 조회 결과:`, taxReturn ? `발견됨 (ID: ${taxReturn.id})` : '없음');
       
       if (!taxReturn) {
         console.log(`사용자 ID ${userId}의 세금 신고서 없음 - 새 빈 신고서 생성`);
@@ -228,43 +227,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
     } catch (error) {
       console.error("Error fetching tax return:", error);
-      res.status(500).json({ message: "Internal server error" });
-    }
-  });
-
-  // Get tax return by user ID (debugging endpoint - temporarily bypasses auth)
-  app.get("/api/tax-return/user/:userId", async (req, res) => {
-    try {
-      const requestedUserId = parseInt(req.params.userId);
-      
-      console.log(`사용자 ID ${requestedUserId} 데이터 직접 요청 (디버깅용)`);
-      
-      // Verify the user exists in database
-      const userExists = await storage.getUserById(requestedUserId);
-      if (!userExists) {
-        console.log(`사용자 ID ${requestedUserId} 데이터베이스에서 찾을 수 없음`);
-        return res.status(404).json({ message: "User not found" });
-      }
-      
-      console.log(`사용자 ${userExists.username} (ID: ${requestedUserId}) 확인됨`);
-      
-      const taxReturn = await storage.getTaxReturnByUserId(requestedUserId);
-      
-      if (!taxReturn) {
-        console.log(`사용자 ID ${requestedUserId}의 세금 데이터 없음`);
-        return res.status(404).json({ message: "No tax data found" });
-      } else {
-        console.log(`사용자 ID ${requestedUserId}의 기존 데이터 반환 (ID: ${taxReturn.id})`);
-        console.log('데이터 요약:', {
-          personalInfo: !!taxReturn.personalInfo,
-          income: !!taxReturn.income,
-          deductions: !!taxReturn.deductions,
-          taxCredits: !!taxReturn.taxCredits
-        });
-        res.json(taxReturn);
-      }
-    } catch (error) {
-      console.error("Error fetching tax return by user ID:", error);
       res.status(500).json({ message: "Internal server error" });
     }
   });
@@ -314,45 +276,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(403).json({ message: "Access denied" });
       }
       
-      console.log(`사용자 ${userId} 세금 데이터 업데이트 요청 (ID: ${id})`);
-      console.log('업데이트 필드:', Object.keys(req.body).join(', '));
+      console.log('기존 데이터:', JSON.stringify(existingReturn.deductions, null, 2));
+      console.log('새 데이터:', JSON.stringify(req.body.deductions, null, 2));
       
-      // Deep merge function to preserve all existing data
-      const deepMerge = (target: any, source: any) => {
-        if (!source) return target;
-        if (!target) return source;
+      // Deep merge existing data with new data to preserve all fields
+      const mergedData = { ...req.body };
+      
+      // Specifically handle deductions merge
+      if (existingReturn.deductions && req.body.deductions) {
+        mergedData.deductions = {
+          ...existingReturn.deductions,
+          ...req.body.deductions
+        };
         
-        const result = { ...target };
-        
-        for (const key in source) {
-          if (source[key] !== null && typeof source[key] === 'object' && !Array.isArray(source[key])) {
-            result[key] = deepMerge(target[key] || {}, source[key]);
-          } else {
-            result[key] = source[key];
-          }
+        // Handle itemizedDeductions specifically to preserve medical expenses
+        if (existingReturn.deductions.itemizedDeductions && req.body.deductions.itemizedDeductions) {
+          mergedData.deductions.itemizedDeductions = {
+            ...existingReturn.deductions.itemizedDeductions,
+            ...req.body.deductions.itemizedDeductions
+          };
         }
-        
-        return result;
-      };
-
-      // Deep merge all data to preserve existing information
-      const mergedData = {
-        ...existingReturn,
-        ...req.body,
-        updatedAt: new Date().toISOString(),
-        personalInfo: req.body.personalInfo ? deepMerge(existingReturn.personalInfo, req.body.personalInfo) : existingReturn.personalInfo,
-        income: req.body.income ? deepMerge(existingReturn.income, req.body.income) : existingReturn.income,
-        deductions: req.body.deductions ? deepMerge(existingReturn.deductions, req.body.deductions) : existingReturn.deductions,
-        taxCredits: req.body.taxCredits ? deepMerge(existingReturn.taxCredits, req.body.taxCredits) : existingReturn.taxCredits,
-        retirementContributions: req.body.retirementContributions ? deepMerge(existingReturn.retirementContributions, req.body.retirementContributions) : existingReturn.retirementContributions,
-        additionalTax: req.body.additionalTax ? deepMerge(existingReturn.additionalTax, req.body.additionalTax) : existingReturn.additionalTax,
-        calculatedResults: req.body.calculatedResults || existingReturn.calculatedResults
-      };
+      } else if (existingReturn.deductions && !req.body.deductions) {
+        // If req.body doesn't have deductions but existing data does, preserve existing
+        mergedData.deductions = existingReturn.deductions;
+      }
       
-      console.log('데이터 업데이트 완료 - 시간:', mergedData.updatedAt);
+      console.log('병합된 데이터:', JSON.stringify(mergedData.deductions, null, 2));
       
       const updatedTaxReturn = await storage.updateTaxReturn(id, mergedData);
-      console.log(`사용자 ${userId} 데이터 저장 성공 - 다음 로그인 시 복원됨`);
       res.json(updatedTaxReturn);
     } catch (error) {
       console.error("Error updating tax return:", error);

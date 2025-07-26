@@ -27,17 +27,7 @@ async function hashPassword(password: string) {
 }
 
 async function comparePasswords(supplied: string, stored: string) {
-  // Handle plain text password (temporary for debugging)
-  if (!stored.includes('.')) {
-    return supplied === stored;
-  }
-  
   const [hashed, salt] = stored.split(".");
-  if (!hashed || !salt) {
-    console.error('Invalid password hash format:', stored);
-    return false;
-  }
-  
   const hashedBuf = Buffer.from(hashed, "hex");
   const suppliedBuf = (await scryptAsync(supplied, salt, 64)) as Buffer;
   return timingSafeEqual(hashedBuf, suppliedBuf);
@@ -210,22 +200,13 @@ export function setupAuth(app: Express) {
   });
 
   app.post("/api/login", (req, res, next) => {
-    console.log('Login attempt for user:', req.body.username);
     passport.authenticate("local", (err: Error | null, user: SelectUser | false, info: { message: string }) => {
-      if (err) {
-        console.error('Authentication error:', err);
-        return next(err);
-      }
+      if (err) return next(err);
       if (!user) {
-        console.log('Authentication failed for user:', req.body.username);
         return res.status(401).json({ message: "아이디나 비밀번호가 올바르지 않습니다(Invalid username or password)" });
       }
       req.login(user, (err) => {
-        if (err) {
-          console.error('Session login error:', err);
-          return next(err);
-        }
-        console.log('Login successful for user:', user.username, 'Session ID:', req.sessionID);
+        if (err) return next(err);
         res.status(200).json(user);
       });
     })(req, res, next);

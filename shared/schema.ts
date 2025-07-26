@@ -84,18 +84,18 @@ export interface SpouseInformation {
 }
 
 export interface PersonalInformation {
-  firstName?: string;
+  firstName: string;
   middleInitial?: string;
-  lastName?: string;
-  ssn?: string;
-  dateOfBirth: string; // 필수
-  email?: string;
-  phone?: string;
-  address1?: string;
+  lastName: string;
+  ssn: string;
+  dateOfBirth: string;
+  email: string;
+  phone: string;
+  address1: string;
   address2?: string;
-  city?: string;
-  state: string; // 필수
-  zipCode?: string;
+  city: string;
+  state: string;
+  zipCode: string;
   filingStatus: FilingStatus;
   isDisabled: boolean;
   isNonresidentAlien: boolean;
@@ -321,45 +321,39 @@ export interface CalculatedResults {
 
 // Zod schemas for validation
 export const dependentSchema = z.object({
-  firstName: z.string().optional(),
-  lastName: z.string().optional(),
-  ssn: z.string().optional(),
-  relationship: z.string().optional(),
-  dateOfBirth: z.string().min(1, "생년월일은 필수입니다"),
+  firstName: z.string().min(1, "First name is required"),
+  lastName: z.string().min(1, "Last name is required"),
+  ssn: z.string().regex(/^\d{3}-\d{2}-\d{4}$/, "SSN must be in format XXX-XX-XXXX"),
+  relationship: z.string().min(1, "Relationship is required"),
+  dateOfBirth: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Date must be in YYYY-MM-DD format"),
   isDisabled: z.boolean().default(false),
   isNonresidentAlien: z.boolean().default(false),
   isQualifyingChild: z.boolean().default(false),
 });
 
 export const spouseInfoSchema = z.object({
-  firstName: z.string().optional(),
-  middleInitial: z.string().optional(),
-  lastName: z.string().optional(),
-  ssn: z.string().optional(),
-  dateOfBirth: z.string().min(1, "배우자 생년월일은 필수입니다"),
+  firstName: z.string().min(1, "Spouse's first name is required"),
+  middleInitial: z.string().max(1).optional(),
+  lastName: z.string().min(1, "Spouse's last name is required"),
+  ssn: z.string().regex(/^\d{3}-\d{2}-\d{4}$/, "SSN must be in format XXX-XX-XXXX"),
+  dateOfBirth: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Date must be in YYYY-MM-DD format"),
   isDisabled: z.boolean().default(false),
   isNonresidentAlien: z.boolean().default(false),
-  differentAddress: z.boolean().optional(),
-  address1: z.string().optional(),
-  address2: z.string().optional(),
-  city: z.string().optional(),
-  state: z.string().optional(),
-  zipCode: z.string().optional(),
 });
 
 export const personalInfoSchema = z.object({
-  firstName: z.string().optional(),
-  middleInitial: z.string().optional(),
-  lastName: z.string().optional(),
-  ssn: z.string().optional(),
-  dateOfBirth: z.string().min(1, "생년월일은 필수입니다"),
-  email: z.string().optional(),
-  phone: z.string().optional(),
-  address1: z.string().optional(),
+  firstName: z.string().min(1, "First name is required"),
+  middleInitial: z.string().max(1).optional(),
+  lastName: z.string().min(1, "Last name is required"),
+  ssn: z.string().regex(/^\d{3}-\d{2}-\d{4}$/, "SSN must be in format XXX-XX-XXXX"),
+  dateOfBirth: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Date must be in YYYY-MM-DD format"),
+  email: z.string().email("Invalid email address"),
+  phone: z.string().regex(/^\d{3}-\d{3}-\d{4}$/, "Phone must be in format XXX-XXX-XXXX"),
+  address1: z.string().min(1, "Address is required"),
   address2: z.string().optional(),
-  city: z.string().optional(),
-  state: z.string().min(1, "주(State)는 필수입니다"),
-  zipCode: z.string().optional(),
+  city: z.string().min(1, "City is required"),
+  state: z.string().length(2, "State must be a 2-letter code"),
+  zipCode: z.string().regex(/^\d{5}(-\d{4})?$/, "ZIP code must be in format XXXXX or XXXXX-XXXX"),
   filingStatus: z.enum(["single", "married_joint", "married_separate", "head_of_household", "qualifying_widow"]),
   isDisabled: z.boolean().default(false),
   isNonresidentAlien: z.boolean().default(false),
@@ -483,8 +477,6 @@ export const calculatedResultsSchema = z.object({
   earnedIncomeCredit: z.number().optional(),
   additionalChildTaxCredit: z.number().optional(),
 });
-
-
 
 // Main TaxData interface
 export interface TaxData {

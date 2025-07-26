@@ -155,9 +155,17 @@ const formSchema = z.object({
 });
 
 const TaxCredits3Page: React.FC = () => {
-  // 모든 Hook을 컴포넌트 최상위에 배치
   const { taxData, updateTaxData, isDataReady } = useTaxContext();
   const { toast } = useToast();
+  
+  // 데이터가 로드되지 않았으면 로딩 표시
+  if (!isDataReady) {
+    return (
+      <div className="max-w-5xl mx-auto px-4 py-6">
+        <div className="text-center">데이터 로딩 중...</div>
+      </div>
+    );
+  }
   
   // 돌봄 비용 입력 필드 표시 여부를 위한 상태
   const [showCareExpenseFields, setShowCareExpenseFields] = useState<boolean>(false);
@@ -188,56 +196,8 @@ const TaxCredits3Page: React.FC = () => {
       name: "careProviders"
     });
   
-  // 총 기여금 감시 - form.watch는 Hook이므로 최상위에 배치
+  // 총 기여금 감시
   const retirementContributionsTotal = form.watch('retirementContributions.totalContributions') || 0;
-  
-  // 페이지 로드 시 데이터 초기화 - useEffect Hook
-  useEffect(() => {
-    if (taxData.taxCredits || taxData.retirementContributions) {
-      const parsedValues: TaxCreditsFormData = {
-        ...defaultFormData,
-        ...taxData.taxCredits,
-        retirementContributions: {
-          ...defaultRetirementContributions,
-          ...(taxData.retirementContributions || {})
-        },
-        careProviders: (taxData.taxCredits as any)?.careProviders || [defaultCareProvider],
-        careExpenses: (taxData.taxCredits as any)?.careExpenses || 0
-      };
-      
-      form.reset(parsedValues);
-      
-      // 돌봄 비용이 있으면 해당 필드 표시
-      if (parsedValues.careExpenses > 0 || (parsedValues.careProviders && parsedValues.careProviders.length > 1)) {
-        setShowCareExpenseFields(true);
-      }
-      
-      // 페이지 로드 시 은퇴 기여금이 있다면 저축공제액 자동 계산
-      if (parsedValues.retirementContributions?.totalContributions > 0) {
-        console.log("페이지 로드 시 은퇴저축공제 자동 계산 실행");
-        // 은퇴저축 관련 필드 표시
-        setShowRetirementFields(true);
-        setTimeout(() => calculateRetirementCredit(), 1500);
-      }
-      
-      // 페이지 로드 시 부양가족이 있다면 Child Tax Credit 자동 계산
-      if (taxData.personalInfo?.dependents && taxData.personalInfo.dependents.length > 0) {
-        console.log("페이지 로드 시 자녀 세액공제 자동 계산 실행");
-        setTimeout(() => calculateChildTaxCreditAuto(), 500);
-      }
-      
-      setPendingChanges(false);
-    }
-  }, [taxData]);
-  
-  // 데이터가 로드되지 않았으면 로딩 표시
-  if (!isDataReady) {
-    return (
-      <div className="max-w-5xl mx-auto px-4 py-6">
-        <div className="text-center">데이터 로딩 중...</div>
-      </div>
-    );
-  }
   
   // 은퇴저축공제 대상 기여금만 합산 (로스 IRA 제외)
   const calculateAllRetirementContributions = () => {
@@ -411,7 +371,7 @@ const TaxCredits3Page: React.FC = () => {
     return result;
   };
   
-  // 자녀 세액공제 자동 계산 (기타 부양가족 공제에 영향 주지 않음)
+  // 자녀 세액공제 자동 계산
   const calculateChildTaxCreditAuto = () => {
     const filingStatus = taxData.personalInfo?.filingStatus || 'single';
     const agi = taxData.income?.adjustedGrossIncome || 0;
@@ -421,80 +381,37 @@ const TaxCredits3Page: React.FC = () => {
     console.log("자녀 세액공제 계산 - 조정총소득(AGI):", agi, "신고유형:", filingStatus);
     
     if (!dependents || dependents.length === 0) {
-      console.log("부양가족 정보가 없음");
-      form.setValue('childTaxCredit', 0);
-      setPendingChanges(true);
-      return 0;
+      toast({
+        title: "계산할 수 없습니다",
+        description: "부양가족 정보가 없습니다. 개인정보 페이지에서 부양가족을 먼저 추가해주세요.",
+        variant: "destructive"
+      });
+      return;
     }
     
-    // 17세 미만 자녀 필터링 (나이 기준으로 자동 판단)
-    const qualifyingChildren = dependents.filter(dependent => {
-      const birthDate = new Date(dependent.dateOfBirth);
-      const taxYearEnd = new Date('2024-12-31');
-      let age = taxYearEnd.getFullYear() - birthDate.getFullYear();
-      const monthDiff = taxYearEnd.getMonth() - birthDate.getMonth();
-      if (monthDiff < 0 || (monthDiff === 0 && taxYearEnd.getDate() < birthDate.getDate())) {
-        age--;
-      }
-      
-      const isQualifying = age < 17 && !dependent.isNonresidentAlien;
-      console.log(`자녀 세액공제 대상 확인 - 생년월일: ${dependent.dateOfBirth}, 나이: ${age}세, 적격 여부: ${isQualifying}`);
-      return isQualifying;
-    });
+    const qualifyingChildren = dependents.filter(dependent => 
+      dependent.isQualifyingChild && !dependent.isNonresidentAlien
+    );
     
-    console.log(`총 ${dependents.length}명 중 ${qualifyingChildren.length}명이 자녀 세액공제 대상`);
-    
-    // 계산 로직: $2,000 per qualifying child
-    const creditPerChild = 2000;
-    const totalCredit = qualifyingChildren.length * creditPerChild;
-    
-    // AGI에 따른 phase-out 적용 (2024년 기준)
-    const phaseOutThreshold = filingStatus === 'married_joint' ? 400000 : 200000;
-    let finalCredit = totalCredit;
-    
-    if (agi > phaseOutThreshold) {
-      const excessAgi = agi - phaseOutThreshold;
-      const reduction = Math.ceil(excessAgi / 1000) * 50; // $50 per $1,000 of excess AGI
-      finalCredit = Math.max(0, totalCredit - reduction);
-      console.log(`AGI ${agi}로 인한 phase-out 적용: ${totalCredit} - ${reduction} = ${finalCredit}`);
+    if (qualifyingChildren.length === 0) {
+      toast({
+        title: "계산할 수 없습니다",
+        description: "적격 자녀가 없습니다. 개인정보 페이지에서 '적격 자녀 여부'에 체크한 부양가족을 추가해주세요.",
+        variant: "destructive"
+      });
+      return;
     }
     
-    // 현재 기타 부양가족 공제 값 보존
-    const currentOtherCredits = form.getValues('otherCredits') || 0;
-    console.log("Child Tax Credit 계산 전 기타 부양가족 공제 값:", currentOtherCredits);
-    
-    // 폼 값 설정 - 배치 업데이트로 한번에 처리
-    console.log("폼에 값 설정 시도:", finalCredit);
-    
-    // 폼 전체를 다시 reset하여 강제 렌더링
-    const currentFormValues = form.getValues();
-    const updatedValues = {
-      ...currentFormValues,
-      childTaxCredit: finalCredit,
-      otherCredits: currentOtherCredits // 기존 값 유지
-    };
-    
-    // reset으로 전체 폼 상태 갱신
-    form.reset(updatedValues);
-    
-    console.log("폼 reset 완료 - Child Tax Credit:", finalCredit, ", 기타 부양가족 공제:", currentOtherCredits);
-    
+    // 적격 자녀에 기반한 세액공제 계산
+    const credit = calculateChildTaxCredit(qualifyingChildren, agi, filingStatus);
+    form.setValue('childTaxCredit', credit);
     setPendingChanges(true);
     
-    // 총 세액공제 업데이트 - 폼 reset 후 즉시 실행
+    // 총 세액공제 업데이트
     setTimeout(() => calculateTotalCredits(), 100);
     
-    console.log("계산된 자녀 세액공제액:", finalCredit);
-    
-    if (finalCredit > 0) {
-      toast({
-        title: "자녀 세액공제 자동 계산 완료",
-        description: `${qualifyingChildren.length}명의 17세 미만 자녀에 대해 $${finalCredit.toLocaleString()}이 계산되었습니다.`,
-        variant: "default"
-      });
-    }
-    
-    return finalCredit;
+    console.log("계산된 자녀 세액공제액:", credit);
+    return credit;
   };
   
   // 기타 부양가족 공제 자동 계산
@@ -552,7 +469,38 @@ const TaxCredits3Page: React.FC = () => {
     return credit;
   };
   
-
+  // 페이지 로드 시 데이터 초기화
+  useEffect(() => {
+    if (taxData.taxCredits || taxData.retirementContributions) {
+      const parsedValues: TaxCreditsFormData = {
+        ...defaultFormData,
+        ...taxData.taxCredits,
+        retirementContributions: {
+          ...defaultRetirementContributions,
+          ...(taxData.retirementContributions || {})
+        },
+        careProviders: (taxData.taxCredits as any)?.careProviders || [defaultCareProvider],
+        careExpenses: (taxData.taxCredits as any)?.careExpenses || 0
+      };
+      
+      form.reset(parsedValues);
+      
+      // 돌봄 비용이 있으면 해당 필드 표시
+      if (parsedValues.careExpenses > 0 || (parsedValues.careProviders && parsedValues.careProviders.length > 1)) {
+        setShowCareExpenseFields(true);
+      }
+      
+      // 페이지 로드 시 은퇴 기여금이 있다면 저축공제액 자동 계산
+      if (parsedValues.retirementContributions?.totalContributions > 0) {
+        console.log("페이지 로드 시 은퇴저축공제 자동 계산 실행");
+        // 은퇴저축 관련 필드 표시
+        setShowRetirementFields(true);
+        setTimeout(() => calculateRetirementCredit(), 1500);
+      }
+      
+      setPendingChanges(false);
+    }
+  }, [taxData]);
   
   // 총 세액공제 합계 계산
   const calculateTotalCredits = () => {
@@ -651,12 +599,10 @@ const TaxCredits3Page: React.FC = () => {
                                     <Input 
                                       placeholder="0.00"
                                       className="pl-8"
-                                      value={field.value !== undefined ? field.value.toString() : ''}
+                                      value={field.value || ''}
                                       onChange={(e) => {
                                         const formatted = formatNumberInput(e.target.value);
-                                        const numValue = formatted ? Number(formatted) : 0;
-                                        console.log("Child Tax Credit 필드 값 변경:", numValue);
-                                        field.onChange(numValue);
+                                        field.onChange(formatted ? Number(formatted) : 0);
                                         setPendingChanges(true);
                                       }}
                                     />

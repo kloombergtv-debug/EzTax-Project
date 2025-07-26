@@ -38,12 +38,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         method: "POST",
         body: credentials
       });
-      
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.message || "로그인 실패");
-      }
-      
       return await res.json();
     },
     onSuccess: (user: SelectUser) => {

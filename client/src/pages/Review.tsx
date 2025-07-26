@@ -49,7 +49,7 @@ const Field: React.FC<{ label: string; value: string | number | undefined | null
 );
 
 const Review: React.FC = () => {
-  const { taxData, saveTaxData, isLoading } = useTaxContext();
+  const { taxData, saveTaxReturn, isLoading } = useTaxContext();
   const { toast } = useToast();
   const [, navigate] = useLocation();
   const [showSubmitDialog, setShowSubmitDialog] = useState(false);
@@ -99,7 +99,7 @@ const Review: React.FC = () => {
   const handleSubmitTaxReturn = async () => {
     try {
       // Update status to completed
-      await saveTaxData();
+      await saveTaxReturn();
       
       setSubmitSuccess(true);
       
@@ -134,39 +134,39 @@ const Review: React.FC = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <Field label="총 소득(Total Income)" value={formatCurrency(calculatedResults.totalIncome || 0)} />
-            <Field label="소득 조정(Adjustments)" value={formatCurrency(calculatedResults.adjustments || 0)} />
-            <Field label="조정 총소득(Adjusted Gross Income)" value={formatCurrency(calculatedResults.adjustedGrossIncome || 0)} />
-            <Field label="공제액(Deductions)" value={formatCurrency(calculatedResults.deductions || 0)} />
+            <Field label="총 소득(Total Income)" value={formatCurrency(calculatedResults.totalIncome)} />
+            <Field label="소득 조정(Adjustments)" value={formatCurrency(calculatedResults.adjustments)} />
+            <Field label="조정 총소득(Adjusted Gross Income)" value={formatCurrency(calculatedResults.adjustedGrossIncome)} />
+            <Field label="공제액(Deductions)" value={formatCurrency(calculatedResults.deductions)} />
             {income.qbi?.qbiDeduction && income.qbi.qbiDeduction > 0 && (
               <Field label="QBI 공제(QBI Deduction)" value={formatCurrency(income.qbi.qbiDeduction)} />
             )}
-            <Field label="과세 소득(Taxable Income)" value={formatCurrency(calculatedResults.taxableIncome || 0)} />
+            <Field label="과세 소득(Taxable Income)" value={formatCurrency(calculatedResults.taxableIncome)} />
           </div>
           <div>
-            <Field label="연방세(Federal Tax)" value={formatCurrency(calculatedResults.federalTax || 0)} />
-            <Field label="세액공제(Tax Credits)" value={formatCurrency(calculatedResults.credits || 0)} />
-            <Field label="납부할 세금(Tax Due)" value={formatCurrency(calculatedResults.taxDue || 0)} />
-            <Field label="기납부 세금 및 원천징수(Payments & Withholding)" value={formatCurrency(calculatedResults.payments || 0)} />
-            {(calculatedResults.refundAmount || 0) > 0 ? (
+            <Field label="연방세(Federal Tax)" value={formatCurrency(calculatedResults.federalTax)} />
+            <Field label="세액공제(Tax Credits)" value={formatCurrency(calculatedResults.credits)} />
+            <Field label="납부할 세금(Tax Due)" value={formatCurrency(calculatedResults.taxDue)} />
+            <Field label="기납부 세금 및 원천징수(Payments & Withholding)" value={formatCurrency(calculatedResults.payments)} />
+            {calculatedResults.refundAmount > 0 ? (
               <>
                 <div className="flex justify-between py-2 font-bold bg-success/10 rounded px-2 text-success">
                   <span>환급 금액(Refund Amount):</span>
-                  <span>{formatCurrency(calculatedResults.refundAmount || 0)}</span>
+                  <span>{formatCurrency(calculatedResults.refundAmount)}</span>
                 </div>
-                {((calculatedResults.additionalChildTaxCredit || 0) > 0 || (calculatedResults.earnedIncomeCredit || 0) > 0) && (
+                {(calculatedResults.additionalChildTaxCredit > 0 || calculatedResults.earnedIncomeCredit > 0) && (
                   <div className="mt-2 p-2 bg-blue-50 rounded text-sm">
                     <div className="font-medium text-blue-800 mb-1">환급 가능한 크레딧 내역:</div>
-                    {(calculatedResults.additionalChildTaxCredit || 0) > 0 && (
+                    {calculatedResults.additionalChildTaxCredit > 0 && (
                       <div className="flex justify-between text-blue-700">
                         <span>• ACTC(추가 자녀 세액공제):</span>
-                        <span>{formatCurrency(calculatedResults.additionalChildTaxCredit || 0)}</span>
+                        <span>{formatCurrency(calculatedResults.additionalChildTaxCredit)}</span>
                       </div>
                     )}
-                    {(calculatedResults.earnedIncomeCredit || 0) > 0 && (
+                    {calculatedResults.earnedIncomeCredit > 0 && (
                       <div className="flex justify-between text-blue-700">
                         <span>• EIC(근로소득세액공제):</span>
-                        <span>{formatCurrency(calculatedResults.earnedIncomeCredit || 0)}</span>
+                        <span>{formatCurrency(calculatedResults.earnedIncomeCredit)}</span>
                       </div>
                     )}
                     <div className="flex justify-between text-blue-700 text-xs mt-1">
@@ -185,7 +185,7 @@ const Review: React.FC = () => {
             ) : (
               <div className="flex justify-between py-2 font-bold bg-destructive/10 rounded px-2 text-destructive">
                 <span>납부할 금액(Amount You Owe):</span>
-                <span>{formatCurrency(calculatedResults.amountOwed || 0)}</span>
+                <span>{formatCurrency(calculatedResults.amountOwed)}</span>
               </div>
             )}
           </div>
@@ -291,8 +291,8 @@ const Review: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <Field label="자녀 세액공제(Child Tax Credit)" value={formatCurrency(calculatedResults.childTaxCredit || taxCredits.childTaxCredit || 0)} />
-                    {(calculatedResults.additionalChildTaxCredit || 0) > 0 && (
-                      <Field label="추가 자녀 세액공제 - 환급가능(Additional Child Tax Credit - Refundable)" value={formatCurrency(calculatedResults.additionalChildTaxCredit || 0)} />
+                    {calculatedResults.additionalChildTaxCredit > 0 && (
+                      <Field label="추가 자녀 세액공제 - 환급가능(Additional Child Tax Credit - Refundable)" value={formatCurrency(calculatedResults.additionalChildTaxCredit)} />
                     )}
                     <Field label="자녀 및 부양가족 돌봄 공제(Child & Dependent Care Credit)" value={formatCurrency(calculatedResults.childDependentCareCredit || taxCredits.childDependentCareCredit || 0)} />
                     <Field label="교육비 공제(Education Credits)" value={formatCurrency(taxCredits.educationCredits || 0)} />
