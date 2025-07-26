@@ -214,7 +214,15 @@ export default function IncomePage() {
       data.adjustedGrossIncome = form.getValues('adjustedGrossIncome');
       
       // 콘텍스트 업데이트
-      updateTaxData({ income: data });
+      await updateTaxData({ income: data });
+      
+      // 서버에 저장
+      await saveTaxReturn();
+      
+      toast({
+        title: "소득 정보 저장됨",
+        description: "소득 정보가 성공적으로 저장되었습니다.",
+      });
       
       // 다음 페이지로 이동
       setLocation('/deductions');
@@ -428,13 +436,17 @@ export default function IncomePage() {
       currentFormData.additionalAdjustmentItems = additionalAdjustmentItems;
       
       // TaxContext 업데이트
-      updateTaxData({ income: currentFormData });
+      await updateTaxData({ income: currentFormData });
+      
+      // 서버에 저장
+      await saveTaxReturn();
       
       toast({
         title: "저장 완료",
         description: "소득 정보가 성공적으로 저장되었습니다.",
       });
     } catch (error) {
+      console.error('저장 오류:', error);
       toast({
         title: "저장 실패",
         description: "소득 정보 저장 중 오류가 발생했습니다.",
