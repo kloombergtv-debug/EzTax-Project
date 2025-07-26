@@ -26,13 +26,11 @@ const relationshipOptions = [
   { value: "other", label: "기타 (Other)" },
 ];
 
-const PersonalInfo: React.FC = () => {
-  // 모든 Hook을 최상단에 선언 (조건부 호출 금지)
+const PersonalInfoFixed: React.FC = () => {
   const { taxData, updateTaxData, isDataReady } = useTaxContext();
   const { toast } = useToast();
   const [, navigate] = useLocation();
   const [showSpouseInfo, setShowSpouseInfo] = useState(false);
-  const [manualLoadComplete, setManualLoadComplete] = useState(false);
 
   const emptyDefaults: PersonalInformation = {
     firstName: '',
@@ -66,54 +64,18 @@ const PersonalInfo: React.FC = () => {
 
   const filingStatus = form.watch('filingStatus');
 
-  // 모든 useEffect를 조건부 렌더링 이전에 선언
   useEffect(() => {
-    // 수동 로드가 완료된 경우 자동 초기화 건너뛰기
-    if (manualLoadComplete) {
-      return;
+    if (taxData.personalInfo) {
+      console.log("PersonalInfo - TaxContext 데이터로 폼 초기화:", taxData.personalInfo);
+      form.reset(taxData.personalInfo);
     }
-    
-    // 우선순위: localStorage > TaxContext > 기본값
-    const restoreFormData = () => {
-      let dataToUse = emptyDefaults;
-      
-      // 1. localStorage에서 임시 저장된 데이터 확인
-      try {
-        const tempPersonalInfo = localStorage.getItem('tempPersonalInfo');
-        const tempFilingStatus = localStorage.getItem('tempFilingStatus');
-        
-        if (tempPersonalInfo) {
-          const parsedData = JSON.parse(tempPersonalInfo);
-          console.log("PersonalInfo - localStorage에서 데이터 복원:", parsedData);
-          dataToUse = { ...emptyDefaults, ...parsedData };
-        } else if (tempFilingStatus) {
-          const parsedStatus = JSON.parse(tempFilingStatus);
-          console.log("PersonalInfo - localStorage에서 Filing Status 복원:", parsedStatus);
-          dataToUse = { ...emptyDefaults, ...parsedStatus };
-        }
-      } catch (error) {
-        console.error("localStorage 데이터 복원 오류:", error);
-      }
-      
-      // 2. TaxContext 데이터가 있으면 우선 적용
-      if (taxData.personalInfo) {
-        console.log("PersonalInfo - TaxContext 데이터로 폼 초기화:", taxData.personalInfo);
-        dataToUse = { ...dataToUse, ...taxData.personalInfo };
-      }
-      
-      console.log("PersonalInfo - 최종 폼 데이터:", dataToUse);
-      form.reset(dataToUse);
-    };
-    
-    restoreFormData();
-  }, [taxData.personalInfo, form, manualLoadComplete]);
+  }, [taxData.personalInfo, form]);
 
   useEffect(() => {
     const shouldShowSpouse = filingStatus === 'married_joint' || filingStatus === 'married_separate';
     setShowSpouseInfo(shouldShowSpouse);
   }, [filingStatus]);
 
-  // 데이터 로딩 체크는 모든 Hook 이후에
   if (!isDataReady) {
     return (
       <div className="max-w-5xl mx-auto px-4 py-6">
@@ -122,14 +84,101 @@ const PersonalInfo: React.FC = () => {
     );
   }
 
+  // 간단한 데이터 불러오기 함수
+  const handleLoadData = async () => {
+    try {
+      const response = await fetch('/api/tax-return', {
+        credentials: 'include',
+        cache: 'no-cache'
+      });
+
+      if (response.ok) {
+        const serverData = await response.json();
+        console.log('불러온 데이터:', serverData);
+        
+        if (serverData?.personalInfo) {
+          const data = serverData.personalInfo;
+          
+          // form.reset을 사용하여 완전히 재설정
+          form.reset({
+            firstName: data.firstName || '',
+            middleInitial: data.middleInitial || '',
+            lastName: data.lastName || '',
+            ssn: data.ssn || '',
+            dateOfBirth: data.dateOfBirth || '',
+            email: data.email || '',
+            phone: data.phone || '',
+            address1: data.address1 || '',
+            address2: data.address2 || '',
+            city: data.city || '',
+            state: data.state || '',
+            zipCode: data.zipCode || '',
+            filingStatus: data.filingStatus || 'single',
+            isDisabled: data.isDisabled || false,
+            isNonresidentAlien: data.isNonresidentAlien || false,
+            spouseInfo: data.spouseInfo || undefined,
+            dependents: data.dependents || []
+          });
+
+          // 부양가족 배열 업데이트
+          if (data.dependents && data.dependents.length > 0) {
+            // 기존 부양가족 제거
+            while (dependentFields.length > 0) {
+              remove(0);
+            }
+            // 새 데이터 추가
+            data.dependents.forEach((dependent: any) => {
+              append({
+                firstName: dependent.firstName || '',
+                lastName: dependent.lastName || '',
+                ssn: dependent.ssn || '',
+                relationship: dependent.relationship || 'child',
+                dateOfBirth: dependent.dateOfBirth || '',
+                isDisabled: dependent.isDisabled || false,
+                isNonresidentAlien: dependent.isNonresidentAlien || false,
+                isQualifyingChild: dependent.isQualifyingChild || true
+              });
+            });
+          }
+
+          // 배우자 정보 표시 업데이트
+          const maritalStatuses = ['married_joint', 'married_separate'];
+          setShowSpouseInfo(maritalStatuses.includes(data.filingStatus || 'single'));
+
+          toast({
+            title: "성공",
+            description: `${data.firstName} ${data.lastName}님의 정보를 불러왔습니다.`,
+          });
+
+          // 디버깅용
+          setTimeout(() => {
+            console.log('폼 데이터 확인:', form.getValues());
+          }, 500);
+
+        } else {
+          toast({
+            title: "데이터 없음",
+            description: "저장된 개인정보가 없습니다.",
+            variant: "destructive",
+          });
+        }
+      } else {
+        throw new Error('서버 오류');
+      }
+    } catch (error) {
+      console.error('데이터 불러오기 오류:', error);
+      toast({
+        title: "오류",
+        description: "데이터를 불러오는 중 오류가 발생했습니다.",
+        variant: "destructive",
+      });
+    }
+  };
+
   const onSubmit = async (data: PersonalInformation) => {
     try {
-      // localStorage에 백업 저장
       localStorage.setItem('tempPersonalInfo', JSON.stringify(data));
-      
       await updateTaxData({ personalInfo: data });
-      
-      // 성공 시 임시 데이터 정리
       localStorage.removeItem('tempPersonalInfo');
       localStorage.removeItem('tempFilingStatus');
       
@@ -186,109 +235,6 @@ const PersonalInfo: React.FC = () => {
     }
   };
 
-  // 수동 데이터 불러오기 함수
-  const handleManualDataReload = async () => {
-    try {
-      const response = await fetch('/api/tax-return', {
-        credentials: 'include',
-        cache: 'no-cache'
-      });
-
-      if (response.ok) {
-        const serverData = await response.json();
-        console.log('수동 데이터 불러오기 결과:', serverData);
-        
-        if (serverData?.personalInfo) {
-          const personalInfo = serverData.personalInfo;
-          console.log('불러온 개인정보 데이터:', personalInfo);
-          
-          // 폼 완전 재설정
-          form.reset({
-            firstName: personalInfo.firstName || '',
-            middleInitial: personalInfo.middleInitial || '',
-            lastName: personalInfo.lastName || '',
-            ssn: personalInfo.ssn || '',
-            dateOfBirth: personalInfo.dateOfBirth || '',
-            email: personalInfo.email || '',
-            phone: personalInfo.phone || '',
-            address1: personalInfo.address1 || '',
-            address2: personalInfo.address2 || '',
-            city: personalInfo.city || '',
-            state: personalInfo.state || '',
-            zipCode: personalInfo.zipCode || '',
-            filingStatus: personalInfo.filingStatus || 'single',
-            isDisabled: personalInfo.isDisabled || false,
-            isNonresidentAlien: personalInfo.isNonresidentAlien || false,
-            spouseInfo: personalInfo.spouseInfo || {
-              firstName: '',
-              lastName: '',
-              ssn: '',
-              dateOfBirth: '',
-              isDisabled: false,
-              isNonresidentAlien: false
-            },
-            dependents: personalInfo.dependents || []
-          });
-
-          // 부양가족 필드 배열 업데이트
-          if (personalInfo.dependents && personalInfo.dependents.length > 0) {
-            // 기존 필드 모두 제거
-            while (dependentFields.length > 0) {
-              remove(0);
-            }
-            
-            // 새 데이터로 필드 추가
-            personalInfo.dependents.forEach((dependent: any) => {
-              append({
-                firstName: dependent.firstName || '',
-                lastName: dependent.lastName || '',
-                ssn: dependent.ssn || '',
-                relationship: dependent.relationship || 'child',
-                dateOfBirth: dependent.dateOfBirth || '',
-                isDisabled: dependent.isDisabled || false,
-                isNonresidentAlien: dependent.isNonresidentAlien || false,
-                isQualifyingChild: dependent.isQualifyingChild || true
-              });
-            });
-          }
-
-          // Filing Status에 따른 배우자 정보 표시 설정
-          const maritalStatuses = ['married_joint', 'married_separate'];
-          setShowSpouseInfo(maritalStatuses.includes(personalInfo.filingStatus || 'single'));
-
-          // 수동 로드 완료 표시
-          setManualLoadComplete(true);
-          
-          // 강제 리렌더링 및 디버깅
-          setTimeout(() => {
-            console.log('폼 재설정 후 현재 값들:', form.getValues());
-            console.log('폼 상태:', form.formState);
-          }, 100);
-
-          toast({
-            title: "데이터 불러오기 완료",
-            description: `${personalInfo.firstName} ${personalInfo.lastName}님의 정보를 불러왔습니다.`,
-          });
-        } else {
-          toast({
-            title: "저장된 데이터 없음",
-            description: "저장된 개인정보가 없습니다.",
-            variant: "destructive",
-          });
-        }
-      } else {
-        throw new Error('데이터 불러오기 실패');
-      }
-    } catch (error) {
-      console.error('수동 데이터 불러오기 오류:', error);
-      toast({
-        title: "데이터 불러오기 실패",
-        description: "저장된 데이터를 불러오는 중 오류가 발생했습니다.",
-        variant: "destructive",
-      });
-    }
-  };
-
   return (
     <div className="max-w-5xl mx-auto px-4 py-6">
       <ProgressTracker currentStep="personal-info" />
@@ -301,9 +247,8 @@ const PersonalInfo: React.FC = () => {
           </div>
           <Button 
             type="button" 
-            onClick={handleManualDataReload}
-            variant="outline"
-            className="bg-green-50 hover:bg-green-100 border-green-300 text-green-700"
+            onClick={handleLoadData}
+            className="bg-green-600 hover:bg-green-700 text-white"
           >
             <RefreshCw className="h-4 w-4 mr-2" />
             저장된 데이터 불러오기
@@ -531,7 +476,6 @@ const PersonalInfo: React.FC = () => {
                   type="button" 
                   variant="outline" 
                   onClick={() => {
-                    // 현재 폼 데이터를 localStorage에 저장
                     const currentFormData = form.getValues();
                     localStorage.setItem('tempPersonalInfo', JSON.stringify(currentFormData));
                     console.log("Filing Status 확인 전 데이터 저장:", currentFormData);
@@ -549,7 +493,7 @@ const PersonalInfo: React.FC = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>신고 상태</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="신고 상태를 선택하세요" />
@@ -733,7 +677,7 @@ const PersonalInfo: React.FC = () => {
                           render={({ field }) => (
                             <FormItem>
                               <FormLabel>관계</FormLabel>
-                              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <Select onValueChange={field.onChange} value={field.value}>
                                 <FormControl>
                                   <SelectTrigger>
                                     <SelectValue placeholder="관계 선택" />
@@ -786,4 +730,4 @@ const PersonalInfo: React.FC = () => {
   );
 };
 
-export default PersonalInfo;
+export default PersonalInfoFixed;

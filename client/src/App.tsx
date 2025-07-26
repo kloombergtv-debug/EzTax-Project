@@ -7,6 +7,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Home from "@/pages/Home";
 import PersonalInfo from "@/pages/PersonalInfo";
+import PersonalInfoFixed from "@/pages/PersonalInfoFixed";
 import IncomePage from "@/pages/Income-fixed";
 import AdditionalIncomePage from "@/pages/AdditionalIncome-simple";
 import AdditionalAdjustmentsPage from "@/pages/AdditionalAdjustments-simple";
@@ -43,7 +44,8 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/about" component={About} />
       <Route path="/auth" component={AuthPage} />
-      <ProtectedRoute path="/personal-info" component={PersonalInfo} />
+      <ProtectedRoute path="/personal-info" component={PersonalInfoFixed} />
+      <ProtectedRoute path="/personal-info-old" component={PersonalInfo} />
       <ProtectedRoute path="/income" component={IncomePage} />
       <ProtectedRoute path="/qbi-details" component={QBIDetails} />
       <ProtectedRoute path="/business-expense" component={BusinessExpense} />
