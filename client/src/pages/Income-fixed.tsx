@@ -686,56 +686,13 @@ export default function IncomePage() {
                             </div>
                             <FormControl>
                               <Input
-                                type="text"
-                                placeholder="달러 금액"
-                                value={(() => {
-                                  // QBI 데이터가 있으면 우선 사용
-                                  const qbiValue = taxData.income?.qbi?.totalQBI || 0;
-                                  const fieldValue = field.value || 0;
-                                  const displayValue = qbiValue !== 0 ? qbiValue : fieldValue;
-                                  
-                                  console.log('사업소득 필드 값 표시:', {
-                                    qbiValue,
-                                    fieldValue,
-                                    displayValue
-                                  });
-                                  
-                                  // 값이 0이면 '$' 표시, 아니면 실제 값 표시 (마이너스 포함)
-                                  return displayValue === 0 ? '$' : displayValue.toString();
-                                })()}
+                                type="number"
+                                step="0.01"
+                                placeholder="사업 순소득 (마이너스 가능)"
+                                value={field.value || ''}
                                 onChange={(e) => {
-                                  let inputValue = e.target.value;
-                                  
-                                  // 입력값이 '$'로 시작하면 제거
-                                  if (inputValue.startsWith('$')) {
-                                    inputValue = inputValue.substring(1);
-                                  }
-                                  
-                                  // 마이너스 기호, 숫자, 소수점만 허용
-                                  inputValue = inputValue.replace(/[^-0-9.]/g, '');
-                                  
-                                  // 마이너스는 맨 앞에만 허용
-                                  if (inputValue.indexOf('-') > 0) {
-                                    inputValue = inputValue.replace(/-/g, '');
-                                  }
-                                  
-                                  // 여러 마이너스 기호 제거 (첫 번째 제외)
-                                  const minusCount = (inputValue.match(/-/g) || []).length;
-                                  if (minusCount > 1) {
-                                    inputValue = inputValue.replace(/-/g, '');
-                                    inputValue = '-' + inputValue;
-                                  }
-                                  
-                                  // 소수점은 하나만 허용
-                                  const dotParts = inputValue.split('.');
-                                  if (dotParts.length > 2) {
-                                    inputValue = dotParts[0] + '.' + dotParts.slice(1).join('');
-                                  }
-                                  
-                                  // 숫자로 변환 (빈 문자열이나 '-'만 있는 경우 0)
-                                  const numericValue = inputValue === '' || inputValue === '-' || inputValue === '.' ? 0 : parseFloat(inputValue) || 0;
-                                  
-                                  console.log('사업소득 입력값:', inputValue, '→ 숫자값:', numericValue);
+                                  const numericValue = parseFloat(e.target.value) || 0;
+                                  console.log('사업소득 입력값:', e.target.value, '→ 숫자값:', numericValue);
                                   field.onChange(numericValue);
                                   
                                   // 총소득 재계산
