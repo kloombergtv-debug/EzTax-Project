@@ -44,7 +44,9 @@ const SectionSummary: React.FC<SectionSummaryProps> = ({ title, editLink, childr
 const Field: React.FC<{ label: string; value: string | number | undefined | null; className?: string }> = ({ label, value, className }) => (
   <div className={`flex justify-between py-1 border-b border-gray-light last:border-0 ${className || ''}`}>
     <span className="text-gray-dark">{label}:</span>
-    <span className="font-semibold">{value !== undefined && value !== null ? value : 'Not provided'}</span>
+    <span className="font-semibold">
+      {value !== undefined && value !== null && value !== "" ? value : 'N/A'}
+    </span>
   </div>
 );
 
@@ -77,6 +79,10 @@ const Review: React.FC = () => {
   const taxCredits = taxData.taxCredits || {} as TaxCredits;
   const additionalTax = taxData.additionalTax || {} as AdditionalTax;
   const calculatedResults = taxData.calculatedResults || {} as CalculatedResults;
+  
+  // 디버깅: creditForOtherDependents 값 확인
+  console.log('Review 페이지 - calculatedResults:', calculatedResults);
+  console.log('Review 페이지 - creditForOtherDependents:', calculatedResults.creditForOtherDependents);
   
   const handleGeneratePdf = () => {
     try {
