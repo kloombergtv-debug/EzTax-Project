@@ -151,6 +151,25 @@ const PersonalInfoFixed: React.FC = () => {
 
   const onSubmit = async (data: PersonalInformation) => {
     try {
+      // 생년월일과 State만 필수 검증
+      if (!data.dateOfBirth) {
+        toast({
+          title: "입력 오류",
+          description: "생년월일을 입력해주세요.",
+          variant: "destructive",
+        });
+        return;
+      }
+      
+      if (!data.state) {
+        toast({
+          title: "입력 오류", 
+          description: "거주 주(State)를 선택해주세요.",
+          variant: "destructive",
+        });
+        return;
+      }
+      
       localStorage.setItem('tempPersonalInfo', JSON.stringify(data));
       await updateTaxData({ personalInfo: data });
       localStorage.removeItem('tempPersonalInfo');
@@ -217,7 +236,12 @@ const PersonalInfoFixed: React.FC = () => {
         <div className="flex justify-between items-center mb-4">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">개인정보 (Personal Information)</h1>
-            <p className="text-gray-600">세금 신고서 작성을 위해 개인정보를 입력해주세요.</p>
+            <p className="text-gray-600">
+              세금 신고서 작성을 위해 개인정보를 입력해주세요. 
+              <span className="text-red-500 font-medium">생년월일</span>과 
+              <span className="text-red-500 font-medium">거주 주(State)</span>만 필수이며, 
+              나머지 정보는 선택사항입니다.
+            </p>
           </div>
           <Button 
             type="button" 
@@ -244,9 +268,9 @@ const PersonalInfoFixed: React.FC = () => {
                   name="firstName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>이름 (First Name)</FormLabel>
+                      <FormLabel>이름 (First Name) <span className="text-gray-500 text-sm font-normal">(선택사항)</span></FormLabel>
                       <FormControl>
-                        <Input placeholder="이름을 입력하세요" {...field} />
+                        <Input placeholder="이름을 입력하세요 (선택사항)" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -258,7 +282,7 @@ const PersonalInfoFixed: React.FC = () => {
                   name="middleInitial"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>중간 이름 (Middle Initial)</FormLabel>
+                      <FormLabel>중간 이름 (Middle Initial) <span className="text-gray-500 text-sm font-normal">(선택사항)</span></FormLabel>
                       <FormControl>
                         <Input placeholder="중간 이름 (선택사항)" maxLength={1} {...field} />
                       </FormControl>
@@ -272,9 +296,9 @@ const PersonalInfoFixed: React.FC = () => {
                   name="lastName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>성 (Last Name)</FormLabel>
+                      <FormLabel>성 (Last Name) <span className="text-gray-500 text-sm font-normal">(선택사항)</span></FormLabel>
                       <FormControl>
-                        <Input placeholder="성을 입력하세요" {...field} />
+                        <Input placeholder="성을 입력하세요 (선택사항)" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -288,10 +312,10 @@ const PersonalInfoFixed: React.FC = () => {
                   name="ssn"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>사회보장번호 (SSN)</FormLabel>
+                      <FormLabel>사회보장번호 (SSN) <span className="text-gray-500 text-sm font-normal">(선택사항)</span></FormLabel>
                       <FormControl>
                         <Input 
-                          placeholder="XXX-XX-XXXX" 
+                          placeholder="XXX-XX-XXXX (선택사항)" 
                           maxLength={11}
                           {...field}
                           onChange={(e) => {
@@ -310,7 +334,7 @@ const PersonalInfoFixed: React.FC = () => {
                   name="dateOfBirth"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>생년월일 (Date of Birth)</FormLabel>
+                      <FormLabel>생년월일 (Date of Birth) <span className="text-red-500">*</span></FormLabel>
                       <FormControl>
                         <Input type="date" {...field} />
                       </FormControl>
@@ -326,9 +350,9 @@ const PersonalInfoFixed: React.FC = () => {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>이메일 (Email)</FormLabel>
+                      <FormLabel>이메일 (Email) <span className="text-gray-500 text-sm font-normal">(선택사항)</span></FormLabel>
                       <FormControl>
-                        <Input type="email" placeholder="이메일 주소" {...field} />
+                        <Input type="email" placeholder="이메일 주소 (선택사항)" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -340,10 +364,10 @@ const PersonalInfoFixed: React.FC = () => {
                   name="phone"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>전화번호 (Phone)</FormLabel>
+                      <FormLabel>전화번호 (Phone) <span className="text-gray-500 text-sm font-normal">(선택사항)</span></FormLabel>
                       <FormControl>
                         <Input 
-                          placeholder="XXX-XXX-XXXX" 
+                          placeholder="XXX-XXX-XXXX (선택사항)" 
                           maxLength={12}
                           {...field}
                           onChange={(e) => {
@@ -371,9 +395,9 @@ const PersonalInfoFixed: React.FC = () => {
                   name="address1"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>주소 1 (Address Line 1)</FormLabel>
+                      <FormLabel>주소 1 (Address Line 1) <span className="text-gray-500 text-sm font-normal">(선택사항)</span></FormLabel>
                       <FormControl>
-                        <Input placeholder="주소를 입력하세요" {...field} />
+                        <Input placeholder="주소를 입력하세요 (선택사항)" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -385,9 +409,9 @@ const PersonalInfoFixed: React.FC = () => {
                   name="address2"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>주소 2 (Address Line 2) - 선택사항</FormLabel>
+                      <FormLabel>주소 2 (Address Line 2) <span className="text-gray-500 text-sm font-normal">(선택사항)</span></FormLabel>
                       <FormControl>
-                        <Input placeholder="아파트, 동, 호수 등" {...field} />
+                        <Input placeholder="아파트, 동, 호수 등 (선택사항)" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -400,9 +424,9 @@ const PersonalInfoFixed: React.FC = () => {
                     name="city"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>시/군 (City)</FormLabel>
+                        <FormLabel>시/군 (City) <span className="text-gray-500 text-sm font-normal">(선택사항)</span></FormLabel>
                         <FormControl>
-                          <Input placeholder="도시명" {...field} />
+                          <Input placeholder="도시명 (선택사항)" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -414,7 +438,7 @@ const PersonalInfoFixed: React.FC = () => {
                     name="state"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>주 (State)</FormLabel>
+                        <FormLabel>주 (State) <span className="text-red-500">*</span></FormLabel>
                         <FormControl>
                           <Input placeholder="주 코드 (예: TX)" {...field} />
                         </FormControl>
@@ -428,9 +452,9 @@ const PersonalInfoFixed: React.FC = () => {
                     name="zipCode"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>우편번호 (ZIP Code)</FormLabel>
+                        <FormLabel>우편번호 (ZIP Code) <span className="text-gray-500 text-sm font-normal">(선택사항)</span></FormLabel>
                         <FormControl>
-                          <Input placeholder="우편번호" {...field} />
+                          <Input placeholder="우편번호 (선택사항)" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>

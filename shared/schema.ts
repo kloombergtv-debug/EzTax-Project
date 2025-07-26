@@ -84,18 +84,18 @@ export interface SpouseInformation {
 }
 
 export interface PersonalInformation {
-  firstName: string;
+  firstName?: string;
   middleInitial?: string;
-  lastName: string;
-  ssn: string;
+  lastName?: string;
+  ssn?: string;
   dateOfBirth: string;
-  email: string;
-  phone: string;
-  address1: string;
+  email?: string;
+  phone?: string;
+  address1?: string;
   address2?: string;
-  city: string;
+  city?: string;
   state: string;
-  zipCode: string;
+  zipCode?: string;
   filingStatus: FilingStatus;
   isDisabled: boolean;
   isNonresidentAlien: boolean;
@@ -342,18 +342,18 @@ export const spouseInfoSchema = z.object({
 });
 
 export const personalInfoSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
+  firstName: z.string().optional(),
   middleInitial: z.string().max(1).optional(),
-  lastName: z.string().min(1, "Last name is required"),
-  ssn: z.string().regex(/^\d{3}-\d{2}-\d{4}$/, "SSN must be in format XXX-XX-XXXX"),
+  lastName: z.string().optional(),
+  ssn: z.string().optional(),
   dateOfBirth: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Date must be in YYYY-MM-DD format"),
-  email: z.string().email("Invalid email address"),
-  phone: z.string().regex(/^\d{3}-\d{3}-\d{4}$/, "Phone must be in format XXX-XXX-XXXX"),
-  address1: z.string().min(1, "Address is required"),
+  email: z.string().optional(),
+  phone: z.string().optional(),
+  address1: z.string().optional(),
   address2: z.string().optional(),
-  city: z.string().min(1, "City is required"),
+  city: z.string().optional(),
   state: z.string().length(2, "State must be a 2-letter code"),
-  zipCode: z.string().regex(/^\d{5}(-\d{4})?$/, "ZIP code must be in format XXXXX or XXXXX-XXXX"),
+  zipCode: z.string().optional(),
   filingStatus: z.enum(["single", "married_joint", "married_separate", "head_of_household", "qualifying_widow"]),
   isDisabled: z.boolean().default(false),
   isNonresidentAlien: z.boolean().default(false),
