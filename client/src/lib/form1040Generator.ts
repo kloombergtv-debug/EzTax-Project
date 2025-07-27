@@ -96,40 +96,12 @@ const addForm1040Header = (doc: jsPDF, taxYear: number): void => {
   doc.setFont('helvetica', 'normal');
   doc.text('Department of the Treasury—Internal Revenue Service', 90, 25);
   
-  // OMB number
-  doc.text('OMB No. 1545-0074', 175, 12);
-  
-  // IRS Use Only box
-  doc.setLineWidth(0.3);
-  doc.rect(175, 14, 20, 12);
-  doc.setFontSize(6);
-  doc.text('IRS Use Only—Do not write', 176, 18);
-  doc.text('or staple in this space.', 176, 21);
-  
   // Tax year line
   doc.setFontSize(8);
   doc.text(`For the year Jan. 1–Dec. 31, ${taxYear}, or other tax year beginning`, 15, 35);
   doc.text(`, ${taxYear}, ending`, 120, 35);
   doc.text(', 20____', 155, 35);
   doc.text('See separate instructions.', 15, 40);
-  
-  // Presidential Election Campaign box
-  doc.rect(175, 30, 20, 25);
-  doc.setFontSize(6);
-  doc.text('Presidential Election', 176, 34);
-  doc.text('Campaign', 176, 37);
-  doc.text('Check here if you, or your', 176, 40);
-  doc.text('spouse if filing jointly, want $3', 176, 43);
-  doc.text('to go to this fund. Checking a', 176, 46);
-  doc.text('box below will not change', 176, 49);
-  doc.text('your tax or refund.', 176, 52);
-  
-  // Checkboxes for You/Spouse
-  doc.rect(176, 53, 2, 2);
-  doc.rect(188, 53, 2, 2);
-  doc.setFontSize(5);
-  doc.text('You', 176, 58);
-  doc.text('Spouse', 186, 58);
 };
 
 // Personal information section
