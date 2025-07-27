@@ -84,10 +84,10 @@ export function calculateStandardDeduction(filingStatus: FilingStatus): number {
   return STANDARD_DEDUCTION_2023[filingStatus] || STANDARD_DEDUCTION_2023.single;
 }
 
-// Child Tax Credit constants
+// Child Tax Credit constants (2024 tax year)
 const CHILD_TAX_CREDIT = {
   BASE_CREDIT_PER_CHILD: 2000,
-  REFUNDABLE_LIMIT_PER_CHILD: 1500,
+  REFUNDABLE_LIMIT_PER_CHILD: 1600, // Updated for 2024: $1,600 per child
   MINIMUM_EARNED_INCOME: 2500,
   PHASE_OUT_THRESHOLD: {
     single: 200000,
@@ -252,24 +252,41 @@ export function calculateChildTaxCredit(
   const eligibleChildren = dependents.filter(isEligibleForChildTaxCredit);
   if (eligibleChildren.length === 0) return 0;
   
+  console.log(`=== Child Tax Credit 계산 상세 분석 ===`);
+  console.log(`적격 자녀 수: ${eligibleChildren.length}명`);
+  console.log(`조정총소득(AGI): $${adjustedGrossIncome}`);
+  console.log(`신고유형: ${filingStatus}`);
+  
   // Calculate initial credit
   let creditAmount = eligibleChildren.length * CHILD_TAX_CREDIT.BASE_CREDIT_PER_CHILD;
+  console.log(`초기 크레딧: ${eligibleChildren.length} × $2,000 = $${creditAmount}`);
   
   // Apply income phase-out
   const threshold = CHILD_TAX_CREDIT.PHASE_OUT_THRESHOLD[filingStatus];
+  console.log(`Phase-out 시작 소득: $${threshold}`);
+  
   if (adjustedGrossIncome > threshold) {
     // Calculate excess income
     const excessIncome = adjustedGrossIncome - threshold;
+    console.log(`초과 소득: $${adjustedGrossIncome} - $${threshold} = $${excessIncome}`);
     
     // Calculate number of phase-out increments (round up)
     const phaseOutIncrements = Math.ceil(excessIncome / CHILD_TAX_CREDIT.PHASE_OUT_INCREMENT);
+    console.log(`Phase-out 단위 수: ${phaseOutIncrements} (각 $1,000당)`);
     
     // Calculate phase-out amount
     const phaseOutAmount = phaseOutIncrements * CHILD_TAX_CREDIT.PHASE_OUT_RATE;
+    console.log(`Phase-out 감소액: ${phaseOutIncrements} × $50 = $${phaseOutAmount}`);
     
     // Apply phase-out
     creditAmount = Math.max(0, creditAmount - phaseOutAmount);
+    console.log(`Phase-out 적용 후: $${creditAmount + phaseOutAmount} - $${phaseOutAmount} = $${creditAmount}`);
+  } else {
+    console.log(`소득이 phase-out 한도 이하이므로 감소 없음`);
   }
+  
+  console.log(`최종 Child Tax Credit: $${creditAmount}`);
+  console.log(`=================================`);
   
   // Round to nearest cent
   return Math.round(creditAmount * 100) / 100;
