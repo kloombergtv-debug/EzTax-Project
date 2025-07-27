@@ -773,7 +773,9 @@ export function calculateTaxes(taxData: TaxData): CalculatedResults {
   console.log(`  - 총 근로소득: $${earnedIncome}`)
   console.log(`📊 세무사 계산과 비교:`)
   console.log(`  - 세무사 ACTC $1,051 → 필요 근로소득: $${((1051 / 0.15) + 2500).toFixed(2)}`)
-  console.log(`  - 현재 근로소득과 차이: $${((1051 / 0.15) + 2500 - earnedIncome).toFixed(2)}`);
+  console.log(`  - 현재 근로소득과 차이: $${((1051 / 0.15) + 2500 - earnedIncome).toFixed(2)}`)
+  console.log(`💡 만약 임금이 $8,000이 정확하다면, 시스템 계산($859)이 맞습니다`)
+  console.log(`   세무사가 다른 소득을 근로소득에 포함했거나, 다른 계산 방법을 사용했을 수 있습니다`);
   
   // Calculate Additional Child Tax Credit (ACTC) - refundable portion
   const calculatedACTC = calculateAdditionalChildTaxCredit(
