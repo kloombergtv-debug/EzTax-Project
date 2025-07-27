@@ -445,7 +445,7 @@ const addTaxAndCreditsSection = (doc: jsPDF, calculatedResults: CalculatedResult
   doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
   
-  addLine('16', 'Tax (see instructions). Check if any from Form(s): 1□8814 2□4972 3□', calculatedResults.federalTax || 0);
+  addLine('16', 'Tax (see instructions). Check if any from Form(s): 8814, 4972', calculatedResults.federalTax || 0);
   addLine('17', 'Amount from Schedule 2, line 3', 0);
   addLine('18', 'Add lines 16 and 17', calculatedResults.federalTax || 0);
   addLine('19', 'Child tax credit or credit for other dependents from Schedule 8812', calculatedResults.credits || 0);
