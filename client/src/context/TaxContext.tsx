@@ -1,6 +1,23 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { TaxData } from '../types/tax';
+import { TaxReturn } from '@shared/schema';
 import { calculateTaxes } from '../lib/taxCalculations';
+
+// Define the TaxData interface based on TaxReturn but with optional fields for client use
+interface TaxData {
+  id?: number;
+  userId?: number | null;
+  taxYear: number;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  personalInfo?: TaxReturn['personalInfo'];
+  income?: TaxReturn['income'];
+  deductions?: TaxReturn['deductions'];
+  taxCredits?: TaxReturn['taxCredits'];
+  retirementContributions?: TaxReturn['retirementContributions'];
+  additionalTax?: TaxReturn['additionalTax'];
+  calculatedResults?: TaxReturn['calculatedResults'];
+}
 
 interface TaxContextType {
   taxData: TaxData;
@@ -8,6 +25,7 @@ interface TaxContextType {
   isDataReady: boolean;
   updateTaxData: (data: Partial<TaxData>) => Promise<void>;
   saveTaxData: () => Promise<void>;
+  saveTaxReturn: () => Promise<void>;
 }
 
 const TaxContext = createContext<TaxContextType | undefined>(undefined);
