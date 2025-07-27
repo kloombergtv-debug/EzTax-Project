@@ -277,13 +277,13 @@ const addDigitalAssetsSection = (doc: jsPDF, yPos: number): number => {
   yPos += 3;
   doc.text('(See instructions.)', 15, yPos);
   
-  // Yes/No checkboxes
-  doc.text('Yes', 150, yPos - 3);
-  doc.text('No', 170, yPos - 3);
-  doc.rect(148, yPos - 5, 2, 2);
-  doc.rect(168, yPos - 5, 2, 2);
-  // Default to No
-  doc.text('X', 168.5, yPos - 4);
+  // Yes/No checkboxes with improved alignment
+  doc.text('Yes', 155, yPos);
+  doc.text('No', 175, yPos);
+  doc.rect(150, yPos - 2, 2.5, 2.5);
+  doc.rect(170, yPos - 2, 2.5, 2.5);
+  // Default to No with better positioning
+  doc.text('X', 170.5, yPos);
   
   return yPos + 8;
 };
@@ -298,15 +298,19 @@ const addStandardDeductionSection = (doc: jsPDF, personalInfo: PersonalInformati
   doc.setFontSize(8);
   doc.setFont('helvetica', 'normal');
   doc.text('Someone can claim:', 15, yPos);
-  doc.text('You as a dependent', 50, yPos);
-  doc.text('Your spouse as a dependent', 90, yPos);
-  yPos += 3;
-  doc.text('Spouse itemizes on a separate return or you were a dual-status alien', 15, yPos);
+  yPos += 4;
   
-  // Checkboxes
-  doc.rect(48, yPos - 6, 2, 2);
-  doc.rect(88, yPos - 6, 2, 2);
-  doc.rect(13, yPos - 1, 2, 2);
+  // First row of checkboxes with proper alignment
+  doc.rect(15, yPos - 2, 2.5, 2.5);
+  doc.text('You as a dependent', 20, yPos);
+  
+  doc.rect(90, yPos - 2, 2.5, 2.5);
+  doc.text('Your spouse as a dependent', 95, yPos);
+  yPos += 5;
+  
+  // Second row checkbox
+  doc.rect(15, yPos - 2, 2.5, 2.5);
+  doc.text('Spouse itemizes on a separate return or you were a dual-status alien', 20, yPos);
   
   return yPos + 8;
 };
@@ -321,21 +325,27 @@ const addAgeBlindnessSection = (doc: jsPDF, personalInfo: PersonalInformation | 
   doc.setFontSize(8);
   doc.setFont('helvetica', 'normal');
   doc.text('You:', 15, yPos);
-  doc.text('Were born before January 2, 1960', 25, yPos);
-  doc.text('Are blind', 80, yPos);
+  yPos += 4;
+  
+  // First row - You
+  doc.rect(15, yPos - 2, 2.5, 2.5);
+  doc.text('Were born before January 2, 1960', 20, yPos);
+  
+  doc.rect(130, yPos - 2, 2.5, 2.5);
+  doc.text('Are blind', 135, yPos);
+  yPos += 5;
   
   if (personalInfo?.filingStatus === 'married_joint') {
-    doc.text('Spouse:', 100, yPos);
-    doc.text('Was born before January 2, 1960', 115, yPos);
-    doc.text('Is blind', 170, yPos);
-  }
-  
-  // Checkboxes
-  doc.rect(23, yPos - 2, 2, 2);
-  doc.rect(78, yPos - 2, 2, 2);
-  if (personalInfo?.filingStatus === 'married_joint') {
-    doc.rect(113, yPos - 2, 2, 2);
-    doc.rect(168, yPos - 2, 2, 2);
+    doc.text('Spouse:', 15, yPos);
+    yPos += 4;
+    
+    // Second row - Spouse
+    doc.rect(15, yPos - 2, 2.5, 2.5);
+    doc.text('Was born before January 2, 1960', 20, yPos);
+    
+    doc.rect(130, yPos - 2, 2.5, 2.5);
+    doc.text('Is blind', 135, yPos);
+    yPos += 5;
   }
   
   return yPos + 8;
@@ -356,7 +366,8 @@ const addDependentsSection = (doc: jsPDF, personalInfo: PersonalInformation | un
   doc.text('(3) Relationship to you', 110, yPos);
   doc.text('(4) Check the box if qualifies for (see instructions):', 140, yPos);
   yPos += 3;
-  doc.text('Child tax credit     Credit for other dependents', 145, yPos);
+  doc.text('Child tax credit', 145, yPos);
+  doc.text('Credit for other dependents', 170, yPos);
   yPos += 4;
   
   // List dependents (max 4 on form)
@@ -367,11 +378,11 @@ const addDependentsSection = (doc: jsPDF, personalInfo: PersonalInformation | un
       if (dependent.ssn) doc.text(dependent.ssn, 70, yPos);
       doc.text(dependent.relationship || '', 110, yPos);
       
-      // Checkboxes for credits
-      doc.rect(145, yPos - 2, 2, 2);
-      doc.rect(175, yPos - 2, 2, 2);
+      // Checkboxes for credits with better alignment
+      doc.rect(143, yPos - 1.5, 2.5, 2.5);
+      doc.rect(168, yPos - 1.5, 2.5, 2.5);
       
-      yPos += 4;
+      yPos += 5;
     });
   }
   
