@@ -774,8 +774,9 @@ export function calculateTaxes(taxData: TaxData): CalculatedResults {
   console.log(`📊 세무사 계산과 비교:`)
   console.log(`  - 세무사 ACTC $1,051 → 필요 근로소득: $${((1051 / 0.15) + 2500).toFixed(2)}`)
   console.log(`  - 현재 근로소득과 차이: $${((1051 / 0.15) + 2500 - earnedIncome).toFixed(2)}`)
-  console.log(`🎯 Schedule SE에 따르면 자영업소득은 $1,497이어야 합니다`)
-  console.log(`   Additional Tax 페이지에서 자영업소득을 $229 → $1,497로 수정하면 ACTC가 $1,051에 근접합니다`);
+  console.log(`🎯 자영업세금 확인:`)
+  console.log(`   - Schedule SE: 자영업소득 $1,497 → 자영업세금 $229`)
+  console.log(`   - 시스템에서 자영업세금이 $229로 표시되면 완전히 일치`);
   
   // Calculate Additional Child Tax Credit (ACTC) - refundable portion
   const calculatedACTC = calculateAdditionalChildTaxCredit(
