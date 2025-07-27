@@ -365,7 +365,7 @@ const Review: React.FC = () => {
                   onClick={handleGeneratePdf}
                 >
                   <File className="mr-2 h-4 w-4" />
-                  신고서 PDF 다운로드
+                  1040신고서(참고용)
                 </Button>
                 
                 <div className="flex flex-col sm:flex-row gap-4">
@@ -426,7 +426,7 @@ const Review: React.FC = () => {
                   onClick={handleGeneratePdf}
                 >
                   <File className="mr-2 h-4 w-4" />
-                  신고서 PDF 다운로드
+                  1040신고서(참고용)
                 </Button>
                 <Button onClick={() => {
                   setShowSubmitDialog(false);
