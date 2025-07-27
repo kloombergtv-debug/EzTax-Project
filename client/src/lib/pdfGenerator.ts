@@ -346,9 +346,13 @@ const add1040TaxSection = (doc: jsPDF, calculatedResults: CalculatedResults | un
     yPosition += 5;
     doc.setFont('helvetica', 'normal');
     
-    // Credits section with detailed breakdown
-    const childTaxCredit = taxCredits?.childTaxCredit || 0;
-    const creditForOtherDependents = taxCredits?.creditForOtherDependents || 0;
+    // Credits section with detailed breakdown - use calculatedResults for accurate values
+    const childTaxCredit = calculatedResults.childTaxCredit || 0;
+    const creditForOtherDependents = calculatedResults.creditForOtherDependents || 0;
+    const retirementSavingsCredit = calculatedResults.retirementSavingsCredit || 0;
+    const earnedIncomeCredit = calculatedResults.earnedIncomeCredit || 0;
+    const childDependentCareCredit = calculatedResults.childDependentCareCredit || 0;
+    
     const totalChildCredits = childTaxCredit + creditForOtherDependents;
     
     if (totalChildCredits > 0) {
@@ -356,12 +360,20 @@ const add1040TaxSection = (doc: jsPDF, calculatedResults: CalculatedResults | un
     }
     
     // Other credits
-    if (taxCredits?.retirementSavingsCredit && taxCredits.retirementSavingsCredit > 0) {
-      addTaxLine('20d', 'Retirement savings contributions credit', taxCredits.retirementSavingsCredit);
+    if (retirementSavingsCredit > 0) {
+      addTaxLine('20d', 'Retirement savings contributions credit', retirementSavingsCredit);
     }
     
-    // Total credits
-    const totalCredits = totalChildCredits + (taxCredits?.retirementSavingsCredit || 0);
+    if (earnedIncomeCredit > 0) {
+      addTaxLine('20e', 'Earned income credit (EIC)', earnedIncomeCredit);
+    }
+    
+    if (childDependentCareCredit > 0) {
+      addTaxLine('20f', 'Child and dependent care credit', childDependentCareCredit);
+    }
+    
+    // Total credits - use the total from calculatedResults
+    const totalCredits = calculatedResults.credits || 0;
     
     if (totalCredits > 0) {
       doc.setFont('helvetica', 'bold');
