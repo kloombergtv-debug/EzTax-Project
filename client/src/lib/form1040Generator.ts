@@ -50,11 +50,9 @@ export const generateForm1040PDF = (taxData: TaxData): jsPDF => {
   // Dependents Section
   yPos = addDependentsSection(doc, taxData.personalInfo, yPos);
   
-  // Check if new page needed
-  if (yPos > 240) {
-    doc.addPage();
-    yPos = 20;
-  }
+  // Start Income section on new page
+  doc.addPage();
+  yPos = 30;
   
   // Income Section (Lines 1-11)
   yPos = addIncomeSection(doc, taxData.income, taxData.calculatedResults, yPos);
