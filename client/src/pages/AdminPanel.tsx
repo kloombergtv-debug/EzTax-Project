@@ -190,7 +190,7 @@ export default function AdminPanel() {
 
   const formatCurrency = (amount: number | null | undefined) => {
     if (amount === null || amount === undefined) return 'N/A';
-    return `$${amount.toLocaleString()}`;
+    return `$${Math.round(amount).toLocaleString()}`;
   };
 
   const formatDate = (dateString: string | null | undefined) => {
