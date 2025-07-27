@@ -337,6 +337,8 @@ export function calculateAdditionalChildTaxCredit(
   const refundableAmount = Math.min(remainingCredit, actcCalculation, maxRefundable);
   
   console.log(`최종 ACTC = min($${remainingCredit}, $${actcCalculation}, $${maxRefundable}) = $${refundableAmount}`);
+  console.log(`🔍 세무사 계산 $1,051과 비교: 차이 $${Math.abs(1051 - refundableAmount)}`);
+  console.log(`📝 세무사가 사용한 다른 공식이나 특수 상황이 있을 수 있습니다`);
   console.log(`========================`);
   
   return Math.round(refundableAmount * 100) / 100;
@@ -763,6 +765,15 @@ export function calculateTaxes(taxData: TaxData): CalculatedResults {
   
   // Calculate earned income for ACTC
   const earnedIncome = (income.wages || 0) + (income.otherEarnedIncome || 0) + (additionalTax.selfEmploymentIncome || 0);
+  
+  console.log(`🔍 근로소득 계산 상세:`)
+  console.log(`  - 임금(wages): $${income.wages || 0}`)
+  console.log(`  - 기타 근로소득: $${income.otherEarnedIncome || 0}`)
+  console.log(`  - 자영업 소득: $${additionalTax.selfEmploymentIncome || 0}`)
+  console.log(`  - 총 근로소득: $${earnedIncome}`)
+  console.log(`📊 세무사 계산과 비교:`)
+  console.log(`  - 세무사 ACTC $1,051 → 필요 근로소득: $${((1051 / 0.15) + 2500).toFixed(2)}`)
+  console.log(`  - 현재 근로소득과 차이: $${((1051 / 0.15) + 2500 - earnedIncome).toFixed(2)}`);
   
   // Calculate Additional Child Tax Credit (ACTC) - refundable portion
   const calculatedACTC = calculateAdditionalChildTaxCredit(
