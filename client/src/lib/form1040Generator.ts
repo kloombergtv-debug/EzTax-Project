@@ -411,7 +411,7 @@ const addIncomeSection = (doc: jsPDF, income: any, calculatedResults: Calculated
     addLine('11', 'Subtract line 10 from line 9. This is your adjusted gross income', calculatedResults?.adjustedGrossIncome || income.adjustedGrossIncome || (totalIncome - totalAdjustments), true);
   }
   
-  return yPos + 8;
+  return yPos + 2;
 };
 
 // Tax and Credits section (Lines 12-24)
