@@ -290,20 +290,37 @@ export function calculateAdditionalChildTaxCredit(
   const nonRefundableUsed = Math.min(childTaxCredit, taxLiability);
   const remainingCredit = childTaxCredit - nonRefundableUsed;
   
-  if (remainingCredit <= 0) return 0;
+  console.log(`=== ACTC 계산 상세 분석 ===`);
+  console.log(`전체 Child Tax Credit: $${childTaxCredit}`);
+  console.log(`세금 부채(Tax Liability): $${taxLiability}`);
+  console.log(`비환급성으로 사용된 금액: $${nonRefundableUsed}`);
+  console.log(`남은 크레딧(환급 후보): $${remainingCredit}`);
+  console.log(`근로소득: $${earnedIncome}`);
+  
+  if (remainingCredit <= 0) {
+    console.log(`남은 크레딧이 0 이하이므로 ACTC = $0`);
+    return 0;
+  }
   
   // ACTC 계산: (근로소득 - $2,500) × 15%
-  if (earnedIncome <= 2500) return 0;
+  if (earnedIncome <= 2500) {
+    console.log(`근로소득이 $2,500 이하이므로 ACTC = $0`);
+    return 0;
+  }
   
   const actcCalculation = (earnedIncome - 2500) * 0.15;
   
   // 자녀 1명당 최대 $1,600까지 환급 가능
   const maxRefundable = eligibleChildren.length * 1600;
   
+  console.log(`ACTC 공식 계산: (${earnedIncome} - 2,500) × 15% = $${actcCalculation}`);
+  console.log(`최대 환급 한도: ${eligibleChildren.length}명 × $1,600 = $${maxRefundable}`);
+  
   // 환급 가능한 금액은 세 값 중 최소값
   const refundableAmount = Math.min(remainingCredit, actcCalculation, maxRefundable);
   
-  console.log(`ACTC 계산: 근로소득 ${earnedIncome}, 적격자녀 ${eligibleChildren.length}명, 환급가능 ${refundableAmount}`);
+  console.log(`최종 ACTC = min($${remainingCredit}, $${actcCalculation}, $${maxRefundable}) = $${refundableAmount}`);
+  console.log(`========================`);
   
   return Math.round(refundableAmount * 100) / 100;
 }
