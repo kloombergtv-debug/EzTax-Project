@@ -8,7 +8,7 @@ import ProgressTracker from '@/components/ProgressTracker';
 
 import StepNavigation from '@/components/StepNavigation';
 import { File, Check, FileEdit, Loader2 } from 'lucide-react';
-import { downloadTaxFormPDF } from '@/lib/pdfGenerator';
+import { downloadForm1040PDF } from '@/lib/form1040Generator';
 import { formatCurrency } from '@/lib/taxCalculations';
 import { PersonalInformation, Deductions, TaxCredits, AdditionalTax, CalculatedResults, Income } from '@shared/schema';
 import { Link, useLocation } from 'wouter';
@@ -86,17 +86,30 @@ const Review: React.FC = () => {
   
   const handleGeneratePdf = () => {
     try {
-      downloadTaxFormPDF(taxData);
+      // Prepare data for authentic Form 1040 PDF
+      const form1040Data = {
+        id: taxData.id,
+        taxYear: 2025,
+        status: taxData.status || 'in_progress',
+        personalInfo: personalInfo,
+        income: income,
+        deductions: deductions,
+        taxCredits: taxCredits,
+        additionalTax: additionalTax,
+        calculatedResults: calculatedResults
+      };
+      
+      downloadForm1040PDF(form1040Data);
       toast({
-        title: "PDF Generated",
-        description: "Your tax return PDF has been downloaded.",
+        title: "실제 Form 1040 PDF 생성 완료",
+        description: "IRS 공식 Form 1040 형식의 PDF가 다운로드되었습니다.",
         variant: "default",
       });
     } catch (error) {
       console.error('Error generating PDF:', error);
       toast({
-        title: "Error",
-        description: "There was a problem generating your PDF. Please try again.",
+        title: "오류",
+        description: "PDF 생성 중 문제가 발생했습니다. 다시 시도해주세요.",
         variant: "destructive",
       });
     }

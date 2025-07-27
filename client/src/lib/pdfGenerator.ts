@@ -52,48 +52,59 @@ const formatFilingStatus = (status: string | undefined): string => {
 
 // Function to add Form 1040 header
 const add1040Header = (doc: jsPDF, taxYear: number): void => {
-  // Form border
-  doc.setDrawColor(0, 0, 0);
-  doc.setLineWidth(1);
-  doc.rect(10, 10, 190, 277);
-  
-  // Form 1040 Title and header layout
-  doc.setFontSize(14);
+  // Main title header
+  doc.setFontSize(12);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(0, 0, 0);
-  doc.text('Form', 15, 20);
-  doc.setFontSize(20);
-  doc.text('1040', 40, 20);
+  doc.text('1040', 15, 15);
+  doc.text('U.S. Individual Income Tax Return', 40, 15);
+  doc.text(`${taxYear}`, 155, 15);
   
-  doc.setFontSize(12);
-  doc.setFont('helvetica', 'normal');
-  doc.text('U.S. Individual Income Tax Return', 80, 20);
-  doc.setFontSize(10);
-  doc.text(`${taxYear}`, 180, 20);
-  
-  // Department info (right side)
+  // Department line
   doc.setFontSize(8);
-  doc.text('Department of the Treasury—Internal Revenue Service', 110, 27);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Department of the Treasury—Internal Revenue Service', 90, 22);
+  
+  // Form label
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Form', 15, 22);
   
   // OMB number (top right)
   doc.setFontSize(8);
-  doc.text('OMB No. 1545-0074', 160, 15);
+  doc.setFont('helvetica', 'normal');
+  doc.text('OMB No. 1545-0074', 170, 10);
   
   // IRS Use Only box (top right corner)
-  doc.rect(140, 10, 60, 20);
-  doc.setFontSize(7);
-  doc.text('IRS Use Only—Do not write or staple in this space.', 142, 18);
+  doc.setDrawColor(0, 0, 0);
+  doc.setLineWidth(0.5);
+  doc.rect(170, 12, 25, 15);
+  doc.setFontSize(6);
+  doc.text('IRS Use Only—Do not write', 172, 16);
+  doc.text('or staple in this space.', 172, 19);
   
   // Tax Year line
-  doc.setFontSize(9);
-  doc.text(`For the year Jan. 1–Dec. 31, ${taxYear}, or other tax year beginning`, 15, 35);
-  doc.text(`, ${taxYear}, ending`, 120, 35);
-  doc.text(`, 20__`, 160, 35);
-  doc.text('See separate instructions.', 15, 40);
+  doc.setFontSize(8);
+  doc.text(`For the year Jan. 1–Dec. 31, ${taxYear}, or other tax year beginning`, 15, 30);
+  doc.text(`, ${taxYear}, ending`, 120, 30);
+  doc.text(`, 20___`, 150, 30);
+  doc.text('See separate instructions.', 15, 35);
   
-  // Section divider
-  doc.setDrawColor(0, 0, 0);
-  doc.line(10, 45, 200, 45);
+  // Presidential Election Campaign checkbox area
+  doc.rect(170, 30, 25, 25);
+  doc.setFontSize(6);
+  doc.text('Presidential Election', 172, 34);
+  doc.text('Campaign', 172, 37);
+  doc.text('Check here if you, or your', 172, 40);
+  doc.text('spouse if filing jointly, want $3', 172, 43);
+  doc.text('to go to this fund. Checking a', 172, 46);
+  doc.text('box below will not change', 172, 49);
+  doc.text('your tax or refund.', 172, 52);
+  doc.text('You        Spouse', 172, 55);
+  
+  // Checkbox squares
+  doc.rect(172, 56, 3, 3);
+  doc.rect(185, 56, 3, 3);
 };
 
 // Generate Form 1040 filing information section
