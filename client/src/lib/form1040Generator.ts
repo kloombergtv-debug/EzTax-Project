@@ -57,7 +57,7 @@ export const generateForm1040PDF = (taxData: TaxData): jsPDF => {
   }
   
   // Income Section (Lines 1-11)
-  yPos = addIncomeSection(doc, taxData.income, yPos);
+  yPos = addIncomeSection(doc, taxData.income, taxData.calculatedResults, yPos);
   
   // Check if new page needed
   if (yPos > 240) {
@@ -379,7 +379,7 @@ const addDependentsSection = (doc: jsPDF, personalInfo: PersonalInformation | un
 };
 
 // Income section (Lines 1-11)
-const addIncomeSection = (doc: jsPDF, income: any, yPos: number): number => {
+const addIncomeSection = (doc: jsPDF, income: any, calculatedResults: CalculatedResults | undefined, yPos: number): number => {
   doc.setFontSize(10);
   doc.setFont('helvetica', 'bold');
   doc.text('Income', 15, yPos);
@@ -419,10 +419,16 @@ const addIncomeSection = (doc: jsPDF, income: any, yPos: number): number => {
     addLine('9', 'Add lines 1z, 2b, 3b, 4b, 5b, 6b, 7, and 8. This is your total income', totalIncome);
     
     doc.setFont('helvetica', 'normal');
-    addLine('10', 'Adjustments to income from Schedule 1, line 26', income.adjustments || 0);
+    // Use the total adjustments from calculatedResults, fallback to income calculation
+    const totalAdjustments = calculatedResults?.adjustments || 
+      (income.adjustments ? 
+        (income.adjustments.studentLoanInterest || 0) + 
+        (income.adjustments.retirementContributions || 0) + 
+        (income.adjustments.otherAdjustments || 0) : 0);
+    addLine('10', 'Adjustments to income from Schedule 1, line 26', totalAdjustments);
     
     doc.setFont('helvetica', 'bold');
-    addLine('11', 'Subtract line 10 from line 9. This is your adjusted gross income', income.adjustedGrossIncome || (totalIncome - (income.adjustments || 0)));
+    addLine('11', 'Subtract line 10 from line 9. This is your adjusted gross income', calculatedResults?.adjustedGrossIncome || income.adjustedGrossIncome || (totalIncome - totalAdjustments));
   }
   
   return yPos + 8;
