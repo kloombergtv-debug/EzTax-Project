@@ -391,29 +391,31 @@ const addDependentsSection = (doc: jsPDF, personalInfo: PersonalInformation | un
 
 // Income section (Lines 1-11)
 const addIncomeSection = (doc: jsPDF, income: any, calculatedResults: CalculatedResults | undefined, yPos: number): number => {
-  doc.setFontSize(10);
+  doc.setFontSize(11);
   doc.setFont('helvetica', 'bold');
   doc.text('Income', 15, yPos);
-  yPos += 6;
+  yPos += 8;
   
-  doc.setFontSize(8);
+  doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
   
-  const addLine = (lineNum: string, description: string, amount: number) => {
+  const addLine = (lineNum: string, description: string, amount: number, isBold = false) => {
+    if (isBold) doc.setFont('helvetica', 'bold');
     doc.text(lineNum, 15, yPos);
-    doc.text(description, 25, yPos);
+    doc.text(description, 30, yPos);
     const amountText = formatCurrency(amount);
-    doc.text(amountText, 190 - doc.getTextWidth(amountText), yPos);
-    yPos += 4;
+    doc.text(amountText, 195 - doc.getTextWidth(amountText), yPos);
+    if (isBold) doc.setFont('helvetica', 'normal');
+    yPos += 5;
   };
   
   if (income) {
     addLine('1z', 'Total amount from Form(s) W-2, box 1 (see instructions)', income.wages || 0);
     
     doc.setFontSize(7);
-    doc.text('Attach Sch. B if required.', 15, yPos);
-    yPos += 3;
-    doc.setFontSize(8);
+    doc.text('Attach Sch. B if required.', 30, yPos);
+    yPos += 4;
+    doc.setFontSize(9);
     
     addLine('2b', 'Taxable interest', income.interestIncome || 0);
     addLine('3b', 'Ordinary dividends', income.dividends || 0);
@@ -423,13 +425,11 @@ const addIncomeSection = (doc: jsPDF, income: any, calculatedResults: Calculated
     addLine('7', 'Capital gain or (loss). Attach Schedule D if required', income.capitalGains || 0);
     addLine('8', 'Additional income from Schedule 1, line 10', income.businessIncome || 0);
     
-    yPos += 2;
-    doc.setFont('helvetica', 'bold');
+    yPos += 3;
     const totalIncome = (income.wages || 0) + (income.interestIncome || 0) + (income.dividends || 0) + 
                        (income.retirementIncome || 0) + (income.capitalGains || 0) + (income.businessIncome || 0);
-    addLine('9', 'Add lines 1z, 2b, 3b, 4b, 5b, 6b, 7, and 8. This is your total income', totalIncome);
+    addLine('9', 'Add lines 1z, 2b, 3b, 4b, 5b, 6b, 7, and 8. This is your total income', totalIncome, true);
     
-    doc.setFont('helvetica', 'normal');
     // Use the total adjustments from calculatedResults, fallback to income calculation
     const totalAdjustments = calculatedResults?.adjustments || 
       (income.adjustments ? 
@@ -438,8 +438,7 @@ const addIncomeSection = (doc: jsPDF, income: any, calculatedResults: Calculated
         (income.adjustments.otherAdjustments || 0) : 0);
     addLine('10', 'Adjustments to income from Schedule 1, line 26', totalAdjustments);
     
-    doc.setFont('helvetica', 'bold');
-    addLine('11', 'Subtract line 10 from line 9. This is your adjusted gross income', calculatedResults?.adjustedGrossIncome || income.adjustedGrossIncome || (totalIncome - totalAdjustments));
+    addLine('11', 'Subtract line 10 from line 9. This is your adjusted gross income', calculatedResults?.adjustedGrossIncome || income.adjustedGrossIncome || (totalIncome - totalAdjustments), true);
   }
   
   return yPos + 8;
@@ -449,17 +448,17 @@ const addIncomeSection = (doc: jsPDF, income: any, calculatedResults: Calculated
 const addTaxAndCreditsSection = (doc: jsPDF, calculatedResults: CalculatedResults | undefined, deductions: Deductions | undefined, yPos: number): number => {
   if (!calculatedResults) return yPos;
   
-  doc.setFontSize(8);
+  doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
   
-  const addLine = (lineNum: string, description: string, amount: number, bold = false) => {
-    if (bold) doc.setFont('helvetica', 'bold');
+  const addLine = (lineNum: string, description: string, amount: number, isBold = false) => {
+    if (isBold) doc.setFont('helvetica', 'bold');
     doc.text(lineNum, 15, yPos);
-    doc.text(description, 25, yPos);
+    doc.text(description, 30, yPos);
     const amountText = formatCurrency(amount);
-    doc.text(amountText, 190 - doc.getTextWidth(amountText), yPos);
-    if (bold) doc.setFont('helvetica', 'normal');
-    yPos += 4;
+    doc.text(amountText, 195 - doc.getTextWidth(amountText), yPos);
+    if (isBold) doc.setFont('helvetica', 'normal');
+    yPos += 5;
   };
   
   const deductionType = deductions?.useStandardDeduction ? 'Standard deduction' : 'Itemized deductions from Schedule A';
@@ -468,10 +467,12 @@ const addTaxAndCreditsSection = (doc: jsPDF, calculatedResults: CalculatedResult
   addLine('14', 'Add lines 12 and 13', calculatedResults.deductions || 0);
   addLine('15', 'Subtract line 14 from line 11. If zero or less, enter -0-. This is your taxable income', calculatedResults.taxableIncome || 0, true);
   
-  yPos += 4;
+  yPos += 6;
+  doc.setFontSize(11);
   doc.setFont('helvetica', 'bold');
   doc.text('Tax and Credits', 15, yPos);
-  yPos += 4;
+  yPos += 6;
+  doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
   
   addLine('16', 'Tax (see instructions). Check if any from Form(s): 1□8814 2□4972 3□', calculatedResults.federalTax || 0);
@@ -491,22 +492,22 @@ const addTaxAndCreditsSection = (doc: jsPDF, calculatedResults: CalculatedResult
 const addPaymentsSection = (doc: jsPDF, calculatedResults: CalculatedResults | undefined, yPos: number): number => {
   if (!calculatedResults) return yPos;
   
-  doc.setFontSize(9);
+  doc.setFontSize(11);
   doc.setFont('helvetica', 'bold');
   doc.text('Payments', 15, yPos);
-  yPos += 4;
+  yPos += 8;
   
-  doc.setFontSize(8);
+  doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
   
-  const addLine = (lineNum: string, description: string, amount: number, bold = false) => {
-    if (bold) doc.setFont('helvetica', 'bold');
+  const addLine = (lineNum: string, description: string, amount: number, isBold = false) => {
+    if (isBold) doc.setFont('helvetica', 'bold');
     doc.text(lineNum, 15, yPos);
-    doc.text(description, 25, yPos);
+    doc.text(description, 30, yPos);
     const amountText = formatCurrency(amount);
-    doc.text(amountText, 190 - doc.getTextWidth(amountText), yPos);
-    if (bold) doc.setFont('helvetica', 'normal');
-    yPos += 4;
+    doc.text(amountText, 195 - doc.getTextWidth(amountText), yPos);
+    if (isBold) doc.setFont('helvetica', 'normal');
+    yPos += 5;
   };
   
   addLine('25d', 'Federal income tax withheld from Forms W-2 and 1099', calculatedResults.payments || 0);
@@ -526,32 +527,34 @@ const addPaymentsSection = (doc: jsPDF, calculatedResults: CalculatedResults | u
 const addRefundOwedSection = (doc: jsPDF, calculatedResults: CalculatedResults | undefined, yPos: number): number => {
   if (!calculatedResults) return yPos;
   
-  doc.setFontSize(9);
+  doc.setFontSize(11);
   doc.setFont('helvetica', 'bold');
   doc.text('Refund', 15, yPos);
-  yPos += 4;
+  yPos += 8;
   
-  doc.setFontSize(8);
+  doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
   
-  const addLine = (lineNum: string, description: string, amount: number, bold = false) => {
-    if (bold) doc.setFont('helvetica', 'bold');
+  const addLine = (lineNum: string, description: string, amount: number, isBold = false) => {
+    if (isBold) doc.setFont('helvetica', 'bold');
     doc.text(lineNum, 15, yPos);
-    doc.text(description, 25, yPos);
+    doc.text(description, 30, yPos);
     const amountText = formatCurrency(amount);
-    doc.text(amountText, 190 - doc.getTextWidth(amountText), yPos);
-    if (bold) doc.setFont('helvetica', 'normal');
-    yPos += 4;
+    doc.text(amountText, 195 - doc.getTextWidth(amountText), yPos);
+    if (isBold) doc.setFont('helvetica', 'normal');
+    yPos += 5;
   };
   
   if (calculatedResults.refundAmount && calculatedResults.refundAmount > 0) {
     addLine('34', 'If line 33 is more than line 24, subtract line 24 from line 33. This is the amount you overpaid', calculatedResults.refundAmount, true);
     addLine('35a', 'Amount of line 34 you want refunded to you. If Form 8888 is attached, check here', calculatedResults.refundAmount);
   } else if (calculatedResults.amountOwed && calculatedResults.amountOwed > 0) {
-    yPos += 4;
+    yPos += 3;
+    doc.setFontSize(11);
     doc.setFont('helvetica', 'bold');
     doc.text('Amount You Owe', 15, yPos);
-    yPos += 4;
+    yPos += 8;
+    doc.setFontSize(9);
     doc.setFont('helvetica', 'normal');
     addLine('37', 'If line 24 is more than line 33, subtract line 33 from line 24. This is the amount you owe', calculatedResults.amountOwed, true);
   }
