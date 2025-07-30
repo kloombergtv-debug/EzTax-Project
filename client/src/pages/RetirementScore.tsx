@@ -68,6 +68,7 @@ interface RetirementAnalysis {
     contributionGrowth: number;
     socialSecurityValue: number;
     requiredAmount: number;
+    requiredFromSavings: number;
     inflationAdjustedIncome: number;
     preparednessRatio: number;
     baseScore: number;
@@ -249,20 +250,23 @@ export default function RetirementScoreStepByStep() {
       ? annualContribution * (Math.pow(1 + data.expectedAnnualReturn / 100, yearsToRetirement) - 1) / (data.expectedAnnualReturn / 100)
       : annualContribution * yearsToRetirement;
     
-    const socialSecurityValue = data.expectedSocialSecurityBenefit * 12 * 25; // 25년치 가치로 환산
-    const totalFutureValue = investmentGrowth + contributionGrowth + socialSecurityValue;
+    // Social Security는 4% 룰에서 별도 처리 (연금은 매년 받는 소득이므로)
+    const socialSecurityAnnualValue = data.expectedSocialSecurityBenefit * 12;
+    const totalFutureValue = investmentGrowth + contributionGrowth;
     
-    // 인플레이션 조정된 필요 금액
+    // 인플레이션 조정된 필요 금액 (4% 룰 적용)
     const inflationAdjustedIncome = data.desiredRetirementIncome * Math.pow(1 + data.expectedInflationRate / 100, yearsToRetirement);
-    const requiredAmount = inflationAdjustedIncome * 12 * 25; // 4% rule with inflation
+    const requiredFromSavings = Math.max(0, (inflationAdjustedIncome * 12) - socialSecurityAnnualValue);
+    const requiredAmount = requiredFromSavings * 25; // 4% rule: Social Security 제외한 필요 금액만
     
     console.log("계산 결과:", {
       yearsToRetirement,
       investmentGrowth,
       contributionGrowth,
-      socialSecurityValue,
+      socialSecurityAnnualValue,
       totalFutureValue,
       requiredAmount,
+      requiredFromSavings,
       inflationAdjustedIncome
     });
     
@@ -390,8 +394,9 @@ export default function RetirementScoreStepByStep() {
         yearsToRetirement,
         investmentGrowth,
         contributionGrowth,
-        socialSecurityValue,
+        socialSecurityValue: socialSecurityAnnualValue,
         requiredAmount,
+        requiredFromSavings,
         inflationAdjustedIncome,
         preparednessRatio,
         baseScore,
@@ -584,19 +589,20 @@ export default function RetirementScoreStepByStep() {
                 </div>
 
                 <div className="bg-green-50 p-4 rounded-lg space-y-2">
-                  <h4 className="font-medium text-green-800">Social Security 가치 환산</h4>
+                  <h4 className="font-medium text-green-800">Social Security 연간 혜택</h4>
                   <p className="text-sm text-green-700">
-                    월 ${form.getValues('expectedSocialSecurityBenefit').toLocaleString()} × 12개월 × 25년 = 
-                    <strong> ${Math.round(analysis.calculationDetails.socialSecurityValue).toLocaleString()}</strong>
+                    월 ${form.getValues('expectedSocialSecurityBenefit').toLocaleString()} × 12개월 = 
+                    <strong> ${Math.round(analysis.calculationDetails.socialSecurityValue).toLocaleString()}/년</strong>
+                    <br />
+                    <span className="text-xs">(은퇴 후 매년 받는 연금이므로 별도 계산)</span>
                   </p>
                 </div>
 
                 <div className="bg-blue-100 p-4 rounded-lg">
-                  <h4 className="font-medium text-blue-800">총 미래 자산</h4>
+                  <h4 className="font-medium text-blue-800">저축으로 마련할 자산</h4>
                   <p className="text-lg font-bold text-blue-900">
                     ${Math.round(analysis.calculationDetails.investmentGrowth).toLocaleString()} + 
-                    ${Math.round(analysis.calculationDetails.contributionGrowth).toLocaleString()} + 
-                    ${Math.round(analysis.calculationDetails.socialSecurityValue).toLocaleString()} = 
+                    ${Math.round(analysis.calculationDetails.contributionGrowth).toLocaleString()} = 
                     ${analysis.projectedSavings.toLocaleString()}
                   </p>
                 </div>
@@ -614,10 +620,15 @@ export default function RetirementScoreStepByStep() {
                 </div>
 
                 <div className="bg-orange-50 p-4 rounded-lg space-y-2">
-                  <h4 className="font-medium text-orange-800">4% 룰 적용 필요 금액</h4>
+                  <h4 className="font-medium text-orange-800">저축으로 준비할 필요 금액</h4>
                   <p className="text-sm text-orange-700">
-                    ${Math.round(analysis.calculationDetails.inflationAdjustedIncome).toLocaleString()} × 12개월 × 25년 = 
-                    <strong> ${Math.round(analysis.calculationDetails.requiredAmount).toLocaleString()}</strong>
+                    연간 필요액: ${Math.round(analysis.calculationDetails.inflationAdjustedIncome * 12).toLocaleString()}
+                    <br />
+                    Social Security 차감: -${Math.round(analysis.calculationDetails.socialSecurityValue).toLocaleString()}
+                    <br />
+                    저축 필요액: ${Math.round(analysis.calculationDetails.requiredFromSavings).toLocaleString()}/년
+                    <br />
+                    4% 룰 적용: <strong>${Math.round(analysis.calculationDetails.requiredAmount).toLocaleString()}</strong>
                   </p>
                 </div>
               </div>
