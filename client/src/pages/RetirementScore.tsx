@@ -650,9 +650,9 @@ export default function RetirementScoreStepByStep() {
                   <div className="bg-purple-50 p-4 rounded-lg">
                     <h4 className="font-medium text-purple-800">재정 건전성</h4>
                     <div className="text-xs text-purple-600 space-y-1">
-                      <div>• 현재 비상자금: {Math.round(analysis.calculationDetails.emergencyRatio * 100)}% (6개월 소득 기준)</div>
-                      <div>• 부채비율: {Math.round(analysis.calculationDetails.debtRatio * 100)}%</div>
-                      <div>• 저축률: {Math.round(analysis.calculationDetails.savingsRate * 100)}%</div>
+                      <div>• 현재 비상자금: {isNaN(analysis.calculationDetails.emergencyRatio) ? 0 : Math.round(analysis.calculationDetails.emergencyRatio * 100)}% (6개월 소득 기준)</div>
+                      <div>• 부채비율: {isNaN(analysis.calculationDetails.debtRatio) ? 0 : Math.round(analysis.calculationDetails.debtRatio * 100)}%</div>
+                      <div>• 저축률: {isNaN(analysis.calculationDetails.savingsRate) ? 0 : Math.round(analysis.calculationDetails.savingsRate * 100)}%</div>
                     </div>
                     <p className="text-lg font-bold text-purple-900 mt-2">
                       {Math.round(analysis.calculationDetails.financialHealthScore)}점/20점
