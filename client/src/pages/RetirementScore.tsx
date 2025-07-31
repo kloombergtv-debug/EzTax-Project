@@ -278,7 +278,7 @@ export default function RetirementScoreStepByStep() {
     let financialHealthScore = 0;
     
     // 비상자금 점수 (0-5점)
-    const emergencyRatio = data.emergencyFund / (data.currentIncome / 12 * 6); // 6개월치 비교
+    const emergencyRatio = data.currentIncome > 0 ? data.emergencyFund / (data.currentIncome / 12 * 6) : 0;
     financialHealthScore += Math.min(5, emergencyRatio * 5);
     
     // 부채 비율 점수 (0-5점)
@@ -359,7 +359,7 @@ export default function RetirementScoreStepByStep() {
     // 비상자금
     if (emergencyRatio >= 1) {
       strengths.push("충분한 비상 자금을 보유하고 있습니다");
-    } else {
+    } else if (data.currentIncome > 0) {
       concerns.push("비상 자금이 부족합니다");
       recommendations.push(`${Math.round((6 - emergencyRatio * 6) * data.currentIncome / 12).toLocaleString()}달러의 추가 비상자금이 필요합니다`);
     }
