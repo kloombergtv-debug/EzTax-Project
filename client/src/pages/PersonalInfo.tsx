@@ -319,7 +319,7 @@ const PersonalInfo: React.FC = () => {
             <CardContent className="pt-6">
               <h2 className="text-xl font-semibold mb-4">기본 정보</h2>
               
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <FormField
                   control={form.control}
                   name="firstName"
@@ -328,20 +328,6 @@ const PersonalInfo: React.FC = () => {
                       <FormLabel>이름 (First Name)</FormLabel>
                       <FormControl>
                         <Input placeholder="이름을 입력하세요" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="middleInitial"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>중간 이름 (Middle Initial)</FormLabel>
-                      <FormControl>
-                        <Input placeholder="중간 이름 (선택사항)" maxLength={1} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -366,28 +352,6 @@ const PersonalInfo: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <FormField
                   control={form.control}
-                  name="ssn"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>사회보장번호 (SSN)</FormLabel>
-                      <FormControl>
-                        <Input 
-                          placeholder="XXX-XX-XXXX" 
-                          maxLength={11}
-                          {...field}
-                          onChange={(e) => {
-                            const formatted = formatSSN(e.target.value);
-                            field.onChange(formatted);
-                          }}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
                   name="dateOfBirth"
                   render={({ field }) => (
                     <FormItem>
@@ -399,9 +363,7 @@ const PersonalInfo: React.FC = () => {
                     </FormItem>
                   )}
                 />
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                
                 <FormField
                   control={form.control}
                   name="email"
@@ -415,25 +377,42 @@ const PersonalInfo: React.FC = () => {
                     </FormItem>
                   )}
                 />
+              </div>
+
+              {/* SSN과 Phone 필드는 숨김 처리 - 개인정보 보호를 위해 */}
+              <div style={{ display: 'none' }}>
+                <FormField
+                  control={form.control}
+                  name="ssn"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
                 
                 <FormField
                   control={form.control}
                   name="phone"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>전화번호 (Phone)</FormLabel>
                       <FormControl>
-                        <Input 
-                          placeholder="XXX-XXX-XXXX" 
-                          maxLength={12}
-                          {...field}
-                          onChange={(e) => {
-                            const formatted = formatPhone(e.target.value);
-                            field.onChange(formatted);
-                          }}
-                        />
+                        <Input {...field} />
                       </FormControl>
-                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={form.control}
+                  name="middleInitial"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
                     </FormItem>
                   )}
                 />
@@ -576,7 +555,7 @@ const PersonalInfo: React.FC = () => {
               <CardContent className="pt-6">
                 <h2 className="text-xl font-semibold mb-4">배우자 정보 (Spouse Information)</h2>
                 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                   <FormField
                     control={form.control}
                     name="spouseInfo.firstName"
@@ -604,25 +583,18 @@ const PersonalInfo: React.FC = () => {
                       </FormItem>
                     )}
                   />
-                  
+                </div>
+
+                {/* 배우자 SSN 숨김 처리 */}
+                <div style={{ display: 'none' }}>
                   <FormField
                     control={form.control}
                     name="spouseInfo.ssn"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>배우자 SSN (Spouse SSN)</FormLabel>
                         <FormControl>
-                          <Input 
-                            placeholder="XXX-XX-XXXX" 
-                            maxLength={11}
-                            {...field}
-                            onChange={(e) => {
-                              const formatted = formatSSN(e.target.value);
-                              field.onChange(formatted);
-                            }}
-                          />
+                          <Input {...field} />
                         </FormControl>
-                        <FormMessage />
                       </FormItem>
                     )}
                   />
@@ -707,28 +679,6 @@ const PersonalInfo: React.FC = () => {
 
                         <FormField
                           control={form.control}
-                          name={`dependents.${index}.ssn`}
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>SSN</FormLabel>
-                              <FormControl>
-                                <Input 
-                                  placeholder="XXX-XX-XXXX" 
-                                  maxLength={11}
-                                  {...field}
-                                  onChange={(e) => {
-                                    const formatted = formatSSN(e.target.value);
-                                    field.onChange(formatted);
-                                  }}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-
-                        <FormField
-                          control={form.control}
                           name={`dependents.${index}.relationship`}
                           render={({ field }) => (
                             <FormItem>
@@ -762,6 +712,21 @@ const PersonalInfo: React.FC = () => {
                                 <Input type="date" {...field} />
                               </FormControl>
                               <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                      {/* 부양가족 SSN 숨김 처리 */}
+                      <div style={{ display: 'none' }}>
+                        <FormField
+                          control={form.control}
+                          name={`dependents.${index}.ssn`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormControl>
+                                <Input {...field} />
+                              </FormControl>
                             </FormItem>
                           )}
                         />
