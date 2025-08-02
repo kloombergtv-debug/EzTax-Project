@@ -42,11 +42,11 @@ const PersonalInfo: React.FC = () => {
     dateOfBirth: '',
     email: '',
     phone: '', // 기본값 유지하되 UI에서 숨김
-    address1: '',
-    address2: '',
+    address1: '', // 기본값 유지하되 UI에서 숨김
+    address2: '', // 기본값 유지하되 UI에서 숨김
     city: '',
     state: '',
-    zipCode: '',
+    zipCode: '', // 기본값 유지하되 UI에서 숨김
     filingStatus: 'single',
     isDisabled: false,
     isNonresidentAlien: false,
@@ -389,35 +389,7 @@ const PersonalInfo: React.FC = () => {
               <h2 className="text-xl font-semibold mb-4">주소 정보</h2>
               
               <div className="space-y-4">
-                <FormField
-                  control={form.control}
-                  name="address1"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>주소 1 (Address Line 1)</FormLabel>
-                      <FormControl>
-                        <Input placeholder="주소를 입력하세요" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="address2"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>주소 2 (Address Line 2) - 선택사항</FormLabel>
-                      <FormControl>
-                        <Input placeholder="아파트, 동, 호수 등" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <FormField
                     control={form.control}
                     name="city"
@@ -440,20 +412,6 @@ const PersonalInfo: React.FC = () => {
                         <FormLabel>주 (State)</FormLabel>
                         <FormControl>
                           <Input placeholder="주 코드 (예: TX)" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  
-                  <FormField
-                    control={form.control}
-                    name="zipCode"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>우편번호 (ZIP Code)</FormLabel>
-                        <FormControl>
-                          <Input placeholder="우편번호" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
