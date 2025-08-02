@@ -484,6 +484,101 @@ export const calculatedResultsSchema = z.object({
   additionalChildTaxCredit: z.number().optional(),
 });
 
+// Retirement Assessment Data Schema
+export const retirementAssessments = pgTable("retirement_assessments", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull(),
+  createdAt: text("created_at").notNull(), // ISO date string
+  updatedAt: text("updated_at").notNull(), // ISO date string
+  // Assessment Data
+  assessmentData: json("assessment_data").$type<RetirementAssessmentData>(),
+  // Calculated Results
+  results: json("results").$type<RetirementResults>(),
+});
+
+export const insertRetirementAssessmentSchema = createInsertSchema(retirementAssessments).omit({
+  id: true,
+});
+
+export type InsertRetirementAssessment = z.infer<typeof insertRetirementAssessmentSchema>;
+export type RetirementAssessment = typeof retirementAssessments.$inferSelect;
+
+// Retirement Assessment Interfaces
+export interface RetirementAssessmentData {
+  currentAge: number;
+  expectedRetirementAge: number;
+  currentSavings: number;
+  monthlyContribution: number;
+  desiredRetirementIncome: number;
+  expectedAnnualReturn: number;
+  currentIncome: number;
+  emergencyFund: number;
+  totalDebt: number;
+  expectedSocialSecurityBenefit: number;
+  healthStatus: string;
+  hasHealthInsurance: boolean;
+  homeOwnership: string;
+  familyStatus: string;
+  dependentsCount: number;
+  investmentExperience: string;
+  riskTolerance: string;
+  expectedInflationRate: number;
+}
+
+export interface RetirementResults {
+  totalScore: number;
+  baseScore: number;
+  financialHealthScore: number;
+  lifestyleScore: number;
+  yearsToRetirement: number;
+  investmentGrowth: number;
+  contributionGrowth: number;
+  socialSecurityAnnualValue: number;
+  totalFutureValue: number;
+  requiredAmount: number;
+  requiredFromSavings: number;
+  inflationAdjustedIncome: number;
+  recommendations: string[];
+}
+
+// Validation schemas for retirement assessment
+export const retirementAssessmentDataSchema = z.object({
+  currentAge: z.number().min(18).max(100),
+  expectedRetirementAge: z.number().min(50).max(80),
+  currentSavings: z.number().min(0),
+  monthlyContribution: z.number().min(0),
+  desiredRetirementIncome: z.number().min(0),
+  expectedAnnualReturn: z.number().min(0).max(20),
+  currentIncome: z.number().min(0),
+  emergencyFund: z.number().min(0),
+  totalDebt: z.number().min(0),
+  expectedSocialSecurityBenefit: z.number().min(0),
+  healthStatus: z.string(),
+  hasHealthInsurance: z.boolean(),
+  homeOwnership: z.string(),
+  familyStatus: z.string(),
+  dependentsCount: z.number().min(0),
+  investmentExperience: z.string(),
+  riskTolerance: z.string(),
+  expectedInflationRate: z.number().min(0).max(20),
+});
+
+export const retirementResultsSchema = z.object({
+  totalScore: z.number(),
+  baseScore: z.number(),
+  financialHealthScore: z.number(),
+  lifestyleScore: z.number(),
+  yearsToRetirement: z.number(),
+  investmentGrowth: z.number(),
+  contributionGrowth: z.number(),
+  socialSecurityAnnualValue: z.number(),
+  totalFutureValue: z.number(),
+  requiredAmount: z.number(),
+  requiredFromSavings: z.number(),
+  inflationAdjustedIncome: z.number(),
+  recommendations: z.array(z.string()),
+});
+
 // Main TaxData interface
 export interface TaxData {
   personalInfo?: PersonalInformation;

@@ -1,4 +1,4 @@
-import { users, type User, type InsertUser, taxReturns, type TaxReturn, type InsertTaxReturn } from "@shared/schema";
+import { users, type User, type InsertUser, taxReturns, type TaxReturn, type InsertTaxReturn, retirementAssessments, type RetirementAssessment, type InsertRetirementAssessment } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc } from "drizzle-orm";
 
@@ -23,6 +23,16 @@ export interface IStorage {
   updateTaxReturn(id: number, taxReturn: Partial<TaxReturn>): Promise<TaxReturn>;
   deleteTaxReturn(id: number): Promise<void>;
   deleteUserTaxReturns(userId: number): Promise<void>;
+  
+  // Retirement assessment methods
+  getRetirementAssessment(id: number): Promise<RetirementAssessment | undefined>;
+  getAllRetirementAssessments(): Promise<RetirementAssessment[]>;
+  getRetirementAssessmentsByUserId(userId: number): Promise<RetirementAssessment[]>;
+  getLatestRetirementAssessment(userId: number): Promise<RetirementAssessment | undefined>;
+  createRetirementAssessment(assessment: InsertRetirementAssessment): Promise<RetirementAssessment>;
+  updateRetirementAssessment(id: number, assessment: Partial<RetirementAssessment>): Promise<RetirementAssessment>;
+  deleteRetirementAssessment(id: number): Promise<void>;
+  deleteUserRetirementAssessments(userId: number): Promise<void>;
 }
 
 export class DbStorage implements IStorage {
@@ -203,6 +213,71 @@ export class DbStorage implements IStorage {
     await db
       .delete(taxReturns)
       .where(eq(taxReturns.userId, userId));
+  }
+
+  // Retirement Assessment Methods
+  async getRetirementAssessment(id: number): Promise<RetirementAssessment | undefined> {
+    const [assessment] = await db.select().from(retirementAssessments).where(eq(retirementAssessments.id, id));
+    return assessment || undefined;
+  }
+
+  async getAllRetirementAssessments(): Promise<RetirementAssessment[]> {
+    return await db.select().from(retirementAssessments).orderBy(desc(retirementAssessments.createdAt));
+  }
+
+  async getRetirementAssessmentsByUserId(userId: number): Promise<RetirementAssessment[]> {
+    return await db.select().from(retirementAssessments)
+      .where(eq(retirementAssessments.userId, userId))
+      .orderBy(desc(retirementAssessments.createdAt));
+  }
+
+  async getLatestRetirementAssessment(userId: number): Promise<RetirementAssessment | undefined> {
+    const [assessment] = await db.select().from(retirementAssessments)
+      .where(eq(retirementAssessments.userId, userId))
+      .orderBy(desc(retirementAssessments.createdAt))
+      .limit(1);
+    return assessment || undefined;
+  }
+
+  async createRetirementAssessment(insertAssessment: InsertRetirementAssessment): Promise<RetirementAssessment> {
+    const [assessment] = await db
+      .insert(retirementAssessments)
+      .values({
+        ...insertAssessment,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      })
+      .returning();
+    return assessment;
+  }
+
+  async updateRetirementAssessment(id: number, assessment: Partial<RetirementAssessment>): Promise<RetirementAssessment> {
+    const updateData = {
+      ...assessment,
+      updatedAt: new Date().toISOString()
+    };
+
+    const [updatedAssessment] = await db
+      .update(retirementAssessments)
+      .set(updateData)
+      .where(eq(retirementAssessments.id, id))
+      .returning();
+    
+    if (!updatedAssessment) {
+      throw new Error(`은퇴 평가 ID ${id}를 찾을 수 없습니다`);
+    }
+    
+    return updatedAssessment;
+  }
+
+  async deleteRetirementAssessment(id: number): Promise<void> {
+    await db.delete(retirementAssessments).where(eq(retirementAssessments.id, id));
+  }
+
+  async deleteUserRetirementAssessments(userId: number): Promise<void> {
+    await db
+      .delete(retirementAssessments)
+      .where(eq(retirementAssessments.userId, userId));
   }
 }
 

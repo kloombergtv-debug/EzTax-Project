@@ -11,7 +11,9 @@ import { Progress } from "@/components/ui/progress";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useLocation } from "wouter";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
 import { 
   TrendingUpIcon, 
   PiggyBankIcon, 
@@ -87,12 +89,39 @@ export default function RetirementScoreStepByStep() {
   const [completedSteps, setCompletedSteps] = useState<boolean[]>([false, false, false, false]);
   const [showSSCalculator, setShowSSCalculator] = useState(false);
   const [showCalculationDetails, setShowCalculationDetails] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
   
   // Social Security calculator state
   const [ssStartAge, setSsStartAge] = useState(25);
   const [ssRetireAge, setSsRetireAge] = useState(65);
   const [ssAvgSalary, setSsAvgSalary] = useState(80000);
   const [ssClaimAge, setSsClaimAge] = useState(67);
+
+  const queryClient = useQueryClient();
+
+  // Query for latest retirement assessment
+  const { data: latestAssessment, isLoading: loadingAssessment } = useQuery({
+    queryKey: ['/api/retirement-assessment/latest'],
+    queryFn: () => apiRequest('/api/retirement-assessment/latest'),
+  });
+
+  // Mutation for saving retirement assessment
+  const saveAssessmentMutation = useMutation({
+    mutationFn: (data: any) => apiRequest('/api/retirement-assessment', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+    onSuccess: () => {
+      setSaveStatus('saved');
+      queryClient.invalidateQueries({ queryKey: ['/api/retirement-assessment/latest'] });
+      setTimeout(() => setSaveStatus('idle'), 2000);
+    },
+    onError: () => {
+      setSaveStatus('error');
+      setTimeout(() => setSaveStatus('idle'), 2000);
+    },
+  });
 
   const form = useForm<RetirementFormData>({
     resolver: zodResolver(retirementFormSchema),
@@ -117,6 +146,72 @@ export default function RetirementScoreStepByStep() {
       expectedInflationRate: 3
     }
   });
+
+  // Load saved data when assessment is fetched
+  useEffect(() => {
+    if (latestAssessment?.assessmentData) {
+      const data = latestAssessment.assessmentData;
+      form.reset(data);
+      
+      // If results exist, set analysis
+      if (latestAssessment.results) {
+        setAnalysis({
+          score: latestAssessment.results.totalScore,
+          projectedSavings: latestAssessment.results.totalFutureValue,
+          additionalNeeded: Math.max(0, latestAssessment.results.requiredFromSavings - latestAssessment.results.totalFutureValue),
+          monthlyNeeded: Math.max(0, (latestAssessment.results.requiredFromSavings - latestAssessment.results.totalFutureValue) / (latestAssessment.results.yearsToRetirement * 12)),
+          recommendations: latestAssessment.results.recommendations,
+          strengths: [],
+          concerns: [],
+          calculationDetails: {
+            yearsToRetirement: latestAssessment.results.yearsToRetirement,
+            investmentGrowth: latestAssessment.results.investmentGrowth,
+            contributionGrowth: latestAssessment.results.contributionGrowth,
+            socialSecurityValue: latestAssessment.results.socialSecurityAnnualValue,
+            requiredAmount: latestAssessment.results.requiredAmount,
+            requiredFromSavings: latestAssessment.results.requiredFromSavings,
+            inflationAdjustedIncome: latestAssessment.results.inflationAdjustedIncome,
+            preparednessRatio: latestAssessment.results.totalFutureValue / latestAssessment.results.requiredFromSavings,
+            baseScore: latestAssessment.results.baseScore,
+            financialHealthScore: latestAssessment.results.financialHealthScore,
+            lifestyleScore: latestAssessment.results.lifestyleScore,
+            emergencyRatio: data.emergencyFund / (data.currentIncome * 0.25),
+            debtRatio: data.totalDebt / data.currentIncome,
+            savingsRate: (data.monthlyContribution * 12) / data.currentIncome
+          }
+        });
+      }
+    }
+  }, [latestAssessment, form]);
+
+  // Save assessment function
+  const saveAssessment = async (formData: RetirementFormData, results?: RetirementAnalysis) => {
+    setSaveStatus('saving');
+    try {
+      const assessmentData = {
+        assessmentData: formData,
+        results: results ? {
+          totalScore: results.score,
+          baseScore: results.calculationDetails.baseScore,
+          financialHealthScore: results.calculationDetails.financialHealthScore,
+          lifestyleScore: results.calculationDetails.lifestyleScore,
+          yearsToRetirement: results.calculationDetails.yearsToRetirement,
+          investmentGrowth: results.calculationDetails.investmentGrowth,
+          contributionGrowth: results.calculationDetails.contributionGrowth,
+          socialSecurityAnnualValue: results.calculationDetails.socialSecurityValue,
+          totalFutureValue: results.projectedSavings,
+          requiredAmount: results.calculationDetails.requiredAmount,
+          requiredFromSavings: results.calculationDetails.requiredFromSavings,
+          inflationAdjustedIncome: results.calculationDetails.inflationAdjustedIncome,
+          recommendations: results.recommendations
+        } : null
+      };
+      
+      await saveAssessmentMutation.mutateAsync(assessmentData);
+    } catch (error) {
+      console.error('Error saving assessment:', error);
+    }
+  };
 
   const stepTitles = [
     "1단계: 기본 정보",
@@ -409,9 +504,19 @@ export default function RetirementScoreStepByStep() {
     };
   };
 
-  const onSubmit = (data: RetirementFormData) => {
-    const result = calculateRetirementScore(data);
-    setAnalysis(result);
+  const onSubmit = async (data: RetirementFormData) => {
+    setIsLoading(true);
+    try {
+      const result = calculateRetirementScore(data);
+      setAnalysis(result);
+      
+      // Save assessment to database
+      await saveAssessment(data, result);
+    } catch (error) {
+      console.error('Error calculating or saving assessment:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const resetForm = () => {
@@ -746,6 +851,18 @@ export default function RetirementScoreStepByStep() {
           )}
         </Card>
 
+        {/* Save Status */}
+        {(saveStatus === 'saved' || saveStatus === 'saving') && (
+          <Alert className="border-green-200 bg-green-50">
+            <CheckCircleIcon className="h-4 w-4" />
+            <AlertDescription className="text-green-700">
+              {saveStatus === 'saving' 
+                ? '은퇴 진단 결과를 저장하고 있습니다...' 
+                : '은퇴 진단 결과가 안전하게 저장되었습니다!'}
+            </AlertDescription>
+          </Alert>
+        )}
+
         <div className="flex flex-col sm:flex-row gap-4">
           <Button onClick={resetForm} variant="outline" className="flex-1">
             <RefreshCwIcon className="h-4 w-4 mr-2" />
@@ -782,6 +899,36 @@ export default function RetirementScoreStepByStep() {
           </CardDescription>
         </CardHeader>
         
+        {/* Save/Load Controls */}
+        <div className="px-6 mb-4">
+          <div className="flex justify-between items-center gap-4">
+            <div className="flex items-center gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => saveAssessment(form.getValues())}
+                disabled={saveAssessmentMutation.isPending || saveStatus === 'saving'}
+                className="text-xs"
+              >
+                {saveStatus === 'saving' ? '저장 중...' : 
+                 saveStatus === 'saved' ? '저장됨!' : 
+                 saveStatus === 'error' ? '저장 실패' : '저장하기'}
+              </Button>
+              
+              {loadingAssessment && (
+                <span className="text-xs text-gray-500">데이터 로드 중...</span>
+              )}
+              
+              {latestAssessment && (
+                <span className="text-xs text-green-600">
+                  최근 저장: {new Date(latestAssessment.updatedAt).toLocaleString('ko-KR')}
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+
         {/* Progress Bar */}
         <div className="px-6 mb-6">
           <div className="flex justify-between items-center mb-2">
@@ -1374,11 +1521,20 @@ export default function RetirementScoreStepByStep() {
                   <Button 
                     type="button" 
                     onClick={() => onSubmit(form.getValues())}
-                    disabled={!validateCurrentStep()}
+                    disabled={!validateCurrentStep() || isLoading}
                     className="flex items-center gap-2 bg-green-600 hover:bg-green-700"
                   >
-                    <TargetIcon className="h-4 w-4" />
-                    종합 은퇴 점수 계산하기
+                    {isLoading ? (
+                      <>
+                        <RefreshCwIcon className="h-4 w-4 animate-spin" />
+                        계산 및 저장 중...
+                      </>
+                    ) : (
+                      <>
+                        <TargetIcon className="h-4 w-4" />
+                        종합 은퇴 점수 계산하기
+                      </>
+                    )}
                   </Button>
                 )}
               </div>

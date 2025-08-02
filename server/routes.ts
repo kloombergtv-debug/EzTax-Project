@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { DbStorage } from "./storage";
-import { insertTaxReturnSchema } from "@shared/schema";
+import { insertTaxReturnSchema, insertRetirementAssessmentSchema, retirementAssessmentDataSchema } from "@shared/schema";
 import { z } from "zod";
 import nodemailer from "nodemailer";
 import path from "path";
@@ -636,6 +636,140 @@ ${message || '상담 요청'}
     } catch (error) {
       console.error('Error getting user tax data:', error);
       res.status(500).json({ message: 'Failed to get tax data' });
+    }
+  });
+
+  // Retirement Assessment Routes
+  
+  // Get user's retirement assessments
+  app.get("/api/retirement-assessments", async (req, res) => {
+    try {
+      if (!req.user) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
+      
+      const userId = (req.user as any).id;
+      const assessments = await storage.getRetirementAssessmentsByUserId(userId);
+      res.json(assessments);
+    } catch (error) {
+      console.error("Error fetching retirement assessments:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Get latest retirement assessment
+  app.get("/api/retirement-assessment/latest", async (req, res) => {
+    try {
+      if (!req.user) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
+      
+      const userId = (req.user as any).id;
+      const assessment = await storage.getLatestRetirementAssessment(userId);
+      res.json(assessment || null);
+    } catch (error) {
+      console.error("Error fetching latest retirement assessment:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Create retirement assessment
+  app.post("/api/retirement-assessment", async (req, res) => {
+    try {
+      if (!req.user) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
+      
+      const userId = (req.user as any).id;
+      
+      const validationResult = insertRetirementAssessmentSchema.safeParse({
+        ...req.body,
+        userId
+      });
+      
+      if (!validationResult.success) {
+        return res.status(400).json({
+          message: "Validation error",
+          errors: validationResult.error.issues
+        });
+      }
+
+      const assessment = await storage.createRetirementAssessment(validationResult.data);
+      res.status(201).json(assessment);
+    } catch (error) {
+      console.error("Error creating retirement assessment:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Update retirement assessment
+  app.put("/api/retirement-assessment/:id", async (req, res) => {
+    try {
+      if (!req.user) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
+      
+      const userId = (req.user as any).id;
+      const assessmentId = parseInt(req.params.id);
+      
+      // Check if assessment belongs to user
+      const existingAssessment = await storage.getRetirementAssessment(assessmentId);
+      if (!existingAssessment || existingAssessment.userId !== userId) {
+        return res.status(403).json({ message: "Access denied" });
+      }
+
+      const updatedAssessment = await storage.updateRetirementAssessment(assessmentId, req.body);
+      res.json(updatedAssessment);
+    } catch (error) {
+      console.error("Error updating retirement assessment:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Admin API - Get all retirement assessments
+  app.get('/api/admin/retirement-assessments', async (req, res) => {
+    if (!req.isAuthenticated() || (req.user as any).username !== 'admin') {
+      return res.status(403).json({ message: 'Admin access required' });
+    }
+
+    try {
+      const assessments = await storage.getAllRetirementAssessments();
+      res.json(assessments);
+    } catch (error) {
+      console.error('Error getting retirement assessments:', error);
+      res.status(500).json({ message: 'Failed to get retirement assessments' });
+    }
+  });
+
+  // Admin API - Get user retirement assessments
+  app.get('/api/admin/users/:id/retirement-assessments', async (req, res) => {
+    if (!req.isAuthenticated() || (req.user as any).username !== 'admin') {
+      return res.status(403).json({ message: 'Admin access required' });
+    }
+
+    try {
+      const userId = parseInt(req.params.id);
+      const assessments = await storage.getRetirementAssessmentsByUserId(userId);
+      res.json(assessments);
+    } catch (error) {
+      console.error('Error getting user retirement assessments:', error);
+      res.status(500).json({ message: 'Failed to get user retirement assessments' });
+    }
+  });
+
+  // Admin API - Delete user retirement assessments
+  app.delete('/api/admin/users/:id/retirement-assessments', async (req, res) => {
+    if (!req.isAuthenticated() || (req.user as any).username !== 'admin') {
+      return res.status(403).json({ message: 'Admin access required' });
+    }
+
+    try {
+      const userId = parseInt(req.params.id);
+      await storage.deleteUserRetirementAssessments(userId);
+      res.json({ success: true, message: '사용자의 모든 은퇴 평가 데이터가 삭제되었습니다' });
+    } catch (error) {
+      console.error('Error deleting user retirement assessments:', error);
+      res.status(500).json({ message: 'Failed to delete retirement assessments' });
     }
   });
 
