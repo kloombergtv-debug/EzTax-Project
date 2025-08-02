@@ -36,12 +36,12 @@ const PersonalInfo: React.FC = () => {
 
   const emptyDefaults: PersonalInformation = {
     firstName: '',
-    middleInitial: '',
+    middleInitial: '', // 기본값 유지하되 UI에서 숨김
     lastName: '',
-    ssn: '',
+    ssn: '', // 기본값 유지하되 UI에서 숨김
     dateOfBirth: '',
     email: '',
-    phone: '',
+    phone: '', // 기본값 유지하되 UI에서 숨김
     address1: '',
     address2: '',
     city: '',
@@ -379,44 +379,7 @@ const PersonalInfo: React.FC = () => {
                 />
               </div>
 
-              {/* SSN과 Phone 필드는 숨김 처리 - 개인정보 보호를 위해 */}
-              <div style={{ display: 'none' }}>
-                <FormField
-                  control={form.control}
-                  name="ssn"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="phone"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="middleInitial"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-              </div>
+
             </CardContent>
           </Card>
 
@@ -585,20 +548,7 @@ const PersonalInfo: React.FC = () => {
                   />
                 </div>
 
-                {/* 배우자 SSN 숨김 처리 */}
-                <div style={{ display: 'none' }}>
-                  <FormField
-                    control={form.control}
-                    name="spouseInfo.ssn"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                </div>
+
                 
                 <FormField
                   control={form.control}
@@ -717,20 +667,7 @@ const PersonalInfo: React.FC = () => {
                         />
                       </div>
 
-                      {/* 부양가족 SSN 숨김 처리 */}
-                      <div style={{ display: 'none' }}>
-                        <FormField
-                          control={form.control}
-                          name={`dependents.${index}.ssn`}
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormControl>
-                                <Input {...field} />
-                              </FormControl>
-                            </FormItem>
-                          )}
-                        />
-                      </div>
+
                     </div>
                   ))}
                 </div>

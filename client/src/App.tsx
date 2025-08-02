@@ -44,7 +44,7 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/about" component={About} />
       <Route path="/auth" component={AuthPage} />
-      <ProtectedRoute path="/personal-info" component={PersonalInfoFixed} />
+      <ProtectedRoute path="/personal-info" component={PersonalInfo} />
       <ProtectedRoute path="/personal-info-old" component={PersonalInfo} />
       <ProtectedRoute path="/income" component={IncomePage} />
       <ProtectedRoute path="/qbi-details" component={QBIDetails} />
