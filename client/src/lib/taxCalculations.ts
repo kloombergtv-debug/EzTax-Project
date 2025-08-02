@@ -815,14 +815,11 @@ export function calculateTaxes(taxData: TaxData): CalculatedResults {
     result.credits = taxCredits.totalCredits || 0;
   }
   
-  // Calculate tax due
-  result.taxDue = Math.max(0, result.federalTax - result.credits);
+  // Calculate federal income tax due (after credits)
+  const federalIncomeTaxDue = Math.max(0, result.federalTax - result.credits);
   
-  // Add additional taxes
-  result.taxDue += additionalTax.otherTaxes;
-  
-  // Add self-employment tax
-  result.taxDue += selfEmploymentTax;
+  // Calculate total tax due (federal income tax + additional taxes + self-employment tax)
+  result.taxDue = federalIncomeTaxDue + additionalTax.otherTaxes + selfEmploymentTax;
   
   // 선납세금으로는 사용자가 입력한 estimatedTaxPayments만 사용
   const estimatedPayments = additionalTax.estimatedTaxPayments;

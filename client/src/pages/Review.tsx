@@ -163,9 +163,13 @@ const Review: React.FC = () => {
             <Field label="과세 소득(Taxable Income)" value={formatCurrency(calculatedResults.taxableIncome)} />
           </div>
           <div>
-            <Field label="연방세(Federal Tax)" value={formatCurrency(calculatedResults.federalTax)} />
+            <Field label="연방 소득세(Federal Income Tax)" value={formatCurrency(calculatedResults.federalTax)} />
             <Field label="세액공제(Tax Credits)" value={formatCurrency(calculatedResults.credits)} />
-            <Field label="납부할 세금(Tax Due)" value={formatCurrency(calculatedResults.taxDue)} />
+            <Field label="연방 소득세 차감 후" value={formatCurrency(Math.max(0, calculatedResults.federalTax - calculatedResults.credits))} />
+            {additionalTax.selfEmploymentTax > 0 && (
+              <Field label="자영업세(Self-Employment Tax)" value={formatCurrency(additionalTax.selfEmploymentTax)} />
+            )}
+            <Field label="총 납부할 세금(Total Tax Due)" value={formatCurrency(calculatedResults.taxDue)} />
             <Field label="기납부 세금 및 원천징수(Payments & Withholding)" value={formatCurrency(calculatedResults.payments)} />
             {calculatedResults.refundAmount > 0 ? (
               <>
