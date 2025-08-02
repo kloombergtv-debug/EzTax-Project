@@ -66,47 +66,30 @@ const PersonalInfo: React.FC = () => {
 
   const filingStatus = form.watch('filingStatus');
 
-  // 모든 useEffect를 조건부 렌더링 이전에 선언
+  // 데이터 로딩 완료 후 폼 초기화
   useEffect(() => {
-    // 수동 로드가 완료된 경우 자동 초기화 건너뛰기
-    if (manualLoadComplete) {
+    if (!isDataReady || manualLoadComplete) {
       return;
     }
     
-    // 우선순위: localStorage > TaxContext > 기본값
-    const restoreFormData = () => {
-      let dataToUse = emptyDefaults;
-      
-      // 1. localStorage에서 임시 저장된 데이터 확인
+    // 저장된 데이터가 있으면 폼에 반영
+    if (taxData.personalInfo) {
+      console.log("PersonalInfo - 서버 데이터로 폼 초기화:", taxData.personalInfo);
+      form.reset(taxData.personalInfo);
+    } else {
+      // localStorage에서 임시 데이터 확인
       try {
         const tempPersonalInfo = localStorage.getItem('tempPersonalInfo');
-        const tempFilingStatus = localStorage.getItem('tempFilingStatus');
-        
         if (tempPersonalInfo) {
           const parsedData = JSON.parse(tempPersonalInfo);
-          console.log("PersonalInfo - localStorage에서 데이터 복원:", parsedData);
-          dataToUse = { ...emptyDefaults, ...parsedData };
-        } else if (tempFilingStatus) {
-          const parsedStatus = JSON.parse(tempFilingStatus);
-          console.log("PersonalInfo - localStorage에서 Filing Status 복원:", parsedStatus);
-          dataToUse = { ...emptyDefaults, ...parsedStatus };
+          console.log("PersonalInfo - localStorage 데이터로 폼 초기화:", parsedData);
+          form.reset({ ...emptyDefaults, ...parsedData });
         }
       } catch (error) {
         console.error("localStorage 데이터 복원 오류:", error);
       }
-      
-      // 2. TaxContext 데이터가 있으면 우선 적용
-      if (taxData.personalInfo) {
-        console.log("PersonalInfo - TaxContext 데이터로 폼 초기화:", taxData.personalInfo);
-        dataToUse = { ...dataToUse, ...taxData.personalInfo };
-      }
-      
-      console.log("PersonalInfo - 최종 폼 데이터:", dataToUse);
-      form.reset(dataToUse);
-    };
-    
-    restoreFormData();
-  }, [taxData.personalInfo, form, manualLoadComplete]);
+    }
+  }, [isDataReady, taxData.personalInfo, form, manualLoadComplete]);
 
   useEffect(() => {
     const shouldShowSpouse = filingStatus === 'married_joint' || filingStatus === 'married_separate';
