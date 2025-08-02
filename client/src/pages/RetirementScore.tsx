@@ -107,17 +107,21 @@ export default function RetirementScoreStepByStep() {
 
   // Mutation for saving retirement assessment
   const saveAssessmentMutation = useMutation({
-    mutationFn: (data: any) => apiRequest({
-      url: '/api/retirement-assessment',
-      method: 'POST',
-      body: data,
-    }),
+    mutationFn: async (data: any) => {
+      const response = await apiRequest({
+        url: '/api/retirement-assessment',
+        method: 'POST',
+        body: data,
+      });
+      return response.json();
+    },
     onSuccess: () => {
       setSaveStatus('saved');
       queryClient.invalidateQueries({ queryKey: ['/api/retirement-assessment/latest'] });
       setTimeout(() => setSaveStatus('idle'), 2000);
     },
-    onError: () => {
+    onError: (error) => {
+      console.error('Error saving assessment:', error);
       setSaveStatus('error');
       setTimeout(() => setSaveStatus('idle'), 2000);
     },
