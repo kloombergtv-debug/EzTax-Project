@@ -219,18 +219,18 @@ export default function About() {
             <div className="flex-shrink-0 text-center lg:text-left">
               <img 
                 src={expertPhotoPath}
-                alt="지대현 EA/RIA"
+                alt="지대현 EA"
                 className="w-32 h-32 rounded-full object-cover border-4 border-blue-200 mx-auto lg:mx-0"
               />
               <h3 className="text-2xl font-bold text-blue-800 mt-4 mb-2">
-                지대현 EA / RIA
+                지대현 EA
               </h3>
               <p className="text-blue-700 font-medium mb-4">
                 EzTax 창립자 & CEO | 세무·투자 전문가
               </p>
               <div className="flex flex-wrap gap-2 justify-center lg:justify-start">
                 <Badge variant="outline" className="border-blue-300 text-blue-700">IRS EA</Badge>
-                <Badge variant="outline" className="border-blue-300 text-blue-700">SEC RIA</Badge>
+
                 <Badge variant="outline" className="border-blue-300 text-blue-700">저자</Badge>
               </div>
             </div>
