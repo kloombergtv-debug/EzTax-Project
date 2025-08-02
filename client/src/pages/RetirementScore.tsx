@@ -54,7 +54,7 @@ const retirementFormSchema = z.object({
   expectedInflationRate: z.number().min(0).max(10).default(3)
 });
 
-type RetirementFormData = z.infer<typeof retirementFormSchema>;
+type RetirementFormData = z.TypeOf<typeof retirementFormSchema>;
 
 interface RetirementAnalysis {
   score: number;
@@ -103,14 +103,14 @@ export default function RetirementScoreStepByStep() {
   // Query for latest retirement assessment
   const { data: latestAssessment, isLoading: loadingAssessment } = useQuery({
     queryKey: ['/api/retirement-assessment/latest'],
-    queryFn: () => apiRequest('/api/retirement-assessment/latest'),
   });
 
   // Mutation for saving retirement assessment
   const saveAssessmentMutation = useMutation({
-    mutationFn: (data: any) => apiRequest('/api/retirement-assessment', {
+    mutationFn: (data: any) => apiRequest({
+      url: '/api/retirement-assessment',
       method: 'POST',
-      body: JSON.stringify(data),
+      body: data,
     }),
     onSuccess: () => {
       setSaveStatus('saved');
@@ -920,7 +920,7 @@ export default function RetirementScoreStepByStep() {
                 <span className="text-xs text-gray-500">데이터 로드 중...</span>
               )}
               
-              {latestAssessment && (
+              {latestAssessment?.updatedAt && (
                 <span className="text-xs text-green-600">
                   최근 저장: {new Date(latestAssessment.updatedAt).toLocaleString('ko-KR')}
                 </span>
