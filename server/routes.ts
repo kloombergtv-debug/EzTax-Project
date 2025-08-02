@@ -682,12 +682,16 @@ ${message || '상담 요청'}
       
       const userId = (req.user as any).id;
       
+      console.log("Retirement assessment request body:", req.body);
+      console.log("Adding userId:", userId);
+      
       const validationResult = insertRetirementAssessmentSchema.safeParse({
         ...req.body,
         userId
       });
       
       if (!validationResult.success) {
+        console.error("Retirement assessment validation error:", validationResult.error.issues);
         return res.status(400).json({
           message: "Validation error",
           errors: validationResult.error.issues
