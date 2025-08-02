@@ -7,6 +7,10 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
 import { Progress } from "@/components/ui/progress";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -24,7 +28,9 @@ import {
   RefreshCwIcon,
   ChevronRightIcon,
   ChevronLeftIcon,
-  Download
+  Download,
+  PhoneIcon,
+  MailIcon
 } from "lucide-react";
 
 const retirementFormSchema = z.object({
@@ -85,6 +91,7 @@ interface RetirementAnalysis {
 
 export default function RetirementScoreStepByStep() {
   const [, navigate] = useLocation();
+  const { toast } = useToast();
   const [analysis, setAnalysis] = useState<RetirementAnalysis | null>(null);
   const [currentStep, setCurrentStep] = useState(0);
   const [completedSteps, setCompletedSteps] = useState<boolean[]>([false, false, false, false]);
@@ -92,6 +99,16 @@ export default function RetirementScoreStepByStep() {
   const [showCalculationDetails, setShowCalculationDetails] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
+  
+  // Consultation dialog state
+  const [isConsultationDialogOpen, setIsConsultationDialogOpen] = useState(false);
+  const [isSubmittingConsultation, setIsSubmittingConsultation] = useState(false);
+  const [consultationFormData, setConsultationFormData] = useState({
+    name: '',
+    phone: '',
+    email: '',
+    message: ''
+  });
   
   // Social Security calculator state
   const [ssStartAge, setSsStartAge] = useState(25);
@@ -255,6 +272,69 @@ export default function RetirementScoreStepByStep() {
       alert('저장된 데이터를 성공적으로 불러왔습니다!');
     } else {
       alert('불러올 데이터가 없습니다.');
+    }
+  };
+
+  // Consultation handlers
+  const handleConsultationInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setConsultationFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmitConsultation = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!consultationFormData.name || !consultationFormData.phone || !consultationFormData.email) {
+      toast({
+        title: "필수 정보 누락",
+        description: "이름, 전화번호, 이메일을 모두 입력해주세요.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsSubmittingConsultation(true);
+    
+    try {
+      const response = await fetch('/api/send-consultation-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...consultationFormData,
+          message: `은퇴 진단 상담 요청\n\n진단 점수: ${analysis?.score || 'N/A'}점\n\n${consultationFormData.message}`
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send consultation request');
+      }
+
+      toast({
+        title: "상담 요청 완료",
+        description: "전문가 상담 요청이 성공적으로 전송되었습니다. 빠른 시일 내에 연락드리겠습니다.",
+      });
+
+      setIsConsultationDialogOpen(false);
+      setConsultationFormData({
+        name: '',
+        phone: '',
+        email: '',
+        message: ''
+      });
+    } catch (error) {
+      console.error('Error sending consultation request:', error);
+      toast({
+        title: "전송 실패",
+        description: "상담 요청 전송에 실패했습니다. 다시 시도해주세요.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmittingConsultation(false);
     }
   };
 
@@ -907,6 +987,118 @@ export default function RetirementScoreStepByStep() {
             </AlertDescription>
           </Alert>
         )}
+
+        {/* Expert Consultation Card */}
+        <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-blue-800">
+              <PhoneIcon className="h-5 w-5" />
+              전문가 상담
+            </CardTitle>
+            <CardDescription className="text-blue-700">
+              은퇴 진단 결과를 바탕으로 맞춤형 재정 설계를 받아보세요
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-col sm:flex-row items-center gap-4">
+              <div className="flex-1 text-center sm:text-left">
+                <div className="space-y-2 text-sm text-blue-700">
+                  <div className="flex items-center justify-center sm:justify-start gap-2">
+                    <PhoneIcon className="h-4 w-4" />
+                    <span>전화 상담 가능</span>
+                  </div>
+                  <div className="flex items-center justify-center sm:justify-start gap-2">
+                    <MailIcon className="h-4 w-4" />
+                    <span>이메일 상담 가능</span>
+                  </div>
+                </div>
+              </div>
+              <Dialog open={isConsultationDialogOpen} onOpenChange={setIsConsultationDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                    상담 예약하기
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>전문가 상담 요청</DialogTitle>
+                    <DialogDescription>
+                      은퇴 진단 결과를 바탕으로 전문가 상담을 요청하시겠습니까? 빠른 시일 내에 연락드리겠습니다.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <form onSubmit={handleSubmitConsultation} className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="name">이름 *</Label>
+                      <Input
+                        id="name"
+                        name="name"
+                        value={consultationFormData.name}
+                        onChange={handleConsultationInputChange}
+                        placeholder="홍길동"
+                        required
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="phone">전화번호 *</Label>
+                      <Input
+                        id="phone"
+                        name="phone"
+                        value={consultationFormData.phone}
+                        onChange={handleConsultationInputChange}
+                        placeholder="010-1234-5678"
+                        required
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="email">이메일 *</Label>
+                      <Input
+                        id="email"
+                        name="email"
+                        type="email"
+                        value={consultationFormData.email}
+                        onChange={handleConsultationInputChange}
+                        placeholder="example@email.com"
+                        required
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="message">상담 내용 (선택사항)</Label>
+                      <Textarea
+                        id="message"
+                        name="message"
+                        value={consultationFormData.message}
+                        onChange={handleConsultationInputChange}
+                        placeholder="상담받고 싶은 내용을 간단히 적어주세요"
+                        rows={3}
+                      />
+                    </div>
+                    
+                    <div className="flex justify-end space-x-2 pt-4">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => setIsConsultationDialogOpen(false)}
+                        disabled={isSubmittingConsultation}
+                      >
+                        취소
+                      </Button>
+                      <Button
+                        type="submit"
+                        disabled={isSubmittingConsultation}
+                        className="bg-blue-600 hover:bg-blue-700"
+                      >
+                        {isSubmittingConsultation ? '전송 중...' : '상담 요청하기'}
+                      </Button>
+                    </div>
+                  </form>
+                </DialogContent>
+              </Dialog>
+            </div>
+          </CardContent>
+        </Card>
 
         <div className="flex flex-col sm:flex-row gap-4">
           <Button onClick={resetForm} variant="outline" className="flex-1">
