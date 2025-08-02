@@ -23,7 +23,8 @@ import {
   ArrowLeftIcon,
   RefreshCwIcon,
   ChevronRightIcon,
-  ChevronLeftIcon
+  ChevronLeftIcon,
+  Download
 } from "lucide-react";
 
 const retirementFormSchema = z.object({
@@ -214,6 +215,46 @@ export default function RetirementScoreStepByStep() {
       await saveAssessmentMutation.mutateAsync(assessmentData);
     } catch (error) {
       console.error('Error saving assessment:', error);
+    }
+  };
+
+  // Load latest data function
+  const loadLatestData = () => {
+    if (latestAssessment && latestAssessment.assessmentData) {
+      const data = latestAssessment.assessmentData;
+      
+      // Reset form with loaded data
+      form.reset(data);
+      
+      // Set analysis if results exist
+      if (latestAssessment.results) {
+        setAnalysis({
+          score: latestAssessment.results.totalScore,
+          projectedSavings: latestAssessment.results.totalFutureValue,
+          recommendations: latestAssessment.results.recommendations,
+          calculationDetails: {
+            baseScore: latestAssessment.results.baseScore,
+            financialHealthScore: latestAssessment.results.financialHealthScore,
+            lifestyleScore: latestAssessment.results.lifestyleScore,
+            yearsToRetirement: latestAssessment.results.yearsToRetirement,
+            investmentGrowth: latestAssessment.results.investmentGrowth,
+            contributionGrowth: latestAssessment.results.contributionGrowth,
+            socialSecurityValue: latestAssessment.results.socialSecurityAnnualValue,
+            requiredAmount: latestAssessment.results.requiredAmount,
+            requiredFromSavings: latestAssessment.results.requiredFromSavings,
+            inflationAdjustedIncome: latestAssessment.results.inflationAdjustedIncome,
+            preparednessRatio: latestAssessment.results.totalFutureValue / latestAssessment.results.requiredAmount,
+            emergencyRatio: data.emergencyFund / (data.currentIncome * 6 / 12),
+            debtRatio: data.totalDebt / data.currentIncome,
+            savingsRate: data.monthlyContribution * 12 / data.currentIncome
+          }
+        });
+      }
+      
+      // Show success message
+      alert('저장된 데이터를 성공적으로 불러왔습니다!');
+    } else {
+      alert('불러올 데이터가 없습니다.');
     }
   };
 
@@ -907,6 +948,16 @@ export default function RetirementScoreStepByStep() {
         <div className="px-6 mb-4">
           <div className="flex justify-between items-center gap-4">
             <div className="flex items-center gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => loadLatestData()}
+                className="text-xs"
+              >
+                <Download className="h-3 w-3 mr-1" />
+                데이터 불러오기
+              </Button>
               <Button
                 type="button"
                 variant="outline"

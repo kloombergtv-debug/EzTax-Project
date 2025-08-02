@@ -687,7 +687,9 @@ ${message || '상담 요청'}
       
       const validationResult = insertRetirementAssessmentSchema.safeParse({
         ...req.body,
-        userId
+        userId,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
       });
       
       if (!validationResult.success) {
