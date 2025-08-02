@@ -213,27 +213,11 @@ const PersonalInfo: React.FC = () => {
             dependents: personalInfo.dependents || []
           });
 
-          // 부양가족 필드 배열 업데이트
-          if (personalInfo.dependents && personalInfo.dependents.length > 0) {
-            // 기존 필드 모두 제거
-            while (dependentFields.length > 0) {
-              remove(0);
-            }
-            
-            // 새 데이터로 필드 추가
-            personalInfo.dependents.forEach((dependent: any) => {
-              append({
-                firstName: dependent.firstName || '',
-                lastName: dependent.lastName || '',
-                ssn: dependent.ssn || '',
-                relationship: dependent.relationship || 'child',
-                dateOfBirth: dependent.dateOfBirth || '',
-                isDisabled: dependent.isDisabled || false,
-                isNonresidentAlien: dependent.isNonresidentAlien || false,
-                isQualifyingChild: dependent.isQualifyingChild || true
-              });
-            });
-          }
+          // TaxContext 업데이트를 통한 데이터 반영
+          await updateTaxData({ personalInfo: personalInfo });
+          
+          // 강제로 페이지 새로고침하여 데이터 반영
+          window.location.reload();
 
           // Filing Status에 따른 배우자 정보 표시 설정
           const maritalStatuses = ['married_joint', 'married_separate'];
