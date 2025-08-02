@@ -246,7 +246,6 @@ export default function About() {
                     <li>🏢 LG전자 – IR팀장</li>
                     <li>🏭 한화그룹 – 전략기획 및 재무담당 임원</li>
                     <li>🧾 IRS 공인 EA (Enrolled Agent)</li>
-                    <li>📊 SEC 등록 투자자문인 (RIA)</li>
                   </ul>
                   
                   <h4 className="font-semibold text-blue-800 mb-3 mt-4">🎓 학력</h4>
