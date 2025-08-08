@@ -322,9 +322,16 @@ const PersonalInfo: React.FC = () => {
                   name="dateOfBirth"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>생년월일 (Date of Birth)</FormLabel>
+                      <FormLabel>출생연도 (Birth Year)</FormLabel>
                       <FormControl>
-                        <Input type="date" {...field} />
+                        <Input 
+                          type="number" 
+                          placeholder="예: 1990" 
+                          min="1900" 
+                          max={new Date().getFullYear()}
+                          {...field} 
+                          onChange={(e) => field.onChange(e.target.value)}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -480,9 +487,16 @@ const PersonalInfo: React.FC = () => {
                   name="spouseInfo.dateOfBirth"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>배우자 생년월일 (Spouse Date of Birth)</FormLabel>
+                      <FormLabel>배우자 출생연도 (Spouse Birth Year)</FormLabel>
                       <FormControl>
-                        <Input type="date" {...field} />
+                        <Input 
+                          type="number" 
+                          placeholder="예: 1985" 
+                          min="1900" 
+                          max={new Date().getFullYear()}
+                          {...field} 
+                          onChange={(e) => field.onChange(e.target.value)}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -582,9 +596,16 @@ const PersonalInfo: React.FC = () => {
                           name={`dependents.${index}.dateOfBirth`}
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>생년월일</FormLabel>
+                              <FormLabel>출생연도</FormLabel>
                               <FormControl>
-                                <Input type="date" {...field} />
+                                <Input 
+                                  type="number" 
+                                  placeholder="예: 2010" 
+                                  min="1900" 
+                                  max={new Date().getFullYear()}
+                                  {...field} 
+                                  onChange={(e) => field.onChange(e.target.value)}
+                                />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
