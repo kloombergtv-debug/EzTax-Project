@@ -66,6 +66,34 @@ const PersonalInfo: React.FC = () => {
 
   const filingStatus = form.watch('filingStatus');
 
+  // 날짜를 연도로 변환하는 헬퍼 함수
+  const convertDateToYear = (dateString: string): string => {
+    if (!dateString) return '';
+    // 이미 4자리 연도인 경우 그대로 반환
+    if (/^\d{4}$/.test(dateString)) return dateString;
+    // YYYY-MM-DD 형식인 경우 연도만 추출
+    if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+      return dateString.split('-')[0];
+    }
+    return dateString;
+  };
+
+  // 개인정보 데이터를 연도 형식으로 변환
+  const convertPersonalInfoDates = (personalInfo: PersonalInformation): PersonalInformation => {
+    return {
+      ...personalInfo,
+      dateOfBirth: convertDateToYear(personalInfo.dateOfBirth),
+      spouseInfo: personalInfo.spouseInfo ? {
+        ...personalInfo.spouseInfo,
+        dateOfBirth: convertDateToYear(personalInfo.spouseInfo.dateOfBirth)
+      } : undefined,
+      dependents: personalInfo.dependents?.map(dependent => ({
+        ...dependent,
+        dateOfBirth: convertDateToYear(dependent.dateOfBirth)
+      })) || []
+    };
+  };
+
   // 데이터 로딩 완료 후 폼 초기화
   useEffect(() => {
     if (!isDataReady || manualLoadComplete) {
@@ -75,7 +103,8 @@ const PersonalInfo: React.FC = () => {
     // 저장된 데이터가 있으면 폼에 반영
     if (taxData.personalInfo) {
       console.log("PersonalInfo - 서버 데이터로 폼 초기화:", taxData.personalInfo);
-      form.reset(taxData.personalInfo);
+      const convertedData = convertPersonalInfoDates(taxData.personalInfo);
+      form.reset(convertedData);
     } else {
       // localStorage에서 임시 데이터 확인
       try {
@@ -83,7 +112,8 @@ const PersonalInfo: React.FC = () => {
         if (tempPersonalInfo) {
           const parsedData = JSON.parse(tempPersonalInfo);
           console.log("PersonalInfo - localStorage 데이터로 폼 초기화:", parsedData);
-          form.reset({ ...emptyDefaults, ...parsedData });
+          const convertedData = convertPersonalInfoDates({ ...emptyDefaults, ...parsedData });
+          form.reset(convertedData);
         }
       } catch (error) {
         console.error("localStorage 데이터 복원 오류:", error);
@@ -185,8 +215,8 @@ const PersonalInfo: React.FC = () => {
           const personalInfo = serverData.personalInfo;
           console.log('불러온 개인정보 데이터:', personalInfo);
           
-          // 폼 완전 재설정
-          form.reset({
+          // 폼 완전 재설정 (날짜를 연도로 변환)
+          const convertedPersonalInfo = convertPersonalInfoDates({
             firstName: personalInfo.firstName || '',
             middleInitial: personalInfo.middleInitial || '',
             lastName: personalInfo.lastName || '',
@@ -212,6 +242,7 @@ const PersonalInfo: React.FC = () => {
             },
             dependents: personalInfo.dependents || []
           });
+          form.reset(convertedPersonalInfo);
 
           // TaxContext 업데이트를 통한 데이터 반영
           await updateTaxData({ personalInfo: personalInfo });
