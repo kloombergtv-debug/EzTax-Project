@@ -292,23 +292,9 @@ const PersonalInfo: React.FC = () => {
                   name="firstName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>이름 (First Name)</FormLabel>
+                      <FormLabel>이름 (Name)</FormLabel>
                       <FormControl>
                         <Input placeholder="이름을 입력하세요" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="lastName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>성 (Last Name)</FormLabel>
-                      <FormControl>
-                        <Input placeholder="성을 입력하세요" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -456,23 +442,9 @@ const PersonalInfo: React.FC = () => {
                     name="spouseInfo.firstName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>배우자 이름 (Spouse First Name)</FormLabel>
+                        <FormLabel>배우자 이름 (Spouse Name)</FormLabel>
                         <FormControl>
                           <Input placeholder="배우자 이름" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  
-                  <FormField
-                    control={form.control}
-                    name="spouseInfo.lastName"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>배우자 성 (Spouse Last Name)</FormLabel>
-                        <FormControl>
-                          <Input placeholder="배우자 성" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -537,7 +509,7 @@ const PersonalInfo: React.FC = () => {
                         </Button>
                       </div>
 
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <FormField
                           control={form.control}
                           name={`dependents.${index}.firstName`}
@@ -546,20 +518,6 @@ const PersonalInfo: React.FC = () => {
                               <FormLabel>이름</FormLabel>
                               <FormControl>
                                 <Input placeholder="부양가족 이름" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-
-                        <FormField
-                          control={form.control}
-                          name={`dependents.${index}.lastName`}
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>성</FormLabel>
-                              <FormControl>
-                                <Input placeholder="부양가족 성" {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
