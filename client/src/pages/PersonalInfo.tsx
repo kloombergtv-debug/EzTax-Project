@@ -263,8 +263,8 @@ const PersonalInfo: React.FC = () => {
       <div className="mb-6">
         <div className="flex justify-between items-center mb-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">개인정보 (Personal Information)</h1>
-            <p className="text-gray-600">세금 신고서 작성을 위해 개인정보를 입력해주세요.</p>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">기본정보 (Basic Information)</h1>
+            <p className="text-gray-600">세금 신고서 작성을 위해 기본정보를 입력해주세요.</p>
           </div>
           <Button 
             type="button" 
