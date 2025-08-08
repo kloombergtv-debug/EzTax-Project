@@ -300,9 +300,7 @@ const PersonalInfo: React.FC = () => {
                     </FormItem>
                   )}
                 />
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                
                 <FormField
                   control={form.control}
                   name="dateOfBirth"
@@ -318,20 +316,6 @@ const PersonalInfo: React.FC = () => {
                           {...field} 
                           onChange={(e) => field.onChange(e.target.value)}
                         />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>이메일 (Email)</FormLabel>
-                      <FormControl>
-                        <Input type="email" placeholder="이메일 주소" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
