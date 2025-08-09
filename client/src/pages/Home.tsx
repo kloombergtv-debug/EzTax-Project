@@ -118,6 +118,37 @@ const Home: React.FC = () => {
         </div>
       </section>
 
+      {/* 사용법 안내 동영상 섹션 */}
+      <section className="mb-12">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-2xl font-heading text-primary-dark text-center">사용법 안내 동영상</CardTitle>
+            <CardDescription className="text-center">
+              EzTax 사용법을 동영상으로 확인하세요
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex justify-center">
+              <div className="w-full max-w-4xl">
+                <div className="relative pb-[56.25%] h-0 overflow-hidden rounded-lg shadow-lg">
+                  <iframe
+                    className="absolute top-0 left-0 w-full h-full"
+                    src="https://www.youtube.com/embed/YOUR_VIDEO_ID"
+                    title="EzTax 사용법 안내"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                  ></iframe>
+                </div>
+                <p className="text-center text-sm text-gray-600 mt-4">
+                  ※ 위 동영상은 예시입니다. 실제 YouTube 동영상 URL로 교체해주세요.
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </section>
+
       <section className="mb-12">
         <Card>
           <CardHeader>
