@@ -122,9 +122,6 @@ const Home: React.FC = () => {
         <Card>
           <CardHeader>
             <CardTitle className="text-2xl font-heading text-primary-dark">세금 시뮬레이션의 6단계</CardTitle>
-            <CardDescription>
-              30분 만에 2025년 세금 신고를 완료하세요.
-            </CardDescription>
           </CardHeader>
           <CardContent>
             <p className="mb-4">
