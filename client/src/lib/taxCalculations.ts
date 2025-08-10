@@ -79,9 +79,81 @@ const STANDARD_DEDUCTION_2023 = {
   qualifying_widow: 27700
 };
 
+// 2024/2025 Capital Gains Tax Rates (장기 자본 이득 - 1년 초과 보유)
+const CAPITAL_GAINS_RATES_2024 = {
+  single: [
+    { rate: 0.00, upTo: 47025 },    // 0% for income up to $47,025
+    { rate: 0.15, upTo: 518900 },   // 15% for income $47,026 to $518,900
+    { rate: 0.20, upTo: Infinity }  // 20% for income over $518,900
+  ],
+  married_joint: [
+    { rate: 0.00, upTo: 94050 },    // 0% for income up to $94,050
+    { rate: 0.15, upTo: 583750 },   // 15% for income $94,051 to $583,750
+    { rate: 0.20, upTo: Infinity }  // 20% for income over $583,750
+  ],
+  married_separate: [
+    { rate: 0.00, upTo: 47025 },    // 0% for income up to $47,025
+    { rate: 0.15, upTo: 291875 },   // 15% for income $47,026 to $291,875
+    { rate: 0.20, upTo: Infinity }  // 20% for income over $291,875
+  ],
+  head_of_household: [
+    { rate: 0.00, upTo: 63000 },    // 0% for income up to $63,000
+    { rate: 0.15, upTo: 551350 },   // 15% for income $63,001 to $551,350
+    { rate: 0.20, upTo: Infinity }  // 20% for income over $551,350
+  ],
+  qualifying_widow: [
+    { rate: 0.00, upTo: 94050 },    // 0% for income up to $94,050
+    { rate: 0.15, upTo: 583750 },   // 15% for income $94,051 to $583,750
+    { rate: 0.20, upTo: Infinity }  // 20% for income over $583,750
+  ]
+};
+
 // Calculate standard deduction based on filing status
 export function calculateStandardDeduction(filingStatus: FilingStatus): number {
   return STANDARD_DEDUCTION_2023[filingStatus] || STANDARD_DEDUCTION_2023.single;
+}
+
+// Calculate long-term capital gains tax based on total taxable income
+export function calculateCapitalGainsTax(
+  capitalGains: number,
+  totalTaxableIncome: number,
+  filingStatus: FilingStatus
+): { taxOwed: number, effectiveRate: number } {
+  if (capitalGains <= 0) {
+    return { taxOwed: 0, effectiveRate: 0 };
+  }
+
+  const brackets = CAPITAL_GAINS_RATES_2024[filingStatus] || CAPITAL_GAINS_RATES_2024.single;
+  let taxOwed = 0;
+  let remainingGains = capitalGains;
+  
+  // 자본 이득세는 총 과세 소득(일반 소득 + 자본 이득)을 기준으로 구간을 결정
+  let currentIncomeLevel = totalTaxableIncome - capitalGains; // 일반 소득 부분
+  
+  for (const bracket of brackets) {
+    if (remainingGains <= 0) break;
+    
+    // 현재 구간에서 적용 가능한 소득 범위
+    const bracketStart = Math.max(0, currentIncomeLevel);
+    const bracketEnd = bracket.upTo;
+    const availableInBracket = Math.max(0, bracketEnd - bracketStart);
+    
+    if (availableInBracket > 0) {
+      // 이 구간에서 과세될 자본 이득 금액
+      const gainsInBracket = Math.min(remainingGains, availableInBracket);
+      
+      // 세금 계산
+      taxOwed += gainsInBracket * bracket.rate;
+      remainingGains -= gainsInBracket;
+      currentIncomeLevel += gainsInBracket;
+    } else {
+      currentIncomeLevel = bracketEnd;
+    }
+  }
+  
+  const effectiveRate = capitalGains > 0 ? (taxOwed / capitalGains) : 0;
+  
+  return { taxOwed, effectiveRate };
 }
 
 // Child Tax Credit constants (2024 tax year)

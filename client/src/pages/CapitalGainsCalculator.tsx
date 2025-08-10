@@ -168,9 +168,72 @@ export default function CapitalGainsCalculator() {
     .filter(t => !t.isLongTerm && t.profit < 0)
     .reduce((sum, t) => sum + Math.abs(t.profit), 0);
     
-  // 추정 세금 계산 (예상 세율: 장기 15%, 단기 24%)
-  const estimatedLongTermTax = longTermGains * 0.15;
-  const estimatedShortTermTax = shortTermGains * 0.24;
+  // 실제 소득 구간에 따른 자본 이득세 계산
+  const calculateLongTermCapitalGainsTax = (gains: number) => {
+    if (gains <= 0) return 0;
+    
+    // 현재 사용자의 소득 정보 가져오기
+    const currentIncome = taxData.income?.totalIncome || 0;
+    const filingStatus = taxData.personalInfo?.filingStatus || 'single';
+    const totalTaxableIncome = currentIncome + gains;
+    
+    // 2024/2025년 장기 자본 이득세율 구간 (소득 구간별)
+    const capitalGainsRates = {
+      single: [
+        { rate: 0.00, upTo: 47025 },    // 0%
+        { rate: 0.15, upTo: 518900 },   // 15%
+        { rate: 0.20, upTo: Infinity }  // 20%
+      ],
+      married_joint: [
+        { rate: 0.00, upTo: 94050 },    // 0%
+        { rate: 0.15, upTo: 583750 },   // 15%
+        { rate: 0.20, upTo: Infinity }  // 20%
+      ],
+      married_separate: [
+        { rate: 0.00, upTo: 47025 },    // 0%
+        { rate: 0.15, upTo: 291875 },   // 15%
+        { rate: 0.20, upTo: Infinity }  // 20%
+      ],
+      head_of_household: [
+        { rate: 0.00, upTo: 63000 },    // 0%
+        { rate: 0.15, upTo: 551350 },   // 15%
+        { rate: 0.20, upTo: Infinity }  // 20%
+      ]
+    };
+    
+    const brackets = capitalGainsRates[filingStatus as keyof typeof capitalGainsRates] || capitalGainsRates.single;
+    let taxOwed = 0;
+    let remainingGains = gains;
+    let currentIncomeLevel = currentIncome; // 일반 소득 부분
+    
+    for (const bracket of brackets) {
+      if (remainingGains <= 0) break;
+      
+      const availableInBracket = Math.max(0, bracket.upTo - currentIncomeLevel);
+      
+      if (availableInBracket > 0) {
+        const gainsInBracket = Math.min(remainingGains, availableInBracket);
+        taxOwed += gainsInBracket * bracket.rate;
+        remainingGains -= gainsInBracket;
+        currentIncomeLevel += gainsInBracket;
+      } else {
+        currentIncomeLevel = bracket.upTo;
+      }
+    }
+    
+    console.log(`장기 자본 이득세 계산: 
+      소득: $${currentIncome.toLocaleString()}, 
+      자본이득: $${gains.toLocaleString()}, 
+      총소득: $${totalTaxableIncome.toLocaleString()}, 
+      납부세액: $${taxOwed.toLocaleString()}, 
+      실효세율: ${((taxOwed/gains)*100).toFixed(1)}%`);
+    
+    return taxOwed;
+  };
+  
+  // 장기/단기 자본 이득세 계산
+  const estimatedLongTermTax = calculateLongTermCapitalGainsTax(longTermGains);
+  const estimatedShortTermTax = shortTermGains * 0.24; // 단기는 일반 소득세율 적용
   const totalEstimatedTax = estimatedLongTermTax + estimatedShortTermTax;
   
   // 입력 필드 변경 처리
@@ -592,6 +655,39 @@ export default function CapitalGainsCalculator() {
           <div className="bg-gray-50 p-6 rounded-md">
             <h3 className="text-xl font-bold mb-4">자본 이득 및 예상 세금 요약</h3>
             
+            {/* 소득 구간별 세율 안내 */}
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+              <h4 className="font-medium text-blue-800 mb-2">📊 2024/2025년 장기 자본 이득세율 구간</h4>
+              <div className="text-sm text-blue-700 space-y-1">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <span className="font-medium">0% 세율:</span>
+                    <div className="text-xs">
+                      • 독신: $47,025 이하<br/>
+                      • 부부 합산: $94,050 이하
+                    </div>
+                  </div>
+                  <div>
+                    <span className="font-medium">15% 세율:</span>
+                    <div className="text-xs">
+                      • 독신: $47,026 - $518,900<br/>
+                      • 부부 합산: $94,051 - $583,750
+                    </div>
+                  </div>
+                  <div>
+                    <span className="font-medium">20% 세율:</span>
+                    <div className="text-xs">
+                      • 독신: $518,901 이상<br/>
+                      • 부부 합산: $583,751 이상
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-2 text-xs text-blue-600 italic">
+                  * 세율은 총 과세 소득(일반 소득 + 자본 이득)을 기준으로 적용됩니다.
+                </div>
+              </div>
+            </div>
+            
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
               {/* 장기 투자 요약 */}
               <div className="bg-white p-4 rounded-lg border border-gray-200">
@@ -609,8 +705,36 @@ export default function CapitalGainsCalculator() {
                     <span className="font-medium text-red-600">${longTermLosses.toLocaleString()}</span>
                   </div>
                   <div className="flex justify-between items-center text-sm">
-                    <span className="text-gray-600">예상 세율:</span>
-                    <span className="font-medium">15%</span>
+                    <span className="text-gray-600">실제 세율:</span>
+                    <span className="font-medium text-blue-600">
+                      {longTermGains > 0 ? 
+                        `${((estimatedLongTermTax / longTermGains) * 100).toFixed(1)}%` : 
+                        '0%'
+                      }
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center text-sm">
+                    <span className="text-gray-600">소득 구간:</span>
+                    <span className="font-medium text-blue-600">
+                      {(() => {
+                        const currentIncome = taxData.income?.totalIncome || 0;
+                        const filingStatus = taxData.personalInfo?.filingStatus || 'single';
+                        const totalIncome = currentIncome + longTermGains;
+                        if (filingStatus === 'single') {
+                          if (totalIncome <= 47025) return '0% 구간';
+                          if (totalIncome <= 518900) return '15% 구간';
+                          return '20% 구간';
+                        } else if (filingStatus === 'married_joint') {
+                          if (totalIncome <= 94050) return '0% 구간';
+                          if (totalIncome <= 583750) return '15% 구간';
+                          return '20% 구간';
+                        } else {
+                          if (totalIncome <= 47025) return '0% 구간';
+                          if (totalIncome <= 291875) return '15% 구간';
+                          return '20% 구간';
+                        }
+                      })()}
+                    </span>
                   </div>
                   <div className="flex justify-between items-center pt-2 border-t">
                     <span className="font-medium">예상 세금:</span>

@@ -36,9 +36,16 @@ Page Layout Preference: Side-by-side layout with input forms taking 2/3 width an
 - **Authentication**: Supports local username/password and Google OAuth with session-based authentication and secure password hashing.
 - **UI/UX Decisions**: Focus on clean, professional appearance with consistent dollar placeholders, clear field labeling, and intuitive navigation flows. Enhancements include dynamic input formatting and streamlined user guidance messages. Side-by-side layout implementation: input forms take 2/3 width with instructional videos on the right side taking 1/3 width, sticky positioned for better user experience.
 - **Retirement Planning Integration**: Features a comprehensive retirement score calculator with multi-factor scoring, inflation adjustments, Social Security integration, and Monte Carlo simulations. This includes a step-by-step guided flow for financial assessment.
+- **Capital Gains Calculator**: Interactive transaction management with localStorage-based persistence to ensure reliable state updates. Calculates short-term vs long-term gains with automatic tax estimations.
 - **Admin Panel**: Provides comprehensive user and tax data management capabilities for administrators.
 - **Email Functionality**: Integration for expert consultation requests and application submissions.
 - **PDF Generation**: Capable of generating Form 1040 PDFs.
+
+### Technical Solutions Archive
+- **React State Management Issue (2025-01-10)**: Capital Gains Calculator experienced persistent state update failures with useState/useReducer. Solution: Implemented localStorage-based state management with component force re-rendering using keys. This bypasses React's state system entirely while maintaining data persistence and UI updates.
+  - Key Implementation: Replace React state arrays with localStorage functions that read/write data directly
+  - Force UI updates using setComponentKey and setForceUpdate to trigger complete component remount
+  - This pattern resolves cases where React state updates fail mysteriously despite correct logic
 
 ## External Dependencies
 
