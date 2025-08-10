@@ -462,10 +462,14 @@ const TaxCredits3Page: React.FC = () => {
     }
     
     // 적격 자녀가 아닌 부양가족에 기반한 세액공제 계산
+    console.log("기타 부양가족 공제 계산 전 - Child Tax Credit 값:", currentChildTaxCredit);
     const credit = calculateCreditForOtherDependents(otherDependents, agi, filingStatus);
+    console.log("기타 부양가족 공제 계산 결과:", credit);
+    
     form.setValue('otherCredits', credit);
     // Child Tax Credit 값 복원
     form.setValue('childTaxCredit', currentChildTaxCredit);
+    console.log("기타 부양가족 공제 계산 후 - Child Tax Credit 복원:", currentChildTaxCredit);
     setPendingChanges(true);
     
     // 총 세액공제 업데이트
