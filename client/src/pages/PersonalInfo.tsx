@@ -678,7 +678,7 @@ const PersonalInfo: React.FC = () => {
                 <div className="relative pb-[56.25%] h-0 overflow-hidden rounded-lg shadow-md">
                   <iframe
                     className="absolute top-0 left-0 w-full h-full"
-                    src="https://www.youtube.com/embed/kxz__B2xr0A"
+                    src="https://www.youtube.com/embed/kce8i5gAG1k"
                     title="기본정보 입력 방법"
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
