@@ -192,9 +192,11 @@ export default function CapitalGainsCalculator() {
     console.log('추가할 거래:', newTransactionWithId);
     console.log('기존 거래 목록:', transactions);
     
-    const updatedTransactions = [...transactions, newTransactionWithId];
-    console.log('업데이트된 거래 목록:', updatedTransactions);
-    setTransactions(updatedTransactions);
+    setTransactions(prevTransactions => {
+      const updatedTransactions = [...prevTransactions, newTransactionWithId];
+      console.log('업데이트된 거래 목록:', updatedTransactions);
+      return updatedTransactions;
+    });
     
     // 입력 필드 초기화
     setNewTransaction({
