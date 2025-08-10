@@ -468,28 +468,46 @@ export default function CapitalGainsCalculator() {
   
   // 자본 이득 저장 및 수입 페이지로 이동
   const saveAndReturn = () => {
-    // 기존 소득 데이터가 없으면 실행하지 않음
-    if (!taxData.income) return;
+    console.log('saveAndReturn 함수 호출됨');
+    console.log('현재 taxData:', taxData);
+    console.log('현재 totalCapitalGains:', totalCapitalGains);
     
-    // 기존 소득 데이터를 기반으로 새 소득 객체 생성
+    // 기존 소득 데이터가 있으면 업데이트, 없으면 새로 생성
+    const existingIncome = taxData.income || {
+      wages: 0,
+      otherEarnedIncome: 0,
+      interestIncome: 0,
+      dividends: 0,
+      businessIncome: 0,
+      capitalGains: 0,
+      rentalIncome: 0,
+      retirementIncome: 0,
+      unemploymentIncome: 0,
+      otherIncome: 0,
+      totalIncome: 0
+    };
+    
+    // 새 소득 객체 생성
     const newIncome: Income = {
-      ...taxData.income,
+      ...existingIncome,
       // 자본 이득 업데이트
       capitalGains: totalCapitalGains,
       // 총소득 재계산
       totalIncome: (
-        Number(taxData.income.wages) +
-        Number(taxData.income.otherEarnedIncome) +
-        Number(taxData.income.interestIncome) +
-        Number(taxData.income.dividends) +
-        Number(taxData.income.businessIncome) +
+        Number(existingIncome.wages) +
+        Number(existingIncome.otherEarnedIncome) +
+        Number(existingIncome.interestIncome) +
+        Number(existingIncome.dividends) +
+        Number(existingIncome.businessIncome) +
         totalCapitalGains +
-        Number(taxData.income.rentalIncome) +
-        Number(taxData.income.retirementIncome) +
-        Number(taxData.income.unemploymentIncome) +
-        Number(taxData.income.otherIncome)
+        Number(existingIncome.rentalIncome) +
+        Number(existingIncome.retirementIncome) +
+        Number(existingIncome.unemploymentIncome) +
+        Number(existingIncome.otherIncome)
       )
     };
+    
+    console.log('새로 생성된 income 데이터:', newIncome);
     
     // 세금 데이터 업데이트
     updateTaxData({ income: newIncome });
@@ -500,6 +518,8 @@ export default function CapitalGainsCalculator() {
       description: `자본 이득 $${totalCapitalGains.toLocaleString()}이(가) 소득에 추가되었습니다.`,
       duration: 3000
     });
+    
+    console.log('소득 페이지로 이동 중...');
     
     // 소득 페이지로 이동
     setLocation('/income');
