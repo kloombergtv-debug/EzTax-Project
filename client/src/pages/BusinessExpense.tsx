@@ -485,19 +485,19 @@ export default function BusinessExpensePage() {
                       </div>
 
                       <div className="mt-4 p-4 bg-blue-50 rounded-lg border-2 border-blue-200">
-                        <h5 className="font-semibold text-blue-800 mb-3">엔티티 총소득 및 지분 계산</h5>
+                        <h5 className="font-semibold text-blue-800 mb-3">엔티티 순소득 및 지분 계산</h5>
                         
                         <FormField
                           control={form.control}
                           name={`k1Items.${index}.totalEntityIncome`}
                           render={({ field }) => (
                             <FormItem className="mb-4">
-                              <FormLabel>엔티티 총소득 (Total Entity Income)</FormLabel>
+                              <FormLabel>엔티티 순소득 (Total Entity Net Income)</FormLabel>
                               <FormControl>
                                 <Input
                                   type="number"
                                   step="0.01"
-                                  placeholder="엔티티의 총 순소득"
+                                  placeholder="엔티티의 순소득"
                                   value={field.value === 0 ? '' : field.value}
                                   onChange={(e) => {
                                     const totalIncome = parseFloat(e.target.value) || 0;
