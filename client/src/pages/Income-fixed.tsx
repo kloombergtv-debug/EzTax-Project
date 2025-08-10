@@ -3,7 +3,7 @@ import { useLocation } from 'wouter';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { Income, incomeSchema, AdditionalIncomeItem, AdditionalAdjustmentItem } from '@shared/schema';
-import { useTaxContext } from '@/context/TaxContext';
+// import { useTaxContext } from '@/context/TaxContext'; // 로그인 없이도 접근하기 위해 비활성화
 import ProgressTracker from '@/components/ProgressTracker';
 import StepNavigation from '@/components/StepNavigation';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
@@ -31,8 +31,13 @@ import {
 
 export default function IncomePage() {
   const [, setLocation] = useLocation();
-  const { taxData, updateTaxData, resetToZero, saveTaxReturn } = useTaxContext();
   const { toast } = useToast();
+  
+  // 로그인 없이도 접근하기 위해 기본값 사용
+  const taxData = { income: null };
+  const updateTaxData = () => Promise.resolve();
+  const resetToZero = () => {};
+  const saveTaxReturn = () => Promise.resolve();
   const [isUploading, setIsUploading] = useState(false);
   
   // W-2 업로드 처리 함수
@@ -529,13 +534,15 @@ export default function IncomePage() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="mb-8">
         <ProgressTracker currentStep={2} />
       </div>
       
-      <div className="md:flex gap-8">
-        <div className="flex-1">
+      {/* 메인 컨텐츠 - 입력 폼과 동영상을 나란히 배치 */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* 입력 폼 영역 (1/2 너비) */}
+        <div className="lg:col-span-1">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <Card className="mb-8">
@@ -1150,6 +1157,33 @@ export default function IncomePage() {
               />
             </form>
           </Form>
+        </div>
+        
+        {/* 동영상 영역 (1/2 너비) */}
+        <div className="lg:col-span-1">
+          <Card className="sticky top-6">
+            <CardContent className="pt-6">
+              <div className="text-center mb-4">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">소득 입력 방법 안내</h3>
+                <p className="text-sm text-gray-600">소득 정보를 정확하게 입력하는 방법을 확인하세요</p>
+              </div>
+              <div className="w-full">
+                <div className="relative pb-[75%] h-0 overflow-hidden rounded-lg shadow-md">
+                  <iframe
+                    className="absolute top-0 left-0 w-full h-full"
+                    src="https://www.youtube.com/embed/kce8i5gAG1k"
+                    title="소득 입력 방법 안내"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
+                </div>
+              </div>
+              <div className="mt-4 text-xs text-gray-500 text-center">
+                세무신고 시 올바른 소득 입력 방법을 동영상으로 확인하세요
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>

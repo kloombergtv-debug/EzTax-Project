@@ -46,7 +46,7 @@ function Router() {
       <Route path="/auth" component={AuthPage} />
       <Route path="/personal-info" component={PersonalInfo} />
       <ProtectedRoute path="/personal-info-old" component={PersonalInfo} />
-      <ProtectedRoute path="/income" component={IncomePage} />
+      <Route path="/income" component={IncomePage} />
       <ProtectedRoute path="/qbi-details" component={QBIDetails} />
       <ProtectedRoute path="/business-expense" component={BusinessExpense} />
       <ProtectedRoute path="/capital-gains" component={CapitalGainsCalculator} />
