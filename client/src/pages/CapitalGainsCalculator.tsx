@@ -78,9 +78,31 @@ export default function CapitalGainsCalculator() {
   // 컴포넌트 재마운트를 위한 키
   const [componentKey, setComponentKey] = useState(0);
   
-  // 거래 목록 상태 관리 (간단한 상태로 돌아가기)
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  // localStorage 기반 상태 관리
   const [forceUpdate, setForceUpdate] = useState(0);
+  
+  // localStorage에서 거래 목록 가져오기
+  const getTransactionsFromStorage = (): Transaction[] => {
+    try {
+      const stored = localStorage.getItem('capitalGainsTransactions');
+      return stored ? JSON.parse(stored) : [];
+    } catch {
+      return [];
+    }
+  };
+  
+  // localStorage에 거래 목록 저장하기
+  const saveTransactionsToStorage = (transactions: Transaction[]) => {
+    try {
+      localStorage.setItem('capitalGainsTransactions', JSON.stringify(transactions));
+      console.log('거래 목록 localStorage에 저장됨:', transactions);
+    } catch (error) {
+      console.error('localStorage 저장 실패:', error);
+    }
+  };
+  
+  // 현재 거래 목록 (localStorage에서 항상 최신 데이터 가져오기)
+  const transactions = getTransactionsFromStorage();
   
   // 테스트를 위한 하드코딩된 더미 데이터 (디버깅용)
   const [showTestData, setShowTestData] = useState(false);
@@ -242,11 +264,11 @@ export default function CapitalGainsCalculator() {
     console.log('추가할 거래:', newTransactionWithId);
     console.log('기존 거래 목록:', transactions);
     
-    // 완전히 새로운 배열 생성
+    // localStorage에 저장하고 강제 리렌더링
     const updatedList = [...transactions, newTransactionWithId];
     console.log('새로 생성된 배열:', updatedList);
     
-    setTransactions(updatedList);
+    saveTransactionsToStorage(updatedList);
     setForceUpdate(prev => prev + 1);
     setComponentKey(prev => prev + 1);
     
@@ -269,8 +291,9 @@ export default function CapitalGainsCalculator() {
   // 거래 삭제
   const removeTransaction = (id: number) => {
     const filteredList = transactions.filter(transaction => transaction.id !== id);
-    setTransactions(filteredList);
+    saveTransactionsToStorage(filteredList);
     setForceUpdate(prev => prev + 1);
+    setComponentKey(prev => prev + 1);
     toast({
       title: "거래 삭제됨",
       description: "선택한 거래가 목록에서 제거되었습니다."
