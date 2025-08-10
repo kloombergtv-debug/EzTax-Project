@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import { useLocation } from 'wouter';
 import { useTaxContext } from '@/context/TaxContext';
 import { Income } from '@shared/schema';
@@ -43,13 +43,40 @@ interface Transaction {
   isLongTerm: boolean;  // 장기투자 여부
 }
 
+// 리듀서 액션 타입
+type TransactionAction = 
+  | { type: 'ADD_TRANSACTION'; transaction: Transaction }
+  | { type: 'REMOVE_TRANSACTION'; id: number }
+  | { type: 'CLEAR_TRANSACTIONS' };
+
+// 리듀서 함수
+function transactionReducer(state: Transaction[], action: TransactionAction): Transaction[] {
+  console.log('Reducer called with action:', action.type, 'Current state:', state);
+  
+  switch (action.type) {
+    case 'ADD_TRANSACTION':
+      const newState = [...state, action.transaction];
+      console.log('ADD_TRANSACTION - New state:', newState);
+      return newState;
+    case 'REMOVE_TRANSACTION':
+      const filteredState = state.filter(t => t.id !== action.id);
+      console.log('REMOVE_TRANSACTION - Filtered state:', filteredState);
+      return filteredState;
+    case 'CLEAR_TRANSACTIONS':
+      console.log('CLEAR_TRANSACTIONS - Clearing state');
+      return [];
+    default:
+      return state;
+  }
+}
+
 export default function CapitalGainsCalculator() {
   const [, setLocation] = useLocation();
   const { taxData, updateTaxData } = useTaxContext();
   const { toast } = useToast();
   
-  // 거래 목록 상태 관리 (빈 배열로 시작)
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  // 거래 목록 상태 관리 (useReducer 사용)
+  const [transactions, dispatch] = useReducer(transactionReducer, []);
   const [updateKey, setUpdateKey] = useState(0);
   
   // 거래 목록 상태 변화 추적
@@ -181,24 +208,19 @@ export default function CapitalGainsCalculator() {
     
     console.log('계산된 값들:', { profit, isLongTerm });
     
-    // 새 거래 추가 - 함수형 업데이트 사용
-    setTransactions(prevTransactions => {
-      const newId = prevTransactions.length > 0 ? Math.max(...prevTransactions.map(t => t.id)) + 1 : 1;
-      const newTransactionWithId = { 
-        ...newTransaction, 
-        id: newId, 
-        profit,
-        isLongTerm 
-      };
-      
-      console.log('추가할 거래:', newTransactionWithId);
-      console.log('기존 거래 목록:', prevTransactions);
-      
-      const updatedTransactions = [...prevTransactions, newTransactionWithId];
-      console.log('업데이트된 거래 목록:', updatedTransactions);
-      
-      return updatedTransactions;
-    });
+    // 새 거래 추가 - useReducer 사용
+    const newId = transactions.length > 0 ? Math.max(...transactions.map(t => t.id)) + 1 : 1;
+    const newTransactionWithId = { 
+      ...newTransaction, 
+      id: newId, 
+      profit,
+      isLongTerm 
+    };
+    
+    console.log('추가할 거래:', newTransactionWithId);
+    console.log('기존 거래 목록:', transactions);
+    
+    dispatch({ type: 'ADD_TRANSACTION', transaction: newTransactionWithId });
     
     setUpdateKey(prev => prev + 1);
     
@@ -220,9 +242,7 @@ export default function CapitalGainsCalculator() {
   
   // 거래 삭제
   const removeTransaction = (id: number) => {
-    setTransactions(prevTransactions => 
-      prevTransactions.filter(transaction => transaction.id !== id)
-    );
+    dispatch({ type: 'REMOVE_TRANSACTION', id });
     setUpdateKey(prev => prev + 1);
     toast({
       title: "거래 삭제됨",
