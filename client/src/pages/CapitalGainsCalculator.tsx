@@ -181,21 +181,25 @@ export default function CapitalGainsCalculator() {
     
     console.log('계산된 값들:', { profit, isLongTerm });
     
-    // 새 거래 추가
-    const newId = transactions.length > 0 ? Math.max(...transactions.map(t => t.id)) + 1 : 1;
-    const newTransactionWithId = { 
-      ...newTransaction, 
-      id: newId, 
-      profit,
-      isLongTerm 
-    };
+    // 새 거래 추가 - 함수형 업데이트 사용
+    setTransactions(prevTransactions => {
+      const newId = prevTransactions.length > 0 ? Math.max(...prevTransactions.map(t => t.id)) + 1 : 1;
+      const newTransactionWithId = { 
+        ...newTransaction, 
+        id: newId, 
+        profit,
+        isLongTerm 
+      };
+      
+      console.log('추가할 거래:', newTransactionWithId);
+      console.log('기존 거래 목록:', prevTransactions);
+      
+      const updatedTransactions = [...prevTransactions, newTransactionWithId];
+      console.log('업데이트된 거래 목록:', updatedTransactions);
+      
+      return updatedTransactions;
+    });
     
-    console.log('추가할 거래:', newTransactionWithId);
-    console.log('기존 거래 목록:', transactions);
-    
-    const updatedTransactions = [...transactions, newTransactionWithId];
-    console.log('업데이트된 거래 목록:', updatedTransactions);
-    setTransactions(updatedTransactions);
     setUpdateKey(prev => prev + 1);
     
     // 입력 필드 초기화
@@ -216,7 +220,10 @@ export default function CapitalGainsCalculator() {
   
   // 거래 삭제
   const removeTransaction = (id: number) => {
-    setTransactions(transactions.filter(transaction => transaction.id !== id));
+    setTransactions(prevTransactions => 
+      prevTransactions.filter(transaction => transaction.id !== id)
+    );
+    setUpdateKey(prev => prev + 1);
     toast({
       title: "거래 삭제됨",
       description: "선택한 거래가 목록에서 제거되었습니다."
