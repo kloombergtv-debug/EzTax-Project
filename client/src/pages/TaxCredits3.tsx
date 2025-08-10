@@ -538,10 +538,41 @@ const TaxCredits3Page: React.FC = () => {
         setTimeout(() => calculateRetirementCredit(), 1500);
       }
       
-      // 페이지 로드 시 기타 부양가족 공제도 자동 확인
+      // 페이지 로드 시 Child Tax Credit 및 기타 부양가족 공제 자동 확인
       setTimeout(() => {
-        // 현재 17세 이상 부양가족이 있는지 확인
         const dependents = taxData?.personalInfo?.dependents || [];
+        
+        // Child Tax Credit 적격 자녀 수 확인 (17세 미만)
+        const childTaxCreditEligible = dependents.filter(dependent => {
+          if (dependent.relationship !== 'child') return false;
+          
+          const birthDate = new Date(dependent.dateOfBirth);
+          const taxYearEnd = new Date('2024-12-31');
+          let age = taxYearEnd.getFullYear() - birthDate.getFullYear();
+          const monthDiff = taxYearEnd.getMonth() - birthDate.getMonth();
+          if (monthDiff < 0 || (monthDiff === 0 && taxYearEnd.getDate() < birthDate.getDate())) {
+            age--;
+          }
+          return age < 17;
+        });
+        
+        // 적격 자녀 수에 따른 올바른 Child Tax Credit 계산
+        const expectedChildTaxCredit = childTaxCreditEligible.length * 2000;
+        const currentChildTaxCredit = form.getValues('childTaxCredit');
+        
+        console.log(`페이지 로드 시 Child Tax Credit 확인: 적격 자녀 ${childTaxCreditEligible.length}명, 예상 금액 $${expectedChildTaxCredit}, 현재 값 $${currentChildTaxCredit}`);
+        
+        // Child Tax Credit이 예상 값과 다르면 자동 계산 실행
+        if (currentChildTaxCredit !== expectedChildTaxCredit) {
+          console.log("Child Tax Credit 자동 재계산 실행");
+          const calculatedCredit = calculateChildTaxCreditAuto();
+          if (calculatedCredit !== currentChildTaxCredit) {
+            form.setValue('childTaxCredit', calculatedCredit);
+            setPendingChanges(true);
+          }
+        }
+        
+        // 17세 이상 부양가족 확인 (기타 부양가족 공제용)
         const otherDependents = dependents.filter(dependent => {
           const birthDate = new Date(dependent.dateOfBirth);
           const taxYearEnd = new Date('2024-12-31');
