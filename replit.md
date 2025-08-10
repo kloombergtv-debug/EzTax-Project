@@ -5,7 +5,12 @@ EzTax is a comprehensive web-based application designed to streamline federal ta
 
 ## User Preferences
 Preferred communication style: Simple, everyday language.
-Page Layout Preference: Side-by-side layout with input forms taking 2/3 width and instructional videos on the right side taking 1/3 width. Videos should be sticky positioned and embedded with responsive design.
+Page Layout Preference: 
+- Side-by-side layout with 1:1 ratio (50:50) for optimal video viewing
+- Input forms and instructional videos side by side with equal width
+- Videos should be sticky positioned and embedded with responsive design
+- Video aspect ratio: 75% height (pb-[75%]) for larger display area
+- Grid layout: `grid-cols-1 lg:grid-cols-2` with `lg:col-span-1` for each section
 
 ## System Architecture
 
