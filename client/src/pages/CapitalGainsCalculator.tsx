@@ -75,9 +75,9 @@ export default function CapitalGainsCalculator() {
   const { taxData, updateTaxData } = useTaxContext();
   const { toast } = useToast();
   
-  // 거래 목록 상태 관리 (useReducer 사용)
-  const [transactions, dispatch] = useReducer(transactionReducer, []);
-  const [updateKey, setUpdateKey] = useState(0);
+  // 거래 목록 상태 관리 (간단한 상태로 돌아가기)
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [forceUpdate, setForceUpdate] = useState(0);
   
   // 거래 목록 상태 변화 추적
   useEffect(() => {
@@ -208,7 +208,7 @@ export default function CapitalGainsCalculator() {
     
     console.log('계산된 값들:', { profit, isLongTerm });
     
-    // 새 거래 추가 - useReducer 사용
+    // 새 거래 추가 - 직접 배열 조작
     const newId = transactions.length > 0 ? Math.max(...transactions.map(t => t.id)) + 1 : 1;
     const newTransactionWithId = { 
       ...newTransaction, 
@@ -220,9 +220,12 @@ export default function CapitalGainsCalculator() {
     console.log('추가할 거래:', newTransactionWithId);
     console.log('기존 거래 목록:', transactions);
     
-    dispatch({ type: 'ADD_TRANSACTION', transaction: newTransactionWithId });
+    // 완전히 새로운 배열 생성
+    const updatedList = [...transactions, newTransactionWithId];
+    console.log('새로 생성된 배열:', updatedList);
     
-    setUpdateKey(prev => prev + 1);
+    setTransactions(updatedList);
+    setForceUpdate(prev => prev + 1);
     
     // 입력 필드 초기화
     setNewTransaction({
@@ -242,8 +245,9 @@ export default function CapitalGainsCalculator() {
   
   // 거래 삭제
   const removeTransaction = (id: number) => {
-    dispatch({ type: 'REMOVE_TRANSACTION', id });
-    setUpdateKey(prev => prev + 1);
+    const filteredList = transactions.filter(transaction => transaction.id !== id);
+    setTransactions(filteredList);
+    setForceUpdate(prev => prev + 1);
     toast({
       title: "거래 삭제됨",
       description: "선택한 거래가 목록에서 제거되었습니다."
@@ -393,7 +397,7 @@ export default function CapitalGainsCalculator() {
           {/* 거래 목록 테이블 */}
           <div className="mb-6">
             <h3 className="text-lg font-medium mb-3">거래 목록</h3>
-            <Table key={updateKey}>
+            <Table key={forceUpdate}>
               <TableCaption>자본 이득 거래 내역</TableCaption>
               <TableHeader>
                 <TableRow>
