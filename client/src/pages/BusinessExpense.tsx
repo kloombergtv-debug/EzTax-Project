@@ -511,7 +511,7 @@ export default function BusinessExpensePage() {
                                     setTimeout(() => calculateTotalK1Income(), 0);
                                   }}
                                 >
-                                  Schedule C에서 가져오기
+                                  사업순소득에서 가져오기
                                 </Button>
                               </FormLabel>
                               <FormControl>
