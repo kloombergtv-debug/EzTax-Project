@@ -13,7 +13,7 @@ import { useToast } from '@/hooks/use-toast';
 import ProgressTracker from '@/components/ProgressTracker';
 
 import StepNavigation from '@/components/StepNavigation';
-import { useTaxContext } from '@/context/TaxContext';
+// import { useTaxContext } from '@/context/TaxContext'; // 로그인 없이도 접근하기 위해 비활성화
 import { Label } from '@/components/ui/label';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { calculateStandardDeduction } from '@/lib/taxCalculations';
@@ -21,18 +21,17 @@ import { useLocation } from 'wouter';
 import { formatNumber, formatCurrency, formatInputNumber } from '@/utils/formatNumber';
 
 const Deductions: React.FC = () => {
-  const { taxData, updateTaxData, isDataReady } = useTaxContext();
+  // 로그인 없이도 접근하기 위해 기본값 사용
+  const taxData = { 
+    personalInfo: { filingStatus: 'single' }, 
+    income: { adjustedGrossIncome: 0 }, 
+    deductions: null 
+  };
+  const updateTaxData = () => {};
+  const isDataReady = true;
+  
   const { toast } = useToast();
   const [, navigate] = useLocation();
-  
-  // 데이터가 로드되지 않았으면 로딩 표시
-  if (!isDataReady) {
-    return (
-      <div className="max-w-5xl mx-auto px-4 py-6">
-        <div className="text-center">데이터 로딩 중...</div>
-      </div>
-    );
-  }
   const [isItemizedDisabled, setIsItemizedDisabled] = useState(true);
   
   // Initialize medical input from existing data - 간단히 0으로 시작
@@ -482,7 +481,7 @@ const Deductions: React.FC = () => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="mb-8">
         <h1 className="text-3xl font-heading font-bold text-primary-dark mb-2">귀하의 2025년 세금 신고서</h1>
         <p className="text-gray-dark">세금 신고서를 준비하기 위해 모든 섹션을 작성하세요. 입력한 정보는 자동으로 저장됩니다.</p>
@@ -528,8 +527,10 @@ const Deductions: React.FC = () => {
         </button>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-6">
-        <div className="flex-grow">
+      {/* 메인 컨텐츠 - 입력 폼과 동영상을 나란히 배치 */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* 입력 폼 영역 (1/2 너비) */}
+        <div className="lg:col-span-1">
           <Card className="mb-6">
             <CardContent className="pt-6">
               <div className="mb-6">
@@ -1241,6 +1242,33 @@ const Deductions: React.FC = () => {
                   </div>
                 </form>
               </Form>
+            </CardContent>
+          </Card>
+        </div>
+        
+        {/* 동영상 영역 (1/2 너비) */}
+        <div className="lg:col-span-1">
+          <Card className="sticky top-6">
+            <CardContent className="pt-6">
+              <div className="text-center mb-4">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">공제 입력 방법 안내</h3>
+                <p className="text-sm text-gray-600">공제 항목을 정확하게 입력하는 방법을 확인하세요</p>
+              </div>
+              <div className="w-full">
+                <div className="relative pb-[75%] h-0 overflow-hidden rounded-lg shadow-md">
+                  <iframe
+                    className="absolute top-0 left-0 w-full h-full"
+                    src="https://www.youtube.com/embed/kce8i5gAG1k"
+                    title="공제 입력 방법 안내"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
+                </div>
+              </div>
+              <div className="mt-4 text-xs text-gray-500 text-center">
+                세무신고 시 올바른 공제 항목 입력 방법을 동영상으로 확인하세요
+              </div>
             </CardContent>
           </Card>
         </div>
