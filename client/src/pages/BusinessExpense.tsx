@@ -41,6 +41,8 @@ const businessExpenseSchema = z.object({
   k1Items: z.array(z.object({
     entityName: z.string().default(''),
     entityType: z.enum(['partnership', 'scorp', 'trust']).default('partnership'),
+    ownershipPercentage: z.number().min(0).max(100).default(0),
+    totalEntityIncome: z.number().default(0),
     ordinaryIncome: z.number().min(0).default(0),
     rentalIncome: z.number().default(0),
     interestIncome: z.number().min(0).default(0),
@@ -147,6 +149,8 @@ export default function BusinessExpensePage() {
     const newItem = {
       entityName: '',
       entityType: 'partnership' as const,
+      ownershipPercentage: 0,
+      totalEntityIncome: 0,
       ordinaryIncome: 0,
       rentalIncome: 0,
       interestIncome: 0,
@@ -394,7 +398,7 @@ export default function BusinessExpensePage() {
                         </Button>
                       </div>
 
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <FormField
                           control={form.control}
                           name={`k1Items.${index}.entityName`}
@@ -435,19 +439,98 @@ export default function BusinessExpensePage() {
 
                         <FormField
                           control={form.control}
-                          name={`k1Items.${index}.ordinaryIncome`}
+                          name={`k1Items.${index}.ownershipPercentage`}
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>경상소득 (Ordinary Business Income)</FormLabel>
+                              <FormLabel>지분율 (Ownership %)</FormLabel>
                               <FormControl>
                                 <Input
                                   type="number"
                                   step="0.01"
-                                  placeholder="0.00"
+                                  min="0"
+                                  max="100"
+                                  placeholder="예: 25.5"
                                   value={field.value === 0 ? '' : field.value}
+                                  onChange={(e) => {
+                                    const ownershipPercentage = parseFloat(e.target.value) || 0;
+                                    field.onChange(ownershipPercentage);
+                                    
+                                    // 지분율 변경시 소득도 자동 재계산
+                                    const totalIncome = form.getValues(`k1Items.${index}.totalEntityIncome`) || 0;
+                                    const myShare = (totalIncome * ownershipPercentage) / 100;
+                                    form.setValue(`k1Items.${index}.ordinaryIncome`, myShare);
+                                  }}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                      <div className="mt-4 p-4 bg-blue-50 rounded-lg border-2 border-blue-200">
+                        <h5 className="font-semibold text-blue-800 mb-3">엔티티 총소득 및 지분 계산</h5>
+                        
+                        <FormField
+                          control={form.control}
+                          name={`k1Items.${index}.totalEntityIncome`}
+                          render={({ field }) => (
+                            <FormItem className="mb-4">
+                              <FormLabel>엔티티 총소득 (Total Entity Income)</FormLabel>
+                              <FormControl>
+                                <Input
+                                  type="number"
+                                  step="0.01"
+                                  placeholder="엔티티의 총 순소득"
+                                  value={field.value === 0 ? '' : field.value}
+                                  onChange={(e) => {
+                                    const totalIncome = parseFloat(e.target.value) || 0;
+                                    field.onChange(totalIncome);
+                                    
+                                    // 지분율에 따라 자동으로 개인 소득 계산
+                                    const ownershipPercentage = form.getValues(`k1Items.${index}.ownershipPercentage`) || 0;
+                                    const myShare = (totalIncome * ownershipPercentage) / 100;
+                                    form.setValue(`k1Items.${index}.ordinaryIncome`, myShare);
+                                  }}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <div className="text-sm text-blue-700 bg-white p-3 rounded border">
+                          <div className="flex justify-between items-center">
+                            <span>나의 소득 지분 (My Share):</span>
+                            <span className="font-semibold">
+                              ${(((form.watch(`k1Items.${index}.totalEntityIncome`) || 0) * 
+                                  (form.watch(`k1Items.${index}.ownershipPercentage`) || 0)) / 100).toLocaleString()}
+                            </span>
+                          </div>
+                          <div className="text-xs text-gray-600 mt-1">
+                            계산: ${(form.watch(`k1Items.${index}.totalEntityIncome`) || 0).toLocaleString()} × {form.watch(`k1Items.${index}.ownershipPercentage`) || 0}%
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                        <FormField
+                          control={form.control}
+                          name={`k1Items.${index}.ordinaryIncome`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>나의 경상소득 (My Ordinary Income)</FormLabel>
+                              <FormControl>
+                                <Input
+                                  type="number"
+                                  step="0.01"
+                                  placeholder="자동 계산됨"
+                                  value={field.value === 0 ? '' : field.value.toFixed(2)}
                                   onChange={(e) => {
                                     field.onChange(parseFloat(e.target.value) || 0);
                                   }}
+                                  className="bg-gray-50"
+                                  readOnly
                                 />
                               </FormControl>
                               <FormMessage />
