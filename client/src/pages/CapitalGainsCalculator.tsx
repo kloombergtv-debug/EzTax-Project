@@ -50,6 +50,7 @@ export default function CapitalGainsCalculator() {
   
   // 거래 목록 상태 관리 (빈 배열로 시작)
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [updateKey, setUpdateKey] = useState(0);
   
   // 거래 목록 상태 변화 추적
   useEffect(() => {
@@ -192,11 +193,10 @@ export default function CapitalGainsCalculator() {
     console.log('추가할 거래:', newTransactionWithId);
     console.log('기존 거래 목록:', transactions);
     
-    setTransactions(prevTransactions => {
-      const updatedTransactions = [...prevTransactions, newTransactionWithId];
-      console.log('업데이트된 거래 목록:', updatedTransactions);
-      return updatedTransactions;
-    });
+    const updatedTransactions = [...transactions, newTransactionWithId];
+    console.log('업데이트된 거래 목록:', updatedTransactions);
+    setTransactions(updatedTransactions);
+    setUpdateKey(prev => prev + 1);
     
     // 입력 필드 초기화
     setNewTransaction({
@@ -366,7 +366,7 @@ export default function CapitalGainsCalculator() {
           {/* 거래 목록 테이블 */}
           <div className="mb-6">
             <h3 className="text-lg font-medium mb-3">거래 목록</h3>
-            <Table>
+            <Table key={updateKey}>
               <TableCaption>자본 이득 거래 내역</TableCaption>
               <TableHeader>
                 <TableRow>
