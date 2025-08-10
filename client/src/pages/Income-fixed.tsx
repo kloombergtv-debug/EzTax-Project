@@ -638,7 +638,7 @@ export default function IncomePage() {
                           <FormItem className="flex flex-col justify-center h-full">
                             <div className="flex justify-between items-center mb-1">
                               <div className="flex items-center gap-1">
-                                <FormLabel>사업 순소득 (Schedule C Net Profit)</FormLabel>
+                                <FormLabel>사업 순소득</FormLabel>
                                 <div className="tooltip">
                                   <InfoIcon className="h-4 w-4 text-gray-dark" />
                                   <span className="tooltip-text">Net profit from business operations (Schedule C)</span>
