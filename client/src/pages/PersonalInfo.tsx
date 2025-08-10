@@ -309,6 +309,30 @@ const PersonalInfo: React.FC = () => {
         </div>
       </div>
 
+      {/* 기본정보 입력 방법 동영상 */}
+      <Card className="mb-6">
+        <CardContent className="pt-6">
+          <div className="text-center mb-4">
+            <h2 className="text-xl font-semibold text-gray-900 mb-2">기본정보 입력 방법</h2>
+            <p className="text-gray-600">기본정보 페이지 사용법을 동영상으로 확인하세요</p>
+          </div>
+          <div className="flex justify-center">
+            <div className="w-full max-w-3xl">
+              <div className="relative pb-[56.25%] h-0 overflow-hidden rounded-lg shadow-lg">
+                <iframe
+                  className="absolute top-0 left-0 w-full h-full"
+                  src="https://www.youtube.com/embed/kxz__B2xr0A"
+                  title="기본정보 입력 방법"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                ></iframe>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           
