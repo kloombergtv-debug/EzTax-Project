@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Logo from './Logo';
 import { useToast } from "@/hooks/use-toast";
-import { HelpCircle, Save, LogIn, LogOut, User, RefreshCcw, ClipboardCheck, Shield } from 'lucide-react';
+import { HelpCircle, Save, LogIn, LogOut, User, RefreshCcw, ClipboardCheck, Shield, Home, DollarSign, PiggyBank, FileText, CreditCard, Calculator, Eye } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useLocation } from 'wouter';
 // import { useTaxContext } from '@/context/TaxContext';
@@ -64,6 +64,73 @@ const Header: React.FC = () => {
           <Logo />
         </div>
         
+        {/* 주요 페이지 네비게이션 */}
+        <nav className="hidden lg:flex items-center space-x-2">
+          <Button 
+            variant={location === '/' ? "default" : "ghost"} 
+            size="sm"
+            className="flex items-center text-sm"
+            onClick={() => navigate('/')}
+          >
+            <Home className="h-4 w-4 mr-1" />
+            Home
+          </Button>
+          <Button 
+            variant={location === '/income' ? "default" : "ghost"} 
+            size="sm"
+            className="flex items-center text-sm"
+            onClick={() => navigate('/income')}
+          >
+            <DollarSign className="h-4 w-4 mr-1" />
+            소득
+          </Button>
+          <Button 
+            variant={location === '/retirement-score' ? "default" : "ghost"} 
+            size="sm"
+            className="flex items-center text-sm"
+            onClick={() => navigate('/retirement-score')}
+          >
+            <PiggyBank className="h-4 w-4 mr-1" />
+            퇴직연금
+          </Button>
+          <Button 
+            variant={location === '/deductions' ? "default" : "ghost"} 
+            size="sm"
+            className="flex items-center text-sm"
+            onClick={() => navigate('/deductions')}
+          >
+            <FileText className="h-4 w-4 mr-1" />
+            공제
+          </Button>
+          <Button 
+            variant={location === '/tax-credits' ? "default" : "ghost"} 
+            size="sm"
+            className="flex items-center text-sm"
+            onClick={() => navigate('/tax-credits')}
+          >
+            <CreditCard className="h-4 w-4 mr-1" />
+            세액공제
+          </Button>
+          <Button 
+            variant={location === '/additional-tax' ? "default" : "ghost"} 
+            size="sm"
+            className="flex items-center text-sm"
+            onClick={() => navigate('/additional-tax')}
+          >
+            <Calculator className="h-4 w-4 mr-1" />
+            추가세금
+          </Button>
+          <Button 
+            variant={location === '/review' ? "default" : "ghost"} 
+            size="sm"
+            className="flex items-center text-sm"
+            onClick={() => navigate('/review')}
+          >
+            <Eye className="h-4 w-4 mr-1" />
+            검토
+          </Button>
+        </nav>
+
         <div className="flex items-center space-x-4">
           {showButtons && (
             <>
