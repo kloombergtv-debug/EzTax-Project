@@ -3,7 +3,7 @@ import { useLocation } from 'wouter';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { Income, incomeSchema, AdditionalIncomeItem, AdditionalAdjustmentItem } from '@shared/schema';
-// import { useTaxContext } from '@/context/TaxContext'; // 로그인 없이도 접근하기 위해 비활성화
+import { useTaxContext } from '@/context/TaxContext';
 import ProgressTracker from '@/components/ProgressTracker';
 import StepNavigation from '@/components/StepNavigation';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
@@ -33,11 +33,8 @@ export default function IncomePage() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   
-  // 로그인 없이도 접근하기 위해 기본값 사용
-  const taxData = { income: null };
-  const updateTaxData = () => Promise.resolve();
-  const resetToZero = () => {};
-  const saveTaxReturn = () => Promise.resolve();
+  // 실제 TaxContext 사용
+  const { taxData, updateTaxData, saveTaxReturn, isDataReady } = useTaxContext();
   const [isUploading, setIsUploading] = useState(false);
   
   // W-2 업로드 처리 함수
