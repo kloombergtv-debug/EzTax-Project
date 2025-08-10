@@ -356,7 +356,7 @@ export default function BusinessExpensePage() {
                 <Separator />
                 
                 <div className={`flex justify-between items-center p-4 rounded-lg border-2 ${form.watch('netIncome') >= 0 ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
-                  <span className={`font-semibold ${form.watch('netIncome') >= 0 ? 'text-green-800' : 'text-red-800'}`}>Schedule C 순소득 (Net Income)</span>
+                  <span className={`font-semibold ${form.watch('netIncome') >= 0 ? 'text-green-800' : 'text-red-800'}`}>사업순소득 (Net Income)</span>
                   <span className={`text-2xl font-bold ${form.watch('netIncome') >= 0 ? 'text-green-700' : 'text-red-700'}`}>
                     ${form.watch('netIncome') >= 0 ? 
                       form.watch('netIncome').toLocaleString() : 
@@ -366,7 +366,7 @@ export default function BusinessExpensePage() {
                 </div>
                 
                 <div className="text-sm text-gray-600 mt-2">
-                  * Schedule C 순소득은 총 수입에서 사업 지출을 뺀 금액입니다.
+                  * 사업순소득은 총 수입에서 사업 지출을 뺀 금액입니다.
                 </div>
               </div>
             </CardContent>
