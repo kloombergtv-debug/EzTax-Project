@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
 import ProgressTracker from '@/components/ProgressTracker';
+import { useTaxContext } from '@/context/TaxContext';
 
 import StepNavigation from '@/components/StepNavigation';
 import { File, Check, FileEdit, Loader2 } from 'lucide-react';
@@ -50,21 +51,26 @@ const Field: React.FC<{ label: string; value: string | number | undefined | null
 );
 
 const Review: React.FC = () => {
-  // 로그인 없이도 접근하기 위해 기본값 사용
-  const taxData = {
-    id: 1,
-    status: 'in_progress',
-    personalInfo: { filingStatus: 'single', firstName: '김', lastName: '테스트', ssn: '', dateOfBirth: '', numberOfChildren: 0, numberOfOtherDependents: 0 },
-    income: { wages: 50000, businessIncome: 0, interestIncome: 0, dividends: 0, capitalGains: 0, otherIncome: 0, adjustedGrossIncome: 50000 },
-    deductions: { useStandardDeduction: true, standardDeductionAmount: 27700, totalDeductions: 27700 },
-    taxCredits: { childTaxCredit: 0, retirementSavingsCredit: 0, foreignTaxCredit: 0, earnedIncomeCredit: 0, totalCredits: 0 },
-    additionalTax: { selfEmploymentIncome: 0, selfEmploymentTax: 0, estimatedTaxPayments: 0, otherTaxes: 0 },
-    calculatedResults: { totalIncome: 50000, adjustments: 0, adjustedGrossIncome: 50000, deductions: 27700, taxableIncome: 22300, federalTax: 2400, credits: 0, taxDue: 2400, payments: 0, refundAmount: 0, amountOwed: 2400 }
-  };
-  const saveTaxReturn = async () => {
-    console.log('세금 신고서 저장:', taxData);
-  };
-  const isLoading = false;
+  // 모든 Hook을 최상단에 선언 (조건부 호출 금지)
+  let taxData, saveTaxReturn, isLoading;
+  try {
+    const context = useTaxContext();
+    taxData = context.taxData;
+    saveTaxReturn = context.updateTaxData;
+    isLoading = context.isLoading || false;
+  } catch (error) {
+    // 로그인하지 않은 상태에서는 기본값 사용
+    console.log('TaxContext 사용 불가, 기본값 사용');
+    taxData = {
+      personalInfo: { filingStatus: 'single', firstName: '', lastName: '', ssn: '', dateOfBirth: '', numberOfChildren: 0, numberOfOtherDependents: 0, email: '', phone: '' },
+      income: { wages: 0, businessIncome: 0, interestIncome: 0, dividends: 0, capitalGains: 0, otherIncome: 0, adjustedGrossIncome: 0 },
+      deductions: { useStandardDeduction: true, standardDeductionAmount: 0, totalDeductions: 0 },
+      taxCredits: { childTaxCredit: 0, retirementSavingsCredit: 0, foreignTaxCredit: 0, earnedIncomeCredit: 0, totalCredits: 0 },
+      additionalTax: { selfEmploymentIncome: 0, selfEmploymentTax: 0, estimatedTaxPayments: 0, otherTaxes: 0 }
+    };
+    saveTaxReturn = () => {};
+    isLoading = false;
+  }
   
   const { toast } = useToast();
   const [, navigate] = useLocation();
@@ -92,7 +98,21 @@ const Review: React.FC = () => {
   const deductions = taxData.deductions || {} as Deductions;
   const taxCredits = taxData.taxCredits || {} as TaxCredits;
   const additionalTax = taxData.additionalTax || {} as AdditionalTax;
-  const calculatedResults = taxData.calculatedResults || {} as CalculatedResults;
+  
+  // 기본 계산 결과 (실제 TaxContext에서 사용될 때 업데이트됨)
+  const calculatedResults = taxData.calculatedResults || {
+    totalIncome: (income.wages || 0) + (income.businessIncome || 0) + (income.interestIncome || 0) + (income.dividends || 0) + (income.capitalGains || 0) + (income.otherIncome || 0),
+    adjustments: 0,
+    adjustedGrossIncome: income.adjustedGrossIncome || 0,
+    deductions: deductions.totalDeductions || 0,
+    taxableIncome: Math.max(0, (income.adjustedGrossIncome || 0) - (deductions.totalDeductions || 0)),
+    federalTax: 0,
+    credits: taxCredits.totalCredits || 0,
+    taxDue: 0,
+    payments: additionalTax.estimatedTaxPayments || 0,
+    refundAmount: 0,
+    amountOwed: 0
+  };
   
   const handleGeneratePdf = () => {
     try {
@@ -303,29 +323,28 @@ const Review: React.FC = () => {
         
         {/* 동영상 영역 (1/2 너비) */}
         <div className="lg:col-span-1">
-          <Card className="sticky top-6">
-            <CardContent className="pt-6">
-              <div className="text-center mb-4">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">세금 신고서 검토 방법 안내</h3>
-                <p className="text-sm text-gray-600">세금 신고서 최종 검토 및 제출 과정을 확인하세요</p>
-              </div>
-              <div className="w-full">
-                <div className="relative pb-[75%] h-0 overflow-hidden rounded-lg shadow-md">
+          <div className="sticky top-8">
+            <Card className="h-fit">
+              <CardContent className="p-0">
+                <div className="p-6 pb-0">
+                  <div className="text-center mb-4">
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">세금 신고서 검토 가이드</h3>
+                    <p className="text-sm text-gray-600">세금 신고서 최종 검토 및 제출 과정을 확인하세요</p>
+                  </div>
+                </div>
+                <div className="relative w-full pb-[75%] h-0">
                   <iframe
-                    className="absolute top-0 left-0 w-full h-full"
                     src="https://www.youtube.com/embed/kce8i5gAG1k"
-                    title="세금 신고서 검토 방법 안내"
+                    title="세금 신고서 검토 가이드"
+                    className="absolute top-0 left-0 w-full h-full rounded-b-lg"
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
-                  ></iframe>
+                  />
                 </div>
-              </div>
-              <div className="mt-4 text-xs text-gray-500 text-center">
-                세무신고서 최종 검토 과정을 동영상으로 확인하세요
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
       
