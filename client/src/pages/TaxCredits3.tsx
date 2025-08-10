@@ -14,7 +14,7 @@ import StepNavigation from '@/components/StepNavigation';
 import { useTaxContext } from '@/context/TaxContext';
 import { Info, RefreshCw, PlusCircle, Trash2 } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { calculateChildTaxCredit, calculateRetirementSavingsCredit, calculateChildDependentCareCredit, calculateCreditForOtherDependents, formatNumberInput } from '@/lib/taxCalculations';
+import { calculateChildTaxCredit, calculateRetirementSavingsCredit, calculateChildDependentCareCredit, calculateCreditForOtherDependents, formatNumberInput, isEligibleForChildTaxCredit } from '@/lib/taxCalculations';
 
 // Retirement Contributions 인터페이스 정의
 interface RetirementContributions {
@@ -390,7 +390,7 @@ const TaxCredits3Page: React.FC = () => {
     }
     
     const qualifyingChildren = dependents.filter(dependent => 
-      dependent.isQualifyingChild && !dependent.isNonresidentAlien
+      isEligibleForChildTaxCredit(dependent) && !dependent.isNonresidentAlien
     );
     
     if (qualifyingChildren.length === 0) {

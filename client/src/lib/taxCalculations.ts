@@ -221,7 +221,7 @@ const CHILD_DEPENDENT_CARE_CREDIT = {
 };
 
 // Check if a dependent is eligible for the Child Tax Credit
-function isEligibleForChildTaxCredit(dependent: Dependent): boolean {
+export function isEligibleForChildTaxCredit(dependent: Dependent): boolean {
   // Must be under 17 at the end of the tax year (2024년 기준)
   const birthDate = new Date(dependent.dateOfBirth);
   const taxYearEnd = new Date('2024-12-31'); // 2024년 기준
