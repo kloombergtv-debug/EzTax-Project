@@ -187,15 +187,6 @@ const TaxCredits3Page: React.FC = () => {
       name: "careProviders"
     });
   
-  // 데이터가 로드되지 않았으면 로딩 표시
-  if (!isDataReady) {
-    return (
-      <div className="max-w-5xl mx-auto px-4 py-6">
-        <div className="text-center">데이터 로딩 중...</div>
-      </div>
-    );
-  }
-  
   // 총 기여금 감시
   const retirementContributionsTotal = form.watch('retirementContributions.totalContributions') || 0;
   
@@ -606,6 +597,15 @@ const TaxCredits3Page: React.FC = () => {
     }
   };
   
+  // 데이터가 로드되지 않았으면 로딩 표시
+  if (!isDataReady) {
+    return (
+      <div className="max-w-5xl mx-auto px-4 py-6">
+        <div className="text-center">데이터 로딩 중...</div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-5xl mx-auto px-4 py-6">
       <ProgressTracker currentStep={4} />
