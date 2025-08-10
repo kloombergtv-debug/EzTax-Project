@@ -16,6 +16,7 @@ import StepNavigation from '@/components/StepNavigation';
 import { Info, RefreshCw, PlusCircle, Trash2 } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { calculateChildTaxCredit, calculateRetirementSavingsCredit, calculateChildDependentCareCredit, calculateCreditForOtherDependents, formatNumberInput, isEligibleForChildTaxCredit } from '@/lib/taxCalculations';
+import { useTaxContext } from '@/context/TaxContext';
 
 // Retirement Contributions 인터페이스 정의
 interface RetirementContributions {
@@ -158,18 +159,8 @@ const formSchema = z.object({
 const TaxCredits3Page: React.FC = () => {
   const { toast } = useToast();
   
-  // 로그인 없이도 접근하기 위해 기본값 사용
-  const taxData = { 
-    personalInfo: { filingStatus: 'single', numberOfChildren: 0, numberOfOtherDependents: 0 }, 
-    income: { adjustedGrossIncome: 0, wages: 0, businessIncome: 0, interestIncome: 0, dividends: 0, capitalGains: 0, otherEarnedIncome: 0 }, 
-    taxCredits: null 
-  };
-  const isDataReady = true;
-  
-  // 기본 updateTaxData 함수
-  const updateTaxData = (newData: any) => {
-    console.log('세액공제 데이터 업데이트:', newData);
-  };
+  // 실제 TaxContext 사용
+  const { taxData, updateTaxData, isDataReady } = useTaxContext();
   
   // 돌봄 비용 입력 필드 표시 여부를 위한 상태
   const [showCareExpenseFields, setShowCareExpenseFields] = useState<boolean>(false);
