@@ -172,10 +172,37 @@ export default function CapitalGainsCalculator() {
   const calculateLongTermCapitalGainsTax = (gains: number) => {
     if (gains <= 0) return 0;
     
-    // 현재 사용자의 소득 정보 가져오기
-    const currentIncome = taxData.income?.totalIncome || 0;
+    // AGI 계산 (모든 소득 포함, 자본 이득 제외)
+    const wages = taxData.income?.wages || 0;
+    const otherEarnedIncome = taxData.income?.otherEarnedIncome || 0;
+    const interestIncome = taxData.income?.interestIncome || 0;
+    const dividends = taxData.income?.dividends || 0;
+    const businessIncome = taxData.income?.businessIncome || 0;
+    const rentalIncome = taxData.income?.rentalIncome || 0;
+    const retirementIncome = taxData.income?.retirementIncome || 0;
+    const unemploymentIncome = taxData.income?.unemploymentIncome || 0;
+    const otherIncome = taxData.income?.otherIncome || 0;
+    
+    // AGI = 모든 일반 소득 합계 (자본 이득 제외)
+    const adjustedGrossIncome = wages + otherEarnedIncome + interestIncome + 
+                               dividends + businessIncome + rentalIncome + 
+                               retirementIncome + unemploymentIncome + otherIncome;
+    
+    // 표준공제 적용하여 과세소득 계산
     const filingStatus = taxData.personalInfo?.filingStatus || 'single';
-    const totalTaxableIncome = currentIncome + gains;
+    const standardDeduction = {
+      single: 13850,
+      married_joint: 27700,
+      married_separate: 13850,
+      head_of_household: 20800,
+      qualifying_widow: 27700
+    }[filingStatus] || 13850;
+    
+    // 과세소득 = AGI - 표준공제 (음수가 되지 않도록)
+    const taxableIncomeBeforeCapitalGains = Math.max(0, adjustedGrossIncome - standardDeduction);
+    
+    // 자본 이득세 계산을 위한 총 과세소득 (일반 과세소득 + 자본 이득)
+    const totalTaxableIncome = taxableIncomeBeforeCapitalGains + gains;
     
     // 2024/2025년 장기 자본 이득세율 구간 (소득 구간별)
     const capitalGainsRates = {
@@ -204,7 +231,7 @@ export default function CapitalGainsCalculator() {
     const brackets = capitalGainsRates[filingStatus as keyof typeof capitalGainsRates] || capitalGainsRates.single;
     let taxOwed = 0;
     let remainingGains = gains;
-    let currentIncomeLevel = currentIncome; // 일반 소득 부분
+    let currentIncomeLevel = taxableIncomeBeforeCapitalGains; // 일반 과세소득 부분
     
     for (const bracket of brackets) {
       if (remainingGains <= 0) break;
@@ -222,9 +249,11 @@ export default function CapitalGainsCalculator() {
     }
     
     console.log(`장기 자본 이득세 계산: 
-      소득: $${currentIncome.toLocaleString()}, 
+      AGI: $${adjustedGrossIncome.toLocaleString()}, 
+      표준공제: $${standardDeduction.toLocaleString()},
+      일반과세소득: $${taxableIncomeBeforeCapitalGains.toLocaleString()},
       자본이득: $${gains.toLocaleString()}, 
-      총소득: $${totalTaxableIncome.toLocaleString()}, 
+      총과세소득: $${totalTaxableIncome.toLocaleString()}, 
       납부세액: $${taxOwed.toLocaleString()}, 
       실효세율: ${((taxOwed/gains)*100).toFixed(1)}%`);
     
@@ -683,7 +712,8 @@ export default function CapitalGainsCalculator() {
                   </div>
                 </div>
                 <div className="mt-2 text-xs text-blue-600 italic">
-                  * 세율은 총 과세 소득(일반 소득 + 자본 이득)을 기준으로 적용됩니다.
+                  * 세율은 과세소득(AGI - 표준공제 + 자본이득)을 기준으로 적용됩니다.<br/>
+                  * 정확한 계산을 위해 소득 페이지에서 모든 소득 정보를 먼저 입력하세요.
                 </div>
               </div>
             </div>
@@ -714,23 +744,47 @@ export default function CapitalGainsCalculator() {
                     </span>
                   </div>
                   <div className="flex justify-between items-center text-sm">
-                    <span className="text-gray-600">소득 구간:</span>
+                    <span className="text-gray-600">과세소득 기준:</span>
                     <span className="font-medium text-blue-600">
                       {(() => {
-                        const currentIncome = taxData.income?.totalIncome || 0;
+                        // AGI 계산
+                        const wages = taxData.income?.wages || 0;
+                        const otherEarnedIncome = taxData.income?.otherEarnedIncome || 0;
+                        const interestIncome = taxData.income?.interestIncome || 0;
+                        const dividends = taxData.income?.dividends || 0;
+                        const businessIncome = taxData.income?.businessIncome || 0;
+                        const rentalIncome = taxData.income?.rentalIncome || 0;
+                        const retirementIncome = taxData.income?.retirementIncome || 0;
+                        const unemploymentIncome = taxData.income?.unemploymentIncome || 0;
+                        const otherIncome = taxData.income?.otherIncome || 0;
+                        
+                        const adjustedGrossIncome = wages + otherEarnedIncome + interestIncome + 
+                                                   dividends + businessIncome + rentalIncome + 
+                                                   retirementIncome + unemploymentIncome + otherIncome;
+                        
                         const filingStatus = taxData.personalInfo?.filingStatus || 'single';
-                        const totalIncome = currentIncome + longTermGains;
+                        const standardDeduction = {
+                          single: 13850,
+                          married_joint: 27700,
+                          married_separate: 13850,
+                          head_of_household: 20800,
+                          qualifying_widow: 27700
+                        }[filingStatus] || 13850;
+                        
+                        const taxableIncome = Math.max(0, adjustedGrossIncome - standardDeduction);
+                        const totalTaxableIncome = taxableIncome + longTermGains;
+                        
                         if (filingStatus === 'single') {
-                          if (totalIncome <= 47025) return '0% 구간';
-                          if (totalIncome <= 518900) return '15% 구간';
+                          if (totalTaxableIncome <= 47025) return '0% 구간';
+                          if (totalTaxableIncome <= 518900) return '15% 구간';
                           return '20% 구간';
                         } else if (filingStatus === 'married_joint') {
-                          if (totalIncome <= 94050) return '0% 구간';
-                          if (totalIncome <= 583750) return '15% 구간';
+                          if (totalTaxableIncome <= 94050) return '0% 구간';
+                          if (totalTaxableIncome <= 583750) return '15% 구간';
                           return '20% 구간';
                         } else {
-                          if (totalIncome <= 47025) return '0% 구간';
-                          if (totalIncome <= 291875) return '15% 구간';
+                          if (totalTaxableIncome <= 47025) return '0% 구간';
+                          if (totalTaxableIncome <= 291875) return '15% 구간';
                           return '20% 구간';
                         }
                       })()}
