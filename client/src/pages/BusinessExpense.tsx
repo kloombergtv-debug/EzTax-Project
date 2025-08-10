@@ -129,7 +129,7 @@ export default function BusinessExpensePage() {
     const netIncome = grossIncome - totalExpenses;
     form.setValue('netIncome', netIncome, { shouldDirty: false });
     return netIncome;
-  }, [form]);
+  }, [form, calculateTotalExpenses]);
 
   // K-1 총 소득 계산
   const calculateTotalK1Income = useCallback(() => {
@@ -174,9 +174,14 @@ export default function BusinessExpensePage() {
 
   // 실시간 계산
   useEffect(() => {
-    calculateNetIncome();
+    const netIncome = calculateNetIncome();
     calculateTotalK1Income();
-  }, [calculateNetIncome, calculateTotalK1Income]);
+    console.log('실시간 계산:', {
+      grossIncome: form.getValues('grossIncome'),
+      totalExpenses: calculateTotalExpenses(),
+      netIncome: netIncome
+    });
+  }, [calculateNetIncome, calculateTotalK1Income, calculateTotalExpenses, form]);
 
   const onSubmit = async (data: BusinessExpenseForm) => {
     try {
@@ -274,7 +279,10 @@ export default function BusinessExpensePage() {
                         placeholder="사업 총수입 금액"
                         value={field.value === 0 ? '' : field.value}
                         onChange={(e) => {
-                          field.onChange(parseFloat(e.target.value) || 0);
+                          const value = parseFloat(e.target.value) || 0;
+                          field.onChange(value);
+                          // 총 수입이 변경될 때마다 순소득 재계산
+                          setTimeout(() => calculateNetIncome(), 0);
                         }}
                       />
                     </FormControl>
@@ -308,7 +316,10 @@ export default function BusinessExpensePage() {
                             placeholder="0.00"
                             value={field.value === 0 ? '' : field.value}
                             onChange={(e) => {
-                              field.onChange(parseFloat(e.target.value) || 0);
+                              const value = parseFloat(e.target.value) || 0;
+                              field.onChange(value);
+                              // 지출이 변경될 때마다 순소득 재계산
+                              setTimeout(() => calculateNetIncome(), 0);
                             }}
                           />
                         </FormControl>
@@ -344,10 +355,13 @@ export default function BusinessExpensePage() {
                 
                 <Separator />
                 
-                <div className="flex justify-between items-center p-4 bg-green-50 rounded-lg border-2 border-green-200">
-                  <span className="font-semibold text-green-800">Schedule C 순소득 (Net Income)</span>
-                  <span className="text-2xl font-bold text-green-700">
-                    ${form.watch('netIncome').toLocaleString()}
+                <div className={`flex justify-between items-center p-4 rounded-lg border-2 ${form.watch('netIncome') >= 0 ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
+                  <span className={`font-semibold ${form.watch('netIncome') >= 0 ? 'text-green-800' : 'text-red-800'}`}>Schedule C 순소득 (Net Income)</span>
+                  <span className={`text-2xl font-bold ${form.watch('netIncome') >= 0 ? 'text-green-700' : 'text-red-700'}`}>
+                    ${form.watch('netIncome') >= 0 ? 
+                      form.watch('netIncome').toLocaleString() : 
+                      `(${Math.abs(form.watch('netIncome')).toLocaleString()})`
+                    }
                   </span>
                 </div>
                 
