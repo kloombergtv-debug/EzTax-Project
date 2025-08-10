@@ -133,21 +133,6 @@ const Header: React.FC = () => {
         </nav>
 
         <div className="flex items-center space-x-4">
-          {showButtons && (
-            <>
-              <Button 
-                variant="outline" 
-                size="sm"
-                className="text-primary-dark hover:text-primary flex items-center text-sm"
-                onClick={() => navigate('/filing-status-checker')}
-              >
-                <ClipboardCheck className="h-4 w-4 mr-1" />
-                Filing Status 확인
-              </Button>
-              
-              </>
-          )}
-          
           {user ? (
             <div className="flex items-center gap-2">
               <div className="hidden md:flex items-center text-sm font-medium">
