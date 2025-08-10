@@ -310,9 +310,9 @@ const PersonalInfo: React.FC = () => {
       </div>
 
       {/* 메인 컨텐츠 - 입력 폼과 동영상을 나란히 배치 */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* 입력 폼 영역 (2/3 너비) */}
-        <div className="lg:col-span-2">
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+        {/* 입력 폼 영역 (3/5 너비) */}
+        <div className="lg:col-span-3">
           <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           
@@ -666,8 +666,8 @@ const PersonalInfo: React.FC = () => {
           </Form>
         </div>
         
-        {/* 동영상 영역 (1/3 너비) */}
-        <div className="lg:col-span-1">
+        {/* 동영상 영역 (2/5 너비) */}
+        <div className="lg:col-span-2">
           <Card className="sticky top-6">
             <CardContent className="pt-6">
               <div className="text-center mb-4">
