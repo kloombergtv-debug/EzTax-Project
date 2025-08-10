@@ -133,7 +133,7 @@ const Home: React.FC = () => {
                 <div className="relative pb-[56.25%] h-0 overflow-hidden rounded-lg shadow-lg">
                   <iframe
                     className="absolute top-0 left-0 w-full h-full"
-                    src="https://www.youtube.com/embed/YOUR_VIDEO_ID"
+                    src="https://www.youtube.com/embed/kxz__B2xr0A"
                     title="EzTax 사용법 안내"
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -141,7 +141,7 @@ const Home: React.FC = () => {
                   ></iframe>
                 </div>
                 <p className="text-center text-sm text-gray-600 mt-4">
-                  ※ 위 동영상은 예시입니다. 실제 YouTube 동영상 URL로 교체해주세요.
+                  EzTax 사용법을 동영상으로 확인하실 수 있습니다.
                 </p>
               </div>
             </div>
