@@ -1156,12 +1156,12 @@ export default function IncomePage() {
                   <div className="income-total-box">
                     <div className="income-total-row">
                       <span>총소득 (Total Income)</span>
-                      <span>{new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 2 }).format(form.watch('totalIncome') || 0)}</span>
+                      <span>{new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(form.watch('totalIncome') || 0)}</span>
                     </div>
                     <div className="income-total-row">
                       <span>조정항목총액 (Total Adjustments)</span>
                       <span>
-                        {new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 2 }).format(
+                        {new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(
                           parseFloat((form.watch('adjustments')?.studentLoanInterest || 0).toString()) +
                           parseFloat((form.watch('adjustments')?.retirementContributions || 0).toString()) +
                           parseFloat((form.watch('adjustments')?.otherAdjustments || 0).toString())
@@ -1170,7 +1170,7 @@ export default function IncomePage() {
                     </div>
                     <div className="income-total-row highlight">
                       <span>조정총소득 (Adjusted Gross Income)</span>
-                      <span>{new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 2 }).format(form.watch('adjustedGrossIncome') || 0)}</span>
+                      <span>{new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(form.watch('adjustedGrossIncome') || 0)}</span>
                     </div>
                   </div>
                   
