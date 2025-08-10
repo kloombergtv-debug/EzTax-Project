@@ -74,8 +74,7 @@ const Review: React.FC = () => {
   
   const { toast } = useToast();
   const [, navigate] = useLocation();
-  const [showSubmitDialog, setShowSubmitDialog] = useState(false);
-  const [submitSuccess, setSubmitSuccess] = useState(false);
+
   
   // Map filing status enum to readable text
   const formatFilingStatus = (status: string | undefined): string => {
@@ -145,28 +144,7 @@ const Review: React.FC = () => {
     }
   };
   
-  const handleSubmitTaxReturn = async () => {
-    try {
-      // Update status to completed
-      await saveTaxReturn();
-      
-      setSubmitSuccess(true);
-      
-      toast({
-        title: "Tax Return Submitted",
-        description: "Your tax return has been successfully submitted.",
-        variant: "default",
-      });
-    } catch (error) {
-      console.error('Error submitting tax return:', error);
-      toast({
-        title: "Error",
-        description: "There was a problem submitting your tax return. Please try again.",
-        variant: "destructive",
-      });
-      setShowSubmitDialog(false);
-    }
-  };
+
   
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -311,9 +289,9 @@ const Review: React.FC = () => {
                   
                   <Button
                     className="bg-primary text-white font-semibold rounded hover:bg-primary-dark transition duration-200 w-[240px] justify-center"
-                    onClick={() => setShowSubmitDialog(true)}
+                    onClick={() => navigate('/tax-savings')}
                   >
-                    세금 신고서 제출
+                    절세방안 제안
                   </Button>
                 </div>
               </div>
@@ -347,103 +325,7 @@ const Review: React.FC = () => {
           </div>
         </div>
       </div>
-      
-      {/* Submit Confirmation Dialog */}
-      <Dialog open={showSubmitDialog} onOpenChange={setShowSubmitDialog}>
-        <DialogContent>
-          {submitSuccess ? (
-            <>
-              <DialogHeader>
-                <DialogTitle className="text-success flex items-center">
-                  <Check className="mr-2 h-5 w-5" />
-                  세금 신고서 제출 완료
-                </DialogTitle>
-              </DialogHeader>
-              
-              <Alert className="bg-success/10 border-success mt-4">
-                <Check className="h-4 w-4 text-success" />
-                <AlertTitle className="text-success">성공!</AlertTitle>
-                <AlertDescription>
-                  2025년 세금 신고서가 성공적으로 제출되었습니다. 기록을 위해 PDF 사본을 다운로드할 수 있습니다.
-                </AlertDescription>
-              </Alert>
-              
-              <DialogFooter className="mt-4">
-                <Button
-                  variant="outline"
-                  className="flex items-center"
-                  onClick={handleGeneratePdf}
-                >
-                  <File className="mr-2 h-4 w-4" />
-                  1040신고서(참고용)
-                </Button>
-                <Button onClick={() => {
-                  setShowSubmitDialog(false);
-                  navigate('/');
-                }}>
-                  홈으로 이동
-                </Button>
-              </DialogFooter>
-            </>
-          ) : (
-            <>
-              <DialogHeader>
-                <DialogTitle>세금 신고서 제출 확인</DialogTitle>
-                <DialogDescription>
-                  세금 신고서를 제출하시겠습니까? 제출 후에는 수정할 수 없습니다.
-                </DialogDescription>
-              </DialogHeader>
-              
-              <div className="my-4">
-                <h4 className="font-medium mb-2">제출 요약:</h4>
-                <ul className="space-y-1 text-sm text-gray-600">
-                  <li className="flex justify-between">
-                    <span>조정 총소득:</span>
-                    <span>{formatCurrency(calculatedResults.adjustedGrossIncome)}</span>
-                  </li>
-                  <li className="flex justify-between">
-                    <span>과세 소득:</span>
-                    <span>{formatCurrency(calculatedResults.taxableIncome)}</span>
-                  </li>
-                  <li className="flex justify-between">
-                    <span>납부할 세금:</span>
-                    <span>{formatCurrency(calculatedResults.taxDue)}</span>
-                  </li>
-                  <li className="flex justify-between font-bold">
-                    {calculatedResults.refundAmount > 0 ? (
-                      <>
-                        <span className="text-success">환급액:</span>
-                        <span className="text-success">{formatCurrency(calculatedResults.refundAmount)}</span>
-                      </>
-                    ) : (
-                      <>
-                        <span className="text-destructive">납부해야 할 금액:</span>
-                        <span className="text-destructive">{formatCurrency(calculatedResults.amountOwed)}</span>
-                      </>
-                    )}
-                  </li>
-                </ul>
-              </div>
-              
-              <DialogFooter className="mt-4">
-                <Button variant="outline" onClick={() => setShowSubmitDialog(false)}>
-                  취소
-                </Button>
-                <Button onClick={handleSubmitTaxReturn} disabled={isLoading}>
-                  {isLoading ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      처리 중...
-                    </>
-                  ) : (
-                    '확인 및 제출'
-                  )}
-                </Button>
-              </DialogFooter>
-            </>
-          )}
-        </DialogContent>
-      </Dialog>
+
     </div>
   );
 };
