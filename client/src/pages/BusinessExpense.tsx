@@ -473,6 +473,8 @@ export default function BusinessExpensePage() {
                                     const totalIncome = form.getValues(`k1Items.${index}.totalEntityIncome`) || 0;
                                     const myShare = (totalIncome * ownershipPercentage) / 100;
                                     form.setValue(`k1Items.${index}.ordinaryIncome`, myShare);
+                                    // K-1 총소득 재계산
+                                    setTimeout(() => calculateTotalK1Income(), 0);
                                   }}
                                 />
                               </FormControl>
@@ -505,6 +507,8 @@ export default function BusinessExpensePage() {
                                     const ownershipPercentage = form.getValues(`k1Items.${index}.ownershipPercentage`) || 0;
                                     const myShare = (totalIncome * ownershipPercentage) / 100;
                                     form.setValue(`k1Items.${index}.ordinaryIncome`, myShare);
+                                    // K-1 총소득 재계산
+                                    setTimeout(() => calculateTotalK1Income(), 0);
                                   }}
                                 />
                               </FormControl>
@@ -566,6 +570,8 @@ export default function BusinessExpensePage() {
                                   value={field.value === 0 ? '' : field.value}
                                   onChange={(e) => {
                                     field.onChange(parseFloat(e.target.value) || 0);
+                                    // K-1 총소득 재계산
+                                    setTimeout(() => calculateTotalK1Income(), 0);
                                   }}
                                 />
                               </FormControl>
@@ -589,6 +595,8 @@ export default function BusinessExpensePage() {
                                   value={field.value === 0 ? '' : field.value}
                                   onChange={(e) => {
                                     field.onChange(parseFloat(e.target.value) || 0);
+                                    // K-1 총소득 재계산
+                                    setTimeout(() => calculateTotalK1Income(), 0);
                                   }}
                                 />
                               </FormControl>
@@ -612,6 +620,8 @@ export default function BusinessExpensePage() {
                                   value={field.value === 0 ? '' : field.value}
                                   onChange={(e) => {
                                     field.onChange(parseFloat(e.target.value) || 0);
+                                    // K-1 총소득 재계산
+                                    setTimeout(() => calculateTotalK1Income(), 0);
                                   }}
                                 />
                               </FormControl>
@@ -634,6 +644,8 @@ export default function BusinessExpensePage() {
                                   value={field.value === 0 ? '' : field.value}
                                   onChange={(e) => {
                                     field.onChange(parseFloat(e.target.value) || 0);
+                                    // K-1 총소득 재계산
+                                    setTimeout(() => calculateTotalK1Income(), 0);
                                   }}
                                 />
                               </FormControl>
