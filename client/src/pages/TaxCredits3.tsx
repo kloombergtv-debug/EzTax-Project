@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { useQuery, useMutation } from '@tanstack/react-query';
+import { queryClient, apiRequest } from '@/lib/queryClient';
 import { Card, CardContent } from '@/components/ui/card';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
@@ -11,7 +13,6 @@ import { useToast } from '@/hooks/use-toast';
 import ProgressTracker from '@/components/ProgressTracker';
 
 import StepNavigation from '@/components/StepNavigation';
-import { useTaxContext } from '@/context/TaxContext';
 import { Info, RefreshCw, PlusCircle, Trash2 } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { calculateChildTaxCredit, calculateRetirementSavingsCredit, calculateChildDependentCareCredit, calculateCreditForOtherDependents, formatNumberInput, isEligibleForChildTaxCredit } from '@/lib/taxCalculations';
@@ -155,8 +156,35 @@ const formSchema = z.object({
 });
 
 const TaxCredits3Page: React.FC = () => {
-  const { taxData, updateTaxData, isDataReady } = useTaxContext();
   const { toast } = useToast();
+  
+  // React Query를 사용한 데이터 가져오기
+  const { data: taxData, isLoading } = useQuery({
+    queryKey: ['/api/tax-return'],
+    retry: 3,
+    refetchOnWindowFocus: false,
+  });
+  
+  const isDataReady = !isLoading && taxData;
+  
+  // 데이터 업데이트 mutation
+  const updateTaxDataMutation = useMutation({
+    mutationFn: (data: any) => apiRequest('/api/tax-return', {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/tax-return'] });
+    },
+  });
+  
+  // updateTaxData 함수
+  const updateTaxData = (newData: any) => {
+    updateTaxDataMutation.mutate(newData);
+  };
   
   // 돌봄 비용 입력 필드 표시 여부를 위한 상태
   const [showCareExpenseFields, setShowCareExpenseFields] = useState<boolean>(false);
@@ -364,9 +392,9 @@ const TaxCredits3Page: React.FC = () => {
   
   // 자녀 세액공제 자동 계산
   const calculateChildTaxCreditAuto = () => {
-    const filingStatus = taxData.personalInfo?.filingStatus || 'single';
-    const agi = taxData.income?.adjustedGrossIncome || 0;
-    const dependents = taxData.personalInfo?.dependents || [];
+    const filingStatus = taxData?.personalInfo?.filingStatus || 'single';
+    const agi = taxData?.income?.adjustedGrossIncome || 0;
+    const dependents = taxData?.personalInfo?.dependents || [];
     
     // 자녀 세액공제 계산
     console.log("자녀 세액공제 계산 - 조정총소득(AGI):", agi, "신고유형:", filingStatus);
@@ -407,9 +435,9 @@ const TaxCredits3Page: React.FC = () => {
   
   // 기타 부양가족 공제 자동 계산
   const calculateOtherDependentCreditAuto = () => {
-    const filingStatus = taxData.personalInfo?.filingStatus || 'single';
-    const agi = taxData.income?.adjustedGrossIncome || 0;
-    const dependents = taxData.personalInfo?.dependents || [];
+    const filingStatus = taxData?.personalInfo?.filingStatus || 'single';
+    const agi = taxData?.income?.adjustedGrossIncome || 0;
+    const dependents = taxData?.personalInfo?.dependents || [];
     
     // 현재 Child Tax Credit 값을 보존
     const currentChildTaxCredit = form.getValues('childTaxCredit');
@@ -480,7 +508,7 @@ const TaxCredits3Page: React.FC = () => {
   
   // 페이지 로드 시 데이터 초기화
   useEffect(() => {
-    if (taxData.taxCredits || taxData.retirementContributions) {
+    if (taxData && (taxData.taxCredits || taxData.retirementContributions)) {
       const parsedValues: TaxCreditsFormData = {
         ...defaultFormData,
         ...taxData.taxCredits,
@@ -492,7 +520,10 @@ const TaxCredits3Page: React.FC = () => {
         careExpenses: (taxData.taxCredits as any)?.careExpenses || 0
       };
       
+      console.log("폼 리셋 전 - Child Tax Credit 현재 값:", form.getValues('childTaxCredit'));
+      console.log("폼 리셋 데이터 - Child Tax Credit 저장된 값:", parsedValues.childTaxCredit);
       form.reset(parsedValues);
+      console.log("폼 리셋 후 - Child Tax Credit 값:", form.getValues('childTaxCredit'));
       
       // 돌봄 비용이 있으면 해당 필드 표시
       if (parsedValues.careExpenses > 0 || (parsedValues.careProviders && parsedValues.careProviders.length > 1)) {
@@ -510,7 +541,7 @@ const TaxCredits3Page: React.FC = () => {
       // 페이지 로드 시 기타 부양가족 공제도 자동 확인
       setTimeout(() => {
         // 현재 17세 이상 부양가족이 있는지 확인
-        const dependents = taxData.personalInfo?.dependents || [];
+        const dependents = taxData?.personalInfo?.dependents || [];
         const otherDependents = dependents.filter(dependent => {
           const birthDate = new Date(dependent.dateOfBirth);
           const taxYearEnd = new Date('2024-12-31');
