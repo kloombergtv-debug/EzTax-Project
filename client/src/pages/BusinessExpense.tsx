@@ -703,21 +703,7 @@ export default function BusinessExpensePage() {
                     ${form.watch('totalK1Income').toLocaleString()}
                   </span>
                 </div>
-                
-                <Separator />
-                
-                <div className="flex justify-between items-center p-4 bg-purple-50 rounded-lg border-2 border-purple-200">
-                  <span className="font-semibold text-purple-800">총 사업소득 (Total Business Income)</span>
-                  <span className="text-2xl font-bold text-purple-700">
-                    ${(form.watch('netIncome') + form.watch('totalK1Income')).toLocaleString()}
-                  </span>
-                </div>
-                
-                <div className="text-sm text-gray-600 mt-2">
-                  * 이 총 사업소득이 소득 페이지의 사업소득 필드에 자동으로 입력됩니다.
-                  <br />
-                  * Schedule C 순소득 + K-1 총소득 = 총 사업소득
-                </div>
+
               </div>
             </CardContent>
           </Card>
