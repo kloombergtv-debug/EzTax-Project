@@ -317,6 +317,43 @@ export default function BusinessExpensePage() {
             </CardContent>
           </Card>
 
+          {/* Schedule C 순소득 계산 결과 */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Schedule C 순소득 계산 결과</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                  <span className="font-medium">총 수입 (Gross Income)</span>
+                  <span className="text-xl font-semibold">
+                    ${form.watch('grossIncome').toLocaleString()}
+                  </span>
+                </div>
+                
+                <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                  <span className="font-medium">총 지출 (Total Expenses)</span>
+                  <span className="text-xl font-semibold text-red-600">
+                    -${calculateTotalExpenses().toLocaleString()}
+                  </span>
+                </div>
+                
+                <Separator />
+                
+                <div className="flex justify-between items-center p-4 bg-green-50 rounded-lg border-2 border-green-200">
+                  <span className="font-semibold text-green-800">Schedule C 순소득 (Net Income)</span>
+                  <span className="text-2xl font-bold text-green-700">
+                    ${form.watch('netIncome').toLocaleString()}
+                  </span>
+                </div>
+                
+                <div className="text-sm text-gray-600 mt-2">
+                  * Schedule C 순소득은 총 수입에서 사업 지출을 뺀 금액입니다.
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
           {/* Schedule K-1 섹션 */}
           <Card>
             <CardHeader>
@@ -544,36 +581,13 @@ export default function BusinessExpensePage() {
             </CardContent>
           </Card>
 
-          {/* 계산 결과 */}
+          {/* 최종 계산 결과 */}
           <Card>
             <CardHeader>
-              <CardTitle>계산 결과 (Calculation Results)</CardTitle>
+              <CardTitle>최종 사업소득 계산 결과</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
-                  <span className="font-medium">총 수입 (Gross Income)</span>
-                  <span className="text-xl font-semibold">
-                    ${form.watch('grossIncome').toLocaleString()}
-                  </span>
-                </div>
-                
-                <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
-                  <span className="font-medium">총 지출 (Total Expenses)</span>
-                  <span className="text-xl font-semibold text-red-600">
-                    -${calculateTotalExpenses().toLocaleString()}
-                  </span>
-                </div>
-                
-                <Separator />
-                
-                <div className="flex justify-between items-center p-4 bg-green-50 rounded-lg border-2 border-green-200">
-                  <span className="font-semibold text-green-800">Schedule C 순소득 (Net Income)</span>
-                  <span className="text-2xl font-bold text-green-700">
-                    ${form.watch('netIncome').toLocaleString()}
-                  </span>
-                </div>
-                
                 <div className="flex justify-between items-center p-4 bg-blue-50 rounded-lg border-2 border-blue-200">
                   <span className="font-semibold text-blue-800">K-1 총소득 (Total K-1 Income)</span>
                   <span className="text-2xl font-bold text-blue-700">
@@ -592,6 +606,8 @@ export default function BusinessExpensePage() {
                 
                 <div className="text-sm text-gray-600 mt-2">
                   * 이 총 사업소득이 소득 페이지의 사업소득 필드에 자동으로 입력됩니다.
+                  <br />
+                  * Schedule C 순소득 + K-1 총소득 = 총 사업소득
                 </div>
               </div>
             </CardContent>
