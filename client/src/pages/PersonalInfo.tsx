@@ -28,7 +28,19 @@ const relationshipOptions = [
 
 const PersonalInfo: React.FC = () => {
   // 모든 Hook을 최상단에 선언 (조건부 호출 금지)
-  const { taxData, updateTaxData, isDataReady } = useTaxContext();
+  let taxData, updateTaxData, isDataReady;
+  try {
+    const context = useTaxContext();
+    taxData = context.taxData;
+    updateTaxData = context.updateTaxData;
+    isDataReady = context.isDataReady;
+  } catch (error) {
+    // 로그인하지 않은 상태에서는 기본값 사용
+    taxData = { personalInfo: null };
+    updateTaxData = () => {};
+    isDataReady = false;
+  }
+  
   const { toast } = useToast();
   const [, navigate] = useLocation();
   const [showSpouseInfo, setShowSpouseInfo] = useState(false);
