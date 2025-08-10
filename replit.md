@@ -5,6 +5,7 @@ EzTax is a comprehensive web-based application designed to streamline federal ta
 
 ## User Preferences
 Preferred communication style: Simple, everyday language.
+Page Layout Preference: Side-by-side layout with input forms taking 2/3 width and instructional videos on the right side taking 1/3 width. Videos should be sticky positioned and embedded with responsive design.
 
 ## System Architecture
 
@@ -33,7 +34,7 @@ Preferred communication style: Simple, everyday language.
 - **Tax Calculation Engine**: Implements federal tax brackets, standard deductions, SALT limits, Child Tax Credit, Retirement Savings Credit, and Self-employment tax for 2024/2025 tax years.
 - **Data Persistence**: Real-time saving and restoration of tax data to PostgreSQL using JSON-based storage.
 - **Authentication**: Supports local username/password and Google OAuth with session-based authentication and secure password hashing.
-- **UI/UX Decisions**: Focus on clean, professional appearance with consistent dollar placeholders, clear field labeling, and intuitive navigation flows. Enhancements include dynamic input formatting and streamlined user guidance messages.
+- **UI/UX Decisions**: Focus on clean, professional appearance with consistent dollar placeholders, clear field labeling, and intuitive navigation flows. Enhancements include dynamic input formatting and streamlined user guidance messages. Side-by-side layout implementation: input forms take 2/3 width with instructional videos on the right side taking 1/3 width, sticky positioned for better user experience.
 - **Retirement Planning Integration**: Features a comprehensive retirement score calculator with multi-factor scoring, inflation adjustments, Social Security integration, and Monte Carlo simulations. This includes a step-by-step guided flow for financial assessment.
 - **Admin Panel**: Provides comprehensive user and tax data management capabilities for administrators.
 - **Email Functionality**: Integration for expert consultation requests and application submissions.
