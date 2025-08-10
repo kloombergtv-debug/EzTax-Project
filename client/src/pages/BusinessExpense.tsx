@@ -492,7 +492,28 @@ export default function BusinessExpensePage() {
                           name={`k1Items.${index}.totalEntityIncome`}
                           render={({ field }) => (
                             <FormItem className="mb-4">
-                              <FormLabel>엔티티 순소득 (Total Entity Net Income)</FormLabel>
+                              <FormLabel className="flex items-center gap-2">
+                                엔티티 순소득 (Total Entity Net Income)
+                                <Button
+                                  type="button"
+                                  variant="outline"
+                                  size="sm"
+                                  className="text-xs px-2 py-1 h-6"
+                                  onClick={() => {
+                                    const netIncome = form.getValues('netIncome') || 0;
+                                    field.onChange(netIncome);
+                                    
+                                    // 지분율에 따라 자동으로 개인 소득 계산
+                                    const ownershipPercentage = form.getValues(`k1Items.${index}.ownershipPercentage`) || 0;
+                                    const myShare = (netIncome * ownershipPercentage) / 100;
+                                    form.setValue(`k1Items.${index}.ordinaryIncome`, myShare);
+                                    // K-1 총소득 재계산
+                                    setTimeout(() => calculateTotalK1Income(), 0);
+                                  }}
+                                >
+                                  Schedule C에서 가져오기
+                                </Button>
+                              </FormLabel>
                               <FormControl>
                                 <Input
                                   type="number"
