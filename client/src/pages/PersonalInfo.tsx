@@ -322,9 +322,9 @@ const PersonalInfo: React.FC = () => {
       </div>
 
       {/* 메인 컨텐츠 - 입력 폼과 동영상을 나란히 배치 */}
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-        {/* 입력 폼 영역 (3/5 너비) */}
-        <div className="lg:col-span-3">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* 입력 폼 영역 (1/2 너비) */}
+        <div className="lg:col-span-1">
           <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           
@@ -678,8 +678,8 @@ const PersonalInfo: React.FC = () => {
           </Form>
         </div>
         
-        {/* 동영상 영역 (2/5 너비) */}
-        <div className="lg:col-span-2">
+        {/* 동영상 영역 (1/2 너비) */}
+        <div className="lg:col-span-1">
           <Card className="sticky top-6">
             <CardContent className="pt-6">
               <div className="text-center mb-4">
@@ -687,7 +687,7 @@ const PersonalInfo: React.FC = () => {
                 <p className="text-sm text-gray-600">기본정보 입력 방법을 확인하세요</p>
               </div>
               <div className="w-full">
-                <div className="relative pb-[56.25%] h-0 overflow-hidden rounded-lg shadow-md">
+                <div className="relative pb-[75%] h-0 overflow-hidden rounded-lg shadow-md">
                   <iframe
                     className="absolute top-0 left-0 w-full h-full"
                     src="https://www.youtube.com/embed/kce8i5gAG1k"
