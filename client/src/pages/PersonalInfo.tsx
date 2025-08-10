@@ -680,26 +680,28 @@ const PersonalInfo: React.FC = () => {
         
         {/* 동영상 영역 (1/2 너비) */}
         <div className="lg:col-span-1">
-          <Card className="sticky top-6">
-            <CardContent className="pt-6">
-              <div className="text-center mb-4">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">입력 방법 안내</h3>
-                <p className="text-sm text-gray-600">기본정보 입력 방법을 확인하세요</p>
-              </div>
-              <div className="w-full">
-                <div className="relative pb-[75%] h-0 overflow-hidden rounded-lg shadow-md">
-                  <iframe
-                    className="absolute top-0 left-0 w-full h-full"
-                    src="https://www.youtube.com/embed/kce8i5gAG1k"
-                    title="기본정보 입력 방법"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowFullScreen
-                  ></iframe>
+          <div className="sticky top-8">
+            <Card className="h-fit">
+              <CardContent className="p-0">
+                <div className="p-6 pb-0">
+                  <div className="text-center mb-4">
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">기본정보 입력 가이드</h3>
+                    <p className="text-sm text-gray-600">기본정보 입력 방법을 확인하세요</p>
+                  </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
+                <div className="relative w-full pb-[75%] h-0">
+                  <iframe
+                    src="https://www.youtube.com/embed/kce8i5gAG1k"
+                    title="기본정보 입력 가이드"
+                    className="absolute top-0 left-0 w-full h-full rounded-b-lg"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
     </div>
