@@ -575,51 +575,7 @@ export default function IncomePage() {
                         )}
                       />
                       
-                      <div className="border rounded-md p-4 bg-blue-50/50 mb-4">
-                        <p className="text-sm font-medium text-blue-800 mb-2">W-2 폼 업로드 (W-2 Form Upload)</p>
-                        <p className="text-xs text-blue-700 mb-3">
-                          W-2 폼 파일을 업로드하면 급여 정보가 자동으로 입력됩니다. 파일이 없으면 수동으로 입력하세요.
-                        </p>
-                        <div className="flex items-center gap-3">
-                          <Button 
-                            type="button" 
-                            variant="outline" 
-                            size="sm"
-                            className="flex items-center gap-2 bg-white hover:bg-blue-50 border-blue-200 text-blue-700"
-                            onClick={() => document.getElementById('w2-file-upload')?.click()}
-                            disabled={isUploading}
-                          >
-                            {isUploading ? (
-                              <>
-                                <Loader2 className="h-4 w-4 animate-spin" />
-                                <span>처리 중...</span>
-                              </>
-                            ) : (
-                              <>
-                                <Upload className="h-4 w-4" />
-                                <span>W-2 폼 업로드</span>
-                              </>
-                            )}
-                          </Button>
-                          <input 
-                            id="w2-file-upload"
-                            type="file" 
-                            accept=".pdf,.jpg,.jpeg,.png" 
-                            className="hidden" 
-                            onChange={(e) => {
-                              const file = e.target.files?.[0];
-                              if (file) {
-                                handleW2Upload(file);
-                                // 파일 입력 초기화
-                                e.target.value = '';
-                              }
-                            }}
-                          />
-                          <p className="text-xs text-blue-600 mt-2">
-                            JPG, PNG 또는 PDF 파일을 업로드하면 급여 정보가 자동으로 추출됩니다.
-                          </p>
-                        </div>
-                      </div>
+
                       
                       <FormField
                         control={form.control}
