@@ -75,9 +75,31 @@ export default function CapitalGainsCalculator() {
   const { taxData, updateTaxData } = useTaxContext();
   const { toast } = useToast();
   
+  // 컴포넌트 재마운트를 위한 키
+  const [componentKey, setComponentKey] = useState(0);
+  
   // 거래 목록 상태 관리 (간단한 상태로 돌아가기)
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [forceUpdate, setForceUpdate] = useState(0);
+  
+  // 테스트를 위한 하드코딩된 더미 데이터 (디버깅용)
+  const [showTestData, setShowTestData] = useState(false);
+  const testTransactions: Transaction[] = [
+    {
+      id: 999,
+      description: "테스트 거래",
+      buyPrice: 100,
+      sellPrice: 200,
+      quantity: 10,
+      profit: 1000,
+      purchaseDate: "2024-01-01",
+      saleDate: "2025-01-01",
+      isLongTerm: true
+    }
+  ];
+  
+  // 실제 표시할 거래 목록 (테스트 데이터 또는 실제 데이터)
+  const displayTransactions = showTestData ? testTransactions : transactions;
   
   // 거래 목록 상태 변화 추적
   useEffect(() => {
@@ -226,6 +248,7 @@ export default function CapitalGainsCalculator() {
     
     setTransactions(updatedList);
     setForceUpdate(prev => prev + 1);
+    setComponentKey(prev => prev + 1);
     
     // 입력 필드 초기화
     setNewTransaction({
@@ -368,7 +391,7 @@ export default function CapitalGainsCalculator() {
   };
   
   return (
-    <div className="container mx-auto py-6">
+    <div key={componentKey} className="container mx-auto py-6">
       <Card className="mb-6">
         <CardHeader>
           <div className="flex items-center justify-between">
@@ -396,7 +419,16 @@ export default function CapitalGainsCalculator() {
           
           {/* 거래 목록 테이블 */}
           <div className="mb-6">
-            <h3 className="text-lg font-medium mb-3">거래 목록</h3>
+            <div className="flex justify-between items-center mb-3">
+              <h3 className="text-lg font-medium">거래 목록</h3>
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => setShowTestData(!showTestData)}
+              >
+                {showTestData ? "실제 데이터" : "테스트 데이터"}
+              </Button>
+            </div>
             <Table key={forceUpdate}>
               <TableCaption>자본 이득 거래 내역</TableCaption>
               <TableHeader>
@@ -413,7 +445,7 @@ export default function CapitalGainsCalculator() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {transactions.map((transaction) => (
+                {displayTransactions.map((transaction) => (
                   <TableRow key={transaction.id}>
                     <TableCell className="font-medium">{transaction.description}</TableCell>
                     <TableCell className="text-right">${transaction.buyPrice.toLocaleString()}</TableCell>
