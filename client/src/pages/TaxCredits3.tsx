@@ -450,12 +450,19 @@ const TaxCredits3Page: React.FC = () => {
     console.log(`기타 부양가족 공제 대상자 수: ${otherDependents.length}`);
     
     if (otherDependents.length === 0) {
+      // 적격 부양가족이 없으면 0으로 설정
+      form.setValue('otherCredits', 0);
+      setPendingChanges(true);
+      
       toast({
-        title: "계산할 수 없습니다",
-        description: "17세 이상의 부양가족이 없습니다. (기타 부양가족 공제는 17세 이상 부양가족에게만 적용됩니다)",
-        variant: "destructive"
+        title: "기타 부양가족 공제 $0",
+        description: "17세 이상의 부양가족이 없어서 기타 부양가족 공제가 적용되지 않습니다.",
+        variant: "default"
       });
-      return;
+      
+      // 총 세액공제 업데이트
+      setTimeout(() => calculateTotalCredits(), 100);
+      return 0;
     }
     
     // 적격 자녀가 아닌 부양가족에 기반한 세액공제 계산
@@ -497,6 +504,29 @@ const TaxCredits3Page: React.FC = () => {
         setShowRetirementFields(true);
         setTimeout(() => calculateRetirementCredit(), 1500);
       }
+      
+      // 페이지 로드 시 기타 부양가족 공제도 자동 확인
+      setTimeout(() => {
+        // 현재 17세 이상 부양가족이 있는지 확인
+        const dependents = taxData.personalInfo?.dependents || [];
+        const otherDependents = dependents.filter(dependent => {
+          const birthDate = new Date(dependent.dateOfBirth);
+          const taxYearEnd = new Date('2024-12-31');
+          let age = taxYearEnd.getFullYear() - birthDate.getFullYear();
+          const monthDiff = taxYearEnd.getMonth() - birthDate.getMonth();
+          if (monthDiff < 0 || (monthDiff === 0 && taxYearEnd.getDate() < birthDate.getDate())) {
+            age--;
+          }
+          return age >= 17 && !dependent.isNonresidentAlien;
+        });
+        
+        // 17세 이상 부양가족이 없으면 기타 부양가족 공제를 0으로 설정
+        if (otherDependents.length === 0 && parsedValues.otherCredits > 0) {
+          console.log("페이지 로드 시 기타 부양가족 공제 0으로 수정");
+          form.setValue('otherCredits', 0);
+          setPendingChanges(true);
+        }
+      }, 1000);
       
       setPendingChanges(false);
     }
