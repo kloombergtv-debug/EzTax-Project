@@ -43,7 +43,7 @@ const businessExpenseSchema = z.object({
     entityType: z.enum(['partnership', 'scorp', 'trust']).default('partnership'),
     ownershipPercentage: z.number().min(0).max(100).default(0),
     totalEntityIncome: z.number().default(0),
-    ordinaryIncome: z.number().min(0).default(0),
+    ordinaryIncome: z.number().default(0),
     rentalIncome: z.number().default(0),
     interestIncome: z.number().min(0).default(0),
     dividendIncome: z.number().min(0).default(0),
@@ -563,13 +563,14 @@ export default function BusinessExpensePage() {
                                 <Input
                                   type="number"
                                   step="0.01"
-                                  placeholder="자동 계산됨"
-                                  value={field.value === 0 ? '' : field.value.toFixed(2)}
+                                  placeholder="마이너스 가능"
+                                  value={field.value === 0 ? '' : field.value}
                                   onChange={(e) => {
-                                    field.onChange(parseFloat(e.target.value) || 0);
+                                    const value = parseFloat(e.target.value) || 0;
+                                    field.onChange(value);
+                                    // K-1 총소득 재계산
+                                    setTimeout(() => calculateTotalK1Income(), 0);
                                   }}
-                                  className="bg-gray-50"
-                                  readOnly
                                 />
                               </FormControl>
                               <FormMessage />
