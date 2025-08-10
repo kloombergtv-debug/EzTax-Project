@@ -332,10 +332,10 @@ export default function BusinessExpensePage() {
             </CardContent>
           </Card>
 
-          {/* Schedule C 순소득 계산 결과 */}
+          {/* 사업순소득 계산결과 */}
           <Card>
             <CardHeader>
-              <CardTitle>Schedule C 순소득 계산 결과</CardTitle>
+              <CardTitle>사업순소득 계산결과</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
