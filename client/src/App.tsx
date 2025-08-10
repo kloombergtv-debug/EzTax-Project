@@ -55,7 +55,7 @@ function Router() {
       <ProtectedRoute path="/filing-status-checker" component={FilingStatusChecker} />
       <ProtectedRoute path="/additional-income" component={AdditionalIncomePage} />
       <ProtectedRoute path="/additional-adjustments" component={AdditionalAdjustmentsPage} />
-      <ProtectedRoute path="/retirement-contributions" component={RetirementContributions} />
+      <Route path="/retirement-contributions" component={RetirementContributions} />
       <Route path="/deductions" component={Deductions} />
       <ProtectedRoute path="/salt-deductions" component={SALTDeductions} />
       <Route path="/tax-credits" component={TaxCredits} />

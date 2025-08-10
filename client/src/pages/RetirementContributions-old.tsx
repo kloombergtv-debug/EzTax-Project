@@ -1,0 +1,656 @@
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
+import { useTaxContext } from "@/context/TaxContext";
+import { useLocation } from "wouter";
+import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { InfoIcon, PiggyBankIcon, TrendingUpIcon } from "lucide-react";
+import { useState, useEffect } from "react";
+
+// 2025 IRS Contribution Limits
+const CONTRIBUTION_LIMITS_2025 = {
+  traditionalIRA: { under50: 7000, over50: 8000 },
+  rothIRA: { under50: 7000, over50: 8000 },
+  plan401k: { under50: 23500, over50: 31000 },
+  plan403b: { under50: 23500, over50: 31000 },
+  plan457: { under50: 23500, over50: 31000 },
+  simpleIRA: { under50: 16000, over50: 19500 },
+  sepIRA: { lesserOf: "25% of compensation or $70,000" },
+  able: 15000,
+  tsp: { under50: 23500, over50: 31000 }
+};
+
+const retirementSchema = z.object({
+  traditionalIRA: z.number().min(0).max(8000),
+  rothIRA: z.number().min(0).max(8000),
+  plan401k: z.number().min(0).max(31000),
+  plan403b: z.number().min(0).max(31000),
+  plan457: z.number().min(0).max(31000),
+  simpleIRA: z.number().min(0).max(19500),
+  sepIRA: z.number().min(0).max(70000),
+  able: z.number().min(0).max(15000),
+  tsp: z.number().min(0).max(31000),
+  otherRetirementPlans: z.number().min(0),
+});
+
+type RetirementFormData = z.infer<typeof retirementSchema>;
+
+export default function RetirementContributions() {
+  // 로그인 없이도 접근하기 위해 기본값 사용
+  const taxData = {
+    personalInfo: { dateOfBirth: '1990-01-01' },
+    retirementContributions: null
+  };
+  const updateTaxData = (newData: any) => {
+    console.log('퇴직연금 데이터 업데이트:', newData);
+  };
+  
+  const [, navigate] = useLocation();
+  const [userAge, setUserAge] = useState(25);
+  const [estimatedCredit, setEstimatedCredit] = useState(0);
+
+  // Calculate user age from date of birth
+  useEffect(() => {
+    if (taxData.personalInfo?.dateOfBirth) {
+      const birthDate = new Date(taxData.personalInfo.dateOfBirth);
+      const today = new Date();
+      const age = today.getFullYear() - birthDate.getFullYear();
+      setUserAge(age);
+    }
+  }, [taxData.personalInfo?.dateOfBirth]);
+
+  const form = useForm<RetirementFormData>({
+    resolver: zodResolver(retirementSchema),
+    defaultValues: {
+      traditionalIRA: taxData.retirementContributions?.traditionalIRA || 0,
+      rothIRA: taxData.retirementContributions?.rothIRA || 0,
+      plan401k: taxData.retirementContributions?.plan401k || 0,
+      plan403b: taxData.retirementContributions?.plan403b || 0,
+      plan457: taxData.retirementContributions?.plan457 || 0,
+      simpleIRA: taxData.retirementContributions?.simpleIRA || 0,
+      sepIRA: taxData.retirementContributions?.sepIRA || 0,
+      able: taxData.retirementContributions?.able || 0,
+      tsp: taxData.retirementContributions?.tsp || 0,
+      otherRetirementPlans: taxData.retirementContributions?.otherRetirementPlans || 0,
+    },
+  });
+
+  // Calculate Saver's Credit eligibility
+  useEffect(() => {
+    const watchedValues = form.watch();
+    const totalDeductibleContributions = 
+      watchedValues.traditionalIRA + 
+      watchedValues.plan401k + 
+      watchedValues.plan403b + 
+      watchedValues.plan457 + 
+      watchedValues.simpleIRA + 
+      watchedValues.sepIRA + 
+      watchedValues.tsp;
+
+    const agi = taxData.income?.adjustedGrossIncome || 0;
+    let creditRate = 0;
+
+    // 2025 Saver's Credit income thresholds
+    if (taxData.personalInfo?.filingStatus === 'married_joint') {
+      if (agi <= 46000) creditRate = 0.50;
+      else if (agi <= 50000) creditRate = 0.20;
+      else if (agi <= 77000) creditRate = 0.10;
+    } else {
+      if (agi <= 23000) creditRate = 0.50;
+      else if (agi <= 25000) creditRate = 0.20;
+      else if (agi <= 38500) creditRate = 0.10;
+    }
+
+    const maxCreditableAmount = Math.min(totalDeductibleContributions, 2000);
+    setEstimatedCredit(maxCreditableAmount * creditRate);
+  }, [form.watch, taxData.income?.adjustedGrossIncome, taxData.personalInfo?.filingStatus]);
+
+  const onSubmit = async (data: RetirementFormData) => {
+    const totalContributions = Object.values(data).reduce((sum, value) => sum + value, 0);
+    
+    const retirementContributions = {
+      ...data,
+      totalContributions,
+    };
+
+    // Update adjustments to include retirement contributions in AGI calculation
+    const updatedAdjustments = {
+      studentLoanInterest: taxData.income?.adjustments?.studentLoanInterest || 0,
+      otherAdjustments: taxData.income?.adjustments?.otherAdjustments || 0,
+      retirementContributions: data.traditionalIRA + data.plan401k + data.plan403b + 
+                               data.plan457 + data.simpleIRA + data.sepIRA + data.tsp
+    };
+
+    // Recalculate AGI
+    const totalIncome = taxData.income?.totalIncome || 0;
+    const totalAdjustments = Object.values(updatedAdjustments).reduce((sum, value) => sum + value, 0);
+    const adjustedGrossIncome = Math.max(0, totalIncome - totalAdjustments);
+
+    await updateTaxData({
+      retirementContributions,
+      income: {
+        wages: taxData.income?.wages || 0,
+        otherEarnedIncome: taxData.income?.otherEarnedIncome || 0,
+        interestIncome: taxData.income?.interestIncome || 0,
+        dividends: taxData.income?.dividends || 0,
+        businessIncome: taxData.income?.businessIncome || 0,
+        capitalGains: taxData.income?.capitalGains || 0,
+        rentalIncome: taxData.income?.rentalIncome || 0,
+        retirementIncome: taxData.income?.retirementIncome || 0,
+        unemploymentIncome: taxData.income?.unemploymentIncome || 0,
+        otherIncome: taxData.income?.otherIncome || 0,
+        totalIncome: taxData.income?.totalIncome || 0,
+        additionalIncomeItems: taxData.income?.additionalIncomeItems || [],
+        additionalAdjustmentItems: taxData.income?.additionalAdjustmentItems || [],
+        adjustments: updatedAdjustments,
+        adjustedGrossIncome,
+      }
+    });
+
+    navigate('/deductions');
+  };
+
+  const getLimit = (planType: keyof typeof CONTRIBUTION_LIMITS_2025, isOver50: boolean = userAge >= 50) => {
+    const limit = CONTRIBUTION_LIMITS_2025[planType];
+    if (typeof limit === 'object' && 'under50' in limit) {
+      return isOver50 ? limit.over50 : limit.under50;
+    }
+    return limit;
+  };
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="mb-8">
+        <h1 className="text-3xl font-heading font-bold text-primary-dark mb-2">은퇴 계획 기여금</h1>
+        <p className="text-gray-dark">세금 혜택을 받을 수 있는 은퇴 계획 기여금을 입력하세요.</p>
+      </div>
+
+      {/* 메인 컨텐츠 - 입력 폼과 동영상을 나란히 배치 */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* 입력 폼 영역 (1/2 너비) */}
+        <div className="lg:col-span-1">
+          <div className="space-y-6">
+
+      {estimatedCredit > 0 && (
+        <Alert className="bg-green-50 border-green-200">
+          <TrendingUpIcon className="h-4 w-4" />
+          <AlertDescription>
+            <strong>세이버즈 크레딧 예상액: ${estimatedCredit.toFixed(0)}</strong>
+            <br />
+            귀하의 소득 수준에서 은퇴 기여금에 대한 세금 크레딧을 받을 수 있습니다.
+          </AlertDescription>
+        </Alert>
+      )}
+
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          {/* Tax-Deductible Retirement Plans */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <PiggyBankIcon className="h-5 w-5" />
+                세금 공제 가능한 은퇴 계획 (Tax-Deductible Plans)
+              </CardTitle>
+              <CardDescription>
+                이 기여금들은 조정총소득(AGI)을 줄여 세금을 절약합니다
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="traditionalIRA"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex justify-between items-center">
+                        <div className="flex items-center gap-2">
+                          <FormLabel>전통적 IRA (Traditional IRA)</FormLabel>
+                          <div className="tooltip">
+                            <InfoIcon className="h-4 w-4 text-gray-400" />
+                            <span className="tooltip-text">누구나 개설 가능한 개인 은퇴계좌. 기여금은 세금공제되며 인출시 과세됩니다.</span>
+                          </div>
+                        </div>
+                        <Badge variant="outline">
+                          한도: ${getLimit('traditionalIRA').toLocaleString()}
+                        </Badge>
+                      </div>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          placeholder="달러 금액"
+                          value={field.value === 0 ? '$' : field.value}
+                          onChange={(e) => {
+                            const value = e.target.value.replace(/[^0-9]/g, '');
+                            field.onChange(value === '' ? 0 : Number(value));
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="plan401k"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex justify-between items-center">
+                        <div className="flex items-center gap-2">
+                          <FormLabel>401(k) 플랜</FormLabel>
+                          <div className="tooltip">
+                            <InfoIcon className="h-4 w-4 text-gray-400" />
+                            <span className="tooltip-text">일반 기업에서 제공하는 은퇴계좌. 회사에서 401k를 제공하는 직장인을 위한 플랜입니다.</span>
+                          </div>
+                        </div>
+                        <Badge variant="outline">
+                          한도: ${getLimit('plan401k').toLocaleString()}
+                        </Badge>
+                      </div>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          placeholder="달러 금액"
+                          value={field.value === 0 ? '$' : field.value}
+                          onChange={(e) => {
+                            const value = e.target.value.replace(/[^0-9]/g, '');
+                            field.onChange(value === '' ? 0 : Number(value));
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="plan403b"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex justify-between items-center">
+                        <div className="flex items-center gap-2">
+                          <FormLabel>403(b) 플랜</FormLabel>
+                          <div className="tooltip">
+                            <InfoIcon className="h-4 w-4 text-gray-400" />
+                            <span className="tooltip-text">학교, 병원, 비영리단체 직원을 위한 은퇴계좌. 교육기관이나 의료기관 근무자에게 적합합니다.</span>
+                          </div>
+                        </div>
+                        <Badge variant="outline">
+                          한도: ${getLimit('plan403b').toLocaleString()}
+                        </Badge>
+                      </div>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          placeholder="달러 금액"
+                          value={field.value === 0 ? '$' : field.value}
+                          onChange={(e) => {
+                            const value = e.target.value.replace(/[^0-9]/g, '');
+                            field.onChange(value === '' ? 0 : Number(value));
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="plan457"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex justify-between items-center">
+                        <div className="flex items-center gap-2">
+                          <FormLabel>457 플랜</FormLabel>
+                          <div className="tooltip">
+                            <InfoIcon className="h-4 w-4 text-gray-400" />
+                            <span className="tooltip-text">정부기관 및 비영리단체 직원을 위한 은퇴계좌. 공무원이나 비영리기관 근무자에게 적합합니다.</span>
+                          </div>
+                        </div>
+                        <Badge variant="outline">
+                          한도: ${getLimit('plan457').toLocaleString()}
+                        </Badge>
+                      </div>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          placeholder="달러 금액"
+                          value={field.value === 0 ? '$' : field.value}
+                          onChange={(e) => {
+                            const value = e.target.value.replace(/[^0-9]/g, '');
+                            field.onChange(value === '' ? 0 : Number(value));
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="simpleIRA"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex justify-between items-center">
+                        <div className="flex items-center gap-2">
+                          <FormLabel>SIMPLE IRA</FormLabel>
+                          <div className="tooltip">
+                            <InfoIcon className="h-4 w-4 text-gray-400" />
+                            <span className="tooltip-text">소규모 회사(100명 이하) 직원을 위한 은퇴계좌. 작은 회사에서 일하는 분들에게 적합합니다.</span>
+                          </div>
+                        </div>
+                        <Badge variant="outline">
+                          한도: ${getLimit('simpleIRA').toLocaleString()}
+                        </Badge>
+                      </div>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          placeholder="달러 금액"
+                          value={field.value === 0 ? '$' : field.value}
+                          onChange={(e) => {
+                            const value = e.target.value.replace(/[^0-9]/g, '');
+                            field.onChange(value === '' ? 0 : Number(value));
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="sepIRA"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex justify-between items-center">
+                        <div className="flex items-center gap-2">
+                          <FormLabel>SEP-IRA</FormLabel>
+                          <div className="tooltip">
+                            <InfoIcon className="h-4 w-4 text-gray-400" />
+                            <span className="tooltip-text">자영업자나 소상공인을 위한 은퇴계좌. 개인사업자나 프리랜서에게 적합합니다.</span>
+                          </div>
+                        </div>
+                        <Badge variant="outline">
+                          한도: $70,000
+                        </Badge>
+                      </div>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          placeholder="달러 금액"
+                          value={field.value === 0 ? '$' : field.value}
+                          onChange={(e) => {
+                            const value = e.target.value.replace(/[^0-9]/g, '');
+                            field.onChange(value === '' ? 0 : Number(value));
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="tsp"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex justify-between items-center">
+                        <div className="flex items-center gap-2">
+                          <FormLabel>TSP (연방직원)</FormLabel>
+                          <div className="tooltip">
+                            <InfoIcon className="h-4 w-4 text-gray-400" />
+                            <span className="tooltip-text">연방정부 직원 및 군인을 위한 은퇴저축플랜. 연방공무원이나 현역 군인에게 적합합니다.</span>
+                          </div>
+                        </div>
+                        <Badge variant="outline">
+                          한도: ${getLimit('tsp').toLocaleString()}
+                        </Badge>
+                      </div>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          placeholder="달러 금액"
+                          value={field.value === 0 ? '$' : field.value}
+                          onChange={(e) => {
+                            const value = e.target.value.replace(/[^0-9]/g, '');
+                            field.onChange(value === '' ? 0 : Number(value));
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Tax-Free Growth Plans */}
+          <Card>
+            <CardHeader>
+              <CardTitle>세후 기여금 (After-Tax Contributions)</CardTitle>
+              <CardDescription>
+                이 기여금들은 현재 세금 공제는 없지만 향후 성장분이 비과세입니다
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="rothIRA"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex justify-between">
+                        로스 IRA (Roth IRA)
+                        <Badge variant="outline">
+                          한도: ${getLimit('rothIRA').toLocaleString()}
+                        </Badge>
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          placeholder="달러 금액"
+                          value={field.value === 0 ? '$' : field.value}
+                          onChange={(e) => {
+                            const value = e.target.value.replace(/[^0-9]/g, '');
+                            field.onChange(value === '' ? 0 : Number(value));
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="able"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="flex justify-between">
+                        ABLE 계정
+                        <Badge variant="outline">
+                          한도: $15,000
+                        </Badge>
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          placeholder="달러 금액"
+                          value={field.value === 0 ? '$' : field.value}
+                          onChange={(e) => {
+                            const value = e.target.value.replace(/[^0-9]/g, '');
+                            field.onChange(value === '' ? 0 : Number(value));
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Other Retirement Plans */}
+          <Card>
+            <CardHeader>
+              <CardTitle>기타 은퇴 계획 (Other Retirement Plans)</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <FormField
+                control={form.control}
+                name="otherRetirementPlans"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>기타 은퇴 계획 기여금</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="text"
+                        placeholder="달러 금액"
+                        value={field.value === 0 ? '$' : field.value}
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/[^0-9]/g, '');
+                          field.onChange(value === '' ? 0 : Number(value));
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </CardContent>
+          </Card>
+
+          {/* Summary */}
+          <Card className="bg-blue-50">
+            <CardHeader>
+              <CardTitle>기여금 요약 (Contribution Summary)</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <div className="flex justify-between">
+                  <span>세금 공제 가능한 기여금:</span>
+                  <span className="font-semibold">
+                    ${(form.watch('traditionalIRA') + form.watch('plan401k') + 
+                      form.watch('plan403b') + form.watch('plan457') + 
+                      form.watch('simpleIRA') + form.watch('sepIRA') + 
+                      form.watch('tsp')).toLocaleString()}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span>세후 기여금:</span>
+                  <span className="font-semibold">
+                    ${(form.watch('rothIRA') + form.watch('able')).toLocaleString()}
+                  </span>
+                </div>
+                <Separator />
+                <div className="flex justify-between font-bold">
+                  <span>총 은퇴 기여금:</span>
+                  <span>
+                    ${Object.values(form.watch()).reduce((sum, val) => sum + val, 0).toLocaleString()}
+                  </span>
+                </div>
+                {estimatedCredit > 0 && (
+                  <div className="flex justify-between text-green-600 font-semibold">
+                    <span>예상 세이버즈 크레딧:</span>
+                    <span>${estimatedCredit.toFixed(0)}</span>
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* AGI Impact Display */}
+          <Card className="bg-green-50 border-green-200">
+            <CardHeader>
+              <CardTitle className="text-green-800">조정총소득 영향 (AGI Impact)</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <div className="flex justify-between">
+                  <span>현재 총소득 (Current Total Income):</span>
+                  <span className="font-semibold">
+                    ${(taxData.income?.totalIncome || 0).toLocaleString()}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span>기존 조정항목 (Existing Adjustments):</span>
+                  <span className="font-semibold">
+                    ${((taxData.income?.adjustments?.studentLoanInterest || 0) + 
+                      (taxData.income?.adjustments?.otherAdjustments || 0)).toLocaleString()}
+                  </span>
+                </div>
+                <div className="flex justify-between text-blue-600">
+                  <span>은퇴 기여금 조정 (Retirement Adjustments):</span>
+                  <span className="font-semibold">
+                    ${(form.watch('traditionalIRA') + form.watch('plan401k') + 
+                      form.watch('plan403b') + form.watch('plan457') + 
+                      form.watch('simpleIRA') + form.watch('sepIRA') + 
+                      form.watch('tsp')).toLocaleString()}
+                  </span>
+                </div>
+                <Separator />
+                <div className="flex justify-between font-bold text-lg text-green-700">
+                  <span>예상 조정총소득 (Projected AGI):</span>
+                  <span>
+                    ${Math.max(0, (taxData.income?.totalIncome || 0) - 
+                      ((taxData.income?.adjustments?.studentLoanInterest || 0) + 
+                       (taxData.income?.adjustments?.otherAdjustments || 0) + 
+                       (form.watch('traditionalIRA') + form.watch('plan401k') + 
+                        form.watch('plan403b') + form.watch('plan457') + 
+                        form.watch('simpleIRA') + form.watch('sepIRA') + 
+                        form.watch('tsp')))).toLocaleString()}
+                  </span>
+                </div>
+                <div className="text-sm text-green-600 mt-2">
+                  💡 은퇴 기여금으로 인한 세금 절약액: 약 ${Math.round(
+                    (form.watch('traditionalIRA') + form.watch('plan401k') + 
+                     form.watch('plan403b') + form.watch('plan457') + 
+                     form.watch('simpleIRA') + form.watch('sepIRA') + 
+                     form.watch('tsp')) * 0.22
+                  ).toLocaleString()} (22% 세율 기준)
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <div className="flex justify-between">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => navigate('/income')}
+            >
+              이전 단계 (Previous)
+            </Button>
+            <Button type="submit">
+              다음 단계 (Next: Deductions)
+            </Button>
+          </div>
+        </form>
+      </Form>
+
+      {/* Information Alert */}
+      <Alert>
+        <InfoIcon className="h-4 w-4" />
+        <AlertDescription>
+          <strong>참고사항:</strong> 은퇴 계획 기여금 한도는 2025년 IRS 규정에 따릅니다. 
+          50세 이상인 경우 추가 기여금(catch-up contributions)이 허용됩니다. 
+          실제 한도는 소득 수준과 고용주 계획에 따라 달라질 수 있습니다.
+        </AlertDescription>
+      </Alert>
+    </div>
+  );
+}
