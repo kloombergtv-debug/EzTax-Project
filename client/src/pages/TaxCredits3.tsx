@@ -420,6 +420,9 @@ const TaxCredits3Page: React.FC = () => {
     const agi = taxData.income?.adjustedGrossIncome || 0;
     const dependents = taxData.personalInfo?.dependents || [];
     
+    // 현재 Child Tax Credit 값을 보존
+    const currentChildTaxCredit = form.getValues('childTaxCredit');
+    
     if (!dependents || dependents.length === 0) {
       toast({
         title: "계산할 수 없습니다",
@@ -452,6 +455,8 @@ const TaxCredits3Page: React.FC = () => {
     if (otherDependents.length === 0) {
       // 적격 부양가족이 없으면 0으로 설정
       form.setValue('otherCredits', 0);
+      // Child Tax Credit 값 복원
+      form.setValue('childTaxCredit', currentChildTaxCredit);
       setPendingChanges(true);
       
       toast({
@@ -468,6 +473,8 @@ const TaxCredits3Page: React.FC = () => {
     // 적격 자녀가 아닌 부양가족에 기반한 세액공제 계산
     const credit = calculateCreditForOtherDependents(otherDependents, agi, filingStatus);
     form.setValue('otherCredits', credit);
+    // Child Tax Credit 값 복원
+    form.setValue('childTaxCredit', currentChildTaxCredit);
     setPendingChanges(true);
     
     // 총 세액공제 업데이트
