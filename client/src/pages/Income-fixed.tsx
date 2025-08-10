@@ -1075,10 +1075,13 @@ export default function IncomePage() {
                                 <span className="tooltip-text">Health Savings Account contributions</span>
                               </div>
                             </div>
+                            <div className="text-sm text-gray-600 mb-2">
+                              <strong>2025년 한도:</strong> 본인 단독 $4,150 | 가족플랜 $8,300
+                            </div>
                             <FormControl>
                               <Input
                                 type="text"
-                                placeholder="달러 금액"
+                                placeholder="달러 금액 (예: $4,150)"
                                 value={field.value === 0 ? '$' : field.value}
                                 onChange={(e) => {
                                   const value = e.target.value.replace(/[^0-9.]/g, '');
