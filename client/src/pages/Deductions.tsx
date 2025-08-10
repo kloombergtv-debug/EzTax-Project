@@ -13,7 +13,7 @@ import { useToast } from '@/hooks/use-toast';
 import ProgressTracker from '@/components/ProgressTracker';
 
 import StepNavigation from '@/components/StepNavigation';
-// import { useTaxContext } from '@/context/TaxContext'; // 로그인 없이도 접근하기 위해 비활성화
+import { useTaxContext } from '@/context/TaxContext';
 import { Label } from '@/components/ui/label';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { calculateStandardDeduction } from '@/lib/taxCalculations';
@@ -21,14 +21,8 @@ import { useLocation } from 'wouter';
 import { formatNumber, formatCurrency, formatInputNumber } from '@/utils/formatNumber';
 
 const Deductions: React.FC = () => {
-  // 로그인 없이도 접근하기 위해 기본값 사용
-  const taxData = { 
-    personalInfo: { filingStatus: 'single' }, 
-    income: { adjustedGrossIncome: 0 }, 
-    deductions: null 
-  };
-  const updateTaxData = () => {};
-  const isDataReady = true;
+  // 실제 TaxContext 사용
+  const { taxData, updateTaxData, isDataReady } = useTaxContext();
   
   const { toast } = useToast();
   const [, navigate] = useLocation();
