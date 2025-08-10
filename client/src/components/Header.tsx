@@ -91,10 +91,10 @@ const Header: React.FC = () => {
             소득
           </Button>
           <Button 
-            variant={location === '/retirement-score' ? "default" : "ghost"} 
+            variant={location === '/retirement-contributions' ? "default" : "ghost"} 
             size="sm"
             className="text-sm"
-            onClick={() => navigate('/retirement-score')}
+            onClick={() => navigate('/retirement-contributions')}
           >
             퇴직연금
           </Button>
