@@ -78,23 +78,10 @@ export default function IncomePage() {
       // 폼 값 업데이트
       form.setValue('wages', extractedWages);
       
-      // 상태 업데이트를 위해 TaxContext에도 업데이트
-      const currentIncome = form.getValues();
-      currentIncome.wages = extractedWages;
-      
-      // 총소득 계산
-      const earnedIncomeTotal = Number(extractedWages || 0) + Number(currentIncome.otherEarnedIncome || 0);
-      const unearnedIncomeTotal = 
-        Number(currentIncome.interestIncome || 0) + 
-        Number(currentIncome.dividends || 0) + 
-        Number(currentIncome.rentalIncome || 0) + 
-        Number(currentIncome.capitalGains || 0);
-      
-      const totalIncome = earnedIncomeTotal + unearnedIncomeTotal;
-      currentIncome.totalIncome = totalIncome;
-      
-      // TaxContext 업데이트
-      updateTaxData({ income: currentIncome });
+      // 총소득 즉시 재계산
+      setTimeout(() => {
+        calculateTotals();
+      }, 100);
       
       // 업로드 상태 초기화
       setIsUploading(false);
@@ -102,7 +89,7 @@ export default function IncomePage() {
       // 추출 완료 알림 표시
       toast({
         title: "W-2 데이터 추출 완료",
-        description: `${file.name} 파일에서 급여 정보(₩${extractedWages.toLocaleString()})가 자동으로 입력되었습니다.`,
+        description: `${file.name} 파일에서 급여 정보($${extractedWages.toLocaleString()})가 자동으로 입력되었습니다.`,
       });
     }, 1500);
   };
