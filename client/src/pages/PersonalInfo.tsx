@@ -288,7 +288,7 @@ const PersonalInfo: React.FC = () => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-6">
+    <div className="max-w-6xl mx-auto px-4 py-6">
       <ProgressTracker currentStep="personal-info" />
       
       <div className="mb-6">
@@ -309,31 +309,11 @@ const PersonalInfo: React.FC = () => {
         </div>
       </div>
 
-      {/* 기본정보 입력 방법 동영상 */}
-      <Card className="mb-6">
-        <CardContent className="pt-6">
-          <div className="text-center mb-4">
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">기본정보 입력 방법</h2>
-            <p className="text-gray-600">기본정보 페이지 사용법을 동영상으로 확인하세요</p>
-          </div>
-          <div className="flex justify-center">
-            <div className="w-full max-w-3xl">
-              <div className="relative pb-[56.25%] h-0 overflow-hidden rounded-lg shadow-lg">
-                <iframe
-                  className="absolute top-0 left-0 w-full h-full"
-                  src="https://www.youtube.com/embed/kxz__B2xr0A"
-                  title="기본정보 입력 방법"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-                ></iframe>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Form {...form}>
+      {/* 메인 컨텐츠 - 입력 폼과 동영상을 나란히 배치 */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* 입력 폼 영역 (2/3 너비) */}
+        <div className="lg:col-span-2">
+          <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           
           {/* 기본 개인정보 */}
@@ -682,8 +662,34 @@ const PersonalInfo: React.FC = () => {
               저장하고 계속
             </Button>
           </div>
-        </form>
-      </Form>
+            </form>
+          </Form>
+        </div>
+        
+        {/* 동영상 영역 (1/3 너비) */}
+        <div className="lg:col-span-1">
+          <Card className="sticky top-6">
+            <CardContent className="pt-6">
+              <div className="text-center mb-4">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">입력 방법 안내</h3>
+                <p className="text-sm text-gray-600">기본정보 입력 방법을 확인하세요</p>
+              </div>
+              <div className="w-full">
+                <div className="relative pb-[56.25%] h-0 overflow-hidden rounded-lg shadow-md">
+                  <iframe
+                    className="absolute top-0 left-0 w-full h-full"
+                    src="https://www.youtube.com/embed/kxz__B2xr0A"
+                    title="기본정보 입력 방법"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                  ></iframe>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
     </div>
   );
 };
