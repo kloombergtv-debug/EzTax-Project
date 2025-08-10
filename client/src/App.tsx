@@ -58,7 +58,7 @@ function Router() {
       <ProtectedRoute path="/retirement-contributions" component={RetirementContributions} />
       <Route path="/deductions" component={Deductions} />
       <ProtectedRoute path="/salt-deductions" component={SALTDeductions} />
-      <ProtectedRoute path="/tax-credits" component={TaxCredits} />
+      <Route path="/tax-credits" component={TaxCredits} />
       <ProtectedRoute path="/additional-tax" component={AdditionalTax} />
       <ProtectedRoute path="/state-tax" component={StateTax} />
       <ProtectedRoute path="/retirement-score" component={RetirementScore} />

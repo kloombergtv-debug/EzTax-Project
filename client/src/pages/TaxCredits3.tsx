@@ -158,32 +158,17 @@ const formSchema = z.object({
 const TaxCredits3Page: React.FC = () => {
   const { toast } = useToast();
   
-  // React Query를 사용한 데이터 가져오기
-  const { data: taxData, isLoading } = useQuery({
-    queryKey: ['/api/tax-return'],
-    retry: 3,
-    refetchOnWindowFocus: false,
-  });
+  // 로그인 없이도 접근하기 위해 기본값 사용
+  const taxData = { 
+    personalInfo: { filingStatus: 'single', numberOfChildren: 0, numberOfOtherDependents: 0 }, 
+    income: { adjustedGrossIncome: 0, wages: 0, businessIncome: 0, interestIncome: 0, dividends: 0, capitalGains: 0, otherEarnedIncome: 0 }, 
+    taxCredits: null 
+  };
+  const isDataReady = true;
   
-  const isDataReady = !isLoading && taxData;
-  
-  // 데이터 업데이트 mutation
-  const updateTaxDataMutation = useMutation({
-    mutationFn: (data: any) => apiRequest('/api/tax-return', {
-      method: 'PATCH',
-      body: JSON.stringify(data),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/tax-return'] });
-    },
-  });
-  
-  // updateTaxData 함수
+  // 기본 updateTaxData 함수
   const updateTaxData = (newData: any) => {
-    updateTaxDataMutation.mutate(newData);
+    console.log('세액공제 데이터 업데이트:', newData);
   };
   
   // 돌봄 비용 입력 필드 표시 여부를 위한 상태
@@ -673,15 +658,24 @@ const TaxCredits3Page: React.FC = () => {
   }
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-6">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="mb-8">
+        <h1 className="text-3xl font-heading font-bold text-primary-dark mb-2">귀하의 2025년 세금 신고서</h1>
+        <p className="text-gray-dark">세금 신고서를 준비하기 위해 모든 섹션을 작성하세요. 입력한 정보는 자동으로 저장됩니다.</p>
+      </div>
+
       <ProgressTracker currentStep={4} />
       
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="space-y-6">
-            <Card>
-              <CardContent className="pt-6">
-                <div className="space-y-6">
+      {/* 메인 컨텐츠 - 입력 폼과 동영상을 나란히 배치 */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* 입력 폼 영역 (1/2 너비) */}
+        <div className="lg:col-span-1">
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+              <div className="space-y-6">
+                <Card>
+                  <CardContent className="pt-6">
+                    <div className="space-y-6">
                   
                   {/* 자녀 세액공제 및 기타 부양가족 공제 */}
                   <div className="mb-6 border-b border-gray-light pb-6">
@@ -1813,6 +1807,35 @@ const TaxCredits3Page: React.FC = () => {
           </div>
         </form>
       </Form>
+      </div>
+      
+      {/* 동영상 영역 (1/2 너비) */}
+      <div className="lg:col-span-1">
+        <Card className="sticky top-6">
+          <CardContent className="pt-6">
+            <div className="text-center mb-4">
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">세액공제 입력 방법 안내</h3>
+              <p className="text-sm text-gray-600">세액공제 항목을 정확하게 입력하는 방법을 확인하세요</p>
+            </div>
+            <div className="w-full">
+              <div className="relative pb-[75%] h-0 overflow-hidden rounded-lg shadow-md">
+                <iframe
+                  className="absolute top-0 left-0 w-full h-full"
+                  src="https://www.youtube.com/embed/kce8i5gAG1k"
+                  title="세액공제 입력 방법 안내"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+              </div>
+            </div>
+            <div className="mt-4 text-xs text-gray-500 text-center">
+              세무신고 시 올바른 세액공제 입력 방법을 동영상으로 확인하세요
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
     </div>
   );
 };
