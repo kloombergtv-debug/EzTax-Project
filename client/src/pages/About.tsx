@@ -240,12 +240,12 @@ export default function About() {
                 <div>
                   <h4 className="font-semibold text-blue-800 mb-3">📚 주요 이력</h4>
                   <ul className="text-sm text-blue-700 space-y-2">
-                    <li>💼 EzTax – 창립자 & CEO</li>
-                    <li>📈 Nomura Securities – 애널리스트</li>
-                    <li>🏦 교보생명 – 재무실부장</li>
-                    <li>🏢 LG전자 – IR팀장</li>
-                    <li>🏭 한화그룹 – 전략기획 및 재무담당 임원</li>
                     <li>🧾 IRS 공인 EA (Enrolled Agent)</li>
+                    <li>🏭 한화그룹 – 재무담당 임원</li>
+                    <li>🏦 교보생명 – 재무실부장</li>
+                    <li>🏢 LG전자 – IR팀 과장</li>
+                    <li>📈 Nomura Securities – 애널리스트</li>
+                    <li>💼 EzTax – 창립자 & CEO</li>
                   </ul>
                   
                   <h4 className="font-semibold text-blue-800 mb-3 mt-4">🎓 학력</h4>
