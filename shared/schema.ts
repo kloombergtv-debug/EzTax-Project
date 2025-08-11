@@ -395,6 +395,7 @@ export const incomeSchema = z.object({
   totalIncome: z.number().min(0),
   adjustments: z.object({
     studentLoanInterest: z.number().min(0),
+    hsaContributions: z.number().min(0),
     retirementContributions: z.number().min(0),
     otherAdjustments: z.number().min(0),
   }),

@@ -1060,7 +1060,7 @@ export default function IncomePage() {
                       
                       <FormField
                         control={form.control}
-                        name="adjustments.retirementContributions"
+                        name="adjustments.hsaContributions"
                         render={({ field }) => (
                           <FormItem>
                             <div className="flex justify-between">
@@ -1158,6 +1158,7 @@ export default function IncomePage() {
                       <span>
                         {new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(
                           parseFloat((form.watch('adjustments')?.studentLoanInterest || 0).toString()) +
+                          parseFloat((form.watch('adjustments')?.hsaContributions || 0).toString()) +
                           parseFloat((form.watch('adjustments')?.retirementContributions || 0).toString()) +
                           parseFloat((form.watch('adjustments')?.otherAdjustments || 0).toString())
                         )}
