@@ -424,13 +424,11 @@ export default function RetirementContributions() {
                       <div className="flex justify-between font-bold">
                         <span>예상 조정총소득 (Projected AGI):</span>
                         <span>
-                          ${Math.max(0, (taxData.income?.totalIncome || 0) - 
-                            ((taxData.income?.adjustments?.studentLoanInterest || 0) + 
-                             (taxData.income?.adjustments?.otherAdjustments || 0) + 
+                          ${Math.max(0, (taxData.income?.adjustedGrossIncome || 0) - 
                              (form.watch('traditionalIRA') + form.watch('plan401k') + 
                               form.watch('plan403b') + form.watch('plan457') + 
                               form.watch('simpleIRA') + form.watch('sepIRA') + 
-                              form.watch('tsp')))).toLocaleString()}
+                              form.watch('tsp'))).toLocaleString()}
                         </span>
                       </div>
                       <div className="text-sm text-green-600 mt-2">
