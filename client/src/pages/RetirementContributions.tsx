@@ -208,7 +208,15 @@ export default function RetirementContributions() {
                               type="number"
                               placeholder="0"
                               {...field}
-                              onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                              onChange={(e) => {
+                                const value = e.target.value;
+                                if (value === '') {
+                                  field.onChange(0);
+                                } else {
+                                  const numValue = Number(value);
+                                  field.onChange(isNaN(numValue) ? 0 : numValue);
+                                }
+                              }}
                             />
                           </FormControl>
                           <FormMessage />
@@ -233,7 +241,15 @@ export default function RetirementContributions() {
                               type="number"
                               placeholder="0"
                               {...field}
-                              onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                              onChange={(e) => {
+                                const value = e.target.value;
+                                if (value === '') {
+                                  field.onChange(0);
+                                } else {
+                                  const numValue = Number(value);
+                                  field.onChange(isNaN(numValue) ? 0 : numValue);
+                                }
+                              }}
                             />
                           </FormControl>
                           <FormMessage />
@@ -258,7 +274,15 @@ export default function RetirementContributions() {
                               type="number"
                               placeholder="0"
                               {...field}
-                              onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                              onChange={(e) => {
+                                const value = e.target.value;
+                                if (value === '') {
+                                  field.onChange(0);
+                                } else {
+                                  const numValue = Number(value);
+                                  field.onChange(isNaN(numValue) ? 0 : numValue);
+                                }
+                              }}
                             />
                           </FormControl>
                           <FormMessage />
@@ -283,7 +307,15 @@ export default function RetirementContributions() {
                               type="number"
                               placeholder="0"
                               {...field}
-                              onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                              onChange={(e) => {
+                                const value = e.target.value;
+                                if (value === '') {
+                                  field.onChange(0);
+                                } else {
+                                  const numValue = Number(value);
+                                  field.onChange(isNaN(numValue) ? 0 : numValue);
+                                }
+                              }}
                             />
                           </FormControl>
                           <FormMessage />
@@ -308,7 +340,15 @@ export default function RetirementContributions() {
                               type="number"
                               placeholder="0"
                               {...field}
-                              onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                              onChange={(e) => {
+                                const value = e.target.value;
+                                if (value === '') {
+                                  field.onChange(0);
+                                } else {
+                                  const numValue = Number(value);
+                                  field.onChange(isNaN(numValue) ? 0 : numValue);
+                                }
+                              }}
                             />
                           </FormControl>
                           <FormMessage />
@@ -344,7 +384,15 @@ export default function RetirementContributions() {
                               type="number"
                               placeholder="0"
                               {...field}
-                              onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                              onChange={(e) => {
+                                const value = e.target.value;
+                                if (value === '') {
+                                  field.onChange(0);
+                                } else {
+                                  const numValue = Number(value);
+                                  field.onChange(isNaN(numValue) ? 0 : numValue);
+                                }
+                              }}
                             />
                           </FormControl>
                           <FormMessage />
