@@ -198,13 +198,9 @@ const Review: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <Field label="이름 (Name)" value={`${personalInfo.firstName || ''} ${personalInfo.lastName || ''}`.trim()} />
-                    <Field label="SSN" value={personalInfo.ssn} />
-                    <Field label="생년월일 (Date of Birth)" value={personalInfo.dateOfBirth} />
                     <Field label="납세자 구분 (Filing Status)" value={formatFilingStatus(personalInfo.filingStatus)} />
                   </div>
                   <div>
-                    <Field label="이메일 (Email)" value={personalInfo.email} />
-                    <Field label="전화번호 (Phone)" value={personalInfo.phone} />
                     <Field label="자녀 수 (Number of Children)" value={personalInfo.numberOfChildren} />
                     <Field label="기타 부양가족 수 (Other Dependents)" value={personalInfo.numberOfOtherDependents} />
                   </div>
