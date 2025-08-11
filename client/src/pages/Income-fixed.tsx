@@ -568,9 +568,27 @@ export default function IncomePage() {
                                 type="text"
                                 placeholder="달러 금액"
                                 value={field.value === 0 ? '$' : field.value}
-                                onChange={(e) => {
-                                  const value = e.target.value.replace(/[^0-9.]/g, '');
-                                  field.onChange(value === '' ? 0 : parseFloat(value) || 0);
+                                onChange={async (e) => {
+                                  const inputValue = e.target.value.replace(/[^0-9.]/g, '');
+                                  const value = inputValue === '' ? 0 : parseFloat(inputValue) || 0;
+                                  field.onChange(value);
+                                  
+                                  // 즉시 계산 및 저장
+                                  setTimeout(async () => {
+                                    calculateTotals();
+                                    
+                                    // 현재 폼 데이터로 서버 업데이트
+                                    const currentData = form.getValues();
+                                    currentData.additionalIncomeItems = additionalIncomeItems;
+                                    currentData.additionalAdjustmentItems = additionalAdjustmentItems;
+                                    
+                                    try {
+                                      await updateTaxData({ income: currentData });
+                                      console.log('급여 자동 저장 완료:', value);
+                                    } catch (error) {
+                                      console.error('급여 자동 저장 오류:', error);
+                                    }
+                                  }, 300);
                                 }}
                               />
                             </FormControl>
@@ -598,9 +616,27 @@ export default function IncomePage() {
                                 type="text"
                                 placeholder="달러 금액"
                                 value={field.value === 0 ? '$' : field.value}
-                                onChange={(e) => {
-                                  const value = e.target.value.replace(/[^0-9.]/g, '');
-                                  field.onChange(value === '' ? 0 : parseFloat(value) || 0);
+                                onChange={async (e) => {
+                                  const inputValue = e.target.value.replace(/[^0-9.]/g, '');
+                                  const value = inputValue === '' ? 0 : parseFloat(inputValue) || 0;
+                                  field.onChange(value);
+                                  
+                                  // 즉시 계산 및 저장
+                                  setTimeout(async () => {
+                                    calculateTotals();
+                                    
+                                    // 현재 폼 데이터로 서버 업데이트
+                                    const currentData = form.getValues();
+                                    currentData.additionalIncomeItems = additionalIncomeItems;
+                                    currentData.additionalAdjustmentItems = additionalAdjustmentItems;
+                                    
+                                    try {
+                                      await updateTaxData({ income: currentData });
+                                      console.log('기타근로소득 자동 저장 완료:', value);
+                                    } catch (error) {
+                                      console.error('기타근로소득 자동 저장 오류:', error);
+                                    }
+                                  }, 300);
                                 }}
                               />
                             </FormControl>
@@ -658,15 +694,27 @@ export default function IncomePage() {
                                 step="0.01"
                                 placeholder="사업 순소득 (마이너스 가능)"
                                 value={field.value || ''}
-                                onChange={(e) => {
+                                onChange={async (e) => {
                                   const numericValue = parseFloat(e.target.value) || 0;
                                   console.log('사업소득 입력값:', e.target.value, '→ 숫자값:', numericValue);
                                   field.onChange(numericValue);
                                   
-                                  // 총소득 재계산
-                                  setTimeout(() => {
+                                  // 즉시 계산 및 저장
+                                  setTimeout(async () => {
                                     calculateTotals();
-                                  }, 50);
+                                    
+                                    // 현재 폼 데이터로 서버 업데이트
+                                    const currentData = form.getValues();
+                                    currentData.additionalIncomeItems = additionalIncomeItems;
+                                    currentData.additionalAdjustmentItems = additionalAdjustmentItems;
+                                    
+                                    try {
+                                      await updateTaxData({ income: currentData });
+                                      console.log('사업소득 자동 저장 완료:', numericValue);
+                                    } catch (error) {
+                                      console.error('사업소득 자동 저장 오류:', error);
+                                    }
+                                  }, 300);
                                 }}
                               />
                             </FormControl>
