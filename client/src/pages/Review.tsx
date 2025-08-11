@@ -232,16 +232,50 @@ const Review: React.FC = () => {
               
               {/* Deductions Summary */}
               <SectionSummary title="공제 (Deductions)" editLink="/deductions">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Field label="공제 유형 (Deduction Type)" value={deductions.useStandardDeduction ? '표준 공제 (Standard)' : '항목별 공제 (Itemized)'} />
-                    {deductions.useStandardDeduction && (
-                      <Field label="표준 공제 금액 (Standard Deduction)" value={formatCurrency(deductions.standardDeductionAmount)} />
-                    )}
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Field label="공제 유형 (Deduction Type)" value={deductions.useStandardDeduction ? '표준 공제 (Standard)' : '항목별 공제 (Itemized)'} />
+                      {deductions.useStandardDeduction && (
+                        <Field label="표준 공제 금액 (Standard Deduction)" value={formatCurrency(deductions.standardDeductionAmount)} />
+                      )}
+                    </div>
+                    <div>
+                      <Field label="총 공제액 (Total Deductions)" value={formatCurrency(deductions.totalDeductions)} className="font-bold bg-primary/5 px-2 py-1 rounded" />
+                    </div>
                   </div>
-                  <div>
-                    <Field label="총 공제액 (Total Deductions)" value={formatCurrency(deductions.totalDeductions)} />
-                  </div>
+                  
+                  {/* Show itemized deduction details when itemized is selected */}
+                  {!deductions.useStandardDeduction && deductions.itemizedDeductions && (
+                    <div className="border-t pt-4">
+                      <h4 className="font-medium text-gray-900 mb-3">항목별 공제 상세 (Itemized Deduction Details)</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <Field label="의료비 (Medical Expenses)" value={formatCurrency(deductions.itemizedDeductions.medicalExpenses || 0)} />
+                          <Field label="주/지방 소득세 (State/Local Income Tax)" value={formatCurrency(deductions.itemizedDeductions.stateLocalIncomeTax || 0)} />
+                          <Field label="부동산세 (Real Estate Taxes)" value={formatCurrency(deductions.itemizedDeductions.realEstateTaxes || 0)} />
+                          <Field label="개인 재산세 (Personal Property Tax)" value={formatCurrency(deductions.itemizedDeductions.personalPropertyTax || 0)} />
+                        </div>
+                        <div>
+                          <Field label="주택담보대출 이자 (Mortgage Interest)" value={formatCurrency(deductions.itemizedDeductions.mortgageInterest || 0)} />
+                          <Field label="현금 기부 (Charitable Cash)" value={formatCurrency(deductions.itemizedDeductions.charitableCash || 0)} />
+                          <Field label="비현금 기부 (Charitable Non-Cash)" value={formatCurrency(deductions.itemizedDeductions.charitableNonCash || 0)} />
+                        </div>
+                      </div>
+                      
+                      {/* Show other deduction items if any */}
+                      {deductions.otherDeductionItems && deductions.otherDeductionItems.length > 0 && (
+                        <div className="mt-4">
+                          <h5 className="font-medium text-gray-900 mb-2">기타 공제 항목 (Other Deductions)</h5>
+                          <div className="space-y-1">
+                            {deductions.otherDeductionItems.map((item, index) => (
+                              <Field key={index} label={`${item.type} ${item.description ? `(${item.description})` : ''}`} value={formatCurrency(item.amount)} />
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               </SectionSummary>
               
