@@ -219,11 +219,13 @@ const Review: React.FC = () => {
                     <Field label="급여 (Wages)" value={formatCurrency(income.wages)} />
                     <Field label="사업 소득 (Business Income)" value={formatCurrency(income.businessIncome)} />
                     <Field label="이자 소득 (Interest Income)" value={formatCurrency(income.interestIncome)} />
+                    <Field label="배당금 (Dividends)" value={formatCurrency(income.dividends)} />
                   </div>
                   <div>
-                    <Field label="배당금 (Dividends)" value={formatCurrency(income.dividends)} />
                     <Field label="자본 이득 (Capital Gains)" value={formatCurrency(income.capitalGains)} />
                     <Field label="기타 소득 (Other Income)" value={formatCurrency(income.otherIncome)} />
+                    <Field label="총 소득 (Total Income)" value={formatCurrency(calculatedResults.totalIncome)} className="font-bold bg-primary/5 px-2 py-1 rounded" />
+                    <Field label="조정 총소득 (AGI)" value={formatCurrency(calculatedResults.adjustedGrossIncome)} className="font-bold bg-success/5 px-2 py-1 rounded" />
                   </div>
                 </div>
               </SectionSummary>
