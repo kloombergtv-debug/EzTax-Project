@@ -1,447 +1,196 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { useToast } from "@/hooks/use-toast";
-import { useLocation } from "wouter";
-import { useState } from "react";
-import { 
-  TrendingUpIcon, 
-  StarIcon, 
-  UsersIcon,
-  ShieldIcon,
-  GlobeIcon,
-  AwardIcon,
-  BuildingIcon,
-  PhoneIcon,
-  MailIcon
-} from "lucide-react";
-import expertPhotoPath from "@assets/내이미지_1750444585639.jpg";
-import visionImagePath from "@assets/ChatGPT Image Jun 20, 2025, 09_38_11 PM_1750473512527.png";
-import missionImagePath from "@assets/ChatGPT Image Jun 20, 2025, 09_42_31 PM_1750473769339.png";
+import React from 'react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Shield, Users, Target, Award } from 'lucide-react';
 
-export default function About() {
-  const [, navigate] = useLocation();
-  const { toast } = useToast();
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    phone: '',
-    email: '',
-    message: ''
-  });
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const handleSubmitConsultation = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!formData.name || !formData.phone || !formData.email) {
-      toast({
-        title: "필수 정보 누락",
-        description: "이름, 전화번호, 이메일을 모두 입력해주세요.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    setIsSubmitting(true);
-    
-    try {
-      const response = await fetch('/api/send-consultation-email', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to send consultation request');
-      }
-
-      toast({
-        title: "상담 요청 완료",
-        description: "전문가 상담 요청이 성공적으로 전송되었습니다. 빠른 시일 내에 연락드리겠습니다.",
-      });
-
-      // Reset form and close dialog
-      setFormData({
-        name: '',
-        phone: '',
-        email: '',
-        message: ''
-      });
-      setIsDialogOpen(false);
-    } catch (error) {
-      console.error('Error sending consultation request:', error);
-      toast({
-        title: "전송 실패",
-        description: "상담 요청 전송에 실패했습니다. 다시 시도해주세요.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
+const About: React.FC = () => {
   return (
-    <div className="max-w-6xl mx-auto p-6 space-y-8">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Hero Section */}
+      <div className="text-center mb-16">
+        <h1 className="text-4xl md:text-5xl font-heading font-bold text-primary-dark mb-6">
+          회사 소개
+        </h1>
+        <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+          EzTax는 개인과 가족이 쉽고 안전하게 세금 신고를 완료할 수 있도록 돕는 혁신적인 세무 플랫폼입니다.
+          복잡한 세무 과정을 간단하게 만들어 누구나 접근할 수 있는 세무 서비스를 제공합니다.
+        </p>
+      </div>
 
-
-      {/* Company Mission & Vision */}
-      <div className="grid md:grid-cols-2 gap-8">
-        <Card className="border-primary/20">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-primary">
-              <StarIcon className="h-6 w-6" />
-              우리의 미션
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid md:grid-cols-2 gap-8 items-center">
-              <div>
-                <p className="text-gray-700 leading-relaxed mb-4">
-                  기술의 힘으로 복잡한 세무와 은퇴 계획을 누구나 쉽게 이해하고 실행할 수 있게 만듭니다. 
-                  혁신적인 핀테크 솔루션을 통해 개인의 재정적 성공을 지원하고, 
-                  더 풍요로운 미래를 향한 여정에 동행합니다.
-                </p>
-                <p className="text-blue-600 font-medium text-sm">
-                  혁신적인 핀테크 솔루션을 통해 개인의 재정적 성공을 지원
-                </p>
-              </div>
-              
-              <div className="flex justify-center">
-                <img 
-                  src={missionImagePath} 
-                  alt="EzTax Mission - 혁신적인 핀테크 솔루션을 통해 개인의 재정적 성공을 지원" 
-                  className="max-w-full h-auto rounded-lg shadow-md"
-                />
-              </div>
-            </div>
+      {/* Mission & Vision */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+        <Card>
+          <CardContent className="p-8 text-center">
+            <Target className="h-12 w-12 text-primary mx-auto mb-4" />
+            <h2 className="text-2xl font-heading font-semibold text-primary-dark mb-4">미션</h2>
+            <p className="text-gray-600 leading-relaxed">
+              복잡한 세무 과정을 단순화하여 모든 사람이 쉽게 세금 신고를 완료하고, 
+              최적의 절세 방안과 은퇴 계획을 세울 수 있도록 지원합니다.
+            </p>
           </CardContent>
         </Card>
 
-        <Card className="border-green-200">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-green-700">
-              <TrendingUpIcon className="h-6 w-6" />
-              우리의 비전
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid md:grid-cols-2 gap-8 items-center">
-              <div>
-                <p className="text-gray-700 leading-relaxed mb-4">
-                  세계 최고의 AI 기반 세무·은퇴 플랫폼이 되어 모든 사람이 재정적 자유를 달성할 수 있도록 돕겠습니다. 
-                  몬테카를로 시뮬레이션과 같은 첨단 기술로 정확한 예측을 제공하고, 
-                  개인 맞춤형 전략으로 부의 창조를 실현합니다.
-                </p>
-                <p className="text-green-600 font-medium text-sm">
-                  절세, 그 이상의 가치를 전하는 재정플랜 플랫폼
-                </p>
-              </div>
-              
-              <div className="flex justify-center">
-                <img 
-                  src={visionImagePath} 
-                  alt="EzTax Vision - 절세, 그 이상의 가치를 전하는 재정플랜 플랫폼" 
-                  className="max-w-full h-auto rounded-lg shadow-md"
-                />
-              </div>
-            </div>
+        <Card>
+          <CardContent className="p-8 text-center">
+            <Award className="h-12 w-12 text-primary mx-auto mb-4" />
+            <h2 className="text-2xl font-heading font-semibold text-primary-dark mb-4">비전</h2>
+            <p className="text-gray-600 leading-relaxed">
+              AI 기술과 사용자 중심의 디자인을 통해 세무 서비스의 새로운 기준을 제시하고, 
+              모든 사람이 재정적으로 더 나은 결정을 내릴 수 있는 세상을 만듭니다.
+            </p>
           </CardContent>
         </Card>
       </div>
 
       {/* Core Values */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-center text-2xl">핵심 가치</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid md:grid-cols-4 gap-6">
-            <div className="text-center">
-              <ShieldIcon className="h-12 w-12 text-primary mx-auto mb-3" />
-              <h3 className="font-semibold text-lg mb-2">신뢰성</h3>
-              <p className="text-sm text-gray-600">
-                정확한 계산과 검증된 데이터로 믿을 수 있는 서비스를 제공합니다.
-              </p>
-            </div>
-            <div className="text-center">
-              <UsersIcon className="h-12 w-12 text-green-600 mx-auto mb-3" />
-              <h3 className="font-semibold text-lg mb-2">접근성</h3>
-              <p className="text-sm text-gray-600">
-                복잡한 세무를 누구나 쉽게 이해할 수 있도록 단순화합니다.
-              </p>
-            </div>
-            <div className="text-center">
-              <AwardIcon className="h-12 w-12 text-orange-600 mx-auto mb-3" />
-              <h3 className="font-semibold text-lg mb-2">전문성</h3>
-              <p className="text-sm text-gray-600">
-                세무 전문가의 깊이 있는 지식과 경험을 기술로 구현합니다.
-              </p>
-            </div>
-            <div className="text-center">
-              <GlobeIcon className="h-12 w-12 text-blue-600 mx-auto mb-3" />
-              <h3 className="font-semibold text-lg mb-2">혁신</h3>
-              <p className="text-sm text-gray-600">
-                AI와 데이터 분석으로 차세대 금융 서비스를 선도합니다.
-              </p>
-            </div>
+      <div className="mb-16">
+        <h2 className="text-3xl font-heading font-bold text-center text-primary-dark mb-12">핵심 가치</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="text-center">
+            <Shield className="h-16 w-16 text-primary mx-auto mb-6" />
+            <h3 className="text-xl font-semibold text-primary-dark mb-4">보안 & 신뢰</h3>
+            <p className="text-gray-600 leading-relaxed">
+              최고 수준의 보안 기술로 고객의 개인정보와 재정 데이터를 안전하게 보호합니다.
+              은행급 암호화와 다단계 보안 시스템을 통해 신뢰할 수 있는 서비스를 제공합니다.
+            </p>
           </div>
-        </CardContent>
-      </Card>
 
-      {/* Founder & CEO Profile */}
-      <Card className="border-blue-200 bg-gradient-to-r from-blue-50 to-indigo-50">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-blue-700 text-2xl">
-            <BuildingIcon className="h-6 w-6" />
-            창립자 & CEO 소개
-          </CardTitle>
-          <CardDescription className="text-blue-600">
-            EzTax를 이끄는 세무·투자 전문가를 만나보세요
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-col lg:flex-row gap-8">
-            <div className="flex-shrink-0 text-center lg:text-left">
-              <img 
-                src={expertPhotoPath}
-                alt="지대현 EA"
-                className="w-32 h-32 rounded-full object-cover border-4 border-blue-200 mx-auto lg:mx-0"
-              />
-              <h3 className="text-2xl font-bold text-blue-800 mt-4 mb-2">
-                지대현 EA
-              </h3>
-              <p className="text-blue-700 font-medium mb-4">
-                EzTax 창립자 & CEO | 세무·투자 전문가
-              </p>
-              <div className="flex flex-wrap gap-2 justify-center lg:justify-start">
-                <Badge variant="outline" className="border-blue-300 text-blue-700">IRS EA</Badge>
+          <div className="text-center">
+            <Users className="h-16 w-16 text-primary mx-auto mb-6" />
+            <h3 className="text-xl font-semibold text-primary-dark mb-4">사용자 중심</h3>
+            <p className="text-gray-600 leading-relaxed">
+              복잡한 세무 용어와 절차를 이해하기 쉽게 설명하고, 
+              직관적인 인터페이스를 통해 누구나 쉽게 사용할 수 있는 플랫폼을 구축합니다.
+            </p>
+          </div>
 
-                <Badge variant="outline" className="border-blue-300 text-blue-700">저자</Badge>
-              </div>
-            </div>
+          <div className="text-center">
+            <Target className="h-16 w-16 text-primary mx-auto mb-6" />
+            <h3 className="text-xl font-semibold text-primary-dark mb-4">정확성 & 효율성</h3>
+            <p className="text-gray-600 leading-relaxed">
+              최신 세법과 IRS 규정을 반영한 정확한 계산으로 신뢰할 수 있는 결과를 제공하며, 
+              빠르고 효율적인 세금 신고 과정을 보장합니다.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Our Story */}
+      <Card className="mb-16">
+        <CardContent className="p-12">
+          <h2 className="text-3xl font-heading font-bold text-center text-primary-dark mb-8">우리의 이야기</h2>
+          <div className="max-w-4xl mx-auto">
+            <p className="text-lg text-gray-600 leading-relaxed mb-6">
+              EzTax는 "세금 신고가 왜 이렇게 복잡해야 할까?"라는 단순한 질문에서 시작되었습니다. 
+              매년 수백만 명의 사람들이 복잡한 세무 소프트웨어와 씨름하거나 비싼 세무사 비용을 지불해야 하는 현실을 보며, 
+              더 나은 해결책이 있어야 한다고 생각했습니다.
+            </p>
             
-            <div className="flex-1">
-              <div className="grid md:grid-cols-2 gap-6 mb-6">
-                <div>
-                  <h4 className="font-semibold text-blue-800 mb-3">📚 주요 이력</h4>
-                  <ul className="text-sm text-blue-700 space-y-2">
-                    <li>💼 EzTax – 창립자 & CEO</li>
-                    <li>📈 Nomura Securities – 애널리스트</li>
-                    <li>🏦 교보생명 – 재무실부장</li>
-                    <li>🏢 LG전자 – IR팀장</li>
-                    <li>🏭 한화그룹 – 전략기획 및 재무담당 임원</li>
-                    <li>🧾 IRS 공인 EA (Enrolled Agent)</li>
-                  </ul>
-                  
-                  <h4 className="font-semibold text-blue-800 mb-3 mt-4">🎓 학력</h4>
-                  <ul className="text-sm text-blue-700 space-y-2">
-                    <li>🎓 University of Pennsylvania – 경제학 학사</li>
-                    <li>🎓 연세대학교 국제대학원 – MBA</li>
-                  </ul>
-                </div>
-                
-                <div>
-                  <h4 className="font-semibold text-blue-800 mb-3">🧠 전문 분야</h4>
-                  <ul className="text-sm text-blue-700 space-y-2">
-                    <li>• 미국 개인 및 사업자 세무 상담</li>
-                    <li>• 자산관리 및 은퇴 플랜 최적화</li>
-                    <li>• 투자전략수립, 자산운용</li>
-                    <li>• 고액자산가 맞춤 절세 전략</li>
-                    <li>• 해외자산 및 글로벌 세무 규정 대응</li>
-                    <li>• 투자수익 대비 실효세율 분석</li>
-                    <li>• 몬테카를로 시뮬레이션 모델링</li>
-                  </ul>
-                </div>
-              </div>
-              
-              <div className="bg-white/80 p-6 rounded-lg mb-6">
-                <h4 className="font-semibold text-blue-800 mb-3">💭 CEO 메시지</h4>
-                <p className="text-blue-800 leading-relaxed mb-4">
-                  <strong>📌 "Less Tax, More Wealth"</strong> 철학을 바탕으로 EzTax를 설립했습니다. 
-                  국내외 유수의 금융·기업 그룹에서 재무 및 IR 책임자로 경력을 쌓으며, 
-                  복잡한 세무와 투자의 세계에서 많은 사람들이 겪는 어려움을 목격했습니다.
-                </p>
-                <p className="text-blue-800 leading-relaxed mb-4">
-                  EzTax는 단순한 세무 계산기가 아닙니다. 첨단 AI 기술과 몬테카를로 시뮬레이션을 활용하여 
-                  개인의 재정 상황을 종합적으로 분석하고, 세금 절감과 부의 극대화를 동시에 달성할 수 있는 
-                  맞춤형 전략을 제시합니다.
-                </p>
-                <p className="text-blue-800 leading-relaxed italic font-medium">
-                  "기술로 세상의 세금 고민을 해결하고, 더 풍요로운 은퇴를 만들어갑니다."
-                </p>
-              </div>
-
-              <div className="bg-blue-100/50 p-4 rounded-lg">
-                <h4 className="font-semibold text-blue-800 mb-3">📖 저서</h4>
-                <p className="text-blue-700 font-medium">
-                  『절세로 시작하는 은퇴설계 Less Tax, Better Retirement』
-                </p>
-                <p className="text-sm text-blue-600 mt-1">
-                  실무진이 알려주는 세금 절감과 자산 증대의 비밀
-                </p>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Contact Information */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-center">
-            <PhoneIcon className="h-6 w-6 text-primary" />
-            연락처 정보
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="text-center">
-              <h3 className="font-semibold text-lg mb-4">전문가 상담 예약</h3>
-              <div className="space-y-3">
-                <div className="flex items-center justify-center gap-2">
-                  <PhoneIcon className="h-5 w-5 text-primary" />
-                  <span>전화 상담 가능</span>
-                </div>
-                <div className="flex items-center justify-center gap-2">
-                  <MailIcon className="h-5 w-5 text-primary" />
-                  <span>이메일 상담 가능</span>
-                </div>
-              </div>
-              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button className="mt-4 bg-primary hover:bg-primary-dark">
-                    상담 예약하기
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px]">
-                  <DialogHeader>
-                    <DialogTitle>전문가 상담 요청</DialogTitle>
-                    <DialogDescription>
-                      세무 및 은퇴 계획 전문가 상담을 요청하시겠습니까? 빠른 시일 내에 연락드리겠습니다.
-                    </DialogDescription>
-                  </DialogHeader>
-                  <form onSubmit={handleSubmitConsultation} className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="name">이름 *</Label>
-                      <Input
-                        id="name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        placeholder="홍길동"
-                        required
-                      />
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="phone">전화번호 *</Label>
-                      <Input
-                        id="phone"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleInputChange}
-                        placeholder="010-1234-5678"
-                        required
-                      />
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="email">이메일 *</Label>
-                      <Input
-                        id="email"
-                        name="email"
-                        type="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        placeholder="example@email.com"
-                        required
-                      />
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="message">상담 내용 (선택사항)</Label>
-                      <Textarea
-                        id="message"
-                        name="message"
-                        value={formData.message}
-                        onChange={handleInputChange}
-                        placeholder="상담받고 싶은 내용을 간단히 적어주세요"
-                        rows={3}
-                      />
-                    </div>
-                    
-                    <div className="flex justify-end space-x-2 pt-4">
-                      <Button
-                        type="button"
-                        variant="outline"
-                        onClick={() => setIsDialogOpen(false)}
-                        disabled={isSubmitting}
-                      >
-                        취소
-                      </Button>
-                      <Button
-                        type="submit"
-                        disabled={isSubmitting}
-                        className="bg-primary hover:bg-primary-dark"
-                      >
-                        {isSubmitting ? '전송 중...' : '상담 요청하기'}
-                      </Button>
-                    </div>
-                  </form>
-                </DialogContent>
-              </Dialog>
-            </div>
+            <p className="text-lg text-gray-600 leading-relaxed mb-6">
+              우리는 최신 기술과 세무 전문 지식을 결합하여, 복잡한 세무 과정을 간단하고 직관적으로 만드는 것을 목표로 합니다. 
+              단순히 세금 신고를 돕는 것을 넘어, 개인의 재정 상황을 종합적으로 분석하여 
+              절세 방안과 장기적인 재정 계획까지 제안하는 통합 플랫폼을 구축했습니다.
+            </p>
             
-            <div className="text-center">
-              <h3 className="font-semibold text-lg mb-4">EzTax 플랫폼</h3>
-              <p className="text-gray-600 mb-4">
-                지금 바로 무료로 세금 계산과 은퇴 진단을 시작해보세요
-              </p>
-              <div className="space-y-2">
-                <Button 
-                  className="w-full bg-green-500 hover:bg-green-600"
-                  onClick={() => navigate('/personal-info')}
-                >
-                  세금 신고 시작하기
-                </Button>
-                <Button 
-                  variant="outline" 
-                  className="w-full border-primary text-primary hover:bg-primary/10"
-                  onClick={() => navigate('/retirement-score')}
-                >
-                  은퇴 준비 상태 진단
-                </Button>
-              </div>
-            </div>
+            <p className="text-lg text-gray-600 leading-relaxed">
+              오늘날 EzTax는 수만 명의 사용자들이 신뢰하는 세무 플랫폼으로 성장했으며, 
+              앞으로도 지속적인 혁신을 통해 더 나은 세무 서비스를 제공하겠습니다.
+            </p>
           </div>
         </CardContent>
       </Card>
 
-      {/* Back to Home */}
-      <div className="text-center">
-        <Button 
-          variant="outline" 
-          onClick={() => navigate('/')}
-          className="border-gray-300"
-        >
-          홈으로 돌아가기
-        </Button>
+      {/* Features */}
+      <div className="mb-16">
+        <h2 className="text-3xl font-heading font-bold text-center text-primary-dark mb-12">주요 서비스</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <Card className="hover:shadow-lg transition-shadow">
+            <CardContent className="p-6">
+              <h3 className="text-xl font-semibold text-primary-dark mb-3">스마트 세금 계산</h3>
+              <p className="text-gray-600 leading-relaxed">
+                AI 기반 세금 계산 엔진으로 정확하고 빠른 세금 계산을 제공합니다. 
+                복잡한 공제 항목과 세액공제를 자동으로 적용하여 최적의 결과를 도출합니다.
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="hover:shadow-lg transition-shadow">
+            <CardContent className="p-6">
+              <h3 className="text-xl font-semibold text-primary-dark mb-3">맞춤형 절세 방안</h3>
+              <p className="text-gray-600 leading-relaxed">
+                개인의 소득 구조와 생활 패턴을 분석하여 최적의 절세 전략을 제안합니다. 
+                은퇴 계획, 교육비 공제, 의료비 공제 등 다양한 절세 옵션을 제공합니다.
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="hover:shadow-lg transition-shadow">
+            <CardContent className="p-6">
+              <h3 className="text-xl font-semibold text-primary-dark mb-3">통합 재정 관리</h3>
+              <p className="text-gray-600 leading-relaxed">
+                세금 신고뿐만 아니라 은퇴 계획, 투자 전략, 보험 최적화까지 
+                종합적인 재정 관리 솔루션을 제공합니다.
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="hover:shadow-lg transition-shadow">
+            <CardContent className="p-6">
+              <h3 className="text-xl font-semibold text-primary-dark mb-3">실시간 지원</h3>
+              <p className="text-gray-600 leading-relaxed">
+                세무 전문가와의 실시간 상담을 통해 복잡한 세무 문제에 대한 
+                전문적인 도움을 받을 수 있습니다.
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="hover:shadow-lg transition-shadow">
+            <CardContent className="p-6">
+              <h3 className="text-xl font-semibold text-primary-dark mb-3">데이터 보안</h3>
+              <p className="text-gray-600 leading-relaxed">
+                은행급 보안 시스템과 256비트 암호화로 고객의 민감한 
+                재정 정보를 안전하게 보호합니다.
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="hover:shadow-lg transition-shadow">
+            <CardContent className="p-6">
+              <h3 className="text-xl font-semibold text-primary-dark mb-3">다국어 지원</h3>
+              <p className="text-gray-600 leading-relaxed">
+                한국어와 영어를 비롯한 다양한 언어를 지원하여 
+                더 많은 사용자가 편리하게 서비스를 이용할 수 있습니다.
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+
+      {/* Contact CTA */}
+      <div className="text-center bg-primary/5 rounded-2xl p-12">
+        <h2 className="text-3xl font-heading font-bold text-primary-dark mb-6">
+          더 나은 세무 경험을 시작하세요
+        </h2>
+        <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+          EzTax와 함께 복잡한 세무 과정을 간단하게 만들고, 
+          스마트한 재정 관리의 첫걸음을 내딛으세요.
+        </p>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <a 
+            href="/personal-info" 
+            className="bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-dark transition duration-200"
+          >
+            세금 계산 시작하기
+          </a>
+          <a 
+            href="mailto:contact@eztax.com" 
+            className="border border-primary text-primary px-8 py-3 rounded-lg font-semibold hover:bg-primary/10 transition duration-200"
+          >
+            문의하기
+          </a>
+        </div>
       </div>
     </div>
   );
-}
+};
+
+export default About;
