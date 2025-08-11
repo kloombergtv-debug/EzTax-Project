@@ -206,7 +206,7 @@ export default function RetirementContributions() {
                           <FormControl>
                             <Input
                               type="number"
-                              placeholder="0"
+                              placeholder="$0"
                               {...field}
                               onChange={(e) => {
                                 const value = e.target.value;
@@ -239,7 +239,7 @@ export default function RetirementContributions() {
                           <FormControl>
                             <Input
                               type="number"
-                              placeholder="0"
+                              placeholder="$0"
                               {...field}
                               onChange={(e) => {
                                 const value = e.target.value;
@@ -272,7 +272,7 @@ export default function RetirementContributions() {
                           <FormControl>
                             <Input
                               type="number"
-                              placeholder="0"
+                              placeholder="$0"
                               {...field}
                               onChange={(e) => {
                                 const value = e.target.value;
@@ -305,7 +305,7 @@ export default function RetirementContributions() {
                           <FormControl>
                             <Input
                               type="number"
-                              placeholder="0"
+                              placeholder="$0"
                               {...field}
                               onChange={(e) => {
                                 const value = e.target.value;
@@ -338,7 +338,7 @@ export default function RetirementContributions() {
                           <FormControl>
                             <Input
                               type="number"
-                              placeholder="0"
+                              placeholder="$0"
                               {...field}
                               onChange={(e) => {
                                 const value = e.target.value;
@@ -382,7 +382,7 @@ export default function RetirementContributions() {
                           <FormControl>
                             <Input
                               type="number"
-                              placeholder="0"
+                              placeholder="$0"
                               {...field}
                               onChange={(e) => {
                                 const value = e.target.value;
