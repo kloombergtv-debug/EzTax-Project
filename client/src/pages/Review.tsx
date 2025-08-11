@@ -178,14 +178,21 @@ const Review: React.FC = () => {
               <div>
                 <Field label="연방 소득세 (Federal Income Tax)" value={formatCurrency(calculatedResults.federalTax)} />
                 <Field label="세액공제 (Tax Credits)" value={formatCurrency(calculatedResults.credits)} />
-                <Field label="총 납부할 세금 (Total Tax Due)" value={formatCurrency(calculatedResults.taxDue)} />
+                <Field label="자영업세 (Self-Employment Tax)" value={formatCurrency(additionalTax.selfEmploymentTax)} />
+                <Field label="기타 세금 (Other Taxes)" value={formatCurrency(additionalTax.otherTaxes)} />
+                <div className="border-t pt-2 mt-2">
+                  <Field label="총 납부할 세금 (Total Tax Due)" value={formatCurrency(calculatedResults.taxDue)} className="font-bold bg-warning/10 px-2 py-1 rounded" />
+                  <div className="text-xs text-gray-600 mt-1 px-2">
+                    = 연방소득세({formatCurrency(calculatedResults.federalTax)}) - 세액공제({formatCurrency(calculatedResults.credits)}) + 자영업세({formatCurrency(additionalTax.selfEmploymentTax)}) + 기타세금({formatCurrency(additionalTax.otherTaxes)})
+                  </div>
+                </div>
                 {calculatedResults.refundAmount > 0 ? (
-                  <div className="flex justify-between py-2 font-bold bg-success/10 rounded px-2 text-success">
+                  <div className="flex justify-between py-2 font-bold bg-success/10 rounded px-2 text-success mt-2">
                     <span>환급 금액 (Refund Amount):</span>
                     <span>{formatCurrency(calculatedResults.refundAmount)}</span>
                   </div>
                 ) : (
-                  <div className="flex justify-between py-2 font-bold bg-destructive/10 rounded px-2 text-destructive">
+                  <div className="flex justify-between py-2 font-bold bg-destructive/10 rounded px-2 text-destructive mt-2">
                     <span>납부할 금액 (Amount Owed):</span>
                     <span>{formatCurrency(calculatedResults.amountOwed)}</span>
                   </div>
