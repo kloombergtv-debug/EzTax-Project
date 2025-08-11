@@ -235,7 +235,9 @@ const Review: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <Field label="공제 유형 (Deduction Type)" value={deductions.useStandardDeduction ? '표준 공제 (Standard)' : '항목별 공제 (Itemized)'} />
-                    <Field label="표준 공제 금액 (Standard Deduction)" value={formatCurrency(deductions.standardDeductionAmount)} />
+                    {deductions.useStandardDeduction && (
+                      <Field label="표준 공제 금액 (Standard Deduction)" value={formatCurrency(deductions.standardDeductionAmount)} />
+                    )}
                   </div>
                   <div>
                     <Field label="총 공제액 (Total Deductions)" value={formatCurrency(deductions.totalDeductions)} />
