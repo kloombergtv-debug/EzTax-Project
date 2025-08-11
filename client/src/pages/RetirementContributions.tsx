@@ -410,8 +410,8 @@ export default function RetirementContributions() {
                   <CardContent>
                     <div className="space-y-2">
                       <div className="flex justify-between">
-                        <span>총소득 (Total Income):</span>
-                        <span>${(taxData.income?.totalIncome || 0).toLocaleString()}</span>
+                        <span>현재 AGI (Current AGI):</span>
+                        <span>${(taxData.income?.adjustedGrossIncome || 0).toLocaleString()}</span>
                       </div>
                       <div className="flex justify-between">
                         <span>은퇴 기여금 공제:</span>
