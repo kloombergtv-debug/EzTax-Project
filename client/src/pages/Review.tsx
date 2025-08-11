@@ -244,12 +244,12 @@ const Review: React.FC = () => {
               <SectionSummary title="세액공제" editLink="/tax-credits">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Field label="자녀 세액공제" value={formatCurrency(taxCredits.childTaxCredit)} />
-                    <Field label="은퇴 저축 공제" value={formatCurrency(taxCredits.retirementSavingsCredit)} />
+                    <Field label="자녀 세액공제" value={formatCurrency(taxCredits.childTaxCredit || 0)} />
+                    <Field label="은퇴 저축 공제" value={formatCurrency(taxCredits.retirementSavingsCredit || 0)} />
                   </div>
                   <div>
-                    <Field label="외국납부세액공제" value={formatCurrency(taxCredits.foreignTaxCredit)} />
-                    <Field label="총 세액공제" value={formatCurrency(taxCredits.totalCredits)} />
+                    <Field label="외국납부세액공제" value={formatCurrency(taxCredits.foreignTaxCredit || 0)} />
+                    <Field label="총 세액공제" value={formatCurrency(taxCredits.totalCredits || 0)} />
                   </div>
                 </div>
               </SectionSummary>

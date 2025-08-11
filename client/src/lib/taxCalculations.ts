@@ -953,7 +953,12 @@ export function calculateTaxes(taxData: TaxData): CalculatedResults {
 }
 
 // Format currency for display (without decimal places)
-export function formatCurrency(amount: number): string {
+export function formatCurrency(amount: number | undefined | null): string {
+  // Handle NaN, undefined, null values safely
+  if (amount === null || amount === undefined || isNaN(amount)) {
+    return '$0';
+  }
+  
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
