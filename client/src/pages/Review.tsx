@@ -165,23 +165,23 @@ const Review: React.FC = () => {
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <Field label="총 소득" value={formatCurrency(calculatedResults.totalIncome)} />
-                <Field label="조정 총소득" value={formatCurrency(calculatedResults.adjustedGrossIncome)} />
-                <Field label="공제액" value={formatCurrency(calculatedResults.deductions)} />
-                <Field label="과세 소득" value={formatCurrency(calculatedResults.taxableIncome)} />
+                <Field label="총 소득 (Total Income)" value={formatCurrency(calculatedResults.totalIncome)} />
+                <Field label="조정 총소득 (Adjusted Gross Income)" value={formatCurrency(calculatedResults.adjustedGrossIncome)} />
+                <Field label="공제액 (Deductions)" value={formatCurrency(calculatedResults.deductions)} />
+                <Field label="과세 소득 (Taxable Income)" value={formatCurrency(calculatedResults.taxableIncome)} />
               </div>
               <div>
-                <Field label="연방 소득세" value={formatCurrency(calculatedResults.federalTax)} />
-                <Field label="세액공제" value={formatCurrency(calculatedResults.credits)} />
-                <Field label="총 납부할 세금" value={formatCurrency(calculatedResults.taxDue)} />
+                <Field label="연방 소득세 (Federal Income Tax)" value={formatCurrency(calculatedResults.federalTax)} />
+                <Field label="세액공제 (Tax Credits)" value={formatCurrency(calculatedResults.credits)} />
+                <Field label="총 납부할 세금 (Total Tax Due)" value={formatCurrency(calculatedResults.taxDue)} />
                 {calculatedResults.refundAmount > 0 ? (
                   <div className="flex justify-between py-2 font-bold bg-success/10 rounded px-2 text-success">
-                    <span>환급 금액:</span>
+                    <span>환급 금액 (Refund Amount):</span>
                     <span>{formatCurrency(calculatedResults.refundAmount)}</span>
                   </div>
                 ) : (
                   <div className="flex justify-between py-2 font-bold bg-destructive/10 rounded px-2 text-destructive">
-                    <span>납부할 금액:</span>
+                    <span>납부할 금액 (Amount Owed):</span>
                     <span>{formatCurrency(calculatedResults.amountOwed)}</span>
                   </div>
                 )}
@@ -194,76 +194,76 @@ const Review: React.FC = () => {
               <h2 className="text-2xl font-heading font-semibold text-primary-dark mb-6">검토 및 계산</h2>
               
               {/* Personal Information Summary */}
-              <SectionSummary title="개인 정보" editLink="/personal-info">
+              <SectionSummary title="개인 정보 (Personal Information)" editLink="/personal-info">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Field label="이름" value={`${personalInfo.firstName || ''} ${personalInfo.lastName || ''}`.trim()} />
+                    <Field label="이름 (Name)" value={`${personalInfo.firstName || ''} ${personalInfo.lastName || ''}`.trim()} />
                     <Field label="SSN" value={personalInfo.ssn} />
-                    <Field label="생년월일" value={personalInfo.dateOfBirth} />
-                    <Field label="납세자 구분" value={formatFilingStatus(personalInfo.filingStatus)} />
+                    <Field label="생년월일 (Date of Birth)" value={personalInfo.dateOfBirth} />
+                    <Field label="납세자 구분 (Filing Status)" value={formatFilingStatus(personalInfo.filingStatus)} />
                   </div>
                   <div>
-                    <Field label="이메일" value={personalInfo.email} />
-                    <Field label="전화번호" value={personalInfo.phone} />
-                    <Field label="자녀 수" value={personalInfo.numberOfChildren} />
-                    <Field label="기타 부양가족 수" value={personalInfo.numberOfOtherDependents} />
+                    <Field label="이메일 (Email)" value={personalInfo.email} />
+                    <Field label="전화번호 (Phone)" value={personalInfo.phone} />
+                    <Field label="자녀 수 (Number of Children)" value={personalInfo.numberOfChildren} />
+                    <Field label="기타 부양가족 수 (Other Dependents)" value={personalInfo.numberOfOtherDependents} />
                   </div>
                 </div>
               </SectionSummary>
               
               {/* Income Summary */}
-              <SectionSummary title="소득" editLink="/income">
+              <SectionSummary title="소득 (Income)" editLink="/income">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Field label="급여" value={formatCurrency(income.wages)} />
-                    <Field label="사업 소득" value={formatCurrency(income.businessIncome)} />
-                    <Field label="이자 소득" value={formatCurrency(income.interestIncome)} />
+                    <Field label="급여 (Wages)" value={formatCurrency(income.wages)} />
+                    <Field label="사업 소득 (Business Income)" value={formatCurrency(income.businessIncome)} />
+                    <Field label="이자 소득 (Interest Income)" value={formatCurrency(income.interestIncome)} />
                   </div>
                   <div>
-                    <Field label="배당금" value={formatCurrency(income.dividends)} />
-                    <Field label="자본 이득" value={formatCurrency(income.capitalGains)} />
-                    <Field label="기타 소득" value={formatCurrency(income.otherIncome)} />
+                    <Field label="배당금 (Dividends)" value={formatCurrency(income.dividends)} />
+                    <Field label="자본 이득 (Capital Gains)" value={formatCurrency(income.capitalGains)} />
+                    <Field label="기타 소득 (Other Income)" value={formatCurrency(income.otherIncome)} />
                   </div>
                 </div>
               </SectionSummary>
               
               {/* Deductions Summary */}
-              <SectionSummary title="공제" editLink="/deductions">
+              <SectionSummary title="공제 (Deductions)" editLink="/deductions">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Field label="공제 유형" value={deductions.useStandardDeduction ? '표준 공제' : '항목별 공제'} />
-                    <Field label="표준 공제 금액" value={formatCurrency(deductions.standardDeductionAmount)} />
+                    <Field label="공제 유형 (Deduction Type)" value={deductions.useStandardDeduction ? '표준 공제 (Standard)' : '항목별 공제 (Itemized)'} />
+                    <Field label="표준 공제 금액 (Standard Deduction)" value={formatCurrency(deductions.standardDeductionAmount)} />
                   </div>
                   <div>
-                    <Field label="총 공제액" value={formatCurrency(deductions.totalDeductions)} />
+                    <Field label="총 공제액 (Total Deductions)" value={formatCurrency(deductions.totalDeductions)} />
                   </div>
                 </div>
               </SectionSummary>
               
               {/* Tax Credits Summary */}
-              <SectionSummary title="세액공제" editLink="/tax-credits">
+              <SectionSummary title="세액공제 (Tax Credits)" editLink="/tax-credits">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Field label="자녀 세액공제" value={formatCurrency(taxCredits.childTaxCredit || 0)} />
-                    <Field label="은퇴 저축 공제" value={formatCurrency(taxCredits.retirementSavingsCredit || 0)} />
+                    <Field label="자녀 세액공제 (Child Tax Credit)" value={formatCurrency(taxCredits.childTaxCredit || 0)} />
+                    <Field label="은퇴 저축 공제 (Retirement Savings Credit)" value={formatCurrency(taxCredits.retirementSavingsCredit || 0)} />
                   </div>
                   <div>
-                    <Field label="외국납부세액공제" value={formatCurrency(taxCredits.foreignTaxCredit || 0)} />
-                    <Field label="총 세액공제" value={formatCurrency(taxCredits.totalCredits || 0)} />
+                    <Field label="외국납부세액공제 (Foreign Tax Credit)" value={formatCurrency(taxCredits.foreignTaxCredit || 0)} />
+                    <Field label="총 세액공제 (Total Tax Credits)" value={formatCurrency(taxCredits.totalCredits || 0)} />
                   </div>
                 </div>
               </SectionSummary>
               
               {/* Additional Tax Summary */}
-              <SectionSummary title="추가 세금" editLink="/additional-tax">
+              <SectionSummary title="추가 세금 (Additional Tax)" editLink="/additional-tax">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Field label="자영업 소득" value={formatCurrency(additionalTax.selfEmploymentIncome)} />
-                    <Field label="자영업 세금" value={formatCurrency(additionalTax.selfEmploymentTax)} />
+                    <Field label="자영업 소득 (Self-Employment Income)" value={formatCurrency(additionalTax.selfEmploymentIncome)} />
+                    <Field label="자영업 세금 (Self-Employment Tax)" value={formatCurrency(additionalTax.selfEmploymentTax)} />
                   </div>
                   <div>
-                    <Field label="예상 세금 납부" value={formatCurrency(additionalTax.estimatedTaxPayments)} />
-                    <Field label="기타 세금" value={formatCurrency(additionalTax.otherTaxes)} />
+                    <Field label="예상 세금 납부 (Estimated Tax Payments)" value={formatCurrency(additionalTax.estimatedTaxPayments)} />
+                    <Field label="기타 세금 (Other Taxes)" value={formatCurrency(additionalTax.otherTaxes)} />
                   </div>
                 </div>
               </SectionSummary>
