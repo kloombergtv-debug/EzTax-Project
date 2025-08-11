@@ -207,7 +207,7 @@ export default function RetirementContributions() {
                             <Input
                               type="number"
                               placeholder="$0"
-                              {...field}
+                              value={field.value || ''}
                               onChange={(e) => {
                                 const value = e.target.value;
                                 if (value === '') {
@@ -240,7 +240,7 @@ export default function RetirementContributions() {
                             <Input
                               type="number"
                               placeholder="$0"
-                              {...field}
+                              value={field.value || ''}
                               onChange={(e) => {
                                 const value = e.target.value;
                                 if (value === '') {
@@ -273,7 +273,7 @@ export default function RetirementContributions() {
                             <Input
                               type="number"
                               placeholder="$0"
-                              {...field}
+                              value={field.value || ''}
                               onChange={(e) => {
                                 const value = e.target.value;
                                 if (value === '') {
@@ -306,7 +306,7 @@ export default function RetirementContributions() {
                             <Input
                               type="number"
                               placeholder="$0"
-                              {...field}
+                              value={field.value || ''}
                               onChange={(e) => {
                                 const value = e.target.value;
                                 if (value === '') {
@@ -339,7 +339,7 @@ export default function RetirementContributions() {
                             <Input
                               type="number"
                               placeholder="$0"
-                              {...field}
+                              value={field.value || ''}
                               onChange={(e) => {
                                 const value = e.target.value;
                                 if (value === '') {
@@ -383,7 +383,7 @@ export default function RetirementContributions() {
                             <Input
                               type="number"
                               placeholder="$0"
-                              {...field}
+                              value={field.value || ''}
                               onChange={(e) => {
                                 const value = e.target.value;
                                 if (value === '') {
