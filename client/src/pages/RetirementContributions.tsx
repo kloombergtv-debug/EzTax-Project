@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { InfoIcon, PiggyBankIcon, TrendingUpIcon } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useTaxContext } from "@/context/TaxContext";
 
 // 2025 IRS Contribution Limits
 const CONTRIBUTION_LIMITS_2025 = {
@@ -41,15 +42,8 @@ const retirementSchema = z.object({
 type RetirementFormData = z.infer<typeof retirementSchema>;
 
 export default function RetirementContributions() {
-  // 로그인 없이도 접근하기 위해 기본값 사용
-  const taxData = {
-    personalInfo: { dateOfBirth: '1990-01-01', filingStatus: 'single' },
-    retirementContributions: null,
-    income: { totalIncome: 50000, adjustedGrossIncome: 50000, adjustments: {} }
-  };
-  const updateTaxData = (newData: any) => {
-    console.log('퇴직연금 데이터 업데이트:', newData);
-  };
+  // 실제 TaxContext 사용
+  const { taxData, updateTaxData, isDataReady } = useTaxContext();
   
   const [, navigate] = useLocation();
   const [userAge, setUserAge] = useState(25);
