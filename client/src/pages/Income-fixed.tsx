@@ -723,6 +723,7 @@ export default function IncomePage() {
                         variant="outline"
                         onClick={handleManualSave}
                         className="flex items-center gap-2"
+                        style={{ backgroundColor: '#dcfcd7' }}
                       >
                         <Save className="h-4 w-4" />
                         진행상황 저장
