@@ -324,15 +324,7 @@ const Review: React.FC = () => {
                   1040신고서(참고용)
                 </Button>
                 
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <Button
-                    variant="outline"
-                    className="border-primary text-primary font-semibold rounded hover:bg-primary-light hover:text-white transition duration-200 w-[240px] justify-center"
-                    onClick={() => navigate('/additional-tax')}
-                  >
-                    이전페이지로 이동
-                  </Button>
-                  
+                <div className="flex justify-center">
                   <Button
                     className="bg-primary text-white font-semibold rounded hover:bg-primary-dark transition duration-200 w-[240px] justify-center"
                     onClick={() => navigate('/tax-savings')}
