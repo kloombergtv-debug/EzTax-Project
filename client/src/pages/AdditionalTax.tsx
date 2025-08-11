@@ -16,13 +16,7 @@ import { Info } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 const AdditionalTaxPage: React.FC = () => {
-  // 로그인 없이도 접근하기 위해 기본값 사용
-  const taxData = { 
-    additionalTax: null 
-  };
-  const updateTaxData = (newData: any) => {
-    console.log('추가세금 데이터 업데이트:', newData);
-  };
+  const { taxData, updateTaxData } = useTaxContext();
   
   const { toast } = useToast();
   const [, navigate] = useLocation();
