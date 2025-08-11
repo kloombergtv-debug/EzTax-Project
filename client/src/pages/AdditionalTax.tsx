@@ -147,8 +147,8 @@ const AdditionalTaxPage: React.FC = () => {
                                 <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-dark">$</span>
                                 <Input 
                                   {...field} 
-                                  placeholder="$"
-                                  className="pl-8"
+                                  placeholder="$0"
+                                  className=""
                                   value={field.value || ''}
                                   onChange={(e) => {
                                     const formatted = formatCurrency(e.target.value);
@@ -177,7 +177,7 @@ const AdditionalTaxPage: React.FC = () => {
                                 <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-dark">$</span>
                                 <Input 
                                   {...field} 
-                                  placeholder="$"
+                                  placeholder="$0"
                                   className="pl-8 bg-gray-bg"
                                   value={field.value ? `${field.value.toFixed(2)}` : ''}
                                   disabled
@@ -228,8 +228,8 @@ const AdditionalTaxPage: React.FC = () => {
                                 <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-dark">$</span>
                                 <Input 
                                   {...field} 
-                                  placeholder="$"
-                                  className="pl-8"
+                                  placeholder="$0"
+                                  className=""
                                   value={field.value || ''}
                                   onChange={(e) => {
                                     const formatted = formatCurrency(e.target.value);
@@ -280,8 +280,8 @@ const AdditionalTaxPage: React.FC = () => {
                                 <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-dark">$</span>
                                 <Input 
                                   {...field} 
-                                  placeholder="$"
-                                  className="pl-8"
+                                  placeholder="$0"
+                                  className=""
                                   value={field.value || ''}
                                   onChange={(e) => {
                                     const formatted = formatCurrency(e.target.value);
