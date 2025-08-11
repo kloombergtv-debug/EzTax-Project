@@ -52,6 +52,14 @@ Page Layout Preference:
   - Force UI updates using setComponentKey and setForceUpdate to trigger complete component remount
   - This pattern resolves cases where React state updates fail mysteriously despite correct logic
 
+- **Input Field Dollar Sign Duplication Issue (2025-01-11)**: Multiple pages (TaxCredits, AdditionalTax, RetirementContributions) showed "$ $" or duplicate dollar signs in input fields.
+  - Root Cause: CSS absolute positioning added "$" symbols while placeholders also contained "$" symbols
+  - Solution: Removed CSS absolute positioned `<span>` elements containing "$" symbols from all affected pages
+  - Updated placeholders to "$0" format instead of "0.00" or "$" to maintain proper dollar formatting
+  - Removed `pl-8` padding classes that were accommodating the removed absolute positioned elements
+  - Applied to: TaxCredits.tsx, AdditionalTax.tsx, RetirementContributions.tsx
+  - Key Fix: Use placeholder="$0" with simple Input components instead of complex relative div structures with absolute positioned dollar symbols
+
 ## External Dependencies
 
 - **Database**: Neon PostgreSQL serverless
