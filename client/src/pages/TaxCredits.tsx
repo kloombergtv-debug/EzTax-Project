@@ -136,7 +136,7 @@ const TaxCreditsPage: React.FC = () => {
       <div className="mb-8">
         <h1 className="text-3xl font-heading font-bold text-primary-dark mb-2">귀하의 2025년 세금 신고서 (Your 2025 Tax Return)</h1>
         <p className="text-gray-dark">세금 신고서를 준비하기 위해 모든 섹션을 작성하세요. 입력한 정보는 자동으로 저장됩니다. (Complete all sections to prepare your tax return. Your information is saved automatically.)</p>
-      </div>
+      
 
       <ProgressTracker currentStep={4} />
 
@@ -165,7 +165,7 @@ const TaxCreditsPage: React.FC = () => {
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
-                    </div>
+                    
                     
                     {!hasDependents && (
                       <div className="bg-gray-bg p-3 rounded-md mb-3 text-sm">
@@ -173,7 +173,7 @@ const TaxCreditsPage: React.FC = () => {
                         자격을 갖춘 자녀가 있다면, 뒤로 돌아가 추가해주세요.</p>
                         <p className="text-xs mt-1">(You have not added any dependents in the Personal Information section. 
                         If you have qualifying children, please go back and add them.)</p>
-                      </div>
+                      
                     )}
                     
                     <div className="grid grid-cols-1 gap-4">
@@ -184,7 +184,7 @@ const TaxCreditsPage: React.FC = () => {
                           <FormItem>
                             <FormLabel>자녀세액공제액 (Child Tax Credit Amount)</FormLabel>
                             <FormControl>
-                              <div>
+                              
                                 <Input 
                                   {...field} 
                                   placeholder="$0"
@@ -195,7 +195,7 @@ const TaxCreditsPage: React.FC = () => {
                                     field.onChange(Number(formatted));
                                   }}
                                 />
-                              </div>
+                              
                             </FormControl>
                             <FormDescription>
                               귀하의 예상 자녀세액공제액을 입력하세요.
@@ -205,8 +205,8 @@ const TaxCreditsPage: React.FC = () => {
                           </FormItem>
                         )}
                       />
-                    </div>
-                  </div>
+                    
+                  
 
                   {/* Child and Dependent Care Credit */}
                   <div className="mb-6 border-b border-gray-light pb-6">
@@ -225,7 +225,7 @@ const TaxCreditsPage: React.FC = () => {
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
-                    </div>
+                    
                     
                     <div className="grid grid-cols-1 gap-4">
                       <FormField
@@ -235,7 +235,7 @@ const TaxCreditsPage: React.FC = () => {
                           <FormItem>
                             <FormLabel>돌봄공제액 (Care Credit Amount)</FormLabel>
                             <FormControl>
-                              <div>
+                              
                                 <Input 
                                   {...field} 
                                   placeholder="$0"
@@ -246,14 +246,14 @@ const TaxCreditsPage: React.FC = () => {
                                     field.onChange(Number(formatted));
                                   }}
                                 />
-                              </div>
+                              
                             </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
-                    </div>
-                  </div>
+                    
+                  
 
                   {/* Education Credits */}
                   <div className="mb-6 border-b border-gray-light pb-6">
@@ -272,7 +272,7 @@ const TaxCreditsPage: React.FC = () => {
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
-                    </div>
+                    
                     
                     <div className="grid grid-cols-1 gap-4">
                       <FormField
@@ -282,7 +282,7 @@ const TaxCreditsPage: React.FC = () => {
                           <FormItem>
                             <FormLabel>교육공제액 (Education Credits Amount)</FormLabel>
                             <FormControl>
-                              <div>
+                              
                                 <Input 
                                   {...field} 
                                   placeholder="$0"
@@ -293,7 +293,7 @@ const TaxCreditsPage: React.FC = () => {
                                     field.onChange(Number(formatted));
                                   }}
                                 />
-                              </div>
+                              
                             </FormControl>
                             <FormDescription>
                               미국 기회 세액공제와 평생 학습 세액공제의 총액입니다.
@@ -303,8 +303,8 @@ const TaxCreditsPage: React.FC = () => {
                           </FormItem>
                         )}
                       />
-                    </div>
-                  </div>
+                    
+                  
 
                   {/* Retirement Savings Credit */}
                   <div className="mb-6 border-b border-gray-light pb-6">
@@ -323,7 +323,7 @@ const TaxCreditsPage: React.FC = () => {
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
-                    </div>
+                    
                     
                     <div className="grid grid-cols-1 gap-4">
                       <FormField
@@ -333,7 +333,7 @@ const TaxCreditsPage: React.FC = () => {
                           <FormItem>
                             <FormLabel>은퇴저축공제액 (Retirement Savings Credit Amount)</FormLabel>
                             <FormControl>
-                              <div>
+                              
                                 <Input 
                                   {...field} 
                                   placeholder="$0"
@@ -344,14 +344,14 @@ const TaxCreditsPage: React.FC = () => {
                                     field.onChange(Number(formatted));
                                   }}
                                 />
-                              </div>
+                              
                             </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
-                    </div>
-                  </div>
+                    
+                  
 
                   {/* Earned Income Credit */}
                   <div className="mb-6 border-b border-gray-light pb-6">
@@ -370,7 +370,7 @@ const TaxCreditsPage: React.FC = () => {
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
-                    </div>
+                    
                     
                     <div className="bg-blue-50 border border-blue-200 rounded-md p-3 mb-4 text-sm">
                       <h5 className="font-medium text-blue-900 mb-2">2025년 소득 한도액 (2025 Income Limits)</h5>
@@ -385,8 +385,8 @@ const TaxCreditsPage: React.FC = () => {
                           근로소득과 조정총소득(AGI) 모두 위 한도액 미만이어야 합니다.
                           (Both earned income and AGI must be less than the limit above.)
                         </p>
-                      </div>
-                    </div>
+                      
+                    
                     
                     <div className="grid grid-cols-1 gap-4">
                       <FormField
@@ -396,7 +396,7 @@ const TaxCreditsPage: React.FC = () => {
                           <FormItem>
                             <FormLabel>근로소득공제액 (Earned Income Credit Amount)</FormLabel>
                             <FormControl>
-                              <div>
+                              
                                 <Input 
                                   {...field} 
                                   placeholder="$0"
@@ -407,7 +407,7 @@ const TaxCreditsPage: React.FC = () => {
                                     field.onChange(Number(formatted));
                                   }}
                                 />
-                              </div>
+                              
                             </FormControl>
                             <FormDescription>
                               IRS Publication 596을 참조하여 정확한 공제액을 계산하거나 세무 소프트웨어를 사용하세요.
@@ -417,14 +417,14 @@ const TaxCreditsPage: React.FC = () => {
                           </FormItem>
                         )}
                       />
-                    </div>
-                  </div>
+                    
+                  
 
                   {/* Other Credits */}
                   <div className="mb-6">
                     <div className="flex items-center mb-3">
                       <h4 className="font-semibold">기타공제 (Other Credits)</h4>
-                    </div>
+                    
                     
                     <div className="grid grid-cols-1 gap-4">
                       <FormField
@@ -434,7 +434,7 @@ const TaxCreditsPage: React.FC = () => {
                           <FormItem>
                             <FormLabel>기타 세금공제 (Other Tax Credits)</FormLabel>
                             <FormControl>
-                              <div>
+                              
                                 <Input 
                                   {...field} 
                                   placeholder="$0"
@@ -445,7 +445,7 @@ const TaxCreditsPage: React.FC = () => {
                                     field.onChange(Number(formatted));
                                   }}
                                 />
-                              </div>
+                              
                             </FormControl>
                             <FormDescription>
                               위에 나열되지 않은 다른 세금공제의 총액을 입력하세요.
@@ -455,8 +455,8 @@ const TaxCreditsPage: React.FC = () => {
                           </FormItem>
                         )}
                       />
-                    </div>
-                  </div>
+                    
+                  
 
                   {/* Total Credits */}
                   <div className="mb-6 bg-gray-bg p-4 rounded-md">
@@ -465,8 +465,8 @@ const TaxCreditsPage: React.FC = () => {
                       <p className="font-bold text-primary-dark text-xl">
                         ${form.getValues('totalCredits').toLocaleString()}
                       </p>
-                    </div>
-                  </div>
+                    
+                  
                   
                   <div className="flex flex-wrap gap-4 mt-8 mb-4">
                     <Button
@@ -529,7 +529,7 @@ const TaxCreditsPage: React.FC = () => {
                       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2 h-5 w-5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
                       <span className="text-lg">진행 상황 저장</span>
                     </Button>
-                  </div>
+                  
                 </form>
               </Form>
               
@@ -545,9 +545,9 @@ const TaxCreditsPage: React.FC = () => {
               />
             </CardContent>
           </Card>
-        </div>
-      </div>
-    </div>
+        
+      
+    
   );
 };
 
