@@ -303,6 +303,8 @@ export const TaxProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         if (finalData.id) {
           // Update existing tax return
           console.log(`기존 세금 신고서 업데이트 중 (ID: ${finalData.id})`);
+          console.log('업데이트할 데이터:', JSON.stringify(finalData, null, 2));
+          
           const response = await fetch(`/api/tax-return/${finalData.id}`, {
             method: 'PUT',
             headers: {
@@ -312,12 +314,18 @@ export const TaxProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             body: JSON.stringify(finalData),
           });
           
-          if (!response.ok) {
-            console.error(`세금 신고서 업데이트 실패: ${response.status} - ${response.statusText}`);
+          if (response.ok) {
+            const updatedData = await response.json();
+            console.log(`세금 신고서 업데이트 성공 (ID: ${updatedData.id})`);
+          } else {
+            const errorText = await response.text();
+            console.error(`세금 신고서 업데이트 실패: ${response.status} - ${response.statusText}`, errorText);
           }
         } else {
           // Create new tax return for user
           console.log(`새 사용자를 위한 세금 신고서 생성 중 (사용자 ID: ${currentUserId})`);
+          console.log('생성할 데이터:', JSON.stringify(finalData, null, 2));
+          
           const response = await fetch('/api/tax-return', {
             method: 'POST',
             headers: {
@@ -333,7 +341,8 @@ export const TaxProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             // Update the local data with the new ID
             setTaxData(prev => ({ ...prev, id: newTaxReturn.id }));
           } else {
-            console.error(`새 세금 신고서 생성 실패: ${response.status} - ${response.statusText}`);
+            const errorText = await response.text();
+            console.error(`새 세금 신고서 생성 실패: ${response.status} - ${response.statusText}`, errorText);
           }
         }
       } catch (error) {
