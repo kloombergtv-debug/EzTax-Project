@@ -98,6 +98,11 @@ const Review: React.FC = () => {
   const taxCredits = taxData.taxCredits || {} as TaxCredits;
   const additionalTax = taxData.additionalTax || {} as AdditionalTax;
   
+  // dependents 배열에서 실제 자녀 수와 기타 부양가족 수 계산
+  const dependents = personalInfo.dependents || [];
+  const numberOfChildren = dependents.filter(dep => dep.relationship === 'child').length;
+  const numberOfOtherDependents = dependents.filter(dep => dep.relationship !== 'child').length;
+  
   // 기본 계산 결과 (실제 TaxContext에서 사용될 때 업데이트됨)
   const calculatedResults = taxData.calculatedResults || {
     totalIncome: (income.wages || 0) + (income.businessIncome || 0) + (income.interestIncome || 0) + (income.dividends || 0) + (income.capitalGains || 0) + (income.otherIncome || 0),
@@ -201,8 +206,8 @@ const Review: React.FC = () => {
                     <Field label="납세자 구분 (Filing Status)" value={formatFilingStatus(personalInfo.filingStatus)} />
                   </div>
                   <div>
-                    <Field label="자녀 수 (Number of Children)" value={personalInfo.numberOfChildren} />
-                    <Field label="기타 부양가족 수 (Other Dependents)" value={personalInfo.numberOfOtherDependents} />
+                    <Field label="자녀 수 (Number of Children)" value={numberOfChildren} />
+                    <Field label="기타 부양가족 수 (Other Dependents)" value={numberOfOtherDependents} />
                   </div>
                 </div>
               </SectionSummary>
