@@ -184,12 +184,11 @@ const TaxCreditsPage: React.FC = () => {
                           <FormItem>
                             <FormLabel>자녀세액공제액 (Child Tax Credit Amount)</FormLabel>
                             <FormControl>
-                              <div className="relative">
-                                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-dark">$</span>
+                              <div>
                                 <Input 
                                   {...field} 
-                                  placeholder="0"
-                                  className="pl-8"
+                                  placeholder="$0"
+                                  className=""
                                   value={field.value || ''}
                                   onChange={(e) => {
                                     const formatted = formatCurrency(e.target.value);
@@ -236,12 +235,11 @@ const TaxCreditsPage: React.FC = () => {
                           <FormItem>
                             <FormLabel>돌봄공제액 (Care Credit Amount)</FormLabel>
                             <FormControl>
-                              <div className="relative">
-                                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-dark">$</span>
+                              <div>
                                 <Input 
                                   {...field} 
-                                  placeholder="0"
-                                  className="pl-8"
+                                  placeholder="$0"
+                                  className=""
                                   value={field.value || ''}
                                   onChange={(e) => {
                                     const formatted = formatCurrency(e.target.value);
@@ -284,12 +282,11 @@ const TaxCreditsPage: React.FC = () => {
                           <FormItem>
                             <FormLabel>교육공제액 (Education Credits Amount)</FormLabel>
                             <FormControl>
-                              <div className="relative">
-                                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-dark">$</span>
+                              <div>
                                 <Input 
                                   {...field} 
-                                  placeholder="0"
-                                  className="pl-8"
+                                  placeholder="$0"
+                                  className=""
                                   value={field.value || ''}
                                   onChange={(e) => {
                                     const formatted = formatCurrency(e.target.value);
@@ -336,12 +333,11 @@ const TaxCreditsPage: React.FC = () => {
                           <FormItem>
                             <FormLabel>은퇴저축공제액 (Retirement Savings Credit Amount)</FormLabel>
                             <FormControl>
-                              <div className="relative">
-                                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-dark">$</span>
+                              <div>
                                 <Input 
                                   {...field} 
-                                  placeholder="0"
-                                  className="pl-8"
+                                  placeholder="$0"
+                                  className=""
                                   value={field.value || ''}
                                   onChange={(e) => {
                                     const formatted = formatCurrency(e.target.value);
@@ -400,12 +396,11 @@ const TaxCreditsPage: React.FC = () => {
                           <FormItem>
                             <FormLabel>근로소득공제액 (Earned Income Credit Amount)</FormLabel>
                             <FormControl>
-                              <div className="relative">
-                                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-dark">$</span>
+                              <div>
                                 <Input 
                                   {...field} 
-                                  placeholder="0"
-                                  className="pl-8"
+                                  placeholder="$0"
+                                  className=""
                                   value={field.value || ''}
                                   onChange={(e) => {
                                     const formatted = formatCurrency(e.target.value);
@@ -439,12 +434,11 @@ const TaxCreditsPage: React.FC = () => {
                           <FormItem>
                             <FormLabel>기타 세금공제 (Other Tax Credits)</FormLabel>
                             <FormControl>
-                              <div className="relative">
-                                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-dark">$</span>
+                              <div>
                                 <Input 
                                   {...field} 
-                                  placeholder="0"
-                                  className="pl-8"
+                                  placeholder="$0"
+                                  className=""
                                   value={field.value || ''}
                                   onChange={(e) => {
                                     const formatted = formatCurrency(e.target.value);
