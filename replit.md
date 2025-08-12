@@ -60,6 +60,11 @@ Page Layout Preference:
   - Applied to: TaxCredits.tsx, AdditionalTax.tsx, RetirementContributions.tsx
   - Key Fix: Use placeholder="$0" with simple Input components instead of complex relative div structures with absolute positioned dollar symbols
 
+### Current Active Page Files (2025-01-12)
+- **Income Page**: Currently using `Income-fixed.tsx` as the main income input page (referenced in App.tsx as IncomePage component)
+- **Video Status**: YouTube instructional video temporarily removed from Income-fixed.tsx (user request, to be restored after 1 hour)
+- **Layout**: Modified to use full-width layout when video is removed (grid-cols-1 instead of grid-cols-2)
+
 ## External Dependencies
 
 - **Database**: Neon PostgreSQL serverless
