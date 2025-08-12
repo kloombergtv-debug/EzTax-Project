@@ -324,7 +324,15 @@ const Review: React.FC = () => {
                   1040신고서(참고용)
                 </Button>
                 
-                <div className="flex justify-center">
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Button
+                    variant="outline"
+                    className="bg-blue-50 text-blue-700 border-blue-200 font-semibold rounded hover:bg-blue-100 transition duration-200 w-[240px] justify-center"
+                    onClick={() => navigate('/state-tax')}
+                  >
+                    주정부 세금 계산
+                  </Button>
+                  
                   <Button
                     className="bg-primary text-white font-semibold rounded hover:bg-primary-dark transition duration-200 w-[240px] justify-center"
                     onClick={() => navigate('/tax-savings')}
