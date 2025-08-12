@@ -181,6 +181,23 @@ export default function AuthPage() {
                     )}
                   </Button>
                   
+                  <div className="text-center">
+                    <p className="text-sm text-gray-600">
+                      비밀번호를 잊으셨나요?{' '}
+                      <button
+                        type="button"
+                        className="text-primary hover:text-primary-dark underline font-medium"
+                        onClick={() => {
+                          toast({
+                            title: "비밀번호 재설정",
+                            description: "관리자에게 문의하여 비밀번호를 재설정받으실 수 있습니다. 또는 새 계정을 만드시면 됩니다.",
+                          });
+                        }}
+                      >
+                        비밀번호 찾기
+                      </button>
+                    </p>
+                  </div>
 
 
                 </CardFooter>
