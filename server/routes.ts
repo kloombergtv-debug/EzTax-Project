@@ -25,8 +25,8 @@ const createEmailTransporter = () => {
       user: emailUser,
       pass: emailPass
     },
-    debug: false,
-    logger: false
+    debug: true,
+    logger: true
   });
 };
 
@@ -582,10 +582,24 @@ ${additionalRequests || '없음'}
           `
         };
         
-        await transporter.sendMail(mailOptions);
-        console.log(`Password reset email sent to: ${email}`);
+        try {
+          console.log(`Attempting to send email to: ${email}`);
+          console.log(`Reset URL: ${resetUrl}`); // Log the reset URL for debugging
+          const info = await transporter.sendMail(mailOptions);
+          console.log(`Password reset email sent successfully to: ${email}`, info.response);
+        } catch (emailError) {
+          console.error('Error sending email:', emailError);
+          console.log(`If email fails, use this reset URL directly: ${resetUrl}`);
+          // Log more details about the error
+          if (emailError.code) {
+            console.error('Error code:', emailError.code);
+          }
+          if (emailError.response) {
+            console.error('Error response:', emailError.response);
+          }
+        }
       } else {
-        console.log(`Password reset requested for: ${email}, but email not configured`);
+        console.log(`Password reset requested for: ${email}, but email transporter not configured`);
       }
       
       res.json({ 
