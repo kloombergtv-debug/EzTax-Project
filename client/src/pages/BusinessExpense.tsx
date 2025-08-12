@@ -281,10 +281,17 @@ export default function BusinessExpensePage() {
                         step="0.01"
                         min="0"
                         placeholder="사업 총수입 금액"
-                        value={field.value === 0 ? '' : field.value}
+                        value={field.value || ''}
                         onChange={(e) => {
-                          const value = parseFloat(e.target.value) || 0;
-                          field.onChange(value);
+                          const inputValue = e.target.value;
+                          if (inputValue === '') {
+                            field.onChange(0);
+                          } else {
+                            const numValue = parseFloat(inputValue);
+                            if (!isNaN(numValue)) {
+                              field.onChange(numValue);
+                            }
+                          }
                           // 총 수입이 변경될 때마다 순소득 재계산
                           setTimeout(() => calculateNetIncome(), 0);
                         }}
@@ -318,10 +325,17 @@ export default function BusinessExpensePage() {
                             step="0.01"
                             min="0"
                             placeholder="0.00"
-                            value={field.value === 0 ? '' : field.value}
+                            value={field.value || ''}
                             onChange={(e) => {
-                              const value = parseFloat(e.target.value) || 0;
-                              field.onChange(value);
+                              const inputValue = e.target.value;
+                              if (inputValue === '') {
+                                field.onChange(0);
+                              } else {
+                                const numValue = parseFloat(inputValue);
+                                if (!isNaN(numValue)) {
+                                  field.onChange(numValue);
+                                }
+                              }
                               // 지출이 변경될 때마다 순소득 재계산
                               setTimeout(() => calculateNetIncome(), 0);
                             }}
@@ -468,10 +482,17 @@ export default function BusinessExpensePage() {
                                   min="0"
                                   max="100"
                                   placeholder="예: 25.5"
-                                  value={field.value === 0 ? '' : field.value}
+                                  value={field.value || ''}
                                   onChange={(e) => {
-                                    const ownershipPercentage = parseFloat(e.target.value) || 0;
-                                    field.onChange(ownershipPercentage);
+                                    const inputValue = e.target.value;
+                                    if (inputValue === '') {
+                                      field.onChange(0);
+                                    } else {
+                                      const ownershipPercentage = parseFloat(inputValue);
+                                      if (!isNaN(ownershipPercentage)) {
+                                        field.onChange(ownershipPercentage);
+                                      }
+                                    }
                                     
                                     // 지분율 변경시 소득도 자동 재계산
                                     const totalIncome = form.getValues(`k1Items.${index}.totalEntityIncome`) || 0;
@@ -523,10 +544,17 @@ export default function BusinessExpensePage() {
                                   type="number"
                                   step="0.01"
                                   placeholder="엔티티의 순소득"
-                                  value={field.value === 0 ? '' : field.value}
+                                  value={field.value || ''}
                                   onChange={(e) => {
-                                    const totalIncome = parseFloat(e.target.value) || 0;
-                                    field.onChange(totalIncome);
+                                    const inputValue = e.target.value;
+                                    if (inputValue === '') {
+                                      field.onChange(0);
+                                    } else {
+                                      const totalIncome = parseFloat(inputValue);
+                                      if (!isNaN(totalIncome)) {
+                                        field.onChange(totalIncome);
+                                      }
+                                    }
                                     
                                     // 지분율에 따라 자동으로 개인 소득 계산
                                     const ownershipPercentage = form.getValues(`k1Items.${index}.ownershipPercentage`) || 0;
@@ -568,10 +596,17 @@ export default function BusinessExpensePage() {
                                   type="number"
                                   step="0.01"
                                   placeholder="마이너스 가능"
-                                  value={field.value === 0 ? '' : field.value}
+                                  value={field.value || ''}
                                   onChange={(e) => {
-                                    const value = parseFloat(e.target.value) || 0;
-                                    field.onChange(value);
+                                    const inputValue = e.target.value;
+                                    if (inputValue === '') {
+                                      field.onChange(0);
+                                    } else {
+                                      const value = parseFloat(inputValue);
+                                      if (!isNaN(value)) {
+                                        field.onChange(value);
+                                      }
+                                    }
                                     // K-1 총소득 재계산
                                     setTimeout(() => calculateTotalK1Income(), 0);
                                   }}
@@ -593,9 +628,17 @@ export default function BusinessExpensePage() {
                                   type="number"
                                   step="0.01"
                                   placeholder="0.00"
-                                  value={field.value === 0 ? '' : field.value}
+                                  value={field.value || ''}
                                   onChange={(e) => {
-                                    field.onChange(parseFloat(e.target.value) || 0);
+                                    const inputValue = e.target.value;
+                                    if (inputValue === '') {
+                                      field.onChange(0);
+                                    } else {
+                                      const value = parseFloat(inputValue);
+                                      if (!isNaN(value)) {
+                                        field.onChange(value);
+                                      }
+                                    }
                                     // K-1 총소득 재계산
                                     setTimeout(() => calculateTotalK1Income(), 0);
                                   }}
@@ -618,9 +661,17 @@ export default function BusinessExpensePage() {
                                   step="0.01"
                                   min="0"
                                   placeholder="0.00"
-                                  value={field.value === 0 ? '' : field.value}
+                                  value={field.value || ''}
                                   onChange={(e) => {
-                                    field.onChange(parseFloat(e.target.value) || 0);
+                                    const inputValue = e.target.value;
+                                    if (inputValue === '') {
+                                      field.onChange(0);
+                                    } else {
+                                      const value = parseFloat(inputValue);
+                                      if (!isNaN(value)) {
+                                        field.onChange(value);
+                                      }
+                                    }
                                     // K-1 총소득 재계산
                                     setTimeout(() => calculateTotalK1Income(), 0);
                                   }}
@@ -643,9 +694,17 @@ export default function BusinessExpensePage() {
                                   step="0.01"
                                   min="0"
                                   placeholder="0.00"
-                                  value={field.value === 0 ? '' : field.value}
+                                  value={field.value || ''}
                                   onChange={(e) => {
-                                    field.onChange(parseFloat(e.target.value) || 0);
+                                    const inputValue = e.target.value;
+                                    if (inputValue === '') {
+                                      field.onChange(0);
+                                    } else {
+                                      const value = parseFloat(inputValue);
+                                      if (!isNaN(value)) {
+                                        field.onChange(value);
+                                      }
+                                    }
                                     // K-1 총소득 재계산
                                     setTimeout(() => calculateTotalK1Income(), 0);
                                   }}
@@ -667,9 +726,17 @@ export default function BusinessExpensePage() {
                                   type="number"
                                   step="0.01"
                                   placeholder="0.00"
-                                  value={field.value === 0 ? '' : field.value}
+                                  value={field.value || ''}
                                   onChange={(e) => {
-                                    field.onChange(parseFloat(e.target.value) || 0);
+                                    const inputValue = e.target.value;
+                                    if (inputValue === '') {
+                                      field.onChange(0);
+                                    } else {
+                                      const value = parseFloat(inputValue);
+                                      if (!isNaN(value)) {
+                                        field.onChange(value);
+                                      }
+                                    }
                                     // K-1 총소득 재계산
                                     setTimeout(() => calculateTotalK1Income(), 0);
                                   }}
@@ -692,9 +759,17 @@ export default function BusinessExpensePage() {
                                   step="0.01"
                                   min="0"
                                   placeholder="0.00"
-                                  value={field.value === 0 ? '' : field.value}
+                                  value={field.value || ''}
                                   onChange={(e) => {
-                                    field.onChange(parseFloat(e.target.value) || 0);
+                                    const inputValue = e.target.value;
+                                    if (inputValue === '') {
+                                      field.onChange(0);
+                                    } else {
+                                      const value = parseFloat(inputValue);
+                                      if (!isNaN(value)) {
+                                        field.onChange(value);
+                                      }
+                                    }
                                   }}
                                 />
                               </FormControl>
