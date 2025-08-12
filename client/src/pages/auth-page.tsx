@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Loader2, User, Mail, Lock, LogIn, UserPlus } from "lucide-react";
+import { Loader2, User, Mail, Lock, LogIn, UserPlus, Eye, EyeOff } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { FcGoogle } from "react-icons/fc";
 
@@ -46,6 +46,9 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 export default function AuthPage() {
   const [activeTab, setActiveTab] = useState<string>("login");
   const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false);
+  const [showLoginPassword, setShowLoginPassword] = useState(false);
+  const [showRegisterPassword, setShowRegisterPassword] = useState(false);
+  const [showRegisterConfirmPassword, setShowRegisterConfirmPassword] = useState(false);
   const [, navigate] = useLocation();
   const { user, isLoading, loginMutation, registerMutation } = useAuth();
   const { toast } = useToast();
@@ -152,11 +155,18 @@ export default function AuthPage() {
                       <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                       <Input
                         id="password"
-                        type="password"
-                        className="pl-10"
+                        type={showLoginPassword ? "text" : "password"}
+                        className="pl-10 pr-10"
                         placeholder="********"
                         {...loginForm.register("password")}
                       />
+                      <button
+                        type="button"
+                        className="absolute right-3 top-3 h-4 w-4 text-muted-foreground hover:text-foreground"
+                        onClick={() => setShowLoginPassword(!showLoginPassword)}
+                      >
+                        {showLoginPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      </button>
                     </div>
                     {loginForm.formState.errors.password && (
                       <p className="text-sm text-destructive">
@@ -256,11 +266,18 @@ export default function AuthPage() {
                       <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                       <Input
                         id="register-password"
-                        type="password"
-                        className="pl-10"
+                        type={showRegisterPassword ? "text" : "password"}
+                        className="pl-10 pr-10"
                         placeholder="********"
                         {...registerForm.register("password")}
                       />
+                      <button
+                        type="button"
+                        className="absolute right-3 top-3 h-4 w-4 text-muted-foreground hover:text-foreground"
+                        onClick={() => setShowRegisterPassword(!showRegisterPassword)}
+                      >
+                        {showRegisterPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      </button>
                     </div>
                     <p className="text-xs text-muted-foreground">
                       최소 8자, 대문자, 특수기호($, *, !, #) 포함 필수
@@ -280,11 +297,18 @@ export default function AuthPage() {
                       <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                       <Input
                         id="register-password-confirm"
-                        type="password"
-                        className="pl-10"
+                        type={showRegisterConfirmPassword ? "text" : "password"}
+                        className="pl-10 pr-10"
                         placeholder="********"
                         {...registerForm.register("passwordConfirm")}
                       />
+                      <button
+                        type="button"
+                        className="absolute right-3 top-3 h-4 w-4 text-muted-foreground hover:text-foreground"
+                        onClick={() => setShowRegisterConfirmPassword(!showRegisterConfirmPassword)}
+                      >
+                        {showRegisterConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      </button>
                     </div>
                     {registerForm.formState.errors.passwordConfirm && (
                       <p className="text-sm text-destructive">
