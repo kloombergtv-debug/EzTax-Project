@@ -222,7 +222,7 @@ export default function TaxSavings() {
       suggestions.push({
         category: '자영업자 공제',
         title: '자영업자 건강보험료 공제',
-        description: '자영업자, 파트너 또는 S법인 주주는 본인과 가족의 건강보험료를 AGI에서 100% 공제할 수 있습니다. (HSA, 장기요양보험료 포함)',
+        description: '자영업자, 파트너 또는 S법인 주주가 지불한 건강보험료를 다시 공제받는 것입니다. 본인과 가족의 건강보험료를 AGI에서 100% 공제할 수 있습니다. (HSA, 장기요양보험료 포함)',
         potentialSavings: Math.min(15000, totalSelfEmploymentIncome * 0.2) * marginalTaxRate,
         difficulty: 'easy',
         timeframe: '즉시',

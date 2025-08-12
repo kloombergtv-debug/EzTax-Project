@@ -31,7 +31,7 @@ const ADJUSTMENT_TYPES = [
   {
     id: "self_employed_health_insurance",
     label: "자영업자 건강보험 (Self-employed health insurance)",
-    info: "자영업자, 파트너 또는 S 법인 주주가 지불한 건강보험료입니다."
+    info: "자영업자, 파트너 또는 S 법인 주주가 지불한 건강보험료를 다시 공제받는 것입니다."
   },
   {
     id: "early_withdrawal_penalty",
