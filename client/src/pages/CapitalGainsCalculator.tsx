@@ -148,7 +148,7 @@ export default function CapitalGainsCalculator() {
   // 프리미엄 기능 안내 다이얼로그 관리
   const [premiumDialogOpen, setPremiumDialogOpen] = useState<boolean>(false);
   
-  // 장기/단기 자본 이득 및 세금 계산
+  // 장기/단기 자본 이득 및 손실 계산
   const longTermGains = transactions
     .filter(t => t.isLongTerm && t.profit > 0)
     .reduce((sum, t) => sum + t.profit, 0);
@@ -157,9 +157,6 @@ export default function CapitalGainsCalculator() {
     .filter(t => !t.isLongTerm && t.profit > 0)
     .reduce((sum, t) => sum + t.profit, 0);
     
-  const totalCapitalGains = longTermGains + shortTermGains;
-  
-  // 장기/단기 자본 손실 계산
   const longTermLosses = transactions
     .filter(t => t.isLongTerm && t.profit < 0)
     .reduce((sum, t) => sum + Math.abs(t.profit), 0);
@@ -167,6 +164,13 @@ export default function CapitalGainsCalculator() {
   const shortTermLosses = transactions
     .filter(t => !t.isLongTerm && t.profit < 0)
     .reduce((sum, t) => sum + Math.abs(t.profit), 0);
+  
+  // 순 자본 이득/손실 계산 (이익에서 손실을 차감)
+  const netLongTermGains = Math.max(0, longTermGains - longTermLosses);
+  const netShortTermGains = Math.max(0, shortTermGains - shortTermLosses);
+  
+  // 총 자본 이득은 순 이익의 합계
+  const totalCapitalGains = netLongTermGains + netShortTermGains;
     
   // 실제 소득 구간에 따른 자본 이득세 계산
   const calculateLongTermCapitalGainsTax = (gains: number) => {
@@ -260,9 +264,9 @@ export default function CapitalGainsCalculator() {
     return taxOwed;
   };
   
-  // 장기/단기 자본 이득세 계산
-  const estimatedLongTermTax = calculateLongTermCapitalGainsTax(longTermGains);
-  const estimatedShortTermTax = shortTermGains * 0.24; // 단기는 일반 소득세율 적용
+  // 장기/단기 자본 이득세 계산 (순 이익 기준)
+  const estimatedLongTermTax = calculateLongTermCapitalGainsTax(netLongTermGains);
+  const estimatedShortTermTax = netShortTermGains * 0.24; // 단기는 일반 소득세율 적용
   const totalEstimatedTax = estimatedLongTermTax + estimatedShortTermTax;
   
   // 입력 필드 변경 처리
@@ -755,10 +759,14 @@ export default function CapitalGainsCalculator() {
                     <span className="font-medium text-red-600">${longTermLosses.toLocaleString()}</span>
                   </div>
                   <div className="flex justify-between items-center text-sm">
+                    <span className="text-gray-600">순 이익:</span>
+                    <span className="font-medium text-blue-600">${netLongTermGains.toLocaleString()}</span>
+                  </div>
+                  <div className="flex justify-between items-center text-sm">
                     <span className="text-gray-600">실제 세율:</span>
                     <span className="font-medium text-blue-600">
-                      {longTermGains > 0 ? 
-                        `${((estimatedLongTermTax / longTermGains) * 100).toFixed(1)}%` : 
+                      {netLongTermGains > 0 ? 
+                        `${((estimatedLongTermTax / netLongTermGains) * 100).toFixed(1)}%` : 
                         '0%'
                       }
                     </span>
@@ -792,7 +800,7 @@ export default function CapitalGainsCalculator() {
                         }[filingStatus] || 13850;
                         
                         const taxableIncome = Math.max(0, adjustedGrossIncome - standardDeduction);
-                        const totalTaxableIncome = taxableIncome + longTermGains;
+                        const totalTaxableIncome = taxableIncome + netLongTermGains;
                         
                         if (filingStatus === 'single') {
                           if (totalTaxableIncome <= 47025) return '0% 구간';
@@ -833,6 +841,10 @@ export default function CapitalGainsCalculator() {
                     <span className="font-medium text-red-600">${shortTermLosses.toLocaleString()}</span>
                   </div>
                   <div className="flex justify-between items-center text-sm">
+                    <span className="text-gray-600">순 이익:</span>
+                    <span className="font-medium text-blue-600">${netShortTermGains.toLocaleString()}</span>
+                  </div>
+                  <div className="flex justify-between items-center text-sm">
                     <span className="text-gray-600">예상 세율:</span>
                     <span className="font-medium">24%</span>
                   </div>
@@ -848,9 +860,9 @@ export default function CapitalGainsCalculator() {
             <div className="bg-white p-4 rounded-lg border border-green-200 mb-6">
               <div className="flex flex-col md:flex-row justify-between items-center">
                 <div>
-                  <h3 className="text-lg font-medium">총 자본 이득 (Total Capital Gains)</h3>
+                  <h3 className="text-lg font-medium">총 자본 이득 (Net Capital Gains)</h3>
                   <p className="text-gray-600 text-sm">
-                    모든 거래의 이익을 합산한 금액입니다.
+                    모든 거래의 순 이익 (이익 - 손실)을 합산한 금액입니다.
                   </p>
                 </div>
                 <div className="text-2xl font-bold text-green-600 mt-2 md:mt-0">
