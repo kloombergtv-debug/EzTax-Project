@@ -60,6 +60,15 @@ Page Layout Preference:
   - Applied to: TaxCredits.tsx, AdditionalTax.tsx, RetirementContributions.tsx
   - Key Fix: Use placeholder="$0" with simple Input components instead of complex relative div structures with absolute positioned dollar symbols
 
+- **Password Reset System Implementation (2025-01-12)**: Complete email-based password reset system with Gmail integration and proper salt/hash security.
+  - **Email Integration**: Gmail SMTP configuration with proper domain handling (Replit vs localhost)
+  - **Security Implementation**: Random token generation, 1-hour expiration, salt/hash password storage format
+  - **Bilingual Support**: Korean/English email templates with professional styling
+  - **Salt/Hash Fix**: Resolved password authentication errors by implementing proper `hash.salt` storage format in `updateUserPassword` method
+  - **Test Accounts**: Created eztax88@gmail.com and equitykr@gmail.com for testing
+  - **Endpoints**: `/api/forgot-password`, `/api/reset-password`, `/api/change-password` all fully functional
+  - Status: All password management features tested and working correctly
+
 ### Current Active Page Files (2025-01-12)
 - **Income Page**: Currently using `Income-fixed.tsx` as the main income input page (referenced in App.tsx as IncomePage component)
 - **Video Status**: YouTube instructional video temporarily removed from Income-fixed.tsx (user request, to be restored after 1 hour)
