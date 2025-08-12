@@ -485,12 +485,16 @@ export default function BusinessExpensePage() {
                                   value={field.value || ''}
                                   onChange={(e) => {
                                     const inputValue = e.target.value;
+                                    let ownershipPercentage = 0;
+                                    
                                     if (inputValue === '') {
                                       field.onChange(0);
                                     } else {
-                                      const ownershipPercentage = parseFloat(inputValue);
+                                      ownershipPercentage = parseFloat(inputValue);
                                       if (!isNaN(ownershipPercentage)) {
                                         field.onChange(ownershipPercentage);
+                                      } else {
+                                        return; // 유효하지 않은 값이면 계산하지 않음
                                       }
                                     }
                                     
@@ -547,12 +551,16 @@ export default function BusinessExpensePage() {
                                   value={field.value || ''}
                                   onChange={(e) => {
                                     const inputValue = e.target.value;
+                                    let totalIncome = 0;
+                                    
                                     if (inputValue === '') {
                                       field.onChange(0);
                                     } else {
-                                      const totalIncome = parseFloat(inputValue);
+                                      totalIncome = parseFloat(inputValue);
                                       if (!isNaN(totalIncome)) {
                                         field.onChange(totalIncome);
+                                      } else {
+                                        return; // 유효하지 않은 값이면 계산하지 않음
                                       }
                                     }
                                     
