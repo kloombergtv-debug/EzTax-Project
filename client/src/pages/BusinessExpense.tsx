@@ -217,7 +217,7 @@ export default function BusinessExpensePage() {
     { key: 'carAndTruck', label: '차량비 (Car and Truck Expenses)' },
     { key: 'commissions', label: '수수료 (Commissions and Fees)' },
     { key: 'contractLabor', label: '계약직 인건비 (Contract Labor)' },
-    { key: 'depletion', label: '고갈비 (Depletion)' },
+    { key: 'depletion', label: '감모 (Depletion)' },
     { key: 'depreciation', label: '감가상각비 (Depreciation)' },
     { key: 'employeeBenefits', label: '직원 복리후생비 (Employee Benefit Programs)' },
     { key: 'insurance', label: '보험료 (Insurance)' },
