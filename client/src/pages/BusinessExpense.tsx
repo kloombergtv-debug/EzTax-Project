@@ -232,7 +232,7 @@ export default function BusinessExpensePage() {
     { key: 'taxes', label: '세금 (Taxes and Licenses)' },
     { key: 'travel', label: '여행비 (Travel)' },
     { key: 'utilities', label: '공과금 (Utilities)' },
-    { key: 'wages', label: '급여 (Wages)' },
+
     { key: 'other', label: '기타 지출 (Other Expenses)' },
   ];
 
