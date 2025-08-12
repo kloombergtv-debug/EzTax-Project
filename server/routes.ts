@@ -552,7 +552,11 @@ ${additionalRequests || '없음'}
       const transporter = createEmailTransporter();
       
       if (transporter) {
-        const resetUrl = `${req.protocol}://${req.get('host')}/reset-password?token=${resetToken}`;
+        // Use proper domain for Replit deployment
+        const host = req.get('host');
+        const isLocalhost = host.includes('localhost');
+        const domain = isLocalhost ? 'https://3e18f96e-0fbf-4af6-b766-cfbae9f2437b-00-17nnd6cbvtwuy.janeway.replit.dev' : `${req.protocol}://${host}`;
+        const resetUrl = `${domain}/reset-password?token=${resetToken}`;
         
         const mailOptions = {
           from: 'eztax88@gmail.com',
