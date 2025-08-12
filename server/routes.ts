@@ -475,6 +475,47 @@ ${additionalRequests || '없음'}
     }
   });
 
+  // User API - Change Password (for logged in users)
+  app.post('/api/change-password', async (req, res) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ message: '로그인이 필요합니다(Login required)' });
+    }
+
+    try {
+      const { currentPassword, newPassword } = req.body;
+      const userId = (req.user as any).id;
+      
+      // Verify current password
+      const user = await storage.getUserById(userId);
+      if (!user) {
+        return res.status(404).json({ message: '사용자를 찾을 수 없습니다(User not found)' });
+      }
+      
+      // Check current password
+      const crypto = await import('crypto');
+      const { promisify } = await import('util');
+      const scryptAsync = promisify(crypto.scrypt);
+      
+      if (user.password) {
+        const [hash, salt] = user.password.split('.');
+        const buf = (await scryptAsync(currentPassword, salt, 64)) as Buffer;
+        const currentPasswordHash = buf.toString('hex');
+        
+        if (currentPasswordHash !== hash) {
+          return res.status(400).json({ message: '현재 비밀번호가 올바르지 않습니다(Current password is incorrect)' });
+        }
+      }
+      
+      // Update to new password
+      await storage.updateUserPassword(userId, newPassword);
+      
+      res.json({ success: true, message: '비밀번호가 성공적으로 변경되었습니다(Password changed successfully)' });
+    } catch (error) {
+      console.error('Error changing password:', error);
+      res.status(500).json({ message: '비밀번호 변경 중 오류가 발생했습니다(Error changing password)' });
+    }
+  });
+
   // Admin API - Reset User Password
   app.post('/api/admin/users/:id/reset-password', async (req, res) => {
     if (!req.isAuthenticated() || (req.user as any).username !== 'admin') {
