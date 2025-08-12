@@ -409,6 +409,7 @@ export default function IncomePage() {
     
     // 조정 항목 계산
     const studentLoanInterest = Number(values.adjustments?.studentLoanInterest || 0);
+    const hsaContributions = Number(values.adjustments?.hsaContributions || 0);
     const retirementContributions = Number(values.adjustments?.retirementContributions || 0);
     
     // 추가 조정 항목 계산
@@ -420,6 +421,7 @@ export default function IncomePage() {
     
     // 조정 항목 합계 계산
     const totalAdjustments = studentLoanInterest + 
+                           hsaContributions +
                            retirementContributions + 
                            additionalAdjustmentsTotal;
     

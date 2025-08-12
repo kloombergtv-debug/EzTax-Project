@@ -713,11 +713,14 @@ export function calculateTaxes(taxData: TaxData): CalculatedResults {
     const additionalAdjustmentsTotal = (income.additionalAdjustmentItems || [])
       .reduce((sum, item) => sum + (item.amount || 0), 0);
     
-    // Sum all adjustments
+    // Sum all adjustments - check both healthSavingsAccount and hsaContributions fields
+    const hsaAmount = ('healthSavingsAccount' in incomeAdjustments ? incomeAdjustments.healthSavingsAccount : 0) +
+      (('hsaContributions' in incomeAdjustments) ? (incomeAdjustments as any).hsaContributions : 0);
+    
     result.adjustments = (
       incomeAdjustments.studentLoanInterest +
       incomeAdjustments.retirementContributions +
-      ('healthSavingsAccount' in incomeAdjustments ? incomeAdjustments.healthSavingsAccount : 0) +
+      hsaAmount +
       incomeAdjustments.otherAdjustments +
       halfSETax +
       additionalAdjustmentsTotal
