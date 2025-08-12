@@ -150,15 +150,7 @@ const Header: React.FC = () => {
                   관리자
                 </Button>
               )}
-              <Button 
-                variant="outline" 
-                size="sm"
-                className="text-primary-dark hover:text-primary flex items-center text-sm"
-                onClick={() => navigate('/change-password')}
-              >
-                <Lock className="h-4 w-4 mr-1" />
-                <span>비밀번호 변경</span>
-              </Button>
+
               <Button 
                 variant="outline" 
                 size="sm"
