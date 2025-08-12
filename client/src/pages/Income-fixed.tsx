@@ -1192,7 +1192,7 @@ export default function IncomePage() {
                 prevStep="/personal-info" 
                 nextStep="/retirement-contributions"
                 submitText="은퇴계획(Retirement)"
-                onNext={() => {
+                onNext={async () => {
                   if (form.formState.errors && Object.keys(form.formState.errors).length > 0) {
                     toast({
                       title: "입력 오류",
@@ -1201,7 +1201,46 @@ export default function IncomePage() {
                     });
                     return false;
                   }
-                  return true;
+                  
+                  try {
+                    // 현재 폼 데이터 가져오기
+                    const formData = form.getValues();
+                    
+                    // 총소득 계산
+                    calculateTotals();
+                    
+                    // 계산된 값들 포함하여 데이터 준비
+                    const incomeData: Income = {
+                      ...formData,
+                      totalIncome: form.getValues('totalIncome'),
+                      adjustedGrossIncome: form.getValues('adjustedGrossIncome'),
+                      additionalIncomeItems: additionalIncomeItems,
+                      additionalAdjustmentItems: additionalAdjustmentItems
+                    };
+                    
+                    console.log('소득 데이터 저장 중:', incomeData);
+                    
+                    // 콘텍스트 업데이트
+                    await updateTaxData({ income: incomeData });
+                    
+                    // 서버에 저장
+                    await saveTaxReturn();
+                    
+                    toast({
+                      title: "소득 정보 저장됨",
+                      description: "소득 정보가 성공적으로 저장되었습니다.",
+                    });
+                    
+                    return true;
+                  } catch (error) {
+                    console.error('소득 정보 저장 오류:', error);
+                    toast({
+                      title: "저장 오류",
+                      description: "소득 정보를 저장하는 중에 오류가 발생했습니다.",
+                      variant: "destructive",
+                    });
+                    return false;
+                  }
                 }}
               />
             </form>
