@@ -192,10 +192,13 @@ export default function TaxSavings() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         
-        {/* 절세방안 제안 영역 (전체 너비) */}
-        <div>
+        {/* 1:1 그리드 레이아웃 */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          
+          {/* 절세방안 제안 영역 (1/2 너비) */}
+          <div className="lg:col-span-1">
           <div className="mb-6">
             <Button
               variant="outline"
@@ -298,6 +301,33 @@ export default function TaxSavings() {
               실제 적용 전에 해당 연도의 최신 세법을 확인하세요.
             </AlertDescription>
           </Alert>
+          </div>
+          
+          {/* 동영상 영역 (1/2 너비) */}
+          <div className="lg:col-span-1">
+            <div className="sticky top-8">
+              <Card className="h-fit">
+                <CardContent className="p-0">
+                  <div className="p-6 pb-0">
+                    <div className="text-center mb-4">
+                      <h3 className="text-xl font-semibold text-gray-900 mb-2">절세 방안 가이드</h3>
+                      <p className="text-sm text-gray-600">세금 절약 전략과 최적화 방법을 확인하세요</p>
+                    </div>
+                  </div>
+                  <div className="relative w-full pb-[75%] h-0">
+                    <iframe
+                      src="https://www.youtube.com/embed/kce8i5gAG1k"
+                      title="절세 방안 가이드"
+                      className="absolute top-0 left-0 w-full h-full rounded-b-lg"
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
         </div>
       </div>
     </div>
