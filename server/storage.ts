@@ -193,7 +193,16 @@ export class DbStorage implements IStorage {
 
   async updateUserPassword(userId: number, newPassword: string): Promise<void> {
     const crypto = await import('crypto');
-    const hashedPassword = crypto.scryptSync(newPassword, 'salt', 64).toString('hex');
+    const { promisify } = await import('util');
+    const scryptAsync = promisify(crypto.scrypt);
+    
+    // Generate a random salt
+    const salt = crypto.randomBytes(16).toString('hex');
+    // Hash password with salt
+    const buf = (await scryptAsync(newPassword, salt, 64)) as Buffer;
+    const hash = buf.toString('hex');
+    // Store as hash.salt format
+    const hashedPassword = `${hash}.${salt}`;
     
     const result = await db
       .update(users)
