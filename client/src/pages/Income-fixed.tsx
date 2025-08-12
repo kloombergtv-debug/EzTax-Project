@@ -536,10 +536,10 @@ export default function IncomePage() {
         <ProgressTracker currentStep={2} />
       </div>
       
-      {/* 메인 컨텐츠 - 입력 폼과 동영상을 나란히 배치 */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* 입력 폼 영역 (1/2 너비) */}
-        <div className="lg:col-span-1">
+      {/* 메인 컨텐츠 - 동영상 임시 제거로 전체 너비 사용 */}
+      <div className="grid grid-cols-1 gap-6">
+        {/* 입력 폼 영역 (전체 너비) */}
+        <div className="col-span-1">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <Card className="mb-8">
@@ -1206,7 +1206,8 @@ export default function IncomePage() {
           </Form>
         </div>
         
-        {/* 동영상 영역 (1/2 너비) */}
+        {/* 동영상 영역 임시 제거 - 한시간 후 복원 예정 */}
+        {/*
         <div className="lg:col-span-1">
           <Card className="sticky top-6">
             <CardContent className="pt-6">
@@ -1232,6 +1233,7 @@ export default function IncomePage() {
             </CardContent>
           </Card>
         </div>
+        */}
       </div>
     </div>
   );
