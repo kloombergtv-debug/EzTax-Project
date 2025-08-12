@@ -176,6 +176,60 @@ export default function TaxSavings() {
       }
     }
 
+    // 자영업자 관련 절세 방안
+    const businessIncome = income?.businessIncome || 0;
+    const selfEmploymentIncome = taxData.additionalTax?.selfEmploymentIncome || 0;
+    const totalSelfEmploymentIncome = businessIncome + selfEmploymentIncome;
+    
+    if (totalSelfEmploymentIncome > 0) {
+      // 자영업세 공제 설명
+      const selfEmploymentTax = taxData.additionalTax?.selfEmploymentTax || 0;
+      const seDeduction = Math.round(selfEmploymentTax / 2);
+      
+      suggestions.push({
+        category: '자영업자 혜택',
+        title: '자영업세 공제 (Self-Employment Tax Deduction)',
+        description: '자영업자는 사회보장세(6.2%) + 메디케어세(1.45%) = 총 15.3%를 납부하지만, 고용주 몫인 7.65%는 AGI에서 공제받을 수 있습니다. 이는 자동으로 계산됩니다.',
+        potentialSavings: seDeduction * marginalTaxRate,
+        difficulty: 'easy',
+        timeframe: '자동 적용',
+        action: '추가 세금 페이지에서 자영업세 확인'
+      });
+
+      // 사업용 차량 공제
+      suggestions.push({
+        category: '자영업자 공제',
+        title: '사업용 차량 비용 공제',
+        description: '2025년 표준 마일리지 공제: 마일당 $0.67. 또는 실제 차량 비용(연료, 보험, 감가상각 등)의 사업용 비율을 공제할 수 있습니다.',
+        potentialSavings: Math.min(5000, totalSelfEmploymentIncome * 0.1) * marginalTaxRate,
+        difficulty: 'medium',
+        timeframe: '연말까지',
+        action: '사업 지출 페이지에서 차량비 입력'
+      });
+
+      // 홈오피스 공제
+      suggestions.push({
+        category: '자영업자 공제',
+        title: '홈오피스 공제 (Home Office Deduction)',
+        description: '집의 일부를 사업용으로 독점 사용하는 경우 공제 가능합니다. 간편법: 300평방피트까지 평방피트당 $5 (최대 $1,500). 실제 비용법도 선택 가능합니다.',
+        potentialSavings: 1500 * marginalTaxRate,
+        difficulty: 'medium',
+        timeframe: '연말까지',
+        action: '사업 지출 페이지에서 사무실 비용 입력'
+      });
+
+      // 자영업자 건강보험료 공제
+      suggestions.push({
+        category: '자영업자 공제',
+        title: '자영업자 건강보험료 공제',
+        description: '자영업자, 파트너 또는 S법인 주주는 본인과 가족의 건강보험료를 AGI에서 100% 공제할 수 있습니다. (HSA, 장기요양보험료 포함)',
+        potentialSavings: Math.min(15000, totalSelfEmploymentIncome * 0.2) * marginalTaxRate,
+        difficulty: 'easy',
+        timeframe: '즉시',
+        action: '기타 조정 페이지에서 자영업자 건강보험료 입력'
+      });
+    }
+
     setSuggestions(suggestions);
   };
 
