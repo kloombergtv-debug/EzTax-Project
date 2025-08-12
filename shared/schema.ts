@@ -1,6 +1,7 @@
 import { pgTable, text, serial, integer, boolean, numeric, json } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
+import type { InferInsertModel, InferSelectModel } from "drizzle-orm";
 
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
@@ -9,6 +10,8 @@ export const users = pgTable("users", {
   email: text("email"),
   googleId: text("google_id").unique(),
   displayName: text("display_name"),
+  resetToken: text("reset_token"),
+  resetExpiry: text("reset_expiry"),
   createdAt: text("created_at").notNull().default(new Date().toISOString()),
   updatedAt: text("updated_at").notNull().default(new Date().toISOString()),
 });
@@ -21,8 +24,8 @@ export const insertUserSchema = createInsertSchema(users).pick({
   displayName: true,
 });
 
-export type InsertUser = z.infer<typeof insertUserSchema>;
-export type User = typeof users.$inferSelect;
+export type InsertUser = InferInsertModel<typeof users>;
+export type User = InferSelectModel<typeof users>;
 
 // Tax Data Schema
 export const taxReturns = pgTable("tax_returns", {
@@ -50,8 +53,8 @@ export const insertTaxReturnSchema = createInsertSchema(taxReturns).omit({
   id: true,
 });
 
-export type InsertTaxReturn = z.infer<typeof insertTaxReturnSchema>;
-export type TaxReturn = typeof taxReturns.$inferSelect;
+export type InsertTaxReturn = InferInsertModel<typeof taxReturns>;
+export type TaxReturn = InferSelectModel<typeof taxReturns>;
 
 // Type definitions for each section
 export type FilingStatus = "single" | "married_joint" | "married_separate" | "head_of_household" | "qualifying_widow";
@@ -501,8 +504,8 @@ export const insertRetirementAssessmentSchema = createInsertSchema(retirementAss
   id: true,
 });
 
-export type InsertRetirementAssessment = z.infer<typeof insertRetirementAssessmentSchema>;
-export type RetirementAssessment = typeof retirementAssessments.$inferSelect;
+export type InsertRetirementAssessment = InferInsertModel<typeof retirementAssessments>;
+export type RetirementAssessment = InferSelectModel<typeof retirementAssessments>;
 
 // Retirement Assessment Interfaces
 export interface RetirementAssessmentData {

@@ -29,6 +29,7 @@ import AdminPanel from "@/pages/AdminPanel";
 import NotFound from "@/pages/not-found";
 import AuthPage from "@/pages/auth-page";
 import ChangePassword from "@/pages/ChangePassword";
+import ResetPassword from "@/pages/ResetPassword";
 import DataTester from "@/pages/DataTester";
 import CapitalGainsCalculator from "@/pages/CapitalGainsCalculator";
 import QBIDetails from "@/pages/QBIDetails";
@@ -46,6 +47,7 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/about" component={About} />
       <Route path="/auth" component={AuthPage} />
+      <Route path="/reset-password" component={ResetPassword} />
       <ProtectedRoute path="/change-password" component={ChangePassword} />
       <Route path="/personal-info" component={PersonalInfo} />
       <ProtectedRoute path="/personal-info-old" component={PersonalInfo} />

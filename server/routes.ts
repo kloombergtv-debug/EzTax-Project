@@ -516,6 +516,129 @@ ${additionalRequests || '없음'}
     }
   });
 
+  // Password Reset Request (no login required)
+  app.post('/api/forgot-password', async (req, res) => {
+    try {
+      const { email } = req.body;
+      
+      if (!email) {
+        return res.status(400).json({ message: '이메일을 입력해주세요(Email is required)' });
+      }
+      
+      // Find user by email
+      const users = await storage.getAllUsers();
+      const user = users.find((u: any) => u.email === email);
+      
+      if (!user) {
+        // Don't reveal if email exists or not for security
+        return res.json({ 
+          success: true, 
+          message: '이메일이 존재하는 경우 비밀번호 재설정 링크를 발송했습니다(If email exists, password reset link has been sent)' 
+        });
+      }
+      
+      // Generate reset token
+      const crypto = await import('crypto');
+      const resetToken = crypto.randomBytes(32).toString('hex');
+      const resetExpiry = new Date(Date.now() + 3600000).toISOString(); // 1 hour from now
+      
+      // Store reset token (you might need to add this to your user schema)
+      await storage.updateUser(user.id, { 
+        resetToken,
+        resetExpiry 
+      });
+      
+      // Create email transporter (using existing Gmail setup)
+      const transporter = createEmailTransporter();
+      
+      if (transporter) {
+        const resetUrl = `${req.protocol}://${req.get('host')}/reset-password?token=${resetToken}`;
+        
+        const mailOptions = {
+          from: 'eztax88@gmail.com',
+          to: email,
+          subject: '비밀번호 재설정 요청 (Password Reset Request)',
+          html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+              <h2 style="color: #2563eb;">EzTax 비밀번호 재설정</h2>
+              <p>안녕하세요,</p>
+              <p>비밀번호 재설정을 요청하셨습니다. 아래 링크를 클릭하여 새 비밀번호를 설정하세요:</p>
+              <div style="text-align: center; margin: 30px 0;">
+                <a href="${resetUrl}" style="background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;">
+                  비밀번호 재설정
+                </a>
+              </div>
+              <p style="color: #666; font-size: 14px;">
+                이 링크는 1시간 후 만료됩니다.<br>
+                만약 비밀번호 재설정을 요청하지 않으셨다면, 이 이메일을 무시하세요.
+              </p>
+              <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
+              <p style="color: #888; font-size: 12px;">
+                Hello,<br>
+                You have requested a password reset. Click the link above to set a new password.<br>
+                This link expires in 1 hour. If you didn't request this, please ignore this email.
+              </p>
+            </div>
+          `
+        };
+        
+        await transporter.sendMail(mailOptions);
+        console.log(`Password reset email sent to: ${email}`);
+      } else {
+        console.log(`Password reset requested for: ${email}, but email not configured`);
+      }
+      
+      res.json({ 
+        success: true, 
+        message: '이메일이 존재하는 경우 비밀번호 재설정 링크를 발송했습니다(If email exists, password reset link has been sent)' 
+      });
+      
+    } catch (error) {
+      console.error('Error in forgot password:', error);
+      res.status(500).json({ message: '비밀번호 재설정 요청 중 오류가 발생했습니다(Error processing password reset request)' });
+    }
+  });
+
+  // Reset Password with Token (no login required)
+  app.post('/api/reset-password', async (req, res) => {
+    try {
+      const { token, newPassword } = req.body;
+      
+      if (!token || !newPassword) {
+        return res.status(400).json({ message: '토큰과 새 비밀번호가 필요합니다(Token and new password are required)' });
+      }
+      
+      // Find user with valid reset token
+      const users = await storage.getAllUsers();
+      const user = users.find((u: any) => u.resetToken === token);
+      
+      if (!user) {
+        return res.status(400).json({ message: '유효하지 않은 재설정 토큰입니다(Invalid reset token)' });
+      }
+      
+      // Check if token is expired
+      if (!user.resetExpiry || new Date(user.resetExpiry) < new Date()) {
+        return res.status(400).json({ message: '재설정 토큰이 만료되었습니다(Reset token has expired)' });
+      }
+      
+      // Update password and clear reset token
+      await storage.updateUserPassword(user.id, newPassword);
+      await storage.updateUser(user.id, { 
+        resetToken: null,
+        resetExpiry: null 
+      });
+      
+      res.json({ 
+        success: true, 
+        message: '비밀번호가 성공적으로 재설정되었습니다(Password has been reset successfully)' 
+      });
+      
+    } catch (error) {
+      console.error('Error resetting password:', error);
+      res.status(500).json({ message: '비밀번호 재설정 중 오류가 발생했습니다(Error resetting password)' });
+    }
+  });
+
   // Admin API - Reset User Password
   app.post('/api/admin/users/:id/reset-password', async (req, res) => {
     if (!req.isAuthenticated() || (req.user as any).username !== 'admin') {

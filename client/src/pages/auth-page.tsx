@@ -7,6 +7,7 @@ import { insertUserSchema } from "@shared/schema";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import ForgotPasswordModal from "@/components/ForgotPasswordModal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -44,6 +45,7 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 
 export default function AuthPage() {
   const [activeTab, setActiveTab] = useState<string>("login");
+  const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false);
   const [, navigate] = useLocation();
   const { user, isLoading, loginMutation, registerMutation } = useAuth();
   const { toast } = useToast();
@@ -189,12 +191,7 @@ export default function AuthPage() {
                       <button
                         type="button"
                         className="text-primary hover:text-primary-dark underline font-medium"
-                        onClick={() => {
-                          toast({
-                            title: "비밀번호 재설정",
-                            description: "관리자에게 문의하여 비밀번호를 재설정받으실 수 있습니다. 또는 새 계정을 만드시면 됩니다.",
-                          });
-                        }}
+                        onClick={() => setForgotPasswordOpen(true)}
                       >
                         비밀번호 찾기
                       </button>
@@ -365,6 +362,12 @@ export default function AuthPage() {
           </div>
         </div>
       </div>
+      
+      {/* Forgot Password Modal */}
+      <ForgotPasswordModal 
+        open={forgotPasswordOpen}
+        onOpenChange={setForgotPasswordOpen}
+      />
     </div>
   );
 }
