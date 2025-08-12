@@ -1153,7 +1153,7 @@ export default function IncomePage() {
                 <CardContent>
                   <div className="income-total-box">
                     <div className="income-total-row">
-                      <span>총소득 (Total Income)</span>
+                      <span>총소득 (Gross Income)</span>
                       <span>{new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(form.watch('totalIncome') || 0)}</span>
                     </div>
                     <div className="income-total-row">
