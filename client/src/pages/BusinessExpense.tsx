@@ -287,9 +287,17 @@ export default function BusinessExpensePage() {
                           if (inputValue === '') {
                             field.onChange(0);
                           } else {
-                            const numValue = parseFloat(inputValue);
-                            if (!isNaN(numValue)) {
-                              field.onChange(numValue);
+                            // 정수인지 확인 (소수점이 없으면)
+                            if (inputValue.includes('.')) {
+                              const numValue = parseFloat(inputValue);
+                              if (!isNaN(numValue)) {
+                                field.onChange(numValue);
+                              }
+                            } else {
+                              const numValue = parseInt(inputValue, 10);
+                              if (!isNaN(numValue)) {
+                                field.onChange(numValue);
+                              }
                             }
                           }
                           // 총 수입이 변경될 때마다 순소득 재계산
@@ -331,9 +339,17 @@ export default function BusinessExpensePage() {
                               if (inputValue === '') {
                                 field.onChange(0);
                               } else {
-                                const numValue = parseFloat(inputValue);
-                                if (!isNaN(numValue)) {
-                                  field.onChange(numValue);
+                                // 정수인지 확인 (소수점이 없으면)
+                                if (inputValue.includes('.')) {
+                                  const numValue = parseFloat(inputValue);
+                                  if (!isNaN(numValue)) {
+                                    field.onChange(numValue);
+                                  }
+                                } else {
+                                  const numValue = parseInt(inputValue, 10);
+                                  if (!isNaN(numValue)) {
+                                    field.onChange(numValue);
+                                  }
                                 }
                               }
                               // 지출이 변경될 때마다 순소득 재계산
@@ -490,11 +506,21 @@ export default function BusinessExpensePage() {
                                     if (inputValue === '') {
                                       field.onChange(0);
                                     } else {
-                                      ownershipPercentage = parseFloat(inputValue);
-                                      if (!isNaN(ownershipPercentage)) {
-                                        field.onChange(ownershipPercentage);
+                                      // 정수인지 확인 (소수점이 없으면)
+                                      if (inputValue.includes('.')) {
+                                        ownershipPercentage = parseFloat(inputValue);
+                                        if (!isNaN(ownershipPercentage)) {
+                                          field.onChange(ownershipPercentage);
+                                        } else {
+                                          return; // 유효하지 않은 값이면 계산하지 않음
+                                        }
                                       } else {
-                                        return; // 유효하지 않은 값이면 계산하지 않음
+                                        ownershipPercentage = parseInt(inputValue, 10);
+                                        if (!isNaN(ownershipPercentage)) {
+                                          field.onChange(ownershipPercentage);
+                                        } else {
+                                          return; // 유효하지 않은 값이면 계산하지 않음
+                                        }
                                       }
                                     }
                                     
@@ -556,11 +582,21 @@ export default function BusinessExpensePage() {
                                     if (inputValue === '') {
                                       field.onChange(0);
                                     } else {
-                                      totalIncome = parseFloat(inputValue);
-                                      if (!isNaN(totalIncome)) {
-                                        field.onChange(totalIncome);
+                                      // 정수인지 확인 (소수점이 없으면)
+                                      if (inputValue.includes('.')) {
+                                        totalIncome = parseFloat(inputValue);
+                                        if (!isNaN(totalIncome)) {
+                                          field.onChange(totalIncome);
+                                        } else {
+                                          return; // 유효하지 않은 값이면 계산하지 않음
+                                        }
                                       } else {
-                                        return; // 유효하지 않은 값이면 계산하지 않음
+                                        totalIncome = parseInt(inputValue, 10);
+                                        if (!isNaN(totalIncome)) {
+                                          field.onChange(totalIncome);
+                                        } else {
+                                          return; // 유효하지 않은 값이면 계산하지 않음
+                                        }
                                       }
                                     }
                                     
