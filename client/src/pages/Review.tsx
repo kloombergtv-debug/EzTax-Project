@@ -314,27 +314,27 @@ const Review: React.FC = () => {
                 </div>
               </SectionSummary>
               
-              <div className="flex flex-col sm:flex-row justify-between mt-10 gap-4">
+              <div className="flex flex-col sm:flex-row justify-between mt-10 gap-3">
                 <Button
                   variant="outline"
-                  className="flex items-center w-[240px] justify-center"
+                  className="flex items-center w-[180px] justify-center"
                   onClick={handleGeneratePdf}
                 >
                   <File className="mr-2 h-4 w-4" />
-                  1040신고서(참고용)
+                  1040신고서
                 </Button>
                 
-                <div className="flex flex-col sm:flex-row gap-4">
+                <div className="flex flex-col sm:flex-row gap-3">
                   <Button
                     variant="outline"
-                    className="bg-blue-50 text-blue-700 border-blue-200 font-semibold rounded hover:bg-blue-100 transition duration-200 w-[240px] justify-center"
+                    className="bg-blue-50 text-blue-700 border-blue-200 font-semibold rounded hover:bg-blue-100 transition duration-200 w-[160px] justify-center"
                     onClick={() => navigate('/state-tax')}
                   >
-                    주정부 세금 계산
+                    주정부 세금
                   </Button>
                   
                   <Button
-                    className="bg-primary text-white font-semibold rounded hover:bg-primary-dark transition duration-200 w-[240px] justify-center"
+                    className="bg-primary text-white font-semibold rounded hover:bg-primary-dark transition duration-200 w-[160px] justify-center"
                     onClick={() => navigate('/tax-savings')}
                   >
                     절세방안 제안
