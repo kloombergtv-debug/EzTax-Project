@@ -264,9 +264,111 @@ export default function CapitalGainsCalculator() {
     return taxOwed;
   };
   
+  // 단기 자본 이득세 계산 (일반소득세율 적용)
+  const calculateShortTermCapitalGainsTax = (gains: number) => {
+    if (gains <= 0) return 0;
+    
+    // AGI 계산 (모든 소득 포함, 자본 이득 제외)
+    const wages = taxData.income?.wages || 0;
+    const otherEarnedIncome = taxData.income?.otherEarnedIncome || 0;
+    const interestIncome = taxData.income?.interestIncome || 0;
+    const dividends = taxData.income?.dividends || 0;
+    const businessIncome = taxData.income?.businessIncome || 0;
+    const rentalIncome = taxData.income?.rentalIncome || 0;
+    const retirementIncome = taxData.income?.retirementIncome || 0;
+    const unemploymentIncome = taxData.income?.unemploymentIncome || 0;
+    const otherIncome = taxData.income?.otherIncome || 0;
+    
+    const adjustedGrossIncome = wages + otherEarnedIncome + interestIncome + 
+                               dividends + businessIncome + rentalIncome + 
+                               retirementIncome + unemploymentIncome + otherIncome;
+    
+    // 표준공제 적용하여 과세소득 계산
+    const filingStatus = taxData.personalInfo?.filingStatus || 'single';
+    const standardDeduction = {
+      single: 13850,
+      married_joint: 27700,
+      married_separate: 13850,
+      head_of_household: 20800,
+      qualifying_widow: 27700
+    }[filingStatus] || 13850;
+    
+    const taxableIncomeBeforeCapitalGains = Math.max(0, adjustedGrossIncome - standardDeduction);
+    
+    // 2024/2025년 일반소득세율 구간
+    const ordinaryTaxRates = {
+      single: [
+        { rate: 0.10, upTo: 11600 },
+        { rate: 0.12, upTo: 47150 },
+        { rate: 0.22, upTo: 100525 },
+        { rate: 0.24, upTo: 191950 },
+        { rate: 0.32, upTo: 243725 },
+        { rate: 0.35, upTo: 609350 },
+        { rate: 0.37, upTo: Infinity }
+      ],
+      married_joint: [
+        { rate: 0.10, upTo: 23200 },
+        { rate: 0.12, upTo: 94300 },
+        { rate: 0.22, upTo: 201050 },
+        { rate: 0.24, upTo: 383900 },
+        { rate: 0.32, upTo: 487450 },
+        { rate: 0.35, upTo: 731200 },
+        { rate: 0.37, upTo: Infinity }
+      ],
+      married_separate: [
+        { rate: 0.10, upTo: 11600 },
+        { rate: 0.12, upTo: 47150 },
+        { rate: 0.22, upTo: 100525 },
+        { rate: 0.24, upTo: 191950 },
+        { rate: 0.32, upTo: 243725 },
+        { rate: 0.35, upTo: 365600 },
+        { rate: 0.37, upTo: Infinity }
+      ],
+      head_of_household: [
+        { rate: 0.10, upTo: 16550 },
+        { rate: 0.12, upTo: 63100 },
+        { rate: 0.22, upTo: 100500 },
+        { rate: 0.24, upTo: 191950 },
+        { rate: 0.32, upTo: 243700 },
+        { rate: 0.35, upTo: 609350 },
+        { rate: 0.37, upTo: Infinity }
+      ]
+    };
+    
+    const brackets = ordinaryTaxRates[filingStatus as keyof typeof ordinaryTaxRates] || ordinaryTaxRates.single;
+    let taxOwed = 0;
+    let remainingGains = gains;
+    let currentIncomeLevel = taxableIncomeBeforeCapitalGains;
+    
+    for (const bracket of brackets) {
+      if (remainingGains <= 0) break;
+      
+      const availableInBracket = Math.max(0, bracket.upTo - currentIncomeLevel);
+      
+      if (availableInBracket > 0) {
+        const gainsInBracket = Math.min(remainingGains, availableInBracket);
+        taxOwed += gainsInBracket * bracket.rate;
+        remainingGains -= gainsInBracket;
+        currentIncomeLevel += gainsInBracket;
+      } else {
+        currentIncomeLevel = bracket.upTo;
+      }
+    }
+    
+    console.log(`단기 자본 이득세 계산: 
+      AGI: $${adjustedGrossIncome.toLocaleString()}, 
+      표준공제: $${standardDeduction.toLocaleString()},
+      일반과세소득: $${taxableIncomeBeforeCapitalGains.toLocaleString()},
+      단기자본이득: $${gains.toLocaleString()}, 
+      납부세액: $${taxOwed.toLocaleString()}, 
+      실효세율: ${gains > 0 ? ((taxOwed/gains)*100).toFixed(1) : 0}%`);
+    
+    return taxOwed;
+  };
+
   // 장기/단기 자본 이득세 계산 (순 이익 기준)
   const estimatedLongTermTax = calculateLongTermCapitalGainsTax(netLongTermGains);
-  const estimatedShortTermTax = netShortTermGains * 0.24; // 단기는 일반 소득세율 적용
+  const estimatedShortTermTax = calculateShortTermCapitalGainsTax(netShortTermGains);
   const totalEstimatedTax = estimatedLongTermTax + estimatedShortTermTax;
   
   // 입력 필드 변경 처리
@@ -845,8 +947,13 @@ export default function CapitalGainsCalculator() {
                     <span className="font-medium text-blue-600">${netShortTermGains.toLocaleString()}</span>
                   </div>
                   <div className="flex justify-between items-center text-sm">
-                    <span className="text-gray-600">예상 세율:</span>
-                    <span className="font-medium">24%</span>
+                    <span className="text-gray-600">실제 세율:</span>
+                    <span className="font-medium text-blue-600">
+                      {netShortTermGains > 0 ? 
+                        `${((estimatedShortTermTax / netShortTermGains) * 100).toFixed(1)}%` : 
+                        '0%'
+                      }
+                    </span>
                   </div>
                   <div className="flex justify-between items-center pt-2 border-t">
                     <span className="font-medium">예상 세금:</span>
