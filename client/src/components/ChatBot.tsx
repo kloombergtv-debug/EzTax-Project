@@ -103,7 +103,7 @@ export function ChatBot({ context = "소득 입력" }: ChatBotProps) {
 
   if (!isOpen) {
     return (
-      <div className="fixed bottom-6 right-6 z-50">
+      <div className="fixed bottom-24 right-6 z-50">
         <Button
           onClick={() => setIsOpen(true)}
           className="h-14 w-14 rounded-full bg-blue-600 hover:bg-blue-700 shadow-lg"
@@ -116,7 +116,7 @@ export function ChatBot({ context = "소득 입력" }: ChatBotProps) {
   }
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
+    <div className="fixed bottom-24 right-6 z-50">
       <Card className="w-[480px] h-[600px] shadow-xl border-2">
         <CardHeader className="pb-2">
           <div className="flex items-center justify-between">

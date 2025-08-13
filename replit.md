@@ -117,6 +117,9 @@ Page Layout Preference:
     - Font size: text-sm → text-base for improved readability
     - Message area: max-w-85% for wider text display
     - Line spacing: leading-relaxed for better visual clarity
+  - **Position Adjustment (2025-01-13)**: ChatBot position moved up by 5cm per user request
+    - Changed from `bottom-6` to `bottom-24` (72px higher)
+    - Better positioning for user accessibility and visual comfort
   - **EzTax Information Accuracy Fix (2025-01-13)**: Corrected ChatBot responses about EzTax platform type
     - Fixed incorrect "app download" suggestions - EzTax is 100% web-based
     - Added pre-filtering for app-related questions with correct responses
