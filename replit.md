@@ -5,6 +5,7 @@ EzTax is a comprehensive web-based application designed to streamline federal ta
 
 ## User Preferences
 Preferred communication style: Simple, everyday language.
+Number display preference: All numbers must be displayed as integers without decimal points using Math.round() for clean presentation.
 Page Layout Preference: 
 - Side-by-side layout with 1:1 ratio (50:50) for optimal video viewing
 - Input forms and instructional videos side by side with equal width
@@ -68,6 +69,14 @@ Page Layout Preference:
   - **Test Accounts**: Created eztax88@gmail.com and equitykr@gmail.com for testing
   - **Endpoints**: `/api/forgot-password`, `/api/reset-password`, `/api/change-password` all fully functional
   - Status: All password management features tested and working correctly
+
+- **Floating-Point Precision Fix Implementation (2025-01-13)**: Complete elimination of decimal points in all number displays across BusinessExpense.tsx and Income-fixed.tsx.
+  - **Root Cause**: JavaScript floating-point arithmetic causing displays like "89,200.01" instead of clean integers
+  - **Solution Applied**: Math.round() applied to all calculation functions and display elements
+  - **Fixed Components**: calculateTotalExpenses(), calculateNetIncome(), calculateTotalK1Income(), and all display elements (.toLocaleString())
+  - **User Preference**: All numbers must display as integers without decimal points for clean presentation
+  - **Files Updated**: BusinessExpense.tsx (complete precision fix), Income-fixed.tsx (previous fix)
+  - Status: All number displays now show clean integers (e.g., "89,200" instead of "89,200.01")
 
 ### Current Active Page Files (2025-01-12)
 - **Income Page**: Currently using `Income-fixed.tsx` as the main income input page (referenced in App.tsx as IncomePage component)
