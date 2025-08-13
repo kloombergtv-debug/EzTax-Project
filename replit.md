@@ -75,7 +75,13 @@ Page Layout Preference:
   - **Solution Applied**: Math.round() applied to all calculation functions and display elements
   - **Fixed Components**: calculateTotalExpenses(), calculateNetIncome(), calculateTotalK1Income(), and all display elements (.toLocaleString())
   - **User Preference**: All numbers must display as integers without decimal points for clean presentation
-  - **Files Updated**: BusinessExpense.tsx (complete precision fix), Income-fixed.tsx (previous fix)
+  - **Files Updated**: BusinessExpense.tsx (complete precision fix), Income-fixed.tsx (comprehensive precision fix completed)
+  - **Income-fixed.tsx Updates (2025-01-13)**: 
+    - All input field placeholders changed from "달러 금액" to "$" 
+    - All value displays use Math.round().toLocaleString() format
+    - All onChange handlers use Math.round(parseFloat()) for integer processing
+    - Removed complex relative/absolute positioning structure for "기타 소득" field
+    - Applied regex pattern /[^0-9]/g (no decimal points) to all input validation
   - Status: All number displays now show clean integers (e.g., "89,200" instead of "89,200.01")
 
 ### Current Active Page Files (2025-01-12)

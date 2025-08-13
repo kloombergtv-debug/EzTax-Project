@@ -521,11 +521,11 @@ export default function IncomePage() {
                             <FormControl>
                               <Input
                                 type="text"
-                                placeholder="달러 금액"
-                                value={field.value === 0 ? '$' : field.value}
+                                placeholder="$"
+                                value={field.value === 0 ? '' : Math.round(field.value).toLocaleString()}
                                 onChange={async (e) => {
-                                  const inputValue = e.target.value.replace(/[^0-9.]/g, '');
-                                  const value = inputValue === '' ? 0 : parseFloat(inputValue) || 0;
+                                  const inputValue = e.target.value.replace(/[^0-9]/g, '');
+                                  const value = inputValue === '' ? 0 : Math.round(parseFloat(inputValue)) || 0;
                                   field.onChange(value);
                                   
                                   // 즉시 계산 및 저장
@@ -569,11 +569,11 @@ export default function IncomePage() {
                             <FormControl>
                               <Input
                                 type="text"
-                                placeholder="달러 금액"
-                                value={field.value === 0 ? '$' : field.value}
+                                placeholder="$"
+                                value={field.value === 0 ? '' : Math.round(field.value).toLocaleString()}
                                 onChange={async (e) => {
-                                  const inputValue = e.target.value.replace(/[^0-9.]/g, '');
-                                  const value = inputValue === '' ? 0 : parseFloat(inputValue) || 0;
+                                  const inputValue = e.target.value.replace(/[^0-9]/g, '');
+                                  const value = inputValue === '' ? 0 : Math.round(parseFloat(inputValue)) || 0;
                                   field.onChange(value);
                                   
                                   // 즉시 계산 및 저장
@@ -699,12 +699,12 @@ export default function IncomePage() {
                             </div>
                             <FormControl>
                               <Input
-                                type="number"
-                                step="0.01"
-                                placeholder="사업 순소득 (마이너스 가능)"
-                                value={field.value || ''}
+                                type="text"
+                                placeholder="$"
+                                value={field.value === 0 ? '' : Math.round(field.value).toLocaleString()}
                                 onChange={async (e) => {
-                                  const numericValue = parseFloat(e.target.value) || 0;
+                                  const inputValue = e.target.value.replace(/[^0-9-]/g, '');
+                                  const numericValue = inputValue === '' ? 0 : Math.round(parseFloat(inputValue)) || 0;
                                   console.log('사업소득 입력값:', e.target.value, '→ 숫자값:', numericValue);
                                   field.onChange(numericValue);
                                   
@@ -772,11 +772,11 @@ export default function IncomePage() {
                             <FormControl>
                               <Input
                                 type="text"
-                                placeholder="달러 금액"
-                                value={field.value === 0 ? '$' : field.value}
+                                placeholder="$"
+                                value={field.value === 0 ? '' : Math.round(field.value).toLocaleString()}
                                 onChange={async (e) => {
-                                  const inputValue = e.target.value.replace(/[^0-9.]/g, '');
-                                  const value = inputValue === '' ? 0 : parseFloat(inputValue) || 0;
+                                  const inputValue = e.target.value.replace(/[^0-9]/g, '');
+                                  const value = inputValue === '' ? 0 : Math.round(parseFloat(inputValue)) || 0;
                                   field.onChange(value);
                                   
                                   // 즉시 계산 및 저장
@@ -818,11 +818,11 @@ export default function IncomePage() {
                             <FormControl>
                               <Input
                                 type="text"
-                                placeholder="달러 금액"
-                                value={field.value === 0 ? '$' : field.value}
+                                placeholder="$"
+                                value={field.value === 0 ? '' : Math.round(field.value).toLocaleString()}
                                 onChange={async (e) => {
-                                  const inputValue = e.target.value.replace(/[^0-9.]/g, '');
-                                  const value = inputValue === '' ? 0 : parseFloat(inputValue) || 0;
+                                  const inputValue = e.target.value.replace(/[^0-9]/g, '');
+                                  const value = inputValue === '' ? 0 : Math.round(parseFloat(inputValue)) || 0;
                                   field.onChange(value);
                                   
                                   // 즉시 계산 및 저장
@@ -878,11 +878,11 @@ export default function IncomePage() {
                             <FormControl>
                               <Input
                                 type="text"
-                                placeholder="달러 금액"
-                                value={field.value === 0 ? '$' : field.value}
+                                placeholder="$"
+                                value={field.value === 0 ? '' : Math.round(field.value).toLocaleString()}
                                 onChange={async (e) => {
-                                  const inputValue = e.target.value.replace(/[^0-9.]/g, '');
-                                  const value = inputValue === '' ? 0 : parseFloat(inputValue) || 0;
+                                  const inputValue = e.target.value.replace(/[^0-9]/g, '');
+                                  const value = inputValue === '' ? 0 : Math.round(parseFloat(inputValue)) || 0;
                                   field.onChange(value);
                                   
                                   // 즉시 계산 및 저장
@@ -924,11 +924,11 @@ export default function IncomePage() {
                             <FormControl>
                               <Input
                                 type="text"
-                                placeholder="달러 금액"
-                                value={field.value === 0 ? '$' : field.value}
+                                placeholder="$"
+                                value={field.value === 0 ? '' : Math.round(field.value).toLocaleString()}
                                 onChange={async (e) => {
-                                  const inputValue = e.target.value.replace(/[^0-9.]/g, '');
-                                  const value = inputValue === '' ? 0 : parseFloat(inputValue) || 0;
+                                  const inputValue = e.target.value.replace(/[^0-9]/g, '');
+                                  const value = inputValue === '' ? 0 : Math.round(parseFloat(inputValue)) || 0;
                                   field.onChange(value);
                                   
                                   // 즉시 계산 및 저장
@@ -984,19 +984,16 @@ export default function IncomePage() {
                           <FormItem>
                             <FormLabel>추가 소득 (Additional Income)</FormLabel>
                             <FormControl>
-                              <div className="relative">
-                                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-dark">$</span>
-                                <Input 
-                                  {...field} 
-                                  placeholder="0.00"
-                                  className="pl-8"
-                                  value={field.value || ''}
-                                  onChange={(e) => {
-                                    const value = e.target.value.replace(/[^0-9.]/g, '');
-                                    field.onChange(Number(value) || 0);
-                                  }}
-                                />
-                              </div>
+                              <Input 
+                                {...field} 
+                                placeholder="$"
+                                value={field.value === 0 ? '' : Math.round(field.value).toLocaleString()}
+                                onChange={(e) => {
+                                  const inputValue = e.target.value.replace(/[^0-9]/g, '');
+                                  const value = inputValue === '' ? 0 : Math.round(parseFloat(inputValue)) || 0;
+                                  field.onChange(value);
+                                }}
+                              />
                             </FormControl>
                             <FormMessage />
                             <div className="text-xs text-gray-500 mt-1">
@@ -1067,10 +1064,10 @@ export default function IncomePage() {
                             <FormControl>
                               <Input
                                 type="text"
-                                placeholder="달러 금액"
-                                value={field.value === 0 ? '$' : field.value}
+                                placeholder="$"
+                                value={field.value === 0 ? '' : Math.round(field.value).toLocaleString()}
                                 onChange={(e) => {
-                                  const value = e.target.value.replace(/[^0-9.]/g, '');
+                                  const value = e.target.value.replace(/[^0-9]/g, '');
                                   const numValue = value === '' ? 0 : parseFloat(value) || 0;
                                   field.onChange(Math.min(numValue, 2500));
                                 }}
@@ -1100,9 +1097,9 @@ export default function IncomePage() {
                               <Input
                                 type="text"
                                 placeholder="달러 금액 (예: $4,150)"
-                                value={field.value === 0 ? '$' : field.value}
+                                value={field.value === 0 ? '' : Math.round(field.value).toLocaleString()}
                                 onChange={(e) => {
-                                  const value = e.target.value.replace(/[^0-9.]/g, '');
+                                  const value = e.target.value.replace(/[^0-9]/g, '');
                                   field.onChange(value === '' ? 0 : parseFloat(value) || 0);
                                 }}
                               />
