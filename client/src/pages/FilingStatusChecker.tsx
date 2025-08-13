@@ -344,6 +344,10 @@ export default function FilingStatusChecker() {
           아래 질문에 답하여 귀하에게 가장 적합한 세금 신고 상태(Filing Status)를 결정하세요.
         </p>
       </div>
+
+      <div className="mb-6">
+        <ChatBot context="세금 신고 상태 확인" />
+      </div>
       
       <Card className="mb-6">
         <CardHeader>
@@ -353,10 +357,6 @@ export default function FilingStatusChecker() {
           {renderCurrentStep()}
         </CardContent>
       </Card>
-      
-      <div className="mb-6">
-        <ChatBot context="세금 신고 상태 확인" />
-      </div>
     </div>
   );
 }
