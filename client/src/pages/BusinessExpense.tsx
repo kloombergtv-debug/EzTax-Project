@@ -119,16 +119,16 @@ export default function BusinessExpensePage() {
   // 총 지출 계산
   const calculateTotalExpenses = useCallback(() => {
     const expenses = form.getValues('expenses');
-    return Object.values(expenses).reduce((sum, value) => sum + (value || 0), 0);
+    return Math.round(Object.values(expenses).reduce((sum, value) => sum + (value || 0), 0));
   }, [form]);
 
   // 순소득 계산
   const calculateNetIncome = useCallback(() => {
-    const grossIncome = form.getValues('grossIncome') || 0;
+    const grossIncome = Math.round(form.getValues('grossIncome') || 0);
     const totalExpenses = calculateTotalExpenses();
     const netIncome = grossIncome - totalExpenses;
-    form.setValue('netIncome', netIncome, { shouldDirty: false });
-    return netIncome;
+    form.setValue('netIncome', Math.round(netIncome), { shouldDirty: false });
+    return Math.round(netIncome);
   }, [form, calculateTotalExpenses]);
 
   // K-1 총 소득 계산
@@ -139,8 +139,8 @@ export default function BusinessExpensePage() {
              (item.interestIncome || 0) + (item.dividendIncome || 0) + 
              (item.capitalGains || 0);
     }, 0);
-    form.setValue('totalK1Income', totalK1, { shouldDirty: false });
-    return totalK1;
+    form.setValue('totalK1Income', Math.round(totalK1), { shouldDirty: false });
+    return Math.round(totalK1);
   }, [form]);
 
   // K-1 항목 추가
@@ -382,14 +382,14 @@ export default function BusinessExpensePage() {
                 <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
                   <span className="font-medium">총 수입 (Gross Income)</span>
                   <span className="text-xl font-semibold">
-                    ${form.watch('grossIncome').toLocaleString()}
+                    ${Math.round(form.watch('grossIncome')).toLocaleString()}
                   </span>
                 </div>
                 
                 <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
                   <span className="font-medium">총 지출 (Total Expenses)</span>
                   <span className="text-xl font-semibold text-red-600">
-                    -${calculateTotalExpenses().toLocaleString()}
+                    -${Math.round(calculateTotalExpenses()).toLocaleString()}
                   </span>
                 </div>
                 
@@ -399,8 +399,8 @@ export default function BusinessExpensePage() {
                   <span className={`font-semibold ${form.watch('netIncome') >= 0 ? 'text-green-800' : 'text-red-800'}`}>사업순소득 (Net Income)</span>
                   <span className={`text-2xl font-bold ${form.watch('netIncome') >= 0 ? 'text-green-700' : 'text-red-700'}`}>
                     ${form.watch('netIncome') >= 0 ? 
-                      form.watch('netIncome').toLocaleString() : 
-                      `(${Math.abs(form.watch('netIncome')).toLocaleString()})`
+                      Math.round(form.watch('netIncome')).toLocaleString() : 
+                      `(${Math.round(Math.abs(form.watch('netIncome'))).toLocaleString()})`
                     }
                   </span>
                 </div>
@@ -534,7 +534,7 @@ export default function BusinessExpensePage() {
                                     // 지분율 변경시 소득도 자동 재계산
                                     const totalIncome = form.getValues(`k1Items.${index}.totalEntityIncome`) || 0;
                                     const myShare = (totalIncome * ownershipPercentage) / 100;
-                                    form.setValue(`k1Items.${index}.ordinaryIncome`, parseFloat(myShare.toFixed(2)));
+                                    form.setValue(`k1Items.${index}.ordinaryIncome`, Math.round(myShare));
                                     // K-1 총소득 재계산
                                     setTimeout(() => calculateTotalK1Income(), 0);
                                   }}
@@ -568,7 +568,7 @@ export default function BusinessExpensePage() {
                                     // 지분율에 따라 자동으로 개인 소득 계산
                                     const ownershipPercentage = form.getValues(`k1Items.${index}.ownershipPercentage`) || 0;
                                     const myShare = (netIncome * ownershipPercentage) / 100;
-                                    form.setValue(`k1Items.${index}.ordinaryIncome`, myShare);
+                                    form.setValue(`k1Items.${index}.ordinaryIncome`, Math.round(myShare));
                                     // K-1 총소득 재계산
                                     setTimeout(() => calculateTotalK1Income(), 0);
                                   }}
@@ -611,7 +611,7 @@ export default function BusinessExpensePage() {
                                     // 지분율에 따라 자동으로 개인 소득 계산
                                     const ownershipPercentage = form.getValues(`k1Items.${index}.ownershipPercentage`) || 0;
                                     const myShare = (totalIncome * ownershipPercentage) / 100;
-                                    form.setValue(`k1Items.${index}.ordinaryIncome`, parseFloat(myShare.toFixed(2)));
+                                    form.setValue(`k1Items.${index}.ordinaryIncome`, Math.round(myShare));
                                     // K-1 총소득 재계산
                                     setTimeout(() => calculateTotalK1Income(), 0);
                                   }}
@@ -626,12 +626,12 @@ export default function BusinessExpensePage() {
                           <div className="flex justify-between items-center">
                             <span>나의 소득 지분 (My Share):</span>
                             <span className="font-semibold">
-                              ${(((form.watch(`k1Items.${index}.totalEntityIncome`) || 0) * 
+                              ${Math.round(((form.watch(`k1Items.${index}.totalEntityIncome`) || 0) * 
                                   (form.watch(`k1Items.${index}.ownershipPercentage`) || 0)) / 100).toLocaleString()}
                             </span>
                           </div>
                           <div className="text-xs text-gray-600 mt-1">
-                            계산: ${(form.watch(`k1Items.${index}.totalEntityIncome`) || 0).toLocaleString()} × {form.watch(`k1Items.${index}.ownershipPercentage`) || 0}%
+                            계산: ${Math.round(form.watch(`k1Items.${index}.totalEntityIncome`) || 0).toLocaleString()} × {form.watch(`k1Items.${index}.ownershipPercentage`) || 0}%
                           </div>
                         </div>
                       </div>
@@ -839,7 +839,7 @@ export default function BusinessExpensePage() {
                       
                       <div className="mt-4 p-3 bg-blue-50 rounded-lg">
                         <div className="text-sm font-medium text-blue-800">
-                          이 K-1의 총 소득: ${((item.ordinaryIncome || 0) + (item.rentalIncome || 0) + (item.interestIncome || 0) + (item.dividendIncome || 0) + (item.capitalGains || 0)).toLocaleString()}
+                          이 K-1의 총 소득: ${Math.round((item.ordinaryIncome || 0) + (item.rentalIncome || 0) + (item.interestIncome || 0) + (item.dividendIncome || 0) + (item.capitalGains || 0)).toLocaleString()}
                         </div>
                       </div>
                     </div>
@@ -859,7 +859,7 @@ export default function BusinessExpensePage() {
                 <div className="flex justify-between items-center p-4 bg-blue-50 rounded-lg border-2 border-blue-200">
                   <span className="font-semibold text-blue-800">K-1 총소득 (Total K-1 Income)</span>
                   <span className="text-2xl font-bold text-blue-700">
-                    ${form.watch('totalK1Income').toLocaleString()}
+                    ${Math.round(form.watch('totalK1Income')).toLocaleString()}
                   </span>
                 </div>
 
