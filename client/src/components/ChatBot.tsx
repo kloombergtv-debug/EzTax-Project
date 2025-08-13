@@ -117,7 +117,7 @@ export function ChatBot({ context = "소득 입력" }: ChatBotProps) {
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
-      <Card className="w-96 h-96 shadow-xl border-2">
+      <Card className="w-[480px] h-[600px] shadow-xl border-2">
         <CardHeader className="pb-2">
           <div className="flex items-center justify-between">
             <CardTitle className="text-lg flex items-center gap-2">
@@ -134,7 +134,7 @@ export function ChatBot({ context = "소득 입력" }: ChatBotProps) {
             </Button>
           </div>
         </CardHeader>
-        <CardContent className="p-0 flex flex-col h-80">
+        <CardContent className="p-0 flex flex-col h-[520px]">
           <ScrollArea className="flex-1 px-4">
             <div className="space-y-4 py-4">
               {messages.map((message) => (
@@ -145,7 +145,7 @@ export function ChatBot({ context = "소득 입력" }: ChatBotProps) {
                   }`}
                 >
                   <div
-                    className={`flex items-start gap-2 max-w-[80%] ${
+                    className={`flex items-start gap-2 max-w-[85%] ${
                       message.role === 'user' ? 'flex-row-reverse' : 'flex-row'
                     }`}
                   >
@@ -169,7 +169,7 @@ export function ChatBot({ context = "소득 입력" }: ChatBotProps) {
                           : 'bg-gray-100 text-gray-900'
                       }`}
                     >
-                      <p className="text-sm whitespace-pre-wrap">
+                      <p className="text-base whitespace-pre-wrap leading-relaxed">
                         {message.content}
                       </p>
                       <p className="text-xs opacity-70 mt-1">

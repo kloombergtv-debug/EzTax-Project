@@ -110,7 +110,13 @@ Page Layout Preference:
     - Advanced features (QBI, ACTC, AMT, Schedule SE)
     - Step-by-step usage instructions
   - **Status**: All integrations completed successfully - comprehensive coverage across entire application with EzTax-specific knowledge
-  - **Current Issue**: API quota exceeded - user needs to check OpenAI billing/usage limits for full functionality
+  - **API Status**: OpenAI API fully operational after quota resolution
+  - **UI Enhancement (2025-01-13)**: ChatBot dialog box significantly enlarged for better readability
+    - Width: 384px → 480px (25% increase)
+    - Height: 384px → 600px (56% increase) 
+    - Font size: text-sm → text-base for improved readability
+    - Message area: max-w-85% for wider text display
+    - Line spacing: leading-relaxed for better visual clarity
 
 ### Current Active Page Files (2025-01-13)
 - **Income Page**: Currently using `Income-fixed.tsx` as the main income input page (referenced in App.tsx as IncomePage component)
