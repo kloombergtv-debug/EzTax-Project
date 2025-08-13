@@ -729,7 +729,7 @@ export default function IncomePage() {
                             </FormControl>
                             <FormMessage />
                             <div className="text-xs text-gray-500 mt-1">
-                              Schedule C, K-1, REIT 배당금 등 QBI 적격 소득
+                              Schedule C, K-1 소득
                             </div>
                           </FormItem>
                         )}
