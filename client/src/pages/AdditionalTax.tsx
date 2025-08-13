@@ -107,10 +107,10 @@ const AdditionalTaxPage: React.FC = () => {
 
       <ProgressTracker currentStep={5} />
 
-      {/* 메인 컨텐츠 - 입력 폼과 동영상을 나란히 배치 */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* 입력 폼 영역 (1/2 너비) */}
-        <div className="lg:col-span-1">
+      {/* 메인 컨텐츠 - 전체 너비 */}
+      <div className="grid grid-cols-1 gap-6">
+        {/* 입력 폼 영역 (전체 너비) */}
+        <div className="col-span-1">
           <Card className="mb-6">
             <CardContent className="pt-6">
               <h2 className="text-2xl font-heading font-semibold text-primary-dark mb-6">추가 세금 (Additional Tax)</h2>
@@ -322,33 +322,7 @@ const AdditionalTaxPage: React.FC = () => {
             </CardContent>
           </Card>
         </div>
-        
-        {/* 동영상 영역 (1/2 너비) */}
-        <div className="lg:col-span-1">
-          <Card className="sticky top-6">
-            <CardContent className="pt-6">
-              <div className="text-center mb-4">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">추가세금 입력 방법 안내</h3>
-                <p className="text-sm text-gray-600">추가세금 항목을 정확하게 입력하는 방법을 확인하세요</p>
-              </div>
-              <div className="w-full">
-                <div className="relative pb-[75%] h-0 overflow-hidden rounded-lg shadow-md">
-                  <iframe
-                    className="absolute top-0 left-0 w-full h-full"
-                    src="https://www.youtube.com/embed/kce8i5gAG1k"
-                    title="추가세금 입력 방법 안내"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  ></iframe>
-                </div>
-              </div>
-              <div className="mt-4 text-xs text-gray-500 text-center">
-                세무신고 시 올바른 추가세금 입력 방법을 동영상으로 확인하세요
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+
       </div>
       <ChatBot context="추가세금" />
     </div>

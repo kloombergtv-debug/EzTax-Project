@@ -125,9 +125,49 @@ Page Layout Preference:
 
 ### Current Active Page Files (2025-01-13)
 - **Income Page**: Currently using `Income-fixed.tsx` as the main income input page (referenced in App.tsx as IncomePage component)
-- **Video Status**: YouTube instructional video temporarily removed from Income-fixed.tsx (user request, to be restored after 1 hour)
-- **Layout**: Modified to use full-width layout when video is removed (grid-cols-1 instead of grid-cols-2)
 - **Universal ChatBot**: AI chatbot now available on every major page for comprehensive user support
+
+### YouTube Video Configuration (Completely Removed 2025-01-13)
+**Status: All YouTube videos successfully removed from application**
+
+**Video Format for Future Restoration:**
+```jsx
+{/* Standard YouTube Video Embed Format */}
+<div className="lg:col-span-1">
+  <div className="lg:sticky lg:top-6">
+    <Card>
+      <CardHeader>
+        <CardTitle>세금 신고 도움말 영상</CardTitle>
+      </CardHeader>
+      <CardContent className="p-0">
+        <div className="w-full pb-[75%] relative">
+          <iframe
+            src="https://www.youtube.com/embed/kce8i5gAG1k"
+            title="세금 신고 도움말"
+            className="absolute inset-0 w-full h-full rounded-b-lg"
+            frameBorder="0"
+            allowFullScreen
+          ></iframe>
+        </div>
+      </CardContent>
+    </Card>
+  </div>
+</div>
+```
+
+**Layout Configuration:**
+- Grid: `grid-cols-1 lg:grid-cols-2` (with video) vs `grid-cols-1` (without video)
+- Video column: `lg:col-span-1` with sticky positioning
+- Form column: `lg:col-span-1` 
+- Video aspect ratio: 75% height (`pb-[75%]`)
+
+**Completed Removal (2025-01-13):**
+- All YouTube videos (ID: kce8i5gAG1k) completely removed from all pages
+- Layout changed from 1:1 split to full-width single column on all pages
+- Grid classes updated from `lg:grid-cols-2` to `grid-cols-1`
+- Column classes updated from `lg:col-span-1` to `col-span-1`
+- Pages affected: Income-fixed.tsx, TaxCredits.tsx, Deductions.tsx, AdditionalTax.tsx, RetirementContributions.tsx, Review.tsx, BusinessExpense.tsx, TaxSavings.tsx
+- All pages now utilize full screen width for forms and content
 
 ## External Dependencies
 

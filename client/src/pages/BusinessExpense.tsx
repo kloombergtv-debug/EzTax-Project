@@ -255,10 +255,10 @@ export default function BusinessExpensePage() {
         </p>
       </div>
 
-      {/* 1:1 Layout: Forms + Video */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+      {/* 전체 너비 레이아웃 */}
+      <div className="grid grid-cols-1 gap-8 mb-8">
         {/* 입력 폼 섹션 */}
-        <div className="lg:col-span-1">
+        <div className="col-span-1">
           <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           {/* 총 수입 */}
@@ -886,28 +886,7 @@ export default function BusinessExpensePage() {
       </Form>
         </div>
 
-        {/* 동영상 섹션 */}
-        <div className="lg:col-span-1">
-          <div className="sticky top-8">
-            <Card className="h-fit">
-              <CardHeader>
-                <CardTitle className="text-xl font-semibold text-center">사업순소득 계산 가이드</CardTitle>
-              </CardHeader>
-              <CardContent className="p-0">
-                <div className="relative w-full pb-[75%] h-0">
-                  <iframe
-                    src="https://www.youtube.com/embed/kce8i5gAG1k"
-                    title="사업순소득 계산 가이드"
-                    className="absolute top-0 left-0 w-full h-full rounded-b-lg"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
+
       </div>
       <ChatBot context="사업경비" />
     </div>

@@ -492,7 +492,7 @@ export default function IncomePage() {
         <ProgressTracker currentStep={2} />
       </div>
       
-      {/* 메인 컨텐츠 - 동영상 임시 제거로 전체 너비 사용 */}
+      {/* 메인 컨텐츠 - 전체 너비 사용 */}
       <div className="grid grid-cols-1 gap-6">
         {/* 입력 폼 영역 (전체 너비) */}
         <div className="col-span-1">
@@ -1264,35 +1264,7 @@ export default function IncomePage() {
             </form>
           </Form>
         </div>
-        
-        {/* 동영상 영역 임시 제거 - 한시간 후 복원 예정 */}
-        {/*
-        <div className="lg:col-span-1">
-          <Card className="sticky top-6">
-            <CardContent className="pt-6">
-              <div className="text-center mb-4">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">소득 입력 방법 안내</h3>
-                <p className="text-sm text-gray-600">소득 정보를 정확하게 입력하는 방법을 확인하세요</p>
-              </div>
-              <div className="w-full">
-                <div className="relative pb-[75%] h-0 overflow-hidden rounded-lg shadow-md">
-                  <iframe
-                    className="absolute top-0 left-0 w-full h-full"
-                    src="https://www.youtube.com/embed/kce8i5gAG1k"
-                    title="소득 입력 방법 안내"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  ></iframe>
-                </div>
-              </div>
-              <div className="mt-4 text-xs text-gray-500 text-center">
-                세무신고 시 올바른 소득 입력 방법을 동영상으로 확인하세요
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-        */}
+
       </div>
       
       {/* AI ChatBot */}
