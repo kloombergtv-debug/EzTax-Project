@@ -335,7 +335,7 @@ export default function BusinessExpensePage() {
                             type="number"
                             step="0.01"
                             min="0"
-                            placeholder="$0"
+                            placeholder="$"
                             value={field.value || ''}
                             onChange={(e) => {
                               const inputValue = e.target.value;
@@ -580,7 +580,7 @@ export default function BusinessExpensePage() {
                                 <Input
                                   type="number"
                                   step="0.01"
-                                  placeholder="$0"
+                                  placeholder="$"
                                   value={field.value || ''}
                                   onChange={(e) => {
                                     const inputValue = e.target.value;
@@ -647,7 +647,7 @@ export default function BusinessExpensePage() {
                                 <Input
                                   type="number"
                                   step="0.01"
-                                  placeholder="$0"
+                                  placeholder="$"
                                   value={field.value || ''}
                                   onChange={(e) => {
                                     const inputValue = e.target.value;
@@ -680,7 +680,7 @@ export default function BusinessExpensePage() {
                                 <Input
                                   type="number"
                                   step="0.01"
-                                  placeholder="$0"
+                                  placeholder="$"
                                   value={field.value || ''}
                                   onChange={(e) => {
                                     const inputValue = e.target.value;
@@ -714,7 +714,7 @@ export default function BusinessExpensePage() {
                                   type="number"
                                   step="0.01"
                                   min="0"
-                                  placeholder="$0"
+                                  placeholder="$"
                                   value={field.value || ''}
                                   onChange={(e) => {
                                     const inputValue = e.target.value;
@@ -748,7 +748,7 @@ export default function BusinessExpensePage() {
                                   type="number"
                                   step="0.01"
                                   min="0"
-                                  placeholder="$0"
+                                  placeholder="$"
                                   value={field.value || ''}
                                   onChange={(e) => {
                                     const inputValue = e.target.value;
@@ -781,7 +781,7 @@ export default function BusinessExpensePage() {
                                 <Input
                                   type="number"
                                   step="0.01"
-                                  placeholder="$0"
+                                  placeholder="$"
                                   value={field.value || ''}
                                   onChange={(e) => {
                                     const inputValue = e.target.value;
@@ -815,7 +815,7 @@ export default function BusinessExpensePage() {
                                   type="number"
                                   step="0.01"
                                   min="0"
-                                  placeholder="$0"
+                                  placeholder="$"
                                   value={field.value || ''}
                                   onChange={(e) => {
                                     const inputValue = e.target.value;
