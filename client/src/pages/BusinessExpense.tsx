@@ -11,6 +11,7 @@ import { Separator } from '@/components/ui/separator';
 import { ArrowLeft, Calculator, Plus, X, Save } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useTaxContext } from '@/context/TaxContext';
+import { ChatBot } from '@/components/ChatBot';
 
 const businessExpenseSchema = z.object({
   grossIncome: z.number().min(0).default(0),
@@ -908,6 +909,7 @@ export default function BusinessExpensePage() {
           </div>
         </div>
       </div>
+      <ChatBot context="사업경비" />
     </div>
   );
 }

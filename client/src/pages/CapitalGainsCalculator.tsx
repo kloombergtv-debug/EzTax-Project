@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { FileText, Calculator, ArrowLeft, Save, Lock, Download, Crown, Check } from 'lucide-react';
+import { ChatBot } from '@/components/ChatBot';
 import {
   Dialog,
   DialogContent,
@@ -1007,7 +1008,7 @@ export default function CapitalGainsCalculator() {
           </div>
         </CardContent>
       </Card>
-      
+      <ChatBot context="자본이득계산기" />
 
     </div>
   );

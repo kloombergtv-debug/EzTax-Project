@@ -7,6 +7,7 @@ import { insertUserSchema } from "@shared/schema";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { ChatBot } from '@/components/ChatBot';
 import ForgotPasswordModal from "@/components/ForgotPasswordModal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -392,6 +393,7 @@ export default function AuthPage() {
         open={forgotPasswordOpen}
         onOpenChange={setForgotPasswordOpen}
       />
+      <ChatBot context="로그인/회원가입" />
     </div>
   );
 }

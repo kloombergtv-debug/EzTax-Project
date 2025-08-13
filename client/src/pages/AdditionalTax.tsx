@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import ProgressTracker from '@/components/ProgressTracker';
 import { useLocation } from 'wouter';
+import { ChatBot } from '@/components/ChatBot';
 import StepNavigation from '@/components/StepNavigation';
 import { useTaxContext } from '@/context/TaxContext';
 import { Info } from 'lucide-react';
@@ -349,6 +350,7 @@ const AdditionalTaxPage: React.FC = () => {
           </Card>
         </div>
       </div>
+      <ChatBot context="추가세금" />
     </div>
   );
 };

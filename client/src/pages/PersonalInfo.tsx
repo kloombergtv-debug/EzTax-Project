@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { PlusCircle, Trash2, Save, RefreshCw } from 'lucide-react';
+import { ChatBot } from '@/components/ChatBot';
 import ProgressTracker from '@/components/ProgressTracker';
 import { useTaxContext } from '../context/TaxContext';
 import { useLocation } from 'wouter';

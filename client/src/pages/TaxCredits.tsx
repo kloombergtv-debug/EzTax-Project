@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import ProgressTracker from '@/components/ProgressTracker';
+import { ChatBot } from '@/components/ChatBot';
 import StepNavigation from '@/components/StepNavigation';
 import { useTaxContext } from '@/context/TaxContext';
 import { Info } from 'lucide-react';
@@ -547,6 +548,7 @@ const TaxCreditsPage: React.FC = () => {
           </Card>
         </div>
       </div>
+      <ChatBot context="세금 크레딧" />
     </div>
   );
 };

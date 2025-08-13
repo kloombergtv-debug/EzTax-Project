@@ -12,6 +12,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { InfoIcon, PiggyBankIcon, TrendingUpIcon } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useTaxContext } from "@/context/TaxContext";
+import { ChatBot } from '@/components/ChatBot';
 
 // 2025 IRS Contribution Limits
 const CONTRIBUTION_LIMITS_2025 = {
@@ -497,6 +498,7 @@ export default function RetirementContributions() {
           </Card>
         </div>
       </div>
+      <ChatBot context="은퇴 기여금" />
     </div>
   );
 }

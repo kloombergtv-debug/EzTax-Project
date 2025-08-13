@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
 import ProgressTracker from '@/components/ProgressTracker';
+import { ChatBot } from '@/components/ChatBot';
 import { useTaxContext } from '@/context/TaxContext';
 
 import StepNavigation from '@/components/StepNavigation';
@@ -371,7 +372,7 @@ const Review: React.FC = () => {
           </div>
         </div>
       </div>
-
+      <ChatBot context="검토 및 제출" />
     </div>
   );
 };

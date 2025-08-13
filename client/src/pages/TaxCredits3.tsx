@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from '@/hooks/use-toast';
 import ProgressTracker from '@/components/ProgressTracker';
+import { ChatBot } from '@/components/ChatBot';
 
 import StepNavigation from '@/components/StepNavigation';
 import { Info, RefreshCw, PlusCircle, Trash2 } from 'lucide-react';
@@ -1795,6 +1796,7 @@ const TaxCredits3Page: React.FC = () => {
         </Card>
       </div>
     </div>
+      <ChatBot context="세액공제" />
     </div>
   );
 };

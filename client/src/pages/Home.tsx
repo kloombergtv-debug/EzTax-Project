@@ -6,6 +6,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { File, FileText, Clock, Shield } from 'lucide-react';
 import { useTaxContext } from '@/context/TaxContext';
 import { useAuth } from '@/hooks/use-auth';
+import { ChatBot } from '@/components/ChatBot';
 
 const Home: React.FC = () => {
   const [, navigate] = useLocation();
@@ -154,6 +155,7 @@ const Home: React.FC = () => {
           </CardFooter>
         </Card>
       </section>
+      <ChatBot context="홈 화면" />
     </div>
   );
 };

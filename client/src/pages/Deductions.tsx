@@ -11,6 +11,7 @@ import { Separator } from '@/components/ui/separator';
 import { Info, Plus, X, Save, Calculator } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import ProgressTracker from '@/components/ProgressTracker';
+import { ChatBot } from '@/components/ChatBot';
 
 import StepNavigation from '@/components/StepNavigation';
 import { useTaxContext } from '@/context/TaxContext';
@@ -1267,6 +1268,7 @@ const Deductions: React.FC = () => {
           </Card>
         </div>
       </div>
+      <ChatBot context="공제 및 세액공제" />
     </div>
   );
 };
