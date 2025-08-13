@@ -15,10 +15,9 @@ interface Message {
 
 interface ChatBotProps {
   context?: string; // Additional context about current page
-  inline?: boolean; // Whether to display inline or as floating button
 }
 
-export function ChatBot({ context = "소득 입력", inline = false }: ChatBotProps) {
+export function ChatBot({ context = "소득 입력" }: ChatBotProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -101,110 +100,6 @@ export function ChatBot({ context = "소득 입력", inline = false }: ChatBotPr
       sendMessage();
     }
   };
-
-  // Inline 모드일 때는 바로 ChatBot 인터페이스를 보여줌
-  if (inline) {
-    return (
-      <div className="w-full">
-        <Card className="w-full h-[400px] shadow-lg border">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-lg flex items-center gap-2">
-              <Bot className="h-5 w-5 text-blue-600" />
-              세금 AI 상담 - {context}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="p-0 flex flex-col h-[330px]">
-            <ScrollArea className="flex-1 px-4">
-              <div className="space-y-4 py-4">
-                {messages.map((message) => (
-                  <div
-                    key={message.id}
-                    className={`flex ${
-                      message.role === 'user' ? 'justify-end' : 'justify-start'
-                    }`}
-                  >
-                    <div
-                      className={`flex items-start gap-2 max-w-[85%] ${
-                        message.role === 'user' ? 'flex-row-reverse' : 'flex-row'
-                      }`}
-                    >
-                      <div
-                        className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                          message.role === 'user'
-                            ? 'bg-blue-600'
-                            : 'bg-gray-200'
-                        }`}
-                      >
-                        {message.role === 'user' ? (
-                          <User className="h-4 w-4 text-white" />
-                        ) : (
-                          <Bot className="h-4 w-4 text-gray-600" />
-                        )}
-                      </div>
-                      <div
-                        className={`rounded-lg px-3 py-2 ${
-                          message.role === 'user'
-                            ? 'bg-blue-600 text-white'
-                            : 'bg-gray-100 text-gray-900'
-                        }`}
-                      >
-                        <p className="text-base whitespace-pre-wrap leading-relaxed">
-                          {message.content}
-                        </p>
-                        <p className="text-xs opacity-70 mt-1">
-                          {message.timestamp.toLocaleTimeString('ko-KR', {
-                            hour: '2-digit',
-                            minute: '2-digit'
-                          })}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-                {isLoading && (
-                  <div className="flex justify-start">
-                    <div className="flex items-start gap-2">
-                      <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
-                        <Bot className="h-4 w-4 text-gray-600" />
-                      </div>
-                      <div className="bg-gray-100 rounded-lg px-3 py-2">
-                        <div className="flex space-x-1">
-                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
-                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-              <div ref={messagesEndRef} />
-            </ScrollArea>
-            <div className="border-t p-4">
-              <div className="flex gap-2">
-                <Input
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyPress={handleKeyPress}
-                  placeholder="세금 관련 질문을 입력하세요..."
-                  disabled={isLoading}
-                  className="flex-1"
-                />
-                <Button
-                  onClick={sendMessage}
-                  disabled={!input.trim() || isLoading}
-                  size="icon"
-                  className="shrink-0"
-                >
-                  <Send className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
 
   if (!isOpen) {
     return (
