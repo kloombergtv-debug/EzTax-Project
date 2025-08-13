@@ -100,10 +100,16 @@ Page Layout Preference:
 
 ### AI ChatBot Integration Completion (2025-01-13)
 - **Complete AI ChatBot Expansion**: Successfully integrated AI chatbot across ALL major application pages
-  - **Pages with ChatBot**: PersonalInfo, TaxCredits, Deductions, Review, AdditionalTax, Home, RetirementContributions, auth-page, CapitalGainsCalculator, BusinessExpense, TaxCredits3, Income-fixed
-  - **Implementation**: Each page has dedicated ChatBot component with contextual support (e.g., "홈 화면", "세액공제", "자본이득계산기")
+  - **Pages with ChatBot**: PersonalInfo, TaxCredits, Deductions, Review, AdditionalTax, Home, RetirementContributions, auth-page, CapitalGainsCalculator, BusinessExpense, TaxCredits3, Income-fixed (13 total pages)
+  - **Implementation**: Each page has dedicated ChatBot component with contextual support (e.g., "기본정보", "세액공제", "자본이득계산기")
   - **Technology**: OpenAI GPT-4o model with Korean tax expertise system prompts
-  - **Status**: All integrations completed successfully - comprehensive coverage across entire application
+  - **EzTax-Specific Training**: ChatBot now trained on complete EzTax application functionality
+    - All page functions and features (9 major sections)
+    - Calculation logic and IRS compliance details
+    - User guidance and navigation help
+    - Advanced features (QBI, ACTC, AMT, Schedule SE)
+    - Step-by-step usage instructions
+  - **Status**: All integrations completed successfully - comprehensive coverage across entire application with EzTax-specific knowledge
   - **Current Issue**: API quota exceeded - user needs to check OpenAI billing/usage limits for full functionality
 
 ### Current Active Page Files (2025-01-13)
