@@ -492,6 +492,12 @@ export default function IncomePage() {
         <ProgressTracker currentStep={2} />
       </div>
       
+      {/* AI ChatBot - 상단에 위치 */}
+      <div className="mb-8 p-4 bg-blue-50 rounded-lg border border-blue-200">
+        <h3 className="text-lg font-semibold text-blue-800 mb-3">💬 AI 세무 전문가 도움</h3>
+        <ChatBot context="소득 입력" />
+      </div>
+
       {/* 메인 컨텐츠 - 전체 너비 사용 */}
       <div className="grid grid-cols-1 gap-6">
         {/* 입력 폼 영역 (전체 너비) */}
@@ -1267,8 +1273,6 @@ export default function IncomePage() {
 
       </div>
       
-      {/* AI ChatBot */}
-      <ChatBot context="소득 입력" />
     </div>
   );
 }
