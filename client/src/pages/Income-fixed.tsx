@@ -96,9 +96,9 @@ export default function IncomePage() {
     }, 1500);
   };
   
-  // QBI에서 businessIncome 가져오기
-  const qbiBusinessIncome = taxData.income?.qbi?.totalQBI || 0;
-  const effectiveBusinessIncome = qbiBusinessIncome > 0 ? qbiBusinessIncome : (taxData.income?.businessIncome || 0);
+  // QBI에서 businessIncome 가져오기 (자동 로드 비활성화)
+  const qbiBusinessIncome = 0; // 자동 로드 비활성화
+  const effectiveBusinessIncome = taxData.income?.businessIncome || 0;
   
   console.log('폼 초기화 - QBI 데이터 확인:', {
     qbiData: taxData.income?.qbi,
@@ -133,36 +133,10 @@ export default function IncomePage() {
     defaultValues,
   });
 
-  // taxData 변경 감지하여 QBI 데이터 적용
-  useEffect(() => {
-    // taxData가 로드되고 QBI 데이터가 있을 때만 실행
-    if (taxData.id && taxData.income?.qbi?.totalQBI) {
-      const qbiTotalIncome = taxData.income.qbi.totalQBI;
-      const currentBusinessIncome = form.getValues('businessIncome');
-      
-      console.log('taxData 로드 완료 - QBI 데이터 적용:', {
-        taxDataId: taxData.id,
-        qbiTotalIncome,
-        currentBusinessIncome
-      });
-      
-      // QBI 값과 현재 값이 다를 때만 업데이트
-      if (Math.abs(currentBusinessIncome - qbiTotalIncome) > 0.01) {
-        console.log('QBI → businessIncome 자동 업데이트:', qbiTotalIncome);
-        
-        form.setValue('businessIncome', qbiTotalIncome, { 
-          shouldValidate: true, 
-          shouldDirty: true,
-          shouldTouch: true
-        });
-        
-        // 총소득 재계산
-        setTimeout(() => {
-          calculateTotals();
-        }, 50);
-      }
-    }
-  }, [taxData.id, taxData.income?.qbi?.totalQBI]); // taxData.id와 QBI 데이터 변경 감지
+  // QBI 자동 로드 기능 비활성화 (사용자가 직접 선택하도록 변경)
+  // useEffect(() => {
+  //   // 자동 QBI 로드 비활성화됨
+  // }, []);
   
   // 총소득과 조정 총소득을 계산하는 함수
   // 심플하게 합계만 리턴하는 함수로 변경
@@ -230,38 +204,10 @@ export default function IncomePage() {
   const [additionalAdjustmentItems, setAdditionalAdjustmentItems] = useState<AdditionalAdjustmentItem[]>([]);
   
   // QBI 데이터에서 businessIncome 자동 업데이트
-  useEffect(() => {
-    const qbiData = taxData.income?.qbi;
-    const qbiTotalIncome = qbiData?.totalQBI;
-    
-    console.log('QBI 자동 로드 체크 (useEffect):', { qbiData, qbiTotalIncome });
-    
-    if (qbiTotalIncome && qbiTotalIncome > 0) {
-      console.log('QBI에서 businessIncome 자동 로드 시작:', qbiTotalIncome);
-      
-      // 현재 폼 값 확인
-      const currentBusinessIncome = form.getValues('businessIncome');
-      console.log('현재 businessIncome 값:', currentBusinessIncome);
-      
-      // QBI 값과 다르면 업데이트 (허용 오차 고려)
-      if (Math.abs(currentBusinessIncome - qbiTotalIncome) > 0.01) {
-        console.log('businessIncome 강제 업데이트:', { from: currentBusinessIncome, to: qbiTotalIncome });
-        
-        // 폼 필드 강제 업데이트
-        form.setValue('businessIncome', qbiTotalIncome, { 
-          shouldValidate: true, 
-          shouldDirty: true,
-          shouldTouch: true
-        });
-        
-        // 강제 리렌더링을 위한 setTimeout
-        setTimeout(() => {
-          form.trigger('businessIncome');
-          calculateTotals();
-        }, 50);
-      }
-    }
-  }, [taxData.income?.qbi?.totalQBI, taxData.id]); // taxData.id 추가로 데이터 변경 감지
+  // QBI 자동 로드 기능 완전 비활성화
+  // useEffect(() => {
+  //   // QBI 자동 로드 기능 비활성화됨 - 사용자가 직접 버튼으로 가져오도록 변경
+  // }, []);
 
   // taxData가 변경될 때마다 추가 소득 항목과 조정 항목을 업데이트
   useEffect(() => {
@@ -666,16 +612,72 @@ export default function IncomePage() {
                                   <span className="tooltip-text">Net profit from business operations (Schedule C)</span>
                                 </div>
                               </div>
-                              <Button
-                                type="button"
-                                variant="outline"
-                                size="sm"
-                                onClick={() => setLocation('/business-expense')}
-                                className="text-xs flex items-center gap-1"
-                              >
-                                <Calculator className="h-3 w-3" />
-                                <span>순소득 계산기</span>
-                              </Button>
+                              <div className="flex gap-2">
+                                <Button
+                                  type="button"
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => {
+                                    // 사업비용 페이지의 순소득 가져오기
+                                    const netIncome = taxData.income?.businessExpense?.netIncome || 0;
+                                    if (netIncome > 0) {
+                                      form.setValue('businessIncome', netIncome);
+                                      calculateTotals();
+                                      toast({
+                                        title: "순소득 가져오기 완료",
+                                        description: `사업 순소득 $${netIncome.toLocaleString()}이 적용되었습니다.`
+                                      });
+                                    } else {
+                                      toast({
+                                        title: "순소득 데이터 없음",
+                                        description: "사업비용 페이지에서 먼저 순소득을 계산해주세요.",
+                                        variant: "destructive"
+                                      });
+                                    }
+                                  }}
+                                  className="text-xs flex items-center gap-1"
+                                >
+                                  <Upload className="h-3 w-3" />
+                                  <span>순소득 가져오기</span>
+                                </Button>
+                                <Button
+                                  type="button"
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => {
+                                    // K-1 소득 합계 가져오기
+                                    const k1Income = taxData.income?.businessExpense?.k1TotalIncome || 0;
+                                    if (k1Income > 0) {
+                                      form.setValue('businessIncome', k1Income);
+                                      calculateTotals();
+                                      toast({
+                                        title: "K-1 소득 가져오기 완료",
+                                        description: `K-1 소득 $${k1Income.toLocaleString()}이 적용되었습니다.`
+                                      });
+                                    } else {
+                                      toast({
+                                        title: "K-1 소득 데이터 없음",
+                                        description: "사업비용 페이지에서 먼저 K-1 정보를 입력해주세요.",
+                                        variant: "destructive"
+                                      });
+                                    }
+                                  }}
+                                  className="text-xs flex items-center gap-1"
+                                >
+                                  <FileText className="h-3 w-3" />
+                                  <span>K-1 가져오기</span>
+                                </Button>
+                                <Button
+                                  type="button"
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => setLocation('/business-expense')}
+                                  className="text-xs flex items-center gap-1"
+                                >
+                                  <Calculator className="h-3 w-3" />
+                                  <span>계산기</span>
+                                </Button>
+                              </div>
                             </div>
                             <FormControl>
                               <Input
