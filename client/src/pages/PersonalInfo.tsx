@@ -705,6 +705,7 @@ const PersonalInfo: React.FC = () => {
           </div>
         </div>
       </div>
+      <ChatBot context="기본정보" />
     </div>
   );
 };
