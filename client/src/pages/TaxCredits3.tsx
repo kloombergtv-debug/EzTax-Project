@@ -781,19 +781,15 @@ const TaxCredits3Page: React.FC = () => {
                           <FormItem>
                             <FormLabel>자녀 및 부양가족 돌봄비용 세액공제액</FormLabel>
                             <FormControl>
-                              <div className="relative">
-                                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-dark">$</span>
-                                <Input 
-                                  placeholder="$"
-                                  className="pl-8"
-                                  value={field.value || ''}
-                                  onChange={(e) => {
-                                    const formatted = formatNumberInput(e.target.value);
-                                    field.onChange(formatted ? Number(formatted) : 0);
-                                    setPendingChanges(true);
-                                  }}
-                                />
-                              </div>
+                              <Input 
+                                placeholder="$"
+                                value={field.value || ''}
+                                onChange={(e) => {
+                                  const formatted = formatNumberInput(e.target.value);
+                                  field.onChange(formatted ? Number(formatted) : 0);
+                                  setPendingChanges(true);
+                                }}
+                              />
                             </FormControl>
                             <FormDescription>
                               돌봄 서비스 제공자 정보를 입력하려면 아래 버튼을 클릭하세요.
@@ -823,19 +819,15 @@ const TaxCredits3Page: React.FC = () => {
                             <FormItem className="mb-4">
                               <FormLabel>총 돌봄 비용 (Total Care Expenses)</FormLabel>
                               <FormControl>
-                                <div className="relative">
-                                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-dark">$</span>
-                                  <Input 
-                                    placeholder="$"
-                                    className="pl-8"
-                                    value={field.value || ''}
-                                    onChange={(e) => {
-                                      const formatted = formatNumberInput(e.target.value);
-                                      field.onChange(formatted ? Number(formatted) : 0);
-                                      setPendingChanges(true);
-                                    }}
-                                  />
-                                </div>
+                                <Input 
+                                  placeholder="$"
+                                  value={field.value || ''}
+                                  onChange={(e) => {
+                                    const formatted = formatNumberInput(e.target.value);
+                                    field.onChange(formatted ? Number(formatted) : 0);
+                                    setPendingChanges(true);
+                                  }}
+                                />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -939,19 +931,15 @@ const TaxCredits3Page: React.FC = () => {
                                 <FormItem>
                                   <FormLabel>지불 금액</FormLabel>
                                   <FormControl>
-                                    <div className="relative">
-                                      <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-dark">$</span>
-                                      <Input 
-                                        placeholder="$"
-                                        className="pl-8"
-                                        value={field.value || ''}
-                                        onChange={(e) => {
-                                          const formatted = formatNumberInput(e.target.value);
-                                          field.onChange(formatted ? Number(formatted) : 0);
-                                          setPendingChanges(true);
-                                        }}
-                                      />
-                                    </div>
+                                    <Input 
+                                      placeholder="$"
+                                      value={field.value || ''}
+                                      onChange={(e) => {
+                                        const formatted = formatNumberInput(e.target.value);
+                                        field.onChange(formatted ? Number(formatted) : 0);
+                                        setPendingChanges(true);
+                                      }}
+                                    />
                                   </FormControl>
                                   <FormMessage />
                                 </FormItem>
@@ -999,24 +987,20 @@ const TaxCredits3Page: React.FC = () => {
                           <FormItem>
                             <FormLabel>미국 오퍼튜니티 세액공제 (AOTC)</FormLabel>
                             <FormControl>
-                              <div className="relative">
-                                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-dark">$</span>
-                                <Input 
-                                  placeholder="$"
-                                  className="pl-8"
-                                  value={field.value || ''}
-                                  onChange={(e) => {
-                                    const formatted = formatNumberInput(e.target.value);
-                                    field.onChange(formatted ? Number(formatted) : 0);
-                                    setPendingChanges(true);
-                                    
-                                    // AOTC와 LLC 합계를 교육 세액공제에 반영
-                                    const llcCredit = form.getValues('llcCredit') || 0;
-                                    const total = (formatted ? Number(formatted) : 0) + llcCredit;
-                                    form.setValue('educationCredits', total);
-                                  }}
-                                />
-                              </div>
+                              <Input 
+                                placeholder="$"
+                                value={field.value || ''}
+                                onChange={(e) => {
+                                  const formatted = formatNumberInput(e.target.value);
+                                  field.onChange(formatted ? Number(formatted) : 0);
+                                  setPendingChanges(true);
+                                  
+                                  // AOTC와 LLC 합계를 교육 세액공제에 반영
+                                  const llcCredit = form.getValues('llcCredit') || 0;
+                                  const total = (formatted ? Number(formatted) : 0) + llcCredit;
+                                  form.setValue('educationCredits', total);
+                                }}
+                              />
                             </FormControl>
                             <FormDescription>
                               학생당 최대 $2,500까지 공제 가능
@@ -1033,24 +1017,20 @@ const TaxCredits3Page: React.FC = () => {
                           <FormItem>
                             <FormLabel>평생 학습 세액공제 (LLC)</FormLabel>
                             <FormControl>
-                              <div className="relative">
-                                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-dark">$</span>
-                                <Input 
-                                  placeholder="$"
-                                  className="pl-8"
-                                  value={field.value || ''}
-                                  onChange={(e) => {
-                                    const formatted = formatNumberInput(e.target.value);
-                                    field.onChange(formatted ? Number(formatted) : 0);
-                                    setPendingChanges(true);
-                                    
-                                    // AOTC와 LLC 합계를 교육 세액공제에 반영
-                                    const aotcCredit = form.getValues('aotcCredit') || 0;
-                                    const total = (formatted ? Number(formatted) : 0) + aotcCredit;
-                                    form.setValue('educationCredits', total);
-                                  }}
-                                />
-                              </div>
+                              <Input 
+                                placeholder="$"
+                                value={field.value || ''}
+                                onChange={(e) => {
+                                  const formatted = formatNumberInput(e.target.value);
+                                  field.onChange(formatted ? Number(formatted) : 0);
+                                  setPendingChanges(true);
+                                  
+                                  // AOTC와 LLC 합계를 교육 세액공제에 반영
+                                  const aotcCredit = form.getValues('aotcCredit') || 0;
+                                  const total = (formatted ? Number(formatted) : 0) + aotcCredit;
+                                  form.setValue('educationCredits', total);
+                                }}
+                              />
                             </FormControl>
                             <FormDescription>
                               납세자당 최대 $2,000까지 공제 가능
@@ -1498,19 +1478,15 @@ const TaxCredits3Page: React.FC = () => {
                           <FormItem>
                             <FormLabel>외국납부세액공제액 (Foreign Tax Credit Amount)</FormLabel>
                             <FormControl>
-                              <div className="relative">
-                                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-dark">$</span>
-                                <Input 
-                                  placeholder="$"
-                                  className="pl-8"
-                                  value={field.value || ''}
-                                  onChange={(e) => {
-                                    const formatted = formatNumberInput(e.target.value);
-                                    field.onChange(formatted ? Number(formatted) : 0);
-                                    setPendingChanges(true);
-                                  }}
-                                />
-                              </div>
+                              <Input 
+                                placeholder="$"
+                                value={field.value || ''}
+                                onChange={(e) => {
+                                  const formatted = formatNumberInput(e.target.value);
+                                  field.onChange(formatted ? Number(formatted) : 0);
+                                  setPendingChanges(true);
+                                }}
+                              />
                             </FormControl>
                             <FormDescription className="text-sm text-gray-600">
                               외국에서 납부한 소득세액을 입력하세요. $300 초과 시 Form 1116이 필요할 수 있습니다.
@@ -1573,19 +1549,15 @@ const TaxCredits3Page: React.FC = () => {
                               </Button>
                             </div>
                             <FormControl>
-                              <div className="relative">
-                                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-dark">$</span>
-                                <Input 
-                                  placeholder="$"
-                                  className="pl-8"
-                                  value={field.value || ''}
-                                  onChange={(e) => {
-                                    const formatted = formatNumberInput(e.target.value);
-                                    field.onChange(formatted ? Number(formatted) : 0);
-                                    setPendingChanges(true);
-                                  }}
-                                />
-                              </div>
+                              <Input 
+                                placeholder="$"
+                                value={field.value || ''}
+                                onChange={(e) => {
+                                  const formatted = formatNumberInput(e.target.value);
+                                  field.onChange(formatted ? Number(formatted) : 0);
+                                  setPendingChanges(true);
+                                }}
+                              />
                             </FormControl>
                             <FormDescription className="text-sm text-gray-600">
                               {taxData.personalInfo?.filingStatus === 'married_joint' 

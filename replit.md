@@ -61,9 +61,19 @@ Page Layout Preference:
   - Applied to: TaxCredits.tsx, AdditionalTax.tsx, RetirementContributions.tsx, TaxCredits3.tsx
   - Key Fix: Use placeholder="$" with simple Input components instead of complex relative div structures with absolute positioned dollar symbols
   - **TaxCredits3.tsx Updates (2025-01-13)**: 
-    - Fixed "기타 부양가족 공제 (Credit for Other Dependents)" field duplicate "$" symbols
-    - Removed absolute positioned span elements and pl-8 classes from Child Tax Credit field
-    - All input field placeholders standardized to "$" format for consistency
+    - Fixed ALL duplicate "$" symbols across TaxCredits3.tsx page
+    - Removed absolute positioned span elements and pl-8 classes from ALL fields:
+      * "기타 부양가족 공제 (Credit for Other Dependents)" field
+      * Child Tax Credit (자녀 세액공제) field
+      * 자녀 및 부양가족 돌봄비용 세액공제 field
+      * 총 돌봄 비용 field
+      * 지불 금액 field  
+      * 미국 오퍼튜니티 세액공제 (AOTC) field
+      * 평생 학습 세액공제 (LLC) field
+      * 외국납부세액공제액 (Foreign Tax Credit) field
+      * 근로소득공제액 (Earned Income Credit) field
+    - All input field placeholders standardized to "$" format for clean UI consistency
+    - Complete systematic fix applied to ensure no duplicate "$" symbols remain in any tax credit input fields
 
 - **Password Reset System Implementation (2025-01-12)**: Complete email-based password reset system with Gmail integration and proper salt/hash security.
   - **Email Integration**: Gmail SMTP configuration with proper domain handling (Replit vs localhost)
