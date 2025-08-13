@@ -652,8 +652,13 @@ export default function IncomePage() {
                                   variant="outline"
                                   size="sm"
                                   onClick={() => {
-                                    // K-1 소득 합계 가져오기
-                                    const k1Income = taxData.income?.businessExpense?.k1TotalIncome || 0;
+                                    // K-1 소득 합계 가져오기 (올바른 필드명 사용)
+                                    const k1Income = taxData.income?.businessExpense?.totalK1Income || 0;
+                                    console.log('K-1 소득 가져오기 시도:', {
+                                      businessExpense: taxData.income?.businessExpense,
+                                      totalK1Income: taxData.income?.businessExpense?.totalK1Income,
+                                      k1Items: taxData.income?.businessExpense?.k1Items
+                                    });
                                     if (k1Income > 0) {
                                       form.setValue('businessIncome', k1Income);
                                       calculateTotals();
