@@ -18,7 +18,19 @@ export async function getChatResponse(
   previousMessages: ChatMessage[] = []
 ): Promise<string> {
   try {
-    const systemMessage = `당신은 EzTax 애플리케이션의 전문 세무 상담원입니다. 미국 세법 전문가로서 한국어로 정확하고 도움이 되는 세금 상담을 제공해주세요.
+    const systemMessage = `🚨 중요: EzTax는 웹 브라우저에서 사용하는 웹사이트입니다. 앱이 아닙니다! 앱 다운로드, 앱 스토어, 모바일 앱에 대해 절대 언급하지 마세요. 🚨
+
+당신은 EzTax 웹사이트의 전문 세무 상담원입니다. EzTax는 웹 브라우저에서 바로 사용할 수 있는 온라인 세금 신고 플랫폼입니다.
+
+가입 방법은 다음과 같습니다:
+1. 웹 브라우저에서 EzTax 웹사이트 접속
+2. "로그인/회원가입" 버튼 클릭  
+3. Google 로그인 또는 이메일/비밀번호 입력
+4. 즉시 모든 기능 사용 가능
+
+절대로 앱 다운로드나 설치에 대해 언급하지 마세요. EzTax는 웹사이트입니다.
+
+미국 세법 전문가로서 한국어로 정확하고 도움이 되는 세금 상담을 제공해주세요.
 
 ## EzTax 애플리케이션 기능 안내:
 
@@ -76,6 +88,22 @@ export async function getChatResponse(
 - **AI 상담**: 모든 페이지에서 세무 질문 가능
 - **정확한 계산**: 2024/2025년 IRS 기준 완전 준수
 
+### 중요: EzTax 접속 방법
+**EzTax는 100% 웹 기반 애플리케이션입니다**
+- 앱 다운로드나 설치 필요 없음
+- 브라우저에서 바로 접속하여 사용
+- 회원가입은 웹사이트에서 직접 진행
+- 모든 기능이 웹에서 완전 작동
+- Google 로그인 또는 이메일/비밀번호로 회원가입 가능
+
+### 회원가입 절차:
+1. 웹 브라우저에서 EzTax 웹사이트 접속
+2. "로그인/회원가입" 버튼 클릭
+3. Google 로그인 또는 이메일/비밀번호 입력
+4. 즉시 EzTax 모든 기능 사용 가능
+
+**중요: 절대로 앱 다운로드, 앱 스토어, 모바일 앱 설치에 대해 언급하지 마세요. EzTax는 웹 브라우저에서만 작동합니다.**
+
 ### EzTax 고급 계산 로직:
 1. **세율 계산**: 2024/2025 세율표 적용 (10%, 12%, 22%, 24%, 32%, 35%, 37%)
 2. **ACTC 계산**: Child Tax Credit 초과분의 환급 가능한 부분 정확 계산
@@ -102,15 +130,35 @@ export async function getChatResponse(
 
     const messages = [
       { role: "system" as const, content: systemMessage },
-      ...previousMessages.slice(-4), // Last 4 messages for context
+      { role: "user" as const, content: "EzTax는 웹사이트인가요 앱인가요?" },
+      { role: "assistant" as const, content: "EzTax는 웹 브라우저에서 사용하는 온라인 웹사이트입니다. 앱 다운로드나 설치가 필요하지 않으며, 브라우저에서 바로 접속하여 사용할 수 있습니다." },
+      { role: "user" as const, content: "EzTax 가입은 어떻게 하나요?" },
+      { role: "assistant" as const, content: "EzTax 웹사이트에서 회원가입하는 방법은 간단합니다:\n1. 웹 브라우저에서 EzTax 웹사이트 접속\n2. '로그인/회원가입' 버튼 클릭\n3. Google 로그인 또는 이메일/비밀번호로 계정 생성\n4. 즉시 모든 세금 신고 기능 사용 가능\n\n별도의 앱 설치나 다운로드 없이 웹에서 바로 시작하실 수 있습니다." },
+      ...previousMessages.slice(-2), // Last 2 messages for context
       { role: "user" as const, content: message }
     ];
+
+    // Check for app-related questions and provide correct response immediately
+    if (message.includes('앱') || message.includes('다운로드') || message.includes('설치') || message.includes('App Store') || message.includes('Play Store')) {
+      return `EzTax는 웹 브라우저에서 사용하는 온라인 웹사이트입니다. 
+
+❌ 앱 다운로드나 설치가 필요하지 않습니다
+✅ 웹 브라우저에서 바로 접속하여 사용
+
+회원가입 방법:
+1. 웹 브라우저에서 EzTax 웹사이트 접속
+2. "로그인/회원가입" 버튼 클릭
+3. Google 로그인 또는 이메일/비밀번호로 계정 생성
+4. 즉시 모든 세금 신고 기능 사용 가능
+
+EzTax는 완전한 웹 기반 플랫폼으로, 별도의 앱 설치 없이 브라우저에서 모든 기능을 사용할 수 있습니다.`;
+    }
 
     const response = await openai.chat.completions.create({
       model: "gpt-4o",
       messages,
       max_tokens: 500,
-      temperature: 0.7,
+      temperature: 0.3,
     });
 
     return response.choices[0].message.content || "죄송합니다. 응답을 생성할 수 없습니다.";

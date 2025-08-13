@@ -117,6 +117,11 @@ Page Layout Preference:
     - Font size: text-sm → text-base for improved readability
     - Message area: max-w-85% for wider text display
     - Line spacing: leading-relaxed for better visual clarity
+  - **EzTax Information Accuracy Fix (2025-01-13)**: Corrected ChatBot responses about EzTax platform type
+    - Fixed incorrect "app download" suggestions - EzTax is 100% web-based
+    - Added pre-filtering for app-related questions with correct responses
+    - Enhanced system prompts with example conversations for consistency
+    - ChatBot now correctly identifies EzTax as web-only platform requiring no downloads
 
 ### Current Active Page Files (2025-01-13)
 - **Income Page**: Currently using `Income-fixed.tsx` as the main income input page (referenced in App.tsx as IncomePage component)
