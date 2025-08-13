@@ -9,6 +9,7 @@ import { useTaxContext, TaxData } from '@/context/TaxContext';
 import { Separator } from '@/components/ui/separator';
 import { HelpCircle, ArrowLeft, ArrowRight, CheckCircle } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { ChatBot } from '@/components/ChatBot';
 
 enum CheckerStep {
   START = 'start',
@@ -352,6 +353,7 @@ export default function FilingStatusChecker() {
           {renderCurrentStep()}
         </CardContent>
       </Card>
+      <ChatBot context="세금 신고 상태 확인" />
     </div>
   );
 }

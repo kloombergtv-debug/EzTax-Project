@@ -100,7 +100,7 @@ Page Layout Preference:
 
 ### AI ChatBot Integration Completion (2025-01-13)
 - **Complete AI ChatBot Expansion**: Successfully integrated AI chatbot across ALL major application pages
-  - **Pages with ChatBot**: PersonalInfo, TaxCredits, Deductions, Review, AdditionalTax, RetirementContributions, auth-page, CapitalGainsCalculator, BusinessExpense, TaxCredits3, Income-fixed (12 total pages, Home excluded per user preference)
+  - **Pages with ChatBot**: PersonalInfo, TaxCredits, Deductions, Review, AdditionalTax, RetirementContributions, auth-page, CapitalGainsCalculator, BusinessExpense, TaxCredits3, Income-fixed, FilingStatusChecker (13 total pages, Home excluded per user preference)
   - **Implementation**: Each page has dedicated ChatBot component with contextual support (e.g., "기본정보", "세액공제", "자본이득계산기")
   - **Technology**: OpenAI GPT-4o model with Korean tax expertise system prompts
   - **EzTax-Specific Training**: ChatBot now trained on complete EzTax application functionality
