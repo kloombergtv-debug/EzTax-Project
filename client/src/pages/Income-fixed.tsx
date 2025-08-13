@@ -98,7 +98,7 @@ export default function IncomePage() {
   
   // QBI에서 businessIncome 가져오기 (자동 로드 비활성화)
   const qbiBusinessIncome = 0; // 자동 로드 비활성화
-  const effectiveBusinessIncome = taxData.income?.businessIncome || 0;
+  const effectiveBusinessIncome = 0; // 강제로 0으로 초기화
   
   console.log('폼 초기화 - QBI 데이터 확인:', {
     qbiData: taxData.income?.qbi,
@@ -133,10 +133,17 @@ export default function IncomePage() {
     defaultValues,
   });
 
-  // QBI 자동 로드 기능 비활성화 (사용자가 직접 선택하도록 변경)
-  // useEffect(() => {
-  //   // 자동 QBI 로드 비활성화됨
-  // }, []);
+  // businessIncome 필드를 0으로 강제 초기화
+  useEffect(() => {
+    // 페이지 로드 시 사업소득을 0으로 강제 초기화
+    if (form.getValues('businessIncome') !== 0) {
+      console.log('사업소득 필드 강제 초기화: 0');
+      form.setValue('businessIncome', 0, { 
+        shouldValidate: false, 
+        shouldDirty: false 
+      });
+    }
+  }, []); // 페이지 로드 시 한 번만 실행
   
   // 총소득과 조정 총소득을 계산하는 함수
   // 심플하게 합계만 리턴하는 함수로 변경
