@@ -5,6 +5,7 @@ import { insertTaxReturnSchema, insertRetirementAssessmentSchema, retirementAsse
 import { z } from "zod";
 import nodemailer from "nodemailer";
 import path from "path";
+import { getChatResponse } from "./openai";
 
 // Configure email transporter for Gmail with better error handling
 const createEmailTransporter = () => {
@@ -958,6 +959,28 @@ ${message || '상담 요청'}
     } catch (error) {
       console.error('Error deleting user retirement assessments:', error);
       res.status(500).json({ message: 'Failed to delete retirement assessments' });
+    }
+  });
+
+  // ChatBot API endpoint
+  app.post('/api/chat', async (req, res) => {
+    try {
+      const { message, context, messages } = req.body;
+      
+      if (!message || typeof message !== 'string') {
+        return res.status(400).json({ message: '메시지를 입력해주세요' });
+      }
+
+      console.log(`ChatBot request - Context: ${context}, Message: ${message.substring(0, 100)}...`);
+      
+      const response = await getChatResponse(message, context || '', messages || []);
+      
+      res.json({ message: response });
+    } catch (error) {
+      console.error('ChatBot API error:', error);
+      res.status(500).json({ 
+        message: error instanceof Error ? error.message : 'AI 상담 서비스에 오류가 발생했습니다' 
+      });
     }
   });
 

@@ -28,6 +28,7 @@ import {
   DialogFooter,
   DialogClose,
 } from "@/components/ui/dialog";
+import { ChatBot } from '@/components/ChatBot';
 
 export default function IncomePage() {
   const [, setLocation] = useLocation();
@@ -1293,6 +1294,9 @@ export default function IncomePage() {
         </div>
         */}
       </div>
+      
+      {/* AI ChatBot */}
+      <ChatBot context="소득 입력" />
     </div>
   );
 }
