@@ -287,14 +287,17 @@ export default function BusinessExpensePage() {
                           if (inputValue === '') {
                             field.onChange(0);
                           } else {
-                            // 정수인지 확인 (소수점이 없으면)
+                            // 부동소수점 정밀도 문제 해결
+                            let numValue;
                             if (inputValue.includes('.')) {
-                              const numValue = parseFloat(inputValue);
+                              numValue = parseFloat(inputValue);
+                              // 소수점이 있으면 2자리까지만
                               if (!isNaN(numValue)) {
+                                numValue = parseFloat(numValue.toFixed(2));
                                 field.onChange(numValue);
                               }
                             } else {
-                              const numValue = parseInt(inputValue, 10);
+                              numValue = parseInt(inputValue, 10);
                               if (!isNaN(numValue)) {
                                 field.onChange(numValue);
                               }
@@ -339,14 +342,17 @@ export default function BusinessExpensePage() {
                               if (inputValue === '') {
                                 field.onChange(0);
                               } else {
-                                // 정수인지 확인 (소수점이 없으면)
+                                // 부동소수점 정밀도 문제 해결
+                                let numValue;
                                 if (inputValue.includes('.')) {
-                                  const numValue = parseFloat(inputValue);
+                                  numValue = parseFloat(inputValue);
+                                  // 소수점이 있으면 2자리까지만
                                   if (!isNaN(numValue)) {
+                                    numValue = parseFloat(numValue.toFixed(2));
                                     field.onChange(numValue);
                                   }
                                 } else {
-                                  const numValue = parseInt(inputValue, 10);
+                                  numValue = parseInt(inputValue, 10);
                                   if (!isNaN(numValue)) {
                                     field.onChange(numValue);
                                   }
@@ -506,10 +512,11 @@ export default function BusinessExpensePage() {
                                     if (inputValue === '') {
                                       field.onChange(0);
                                     } else {
-                                      // 정수인지 확인 (소수점이 없으면)
+                                      // 부동소수점 정밀도 문제 해결
                                       if (inputValue.includes('.')) {
                                         ownershipPercentage = parseFloat(inputValue);
                                         if (!isNaN(ownershipPercentage)) {
+                                          ownershipPercentage = parseFloat(ownershipPercentage.toFixed(2));
                                           field.onChange(ownershipPercentage);
                                         } else {
                                           return; // 유효하지 않은 값이면 계산하지 않음
@@ -527,7 +534,7 @@ export default function BusinessExpensePage() {
                                     // 지분율 변경시 소득도 자동 재계산
                                     const totalIncome = form.getValues(`k1Items.${index}.totalEntityIncome`) || 0;
                                     const myShare = (totalIncome * ownershipPercentage) / 100;
-                                    form.setValue(`k1Items.${index}.ordinaryIncome`, myShare);
+                                    form.setValue(`k1Items.${index}.ordinaryIncome`, parseFloat(myShare.toFixed(2)));
                                     // K-1 총소득 재계산
                                     setTimeout(() => calculateTotalK1Income(), 0);
                                   }}
@@ -582,10 +589,11 @@ export default function BusinessExpensePage() {
                                     if (inputValue === '') {
                                       field.onChange(0);
                                     } else {
-                                      // 정수인지 확인 (소수점이 없으면)
+                                      // 부동소수점 정밀도 문제 해결
                                       if (inputValue.includes('.')) {
                                         totalIncome = parseFloat(inputValue);
                                         if (!isNaN(totalIncome)) {
+                                          totalIncome = parseFloat(totalIncome.toFixed(2));
                                           field.onChange(totalIncome);
                                         } else {
                                           return; // 유효하지 않은 값이면 계산하지 않음
@@ -603,7 +611,7 @@ export default function BusinessExpensePage() {
                                     // 지분율에 따라 자동으로 개인 소득 계산
                                     const ownershipPercentage = form.getValues(`k1Items.${index}.ownershipPercentage`) || 0;
                                     const myShare = (totalIncome * ownershipPercentage) / 100;
-                                    form.setValue(`k1Items.${index}.ordinaryIncome`, myShare);
+                                    form.setValue(`k1Items.${index}.ordinaryIncome`, parseFloat(myShare.toFixed(2)));
                                     // K-1 총소득 재계산
                                     setTimeout(() => calculateTotalK1Income(), 0);
                                   }}
@@ -646,8 +654,9 @@ export default function BusinessExpensePage() {
                                     if (inputValue === '') {
                                       field.onChange(0);
                                     } else {
-                                      const value = parseFloat(inputValue);
+                                      let value = parseFloat(inputValue);
                                       if (!isNaN(value)) {
+                                        value = parseFloat(value.toFixed(2));
                                         field.onChange(value);
                                       }
                                     }
@@ -678,8 +687,9 @@ export default function BusinessExpensePage() {
                                     if (inputValue === '') {
                                       field.onChange(0);
                                     } else {
-                                      const value = parseFloat(inputValue);
+                                      let value = parseFloat(inputValue);
                                       if (!isNaN(value)) {
+                                        value = parseFloat(value.toFixed(2));
                                         field.onChange(value);
                                       }
                                     }
@@ -711,8 +721,9 @@ export default function BusinessExpensePage() {
                                     if (inputValue === '') {
                                       field.onChange(0);
                                     } else {
-                                      const value = parseFloat(inputValue);
+                                      let value = parseFloat(inputValue);
                                       if (!isNaN(value)) {
+                                        value = parseFloat(value.toFixed(2));
                                         field.onChange(value);
                                       }
                                     }
@@ -744,8 +755,9 @@ export default function BusinessExpensePage() {
                                     if (inputValue === '') {
                                       field.onChange(0);
                                     } else {
-                                      const value = parseFloat(inputValue);
+                                      let value = parseFloat(inputValue);
                                       if (!isNaN(value)) {
+                                        value = parseFloat(value.toFixed(2));
                                         field.onChange(value);
                                       }
                                     }
@@ -776,8 +788,9 @@ export default function BusinessExpensePage() {
                                     if (inputValue === '') {
                                       field.onChange(0);
                                     } else {
-                                      const value = parseFloat(inputValue);
+                                      let value = parseFloat(inputValue);
                                       if (!isNaN(value)) {
+                                        value = parseFloat(value.toFixed(2));
                                         field.onChange(value);
                                       }
                                     }
@@ -809,8 +822,9 @@ export default function BusinessExpensePage() {
                                     if (inputValue === '') {
                                       field.onChange(0);
                                     } else {
-                                      const value = parseFloat(inputValue);
+                                      let value = parseFloat(inputValue);
                                       if (!isNaN(value)) {
+                                        value = parseFloat(value.toFixed(2));
                                         field.onChange(value);
                                       }
                                     }
