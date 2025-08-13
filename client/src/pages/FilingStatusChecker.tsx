@@ -345,9 +345,8 @@ export default function FilingStatusChecker() {
         </p>
       </div>
 
-      <div className="mb-8 p-4 bg-blue-50 rounded-lg border border-blue-200">
-        <h3 className="text-lg font-semibold text-blue-800 mb-3">💬 AI 세무 전문가 도움</h3>
-        <ChatBot context="세금 신고 상태 확인" />
+      <div className="mb-8">
+        <ChatBot context="세금 신고 상태 확인" inline={true} />
       </div>
       
       <Card className="mb-6">

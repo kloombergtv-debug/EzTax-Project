@@ -493,9 +493,8 @@ export default function IncomePage() {
       </div>
       
       {/* AI ChatBot - 상단에 위치 */}
-      <div className="mb-8 p-4 bg-blue-50 rounded-lg border border-blue-200">
-        <h3 className="text-lg font-semibold text-blue-800 mb-3">💬 AI 세무 전문가 도움</h3>
-        <ChatBot context="소득 입력" />
+      <div className="mb-8">
+        <ChatBot context="소득 입력" inline={true} />
       </div>
 
       {/* 메인 컨텐츠 - 전체 너비 사용 */}
