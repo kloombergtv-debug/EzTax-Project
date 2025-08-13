@@ -98,10 +98,15 @@ Page Layout Preference:
     - Applied regex pattern /[^0-9]/g (no decimal points) to all input validation
   - Status: All number displays now show clean integers (e.g., "89,200" instead of "89,200.01")
 
-### Current Active Page Files (2025-01-12)
+### Current Active Page Files (2025-01-13)
 - **Income Page**: Currently using `Income-fixed.tsx` as the main income input page (referenced in App.tsx as IncomePage component)
 - **Video Status**: YouTube instructional video temporarily removed from Income-fixed.tsx (user request, to be restored after 1 hour)
 - **Layout**: Modified to use full-width layout when video is removed (grid-cols-1 instead of grid-cols-2)
+- **AI ChatBot**: Successfully integrated AI chatbot on Income page with OpenAI GPT-4o model
+  - **Components**: ChatBot.tsx component with real-time chat interface
+  - **Backend**: /api/chat endpoint with Korean tax expertise system prompt
+  - **Status**: Functional but requires valid OpenAI API key with sufficient quota
+  - **Current Issue**: API quota exceeded - user needs to check OpenAI billing/usage limits
 
 ## External Dependencies
 

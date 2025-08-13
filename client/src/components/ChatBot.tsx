@@ -54,7 +54,7 @@ export function ChatBot({ context = "소득 입력" }: ChatBotProps) {
     setIsLoading(true);
 
     try {
-      const response = await apiRequest('/api/chat', {
+      const response = await fetch('/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -65,6 +65,10 @@ export function ChatBot({ context = "소득 입력" }: ChatBotProps) {
           messages: messages.slice(-5) // Send last 5 messages for context
         })
       });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
 
       const data = await response.json();
 

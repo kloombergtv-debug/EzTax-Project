@@ -52,6 +52,24 @@ export async function getChatResponse(
     return response.choices[0].message.content || "죄송합니다. 응답을 생성할 수 없습니다.";
   } catch (error) {
     console.error("OpenAI API 오류:", error);
+    
+    // Check if it's a quota exceeded error
+    if (error instanceof Error && error.message.includes('quota')) {
+      return `현재 OpenAI API 할당량이 초과되었습니다. 
+
+OpenAI 계정의 결제 상태와 사용량 한도를 확인해주세요:
+- OpenAI 대시보드에서 Usage와 Billing 섹션을 확인
+- 결제 방법이 유효한지 확인
+- 새로운 API 키 발급을 고려해보세요
+
+임시 해결방법:
+1. OpenAI API 할당량 증가
+2. 새로운 결제 카드 등록
+3. 다른 OpenAI 계정 사용
+
+세금 관련 기본 질문이 있으시면 FAQ나 도움말을 참조해주세요.`;
+    }
+    
     throw new Error("AI 상담 서비스에 일시적인 문제가 발생했습니다. 잠시 후 다시 시도해 주세요.");
   }
 }
