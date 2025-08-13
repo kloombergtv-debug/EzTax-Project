@@ -683,10 +683,8 @@ const TaxCredits3Page: React.FC = () => {
                               <FormControl>
                                 <div className="relative flex gap-2">
                                   <div className="flex-grow relative">
-                                    <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-dark">$</span>
                                     <Input 
                                       placeholder="$"
-                                      className="pl-8"
                                       value={field.value || ''}
                                       onChange={(e) => {
                                         const formatted = formatNumberInput(e.target.value);
@@ -725,10 +723,8 @@ const TaxCredits3Page: React.FC = () => {
                               <FormControl>
                                 <div className="relative flex gap-2">
                                   <div className="flex-grow relative">
-                                    <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-dark">$</span>
                                     <Input 
                                       placeholder="$"
-                                      className="pl-8"
                                       value={field.value || ''}
                                       onChange={(e) => {
                                         const formatted = formatNumberInput(e.target.value);

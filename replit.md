@@ -56,10 +56,14 @@ Page Layout Preference:
 - **Input Field Dollar Sign Duplication Issue (2025-01-11)**: Multiple pages (TaxCredits, AdditionalTax, RetirementContributions) showed "$ $" or duplicate dollar signs in input fields.
   - Root Cause: CSS absolute positioning added "$" symbols while placeholders also contained "$" symbols
   - Solution: Removed CSS absolute positioned `<span>` elements containing "$" symbols from all affected pages
-  - Updated placeholders to "$0" format instead of "0.00" or "$" to maintain proper dollar formatting
+  - Updated placeholders to "$" format instead of "$0" or "0.00" to maintain proper dollar formatting
   - Removed `pl-8` padding classes that were accommodating the removed absolute positioned elements
-  - Applied to: TaxCredits.tsx, AdditionalTax.tsx, RetirementContributions.tsx
-  - Key Fix: Use placeholder="$0" with simple Input components instead of complex relative div structures with absolute positioned dollar symbols
+  - Applied to: TaxCredits.tsx, AdditionalTax.tsx, RetirementContributions.tsx, TaxCredits3.tsx
+  - Key Fix: Use placeholder="$" with simple Input components instead of complex relative div structures with absolute positioned dollar symbols
+  - **TaxCredits3.tsx Updates (2025-01-13)**: 
+    - Fixed "기타 부양가족 공제 (Credit for Other Dependents)" field duplicate "$" symbols
+    - Removed absolute positioned span elements and pl-8 classes from Child Tax Credit field
+    - All input field placeholders standardized to "$" format for consistency
 
 - **Password Reset System Implementation (2025-01-12)**: Complete email-based password reset system with Gmail integration and proper salt/hash security.
   - **Email Integration**: Gmail SMTP configuration with proper domain handling (Replit vs localhost)

@@ -187,7 +187,7 @@ const TaxCreditsPage: React.FC = () => {
                               <div>
                                 <Input 
                                   {...field} 
-                                  placeholder="$0"
+                                  placeholder="$"
                                   className=""
                                   value={field.value || ''}
                                   onChange={(e) => {
@@ -238,7 +238,7 @@ const TaxCreditsPage: React.FC = () => {
                               <div>
                                 <Input 
                                   {...field} 
-                                  placeholder="$0"
+                                  placeholder="$"
                                   className=""
                                   value={field.value || ''}
                                   onChange={(e) => {
@@ -285,7 +285,7 @@ const TaxCreditsPage: React.FC = () => {
                               <div>
                                 <Input 
                                   {...field} 
-                                  placeholder="$0"
+                                  placeholder="$"
                                   className=""
                                   value={field.value || ''}
                                   onChange={(e) => {
@@ -336,7 +336,7 @@ const TaxCreditsPage: React.FC = () => {
                               <div>
                                 <Input 
                                   {...field} 
-                                  placeholder="$0"
+                                  placeholder="$"
                                   className=""
                                   value={field.value || ''}
                                   onChange={(e) => {
@@ -399,7 +399,7 @@ const TaxCreditsPage: React.FC = () => {
                               <div>
                                 <Input 
                                   {...field} 
-                                  placeholder="$0"
+                                  placeholder="$"
                                   className=""
                                   value={field.value || ''}
                                   onChange={(e) => {
@@ -437,7 +437,7 @@ const TaxCreditsPage: React.FC = () => {
                               <div>
                                 <Input 
                                   {...field} 
-                                  placeholder="$0"
+                                  placeholder="$"
                                   className=""
                                   value={field.value || ''}
                                   onChange={(e) => {
