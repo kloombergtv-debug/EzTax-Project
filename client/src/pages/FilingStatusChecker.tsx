@@ -353,7 +353,10 @@ export default function FilingStatusChecker() {
           {renderCurrentStep()}
         </CardContent>
       </Card>
-      <ChatBot context="세금 신고 상태 확인" />
+      
+      <div className="mb-6">
+        <ChatBot context="세금 신고 상태 확인" />
+      </div>
     </div>
   );
 }
