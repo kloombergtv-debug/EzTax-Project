@@ -106,10 +106,10 @@ export function ChatBot({ context = "소득 입력" }: ChatBotProps) {
       <div className="fixed bottom-24 right-6 z-50">
         <Button
           onClick={() => setIsOpen(true)}
-          className="h-14 w-14 rounded-full bg-blue-600 hover:bg-blue-700 shadow-lg"
+          className="h-18 w-18 rounded-full bg-blue-600 hover:bg-blue-700 shadow-xl animate-pulse hover:animate-none hover:scale-110 transition-transform"
           size="icon"
         >
-          <MessageCircle className="h-6 w-6 text-white" />
+          <Bot className="h-8 w-8 text-white" />
         </Button>
       </div>
     );
