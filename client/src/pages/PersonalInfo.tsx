@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { personalInfoSchema, type PersonalInformation } from '@shared/schema';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -323,9 +323,9 @@ const PersonalInfo: React.FC = () => {
       </div>
 
       {/* 메인 컨텐츠 - 입력 폼과 동영상을 나란히 배치 */}
-      <div className="grid grid-cols-1 gap-6">
-        {/* 입력 폼 영역 (전체 너비) */}
-        <div className="col-span-1">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* 입력 폼 영역 (50% 너비) */}
+        <div className="lg:col-span-1">
           <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           
@@ -677,6 +677,28 @@ const PersonalInfo: React.FC = () => {
           </div>
             </form>
           </Form>
+        </div>
+
+        {/* YouTube 동영상 영역 (50% 너비) */}
+        <div className="lg:col-span-1">
+          <div className="lg:sticky lg:top-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>세금 신고 도움말 영상</CardTitle>
+              </CardHeader>
+              <CardContent className="p-0">
+                <div className="w-full pb-[75%] relative">
+                  <iframe
+                    src="https://www.youtube.com/embed/kce8i5gAG1k"
+                    title="세금 신고 도움말"
+                    className="absolute inset-0 w-full h-full rounded-b-lg"
+                    frameBorder="0"
+                    allowFullScreen
+                  ></iframe>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
 
       </div>
