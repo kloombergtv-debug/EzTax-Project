@@ -122,7 +122,7 @@ export function ChatBot({ context = "소득 입력" }: ChatBotProps) {
           <div className="flex items-center justify-between">
             <CardTitle className="text-lg flex items-center gap-2">
               <Bot className="h-5 w-5 text-blue-600" />
-              세무도우미
+              세금 AI 상담
             </CardTitle>
             <Button
               variant="ghost"
