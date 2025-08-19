@@ -1422,9 +1422,7 @@ export default function RetirementScoreStepByStep() {
                               variant="outline"
                               onClick={() => setShowSSCalculator(!showSSCalculator)}
                               className="flex items-center gap-1 whitespace-nowrap"
-                            >
-                              📊 상세 Social Security 계산기
-                            </Button>
+                            >📊 Social Security 예상액</Button>
                           </div>
                           <FormMessage />
                         </FormItem>
