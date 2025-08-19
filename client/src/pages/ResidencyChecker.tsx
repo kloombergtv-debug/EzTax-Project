@@ -69,12 +69,12 @@ const ResidencyChecker: React.FC = () => {
     
     // 면제 체류 기간 계산 (미국 최초 입국일부터)
     let exemptYears = 0;
+    let exemptDays = 0;
     if (data.visaStartDate) {
       const firstEntryDate = new Date(data.visaStartDate);
-      const firstEntryYear = firstEntryDate.getFullYear();
-      const currentYear = currentDate.getFullYear();
-      // 면제 체류자로 체류한 첫 달력연도부터 카운트
-      exemptYears = currentYear - firstEntryYear;
+      const timeDiff = currentDate.getTime() - firstEntryDate.getTime();
+      exemptDays = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+      exemptYears = Math.floor(exemptDays / 365.25); // 윤년 고려
     }
 
     // 비자별 예외 규정 확인
@@ -93,11 +93,11 @@ const ResidencyChecker: React.FC = () => {
             twoPrevious: 0,
           },
           isVisaException: true,
-          visaNote: `${data.visaType.toUpperCase()} 학생: 면제 체류 ${exemptYears}년차 (5년 미만) → 자동 비거주자`,
+          visaNote: `${data.visaType.toUpperCase()} 학생: 면제 체류 ${Math.round(exemptDays)}일 (${(exemptDays/365.25).toFixed(1)}년, 5년 미만) → 자동 비거주자`,
           exemptionYears: 5
         };
       } else {
-        visaNote = `${data.visaType.toUpperCase()} 학생: 면제 체류 ${exemptYears}년차 (5년 초과) → 일반 SPT 적용`;
+        visaNote = `${data.visaType.toUpperCase()} 학생: 면제 체류 ${Math.round(exemptDays)}일 (${(exemptDays/365.25).toFixed(1)}년, 5년 초과) → 일반 SPT 적용`;
       }
     } else if (data.visaType === 'j1_non_student') {
       exemptionLimit = 2;
@@ -111,15 +111,15 @@ const ResidencyChecker: React.FC = () => {
             twoPrevious: 0,
           },
           isVisaException: true,
-          visaNote: `J-1 비학생 (교수/연구원): 면제 체류 ${exemptYears}년차 (2년 미만) → 자동 비거주자`,
+          visaNote: `J-1 비학생 (교수/연구원): 면제 체류 ${Math.round(exemptDays)}일 (${(exemptDays/365.25).toFixed(1)}년, 2년 미만) → 자동 비거주자`,
           exemptionYears: 2
         };
       } else {
         // J-1 Non-Student는 6년 중 2년 룰 적용
         if (exemptYears >= 2 && exemptYears < 6) {
-          visaNote = `J-1 비학생: 면제 체류 ${exemptYears}년차 (2년 이상) → 일반 SPT 적용`;
+          visaNote = `J-1 비학생: 면제 체류 ${Math.round(exemptDays)}일 (${(exemptDays/365.25).toFixed(1)}년, 2년 이상) → 일반 SPT 적용`;
         } else if (exemptYears >= 6) {
-          visaNote = `J-1 비학생: 면제 체류 ${exemptYears}년차 → 6년 중 2년 면제 규칙 확인 필요`;
+          visaNote = `J-1 비학생: 면제 체류 ${Math.round(exemptDays)}일 (${(exemptDays/365.25).toFixed(1)}년) → 6년 중 2년 면제 규칙 확인 필요`;
         }
       }
     } else if (['h1b', 'l1', 'o1', 'tn', 'e2', 'eb_immigrant'].includes(data.visaType)) {
