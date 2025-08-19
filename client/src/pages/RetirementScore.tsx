@@ -1124,7 +1124,6 @@ export default function RetirementScoreStepByStep() {
           4단계 간단한 질문으로 당신의 은퇴 준비 점수를 확인하고 맞춤 전략을 받아보세요
         </p>
       </div>
-
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -1437,9 +1436,7 @@ export default function RetirementScoreStepByStep() {
                       <div className="col-span-full">
                         <Card className="bg-blue-50 border-blue-200">
                           <CardHeader>
-                            <CardTitle className="flex items-center gap-2 text-blue-700">
-                              📊 상세 Social Security 계산기
-                            </CardTitle>
+                            <CardTitle className="flex items-center gap-2 text-blue-700">📊Social Security 추산기</CardTitle>
                             <CardDescription>
                               근무기간과 평균소득을 기반으로 예상 Social Security 연금을 계산합니다
                             </CardDescription>
