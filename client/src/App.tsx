@@ -37,6 +37,7 @@ import BusinessExpense from "@/pages/BusinessExpense";
 import PremiumFeatures from "@/pages/PremiumFeatures";
 import Payment from "@/pages/Payment";
 import FilingStatusChecker from "@/pages/FilingStatusChecker";
+import ResidencyChecker from "@/pages/ResidencyChecker";
 import { AuthProvider } from "@/hooks/use-auth";
 import { ProtectedRoute } from "@/lib/protected-route";
 import { TaxProvider } from "@/context/TaxContext";
@@ -58,6 +59,7 @@ function Router() {
       <ProtectedRoute path="/premium-features" component={PremiumFeatures} />
       <ProtectedRoute path="/payment" component={Payment} />
       <ProtectedRoute path="/filing-status-checker" component={FilingStatusChecker} />
+      <Route path="/residency-checker" component={ResidencyChecker} />
       <ProtectedRoute path="/additional-income" component={AdditionalIncomePage} />
       <ProtectedRoute path="/additional-adjustments" component={AdditionalAdjustmentsPage} />
       <Route path="/retirement-contributions" component={RetirementContributions} />

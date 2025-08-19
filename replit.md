@@ -129,6 +129,21 @@ Page Layout Preference:
 ### Current Active Page Files (2025-01-13)
 - **Income Page**: Currently using `Income-fixed.tsx` as the main income input page (referenced in App.tsx as IncomePage component)
 - **Universal ChatBot**: AI chatbot now available on every major page for comprehensive user support
+- **Residency Checker**: New page `/residency-checker` for US tax residency determination using Substantial Presence Test
+
+### New Feature: US Tax Residency Checker (2025-01-13)
+- **Page Created**: `ResidencyChecker.tsx` - dedicated page for determining US tax residency status
+- **Navigation Updated**: Footer menu changed from '고객지원센터' to '거주자여부확인' linking to new page
+- **Calculation Formula**: Implements IRS Substantial Presence Test formula:
+  - Current year days + (Previous year days × 1/3) + (Two years ago days × 1/6) ≥ 183 days
+- **Features**:
+  - Interactive form with year-specific input fields (2024, 2023, 2022)
+  - Real-time calculation with detailed breakdown
+  - Clear resident/non-resident status determination
+  - Educational content about tax obligations for each status
+  - Responsive design with visual result presentation
+- **ChatBot Integration**: Includes contextual AI support for residency questions
+- **Route**: Available at `/residency-checker` (no authentication required)
 
 ### YouTube Video Configuration (Completely Removed 2025-01-13)
 **Status: All YouTube videos successfully removed from application**
