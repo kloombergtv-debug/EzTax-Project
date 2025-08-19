@@ -65,22 +65,23 @@ const ResidencyChecker: React.FC = () => {
     const currentYear = currentDate.getFullYear();
     const taxYear = currentYear - 1; // 세금 신고 대상 연도 (예: 2025년 → 2024년 신고)
     
-    // 비자 기간 계산
-    let visaYears = 0;
+    // 면제 체류 기간 계산 (미국 최초 입국일부터)
+    let exemptYears = 0;
     if (data.visaType !== 'none' && data.visaStartDate) {
-      const visaStartDate = new Date(data.visaStartDate);
-      const yearsDiff = currentDate.getFullYear() - visaStartDate.getFullYear();
-      const monthsDiff = currentDate.getMonth() - visaStartDate.getMonth();
-      visaYears = yearsDiff + (monthsDiff >= 0 ? 0 : -1);
+      const firstEntryDate = new Date(data.visaStartDate);
+      const firstEntryYear = firstEntryDate.getFullYear();
+      const currentYear = currentDate.getFullYear();
+      // 면제 체류자로 체류한 첫 달력연도부터 카운트
+      exemptYears = currentYear - firstEntryYear;
     }
 
     // 비자별 예외 규정 확인
-    let exemptionYears = 0;
+    let exemptionLimit = 0;
     let visaNote = '';
     
     if (data.visaType === 'f1_student' || data.visaType === 'j1_student' || data.visaType === 'm1_student') {
-      exemptionYears = 5;
-      if (visaYears < 5) {
+      exemptionLimit = 5;
+      if (exemptYears < 5) {
         return {
           totalDays: 0,
           isResident: false,
@@ -90,15 +91,15 @@ const ResidencyChecker: React.FC = () => {
             twoPrevious: 0,
           },
           isVisaException: true,
-          visaNote: `${data.visaType.toUpperCase()} 학생 비자 ${Math.round(visaYears * 10) / 10}년차: 5년 미만으로 자동 비거주자 처리`,
+          visaNote: `${data.visaType.toUpperCase()} 학생: 면제 체류 ${exemptYears}년차 (5년 미만) → 자동 비거주자`,
           exemptionYears: 5
         };
       } else {
-        visaNote = `${data.visaType.toUpperCase()} 학생 비자 ${Math.round(visaYears * 10) / 10}년차: 5년 초과로 일반 SPT 규칙 적용`;
+        visaNote = `${data.visaType.toUpperCase()} 학생: 면제 체류 ${exemptYears}년차 (5년 초과) → 일반 SPT 적용`;
       }
     } else if (data.visaType === 'j1_non_student') {
-      exemptionYears = 2;
-      if (visaYears < 2) {
+      exemptionLimit = 2;
+      if (exemptYears < 2) {
         return {
           totalDays: 0,
           isResident: false,
@@ -108,17 +109,15 @@ const ResidencyChecker: React.FC = () => {
             twoPrevious: 0,
           },
           isVisaException: true,
-          visaNote: `J-1 비학생 (교수/연구원) 비자 ${Math.round(visaYears * 10) / 10}년차: 2년 미만으로 자동 비거주자 처리`,
+          visaNote: `J-1 비학생 (교수/연구원): 면제 체류 ${exemptYears}년차 (2년 미만) → 자동 비거주자`,
           exemptionYears: 2
         };
       } else {
         // J-1 Non-Student는 6년 중 2년 룰 적용
-        const lastSixYears = 6;
-        const exemptYears = 2;
-        if (visaYears >= 2 && visaYears < 6) {
-          visaNote = `J-1 비학생 비자 ${Math.round(visaYears * 10) / 10}년차: 2년 이상이므로 일반 SPT 규칙 적용`;
-        } else if (visaYears >= 6) {
-          visaNote = `J-1 비학생 비자 ${Math.round(visaYears * 10) / 10}년차: 6년 중 2년 면제 규칙 확인 필요`;
+        if (exemptYears >= 2 && exemptYears < 6) {
+          visaNote = `J-1 비학생: 면제 체류 ${exemptYears}년차 (2년 이상) → 일반 SPT 적용`;
+        } else if (exemptYears >= 6) {
+          visaNote = `J-1 비학생: 면제 체류 ${exemptYears}년차 → 6년 중 2년 면제 규칙 확인 필요`;
         }
       }
     }
@@ -141,7 +140,7 @@ const ResidencyChecker: React.FC = () => {
       },
       isVisaException: false,
       visaNote: visaNote || undefined,
-      exemptionYears
+      exemptionYears: exemptionLimit
     };
   };
 
@@ -348,7 +347,7 @@ const ResidencyChecker: React.FC = () => {
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel className="text-sm font-medium text-blue-900">
-                              비자 시작일
+                              미국 최초 입국일 (면제 체류자로)
                             </FormLabel>
                             <FormControl>
                               <Input
@@ -358,10 +357,11 @@ const ResidencyChecker: React.FC = () => {
                               />
                             </FormControl>
                             <div className="text-xs text-blue-700 mt-1 space-y-1">
-                              <div><strong>면제 규정:</strong></div>
+                              <div><strong>⚠️ 중요: 계산 방법</strong></div>
+                              <div>• 비자 발급일이 아닌 <strong>미국 최초 입국일</strong>부터 계산</div>
+                              <div>• <strong>면제 체류자(exempt individual)</strong>로 체류한 <strong>첫 달력연도</strong>부터 카운트</div>
                               <div>• <strong>F-1, J-1, M-1 Student:</strong> 5년 미만 자동 비거주자</div>
                               <div>• <strong>J-1 Non-Student:</strong> 2년 미만 자동 비거주자</div>
-                              <div>• 면제 기간 초과 시 일반 SPT 규칙 적용</div>
                             </div>
                             <FormMessage />
                           </FormItem>
@@ -416,8 +416,9 @@ const ResidencyChecker: React.FC = () => {
                   비자별 특별 규정
                 </h4>
                 <div className="text-sm text-amber-800 space-y-1">
-                  <p>• <strong>F-1, J-1, M-1 Student:</strong> 처음 5년간 SPT 제외 → 자동 비거주자</p>
-                  <p>• <strong>J-1 Non-Student:</strong> 처음 2년간 SPT 제외 → 자동 비거주자</p>
+                  <p>• <strong>F-1, J-1, M-1 Student:</strong> 면제 체류 첫 달력연도부터 5년간 SPT 제외</p>
+                  <p>• <strong>J-1 Non-Student:</strong> 면제 체류 첫 달력연도부터 2년간 SPT 제외</p>
+                  <p>• <strong>계산 기준:</strong> 비자 발급일이 아닌 미국 최초 입국일부터</p>
                   <p>• <strong>면제 기간 초과:</strong> 일반 SPT 규칙 적용 (183일 기준)</p>
                   <p>• <strong>추가 혜택:</strong> Closer Connection Exception, 한미조세조약 적용 가능</p>
                 </div>
