@@ -420,6 +420,7 @@ const ResidencyChecker: React.FC = () => {
                               <div><strong>⚠️ 중요: 면제 기간 계산 방법</strong></div>
                               <div>• 비자 발급일이 아닌 <strong>미국 최초 입국일</strong>부터 계산</div>
                               <div>• <strong>면제 체류자(exempt individual)</strong>로 체류한 <strong>첫 달력연도</strong>부터 카운트</div>
+                              <div>• <strong>면제기간(Exempt Period)</strong>은 미국 체류일수와 관계없이, <strong>캘린더 연도로 계산됨</strong></div>
                               <div>• <strong>F-1, J-1, M-1 Student:</strong> 5년 미만 자동 비거주자</div>
                               <div>• <strong>J-1 Non-Student:</strong> 2년 미만 자동 비거주자</div>
                               <div>• <strong>H-1B, L-1, O-1, TN, E-2, EB:</strong> 면제 기간 없음 (바로 SPT 적용)</div>
