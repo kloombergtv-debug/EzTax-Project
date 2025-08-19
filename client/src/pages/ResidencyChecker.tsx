@@ -96,7 +96,15 @@ const ResidencyChecker: React.FC = () => {
     
     if (data.visaType === 'f1_student' || data.visaType === 'j1_student' || data.visaType === 'm1_student') {
       exemptionLimit = 5;
+      console.log('학생 비자 계산:', {
+        visaType: data.visaType,
+        exemptYears,
+        exemptDays,
+        condition: exemptYears < 5
+      });
+      
       if (exemptYears < 5) {
+        console.log(`${data.visaType.toUpperCase()} 학생: 5년 미만으로 비거주자 반환`);
         return {
           totalDays: 0,
           isResident: false,
