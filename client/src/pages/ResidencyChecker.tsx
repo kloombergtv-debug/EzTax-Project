@@ -15,7 +15,7 @@ const residencySchema = z.object({
   currentYearDays: z.number().min(0).max(366),
   previousYearDays: z.number().min(0).max(366),
   twoPreviousYearDays: z.number().min(0).max(366),
-  visaType: z.enum(['none', 'f1_student', 'j1_student', 'm1_student', 'j1_non_student']),
+  visaType: z.enum(['none', 'f1_student', 'j1_student', 'm1_student', 'j1_non_student', 'h1b', 'l1', 'o1', 'tn', 'e2', 'eb_immigrant']),
   visaStartDate: z.string().optional(),
 });
 
@@ -120,6 +120,17 @@ const ResidencyChecker: React.FC = () => {
           visaNote = `J-1 비학생: 면제 체류 ${exemptYears}년차 → 6년 중 2년 면제 규칙 확인 필요`;
         }
       }
+    } else if (['h1b', 'l1', 'o1', 'tn', 'e2', 'eb_immigrant'].includes(data.visaType)) {
+      // 취업/투자/이민 비자는 면제 기간 없음 - 바로 일반 SPT 적용
+      const visaTypeNames = {
+        h1b: 'H-1B (전문직 취업)',
+        l1: 'L-1 (주재원 파견)',
+        o1: 'O-1 (특기자)',
+        tn: 'TN (NAFTA/USMCA 전문직)',
+        e2: 'E-2 (투자자)',
+        eb_immigrant: 'EB 이민비자/영주권자'
+      };
+      visaNote = `${visaTypeNames[data.visaType as keyof typeof visaTypeNames]}: 면제 기간 없음 → 일반 SPT 규칙 적용`;
     }
 
     // 일반 SPT 계산
@@ -308,8 +319,11 @@ const ResidencyChecker: React.FC = () => {
                   <div className="flex items-center gap-3 mb-4">
                     <GraduationCap className="h-5 w-5 text-blue-600" />
                     <label className="text-sm font-medium">
-                      비자 타입 (해당되는 경우)
+                      비자 타입 선택
                     </label>
+                  </div>
+                  <div className="text-xs text-gray-600 mb-3">
+                    • <strong>"해당 없음"</strong>은 B1/B2 관광/출장 비자나 기타 면제 규정이 없는 모든 비자 타입을 포함합니다
                   </div>
                   
                   <FormField
@@ -322,15 +336,26 @@ const ResidencyChecker: React.FC = () => {
                             {...field}
                             onChange={(e) => {
                               field.onChange(e.target.value);
-                              setShowVisaFields(e.target.value !== 'none');
+                              const hasExemption = ['f1_student', 'j1_student', 'm1_student', 'j1_non_student'].includes(e.target.value);
+                              setShowVisaFields(e.target.value !== 'none' && hasExemption);
                             }}
                             className="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                           >
-                            <option value="none">해당 없음 (일반 비자)</option>
-                            <option value="f1_student">F-1 Student (학생)</option>
-                            <option value="j1_student">J-1 Student (학생)</option>
-                            <option value="m1_student">M-1 Student (학생)</option>
-                            <option value="j1_non_student">J-1 Non-Student (교수/연구원 등)</option>
+                            <option value="none">해당 없음 (B1/B2 관광/출장, 기타 일반 비자)</option>
+                            <optgroup label="학생 비자 (면제 기간 있음)">
+                              <option value="f1_student">F-1 Student (학생)</option>
+                              <option value="j1_student">J-1 Student (학생)</option>
+                              <option value="m1_student">M-1 Student (학생)</option>
+                              <option value="j1_non_student">J-1 Non-Student (교수/연구원)</option>
+                            </optgroup>
+                            <optgroup label="취업/투자 비자 (면제 기간 없음)">
+                              <option value="h1b">H-1B (전문직 취업)</option>
+                              <option value="l1">L-1 (주재원 파견)</option>
+                              <option value="o1">O-1 (특기자)</option>
+                              <option value="tn">TN (NAFTA/USMCA 전문직)</option>
+                              <option value="e2">E-2 (투자자)</option>
+                              <option value="eb_immigrant">EB 이민비자/영주권자</option>
+                            </optgroup>
                           </select>
                         </FormControl>
                         <FormMessage />
@@ -354,11 +379,12 @@ const ResidencyChecker: React.FC = () => {
                               />
                             </FormControl>
                             <div className="text-xs text-blue-700 mt-1 space-y-1">
-                              <div><strong>⚠️ 중요: 계산 방법</strong></div>
+                              <div><strong>⚠️ 중요: 면제 기간 계산 방법</strong></div>
                               <div>• 비자 발급일이 아닌 <strong>미국 최초 입국일</strong>부터 계산</div>
                               <div>• <strong>면제 체류자(exempt individual)</strong>로 체류한 <strong>첫 달력연도</strong>부터 카운트</div>
                               <div>• <strong>F-1, J-1, M-1 Student:</strong> 5년 미만 자동 비거주자</div>
                               <div>• <strong>J-1 Non-Student:</strong> 2년 미만 자동 비거주자</div>
+                              <div>• <strong>H-1B, L-1, O-1, TN, E-2, EB:</strong> 면제 기간 없음 (바로 SPT 적용)</div>
                             </div>
                             <FormMessage />
                           </FormItem>
@@ -413,10 +439,12 @@ const ResidencyChecker: React.FC = () => {
                   비자별 특별 규정
                 </h4>
                 <div className="text-sm text-amber-800 space-y-1">
-                  <p>• <strong>F-1, J-1, M-1 Student:</strong> 면제 체류 첫 달력연도부터 5년간 SPT 제외</p>
-                  <p>• <strong>J-1 Non-Student:</strong> 면제 체류 첫 달력연도부터 2년간 SPT 제외</p>
+                  <p>• <strong>면제 기간 있는 비자:</strong></p>
+                  <p className="ml-4">- F-1, J-1, M-1 Student: 5년간 SPT 제외</p>
+                  <p className="ml-4">- J-1 Non-Student: 2년간 SPT 제외</p>
+                  <p>• <strong>면제 기간 없는 비자:</strong></p>
+                  <p className="ml-4">- H-1B, L-1, O-1, TN, E-2, EB 이민비자/영주권: 바로 일반 SPT 적용</p>
                   <p>• <strong>계산 기준:</strong> 비자 발급일이 아닌 미국 최초 입국일부터</p>
-                  <p>• <strong>면제 기간 초과:</strong> 일반 SPT 규칙 적용 (183일 기준)</p>
                   <p>• <strong>추가 혜택:</strong> Closer Connection Exception, 한미조세조약 적용 가능</p>
                 </div>
               </div>
