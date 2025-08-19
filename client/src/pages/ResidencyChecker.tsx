@@ -40,12 +40,13 @@ const ResidencyChecker: React.FC = () => {
   const [showVisaFields, setShowVisaFields] = useState(true);
   const [, navigate] = useLocation();
 
-  // 현재 날짜를 자동으로 설정
+  // 현재 날짜를 자동으로 설정 (UTC 시간대 고려)
   const getCurrentDate = () => {
     const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, '0');
-    const day = String(today.getDate()).padStart(2, '0');
+    // UTC 기준으로 날짜 계산하여 시간대 문제 방지
+    const year = today.getUTCFullYear();
+    const month = String(today.getUTCMonth() + 1).padStart(2, '0');
+    const day = String(today.getUTCDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
   };
 
@@ -87,9 +88,10 @@ const ResidencyChecker: React.FC = () => {
       
       console.log('거주자 계산 디버그:', {
         visaType: data.visaType,
-        firstEntryDate: firstEntryDate.toLocaleDateString(),
-        inputDate: inputDate.toLocaleDateString(),
-        calculationDate: calculationDate.toLocaleDateString(),
+        firstEntryDate: firstEntryDate.toLocaleDateString('ko-KR'),
+        inputDate: inputDate.toLocaleDateString('ko-KR'),
+        calculationDate: calculationDate.toLocaleDateString('ko-KR'),
+        inputDateRaw: data.currentDate, // 원본 입력값 확인
         taxYear,
         entryYear: firstEntryDate.getFullYear(),
         exemptDays,
