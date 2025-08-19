@@ -75,12 +75,16 @@ const ResidencyChecker: React.FC = () => {
   });
 
   const calculateResidency = (data: ResidencyData): ResidencyResult => {
-    // 현재 날짜와 세금 신고 대상 연도 계산
+    // 현재 날짜와 세금 신고 대상 연도 계산 (시간대 문제 해결)
     console.log('calculateResidency 입력 데이터:', data.currentDate);
-    const inputDate = new Date(data.currentDate);
+    
+    // 시간대 문제를 해결하기 위해 날짜 문자열을 직접 파싱
+    const [year, month, day] = data.currentDate.split('-').map(Number);
+    const inputDate = new Date(year, month - 1, day); // month는 0-based
+    
     console.log('inputDate 생성 결과:', {
-      inputDateString: inputDate.toString(),
-      inputDateLocal: inputDate.toLocaleDateString('ko-KR'),
+      original: data.currentDate,
+      parsed: inputDate.toLocaleDateString('ko-KR'),
       getFullYear: inputDate.getFullYear(),
       getMonth: inputDate.getMonth() + 1,
       getDate: inputDate.getDate()
@@ -98,7 +102,16 @@ const ResidencyChecker: React.FC = () => {
     let exemptCalendarYears = 0; // F-1 학생용 캘린더 연도 계산
     
     if (data.visaStartDate) {
-      const firstEntryDate = new Date(data.visaStartDate);
+      // 시간대 문제를 해결하기 위해 날짜 문자열을 직접 파싱
+      const [year, month, day] = data.visaStartDate.split('-').map(Number);
+      const firstEntryDate = new Date(year, month - 1, day); // month는 0-based
+      
+      console.log('비자 시작일 파싱 디버그:', {
+        original: data.visaStartDate,
+        parsed: firstEntryDate.toLocaleDateString('ko-KR'),
+        year, month, day
+      });
+      
       const timeDiff = calculationDate.getTime() - firstEntryDate.getTime();
       exemptDays = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
       exemptYears = Math.floor(exemptDays / 365.25); // 윤년 고려 (J-1 Non-student용)
