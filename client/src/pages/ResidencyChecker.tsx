@@ -129,7 +129,7 @@ const ResidencyChecker: React.FC = () => {
                       <FormItem>
                         <FormLabel className="flex items-center gap-2">
                           <Calendar className="h-4 w-4" />
-                          금년(2024) 체류일수
+                          세금신고 대상년도 (2024년) 체류일수
                         </FormLabel>
                         <FormControl>
                           <Input
@@ -153,7 +153,7 @@ const ResidencyChecker: React.FC = () => {
                       <FormItem>
                         <FormLabel className="flex items-center gap-2">
                           <Calendar className="h-4 w-4" />
-                          전년(2023) 체류일수
+                          전년도 (2023년) 체류일수
                         </FormLabel>
                         <FormControl>
                           <Input
@@ -177,7 +177,7 @@ const ResidencyChecker: React.FC = () => {
                       <FormItem>
                         <FormLabel className="flex items-center gap-2">
                           <Calendar className="h-4 w-4" />
-                          전전년(2022) 체류일수
+                          전전년도 (2022년) 체류일수
                         </FormLabel>
                         <FormControl>
                           <Input
@@ -283,11 +283,11 @@ const ResidencyChecker: React.FC = () => {
           <CardContent>
             <div className="space-y-4">
               <div className="bg-blue-50 p-4 rounded-lg">
-                <h3 className="font-semibold text-blue-900 mb-2">계산 공식</h3>
+                <h3 className="font-semibold text-blue-900 mb-2">계산 공식 (2025년 세금신고 기준)</h3>
                 <p className="text-blue-800">
-                  <strong>금년 체류일수</strong> + 
-                  (<strong>전년도 체류일수</strong> × 1/3) + 
-                  (<strong>전전년도 체류일수</strong> × 1/6) = <strong>183일 이상</strong>
+                  <strong>2024년 체류일수</strong> + 
+                  (<strong>2023년 체류일수</strong> × 1/3) + 
+                  (<strong>2022년 체류일수</strong> × 1/6) = <strong>183일 이상</strong>
                 </p>
               </div>
               
@@ -325,21 +325,21 @@ const ResidencyChecker: React.FC = () => {
                     <div className="text-2xl font-bold text-gray-900">
                       {result.breakdown.current}일
                     </div>
-                    <div className="text-sm text-gray-600">금년 체류일수</div>
+                    <div className="text-sm text-gray-600">2024년 체류일수</div>
                   </div>
                   
                   <div className="bg-gray-50 p-4 rounded-lg">
                     <div className="text-2xl font-bold text-gray-900">
                       {result.breakdown.previous}일
                     </div>
-                    <div className="text-sm text-gray-600">전년도 (× 1/3)</div>
+                    <div className="text-sm text-gray-600">2023년 (× 1/3)</div>
                   </div>
                   
                   <div className="bg-gray-50 p-4 rounded-lg">
                     <div className="text-2xl font-bold text-gray-900">
                       {result.breakdown.twoPrevious}일
                     </div>
-                    <div className="text-sm text-gray-600">전전년도 (× 1/6)</div>
+                    <div className="text-sm text-gray-600">2022년 (× 1/6)</div>
                   </div>
                 </div>
 
