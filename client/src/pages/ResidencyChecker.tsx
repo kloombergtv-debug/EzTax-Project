@@ -498,19 +498,19 @@ const ResidencyChecker: React.FC = () => {
                     )}
                     
                     <Alert className={result.isResident ? "border-red-200 bg-red-50" : "border-green-200 bg-green-50"}>
-                      <AlertDescription className={result.isResident ? "text-red-800" : "text-green-800"}>
+                      <AlertDescription className={`${result.isResident ? "text-red-800" : "text-green-800"} text-lg`}>
                         {result.isResident ? (
-                          <span className="font-semibold">
+                          <span className="font-bold text-xl">
                             🏠 미국 세법상 거주자입니다 {!result.isVisaException && "(183일 이상)"}
                             <br />
-                            전 세계 소득에 대해 미국 세금 신고 의무가 있습니다.
+                            <span className="text-lg">전 세계 소득에 대해 미국 세금 신고 의무가 있습니다.</span>
                           </span>
                         ) : (
-                          <span className="font-semibold">
+                          <span className="font-bold text-xl">
                             ✈️ 미국 세법상 비거주자입니다 
                             {result.isVisaException ? "(비자 예외)" : "(183일 미만)"}
                             <br />
-                            미국 원천소득에 대해서만 세금 신고 의무가 있습니다.
+                            <span className="text-lg">미국 원천소득에 대해서만 세금 신고 의무가 있습니다.</span>
                           </span>
                         )}
                       </AlertDescription>
