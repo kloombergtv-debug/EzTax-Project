@@ -63,23 +63,28 @@ const ResidencyChecker: React.FC = () => {
 
   const calculateResidency = (data: ResidencyData): ResidencyResult => {
     // 현재 날짜와 세금 신고 대상 연도 계산
-    const currentDate = new Date(data.currentDate);
-    const currentYear = currentDate.getFullYear();
-    const taxYear = currentYear - 1; // 세금 신고 대상 연도 (예: 2025년 → 2024년 신고)
+    const inputDate = new Date(data.currentDate);
+    const inputYear = inputDate.getFullYear();
+    const taxYear = inputYear - 1; // 세금 신고 대상 연도 (예: 2025년 → 2024년 신고)
     
-    // 면제 체류 기간 계산 (미국 최초 입국일부터)
+    // 계산 기준일을 세금 신고 대상 연도의 12월 31일로 설정
+    const calculationDate = new Date(taxYear, 11, 31); // 12월은 11 (0-based)
+    
+    // 면제 체류 기간 계산 (미국 최초 입국일부터 세금 신고 대상 연도 말까지)
     let exemptYears = 0;
     let exemptDays = 0;
     if (data.visaStartDate) {
       const firstEntryDate = new Date(data.visaStartDate);
-      const timeDiff = currentDate.getTime() - firstEntryDate.getTime();
+      const timeDiff = calculationDate.getTime() - firstEntryDate.getTime();
       exemptDays = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
       exemptYears = Math.floor(exemptDays / 365.25); // 윤년 고려
       
       console.log('거주자 계산 디버그:', {
         visaType: data.visaType,
         firstEntryDate: firstEntryDate.toLocaleDateString(),
-        currentDate: currentDate.toLocaleDateString(),
+        inputDate: inputDate.toLocaleDateString(),
+        calculationDate: calculationDate.toLocaleDateString(),
+        taxYear,
         exemptDays,
         exemptYears: (exemptDays/365.25).toFixed(2) + '년'
       });
@@ -242,8 +247,8 @@ const ResidencyChecker: React.FC = () => {
                             세금 신고 대상: {new Date(field.value).getFullYear() - 1}년도
                           </span>
                           <br />
-                          <span className="text-orange-600">
-                            💡 2024년도 세금 신고라면 2024년 12월 31일로 설정하세요
+                          <span className="text-green-600">
+                            ✓ 거주자 판정은 자동으로 {new Date(field.value).getFullYear() - 1}년 12월 31일까지 계산됩니다
                           </span>
                         </div>
                         <FormMessage />
