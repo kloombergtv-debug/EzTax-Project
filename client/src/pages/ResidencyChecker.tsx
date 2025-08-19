@@ -81,7 +81,7 @@ const ResidencyChecker: React.FC = () => {
         firstEntryDate: firstEntryDate.toLocaleDateString(),
         currentDate: currentDate.toLocaleDateString(),
         exemptDays,
-        exemptYears
+        exemptYears: (exemptDays/365.25).toFixed(2) + '년'
       });
     }
 
@@ -240,6 +240,10 @@ const ResidencyChecker: React.FC = () => {
                           <br />
                           <span className="font-medium">
                             세금 신고 대상: {new Date(field.value).getFullYear() - 1}년도
+                          </span>
+                          <br />
+                          <span className="text-orange-600">
+                            💡 2024년도 세금 신고라면 2024년 12월 31일로 설정하세요
                           </span>
                         </div>
                         <FormMessage />
