@@ -47,7 +47,7 @@ Page Layout Preference:
 - **Email Functionality**: Integration for expert consultation requests and application submissions.
 - **PDF Generation**: Capable of generating Form 1040 PDFs.
 - **AI ChatBot Integration**: Integrated across all major application pages (e.g., PersonalInfo, TaxCredits, Deductions) for contextual support. Utilizes OpenAI GPT-4o model with Korean tax expertise and EzTax-specific training.
-- **US Tax Residency Checker**: Dedicated page (`/residency-checker`) for determining US tax residency status using the IRS Substantial Presence Test formula, including student visa exception rules and dynamic date calculations.
+- **US Tax Residency Checker**: Dedicated page (`/residency-checker`) for determining US tax residency status using the IRS Substantial Presence Test formula, including student visa exception rules and accurate date calculations. Features F-1 student calendar year-based exemption calculation, J-1 Non-student 2-year exemption rules, and timezone-safe date parsing for consistent results across different environments.
 
 ## External Dependencies
 
