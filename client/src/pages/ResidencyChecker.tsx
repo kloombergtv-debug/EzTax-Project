@@ -7,8 +7,9 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Calculator, Home, Calendar, GraduationCap } from 'lucide-react';
+import { Calculator, Home, Calendar, GraduationCap, ArrowLeft } from 'lucide-react';
 import { ChatBot } from '@/components/ChatBot';
+import { useLocation } from 'wouter';
 
 const residencySchema = z.object({
   currentDate: z.string().min(1, "현재 날짜를 입력해주세요"),
@@ -37,6 +38,7 @@ interface ResidencyResult {
 const ResidencyChecker: React.FC = () => {
   const [result, setResult] = useState<ResidencyResult | null>(null);
   const [showVisaFields, setShowVisaFields] = useState(true);
+  const [, navigate] = useLocation();
 
   // 현재 날짜를 자동으로 설정
   const getCurrentDate = () => {
@@ -515,6 +517,28 @@ const ResidencyChecker: React.FC = () => {
                         )}
                       </AlertDescription>
                     </Alert>
+
+                    {/* 결과 저장하고 돌아가기 버튼 */}
+                    <div className="mt-6 text-center">
+                      <Button 
+                        type="button" 
+                        onClick={() => {
+                          // 결과를 localStorage에 저장
+                          localStorage.setItem('residencyResult', JSON.stringify({
+                            isResident: result.isResident,
+                            isNonresidentAlien: !result.isResident,
+                            timestamp: new Date().toISOString()
+                          }));
+                          
+                          // PersonalInfo 페이지로 돌아가기
+                          navigate('/personal-info');
+                        }}
+                        className="bg-green-600 hover:bg-green-700"
+                      >
+                        <ArrowLeft className="h-4 w-4 mr-2" />
+                        결과 저장하고 기본정보로 돌아가기
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </div>

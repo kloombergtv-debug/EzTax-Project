@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { PlusCircle, Trash2, Save, RefreshCw } from 'lucide-react';
+import { PlusCircle, Trash2, Save, RefreshCw, Home } from 'lucide-react';
 import { ChatBot } from '@/components/ChatBot';
 import ProgressTracker from '@/components/ProgressTracker';
 import { useTaxContext } from '../context/TaxContext';
@@ -132,7 +132,29 @@ const PersonalInfo: React.FC = () => {
         console.error("localStorage 데이터 복원 오류:", error);
       }
     }
-  }, [isDataReady, taxData.personalInfo, form, manualLoadComplete]);
+    
+    // 거주자 여부 결과 확인 및 적용
+    const residencyResult = localStorage.getItem('residencyResult');
+    if (residencyResult) {
+      try {
+        const result = JSON.parse(residencyResult);
+        console.log('저장된 거주자 여부 결과:', result);
+        
+        // 폼에 거주자 여부 결과 반영
+        form.setValue('isNonresidentAlien', result.isNonresidentAlien);
+        
+        // 결과 적용 후 localStorage에서 제거
+        localStorage.removeItem('residencyResult');
+        
+        toast({
+          title: "거주자 여부 결과 적용됨",
+          description: result.isNonresidentAlien ? "비거주자로 설정되었습니다" : "거주자로 설정되었습니다",
+        });
+      } catch (error) {
+        console.error('거주자 여부 결과 파싱 오류:', error);
+      }
+    }
+  }, [isDataReady, taxData.personalInfo, form, manualLoadComplete, toast]);
 
   useEffect(() => {
     const shouldShowSpouse = filingStatus === 'married_joint' || filingStatus === 'married_separate';
@@ -512,6 +534,58 @@ const PersonalInfo: React.FC = () => {
                         <SelectItem value="qualifying_widow">적격미망인 (Qualifying Widow(er))</SelectItem>
                       </SelectContent>
                     </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </CardContent>
+          </Card>
+
+          {/* 거주자 여부 확인 */}
+          <Card>
+            <CardContent className="pt-6">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-semibold">미국 세법상 거주자 여부</h2>
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  onClick={() => {
+                    // 현재 폼 데이터를 localStorage에 저장
+                    const currentFormData = form.getValues();
+                    localStorage.setItem('tempPersonalInfo', JSON.stringify(currentFormData));
+                    console.log("거주자 여부 확인 전 데이터 저장:", currentFormData);
+                    navigate('/residency-checker');
+                  }}
+                  className="text-sm bg-green-50 hover:bg-green-100 border-green-300 text-green-700"
+                >
+                  <Home className="h-4 w-4 mr-2" />
+                  거주자 여부 확인
+                </Button>
+              </div>
+              
+              <FormField
+                control={form.control}
+                name="isNonresidentAlien"
+                render={({ field }) => (
+                  <FormItem>
+                    <div className="flex items-center space-x-2">
+                      <FormControl>
+                        <input
+                          type="checkbox"
+                          checked={field.value}
+                          onChange={field.onChange}
+                          className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                        />
+                      </FormControl>
+                      <FormLabel className="text-sm font-normal cursor-pointer">
+                        미국 세법상 비거주자(Non-resident Alien)입니다
+                      </FormLabel>
+                    </div>
+                    <div className="text-xs text-gray-600 mt-2 ml-6">
+                      • 확실하지 않으면 위의 "거주자 여부 확인" 버튼을 클릭하세요<br/>
+                      • 거주자/비거주자에 따라 세금 계산 방식이 달라집니다<br/>
+                      • F-1, J-1 등 학생 비자 소지자는 특별 규정이 적용될 수 있습니다
+                    </div>
                     <FormMessage />
                   </FormItem>
                 )}
