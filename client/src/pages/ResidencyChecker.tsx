@@ -40,14 +40,26 @@ const ResidencyChecker: React.FC = () => {
   const [showVisaFields, setShowVisaFields] = useState(true);
   const [, navigate] = useLocation();
 
-  // 현재 날짜를 자동으로 설정 (UTC 시간대 고려)
+  // 현재 날짜를 자동으로 설정 (로컬 시간대 기준)
   const getCurrentDate = () => {
     const today = new Date();
-    // UTC 기준으로 날짜 계산하여 시간대 문제 방지
-    const year = today.getUTCFullYear();
-    const month = String(today.getUTCMonth() + 1).padStart(2, '0');
-    const day = String(today.getUTCDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
+    console.log('getCurrentDate 디버그:', {
+      originalDate: today.toString(),
+      utcDate: today.toUTCString(),
+      localDate: today.toLocaleDateString('ko-KR'),
+      getFullYear: today.getFullYear(),
+      getMonth: today.getMonth() + 1,
+      getDate: today.getDate()
+    });
+    
+    // 로컬 시간 기준으로 날짜 계산 (사용자 브라우저 시간대 기준)
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    const result = `${year}-${month}-${day}`;
+    
+    console.log('getCurrentDate 결과:', result);
+    return result;
   };
 
   const form = useForm<ResidencyData>({
@@ -64,7 +76,16 @@ const ResidencyChecker: React.FC = () => {
 
   const calculateResidency = (data: ResidencyData): ResidencyResult => {
     // 현재 날짜와 세금 신고 대상 연도 계산
+    console.log('calculateResidency 입력 데이터:', data.currentDate);
     const inputDate = new Date(data.currentDate);
+    console.log('inputDate 생성 결과:', {
+      inputDateString: inputDate.toString(),
+      inputDateLocal: inputDate.toLocaleDateString('ko-KR'),
+      getFullYear: inputDate.getFullYear(),
+      getMonth: inputDate.getMonth() + 1,
+      getDate: inputDate.getDate()
+    });
+    
     const inputYear = inputDate.getFullYear();
     const taxYear = inputYear - 1; // 세금 신고 대상 연도 (예: 2025년 → 2024년 신고)
     
