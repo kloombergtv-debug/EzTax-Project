@@ -37,10 +37,19 @@ const ResidencyChecker: React.FC = () => {
   const [result, setResult] = useState<ResidencyResult | null>(null);
   const [showStudentFields, setShowStudentFields] = useState(false);
 
+  // 현재 날짜를 자동으로 설정
+  const getCurrentDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
   const form = useForm<ResidencyData>({
     resolver: zodResolver(residencySchema),
     defaultValues: {
-      currentDate: "2025-08-19", // 기본값: 현재 날짜
+      currentDate: getCurrentDate(), // 자동으로 오늘 날짜 설정
       currentYearDays: 0,
       previousYearDays: 0,
       twoPreviousYearDays: 0,
@@ -120,10 +129,7 @@ const ResidencyChecker: React.FC = () => {
           <div>
             <h1 className="text-3xl font-bold text-gray-900">미국 거주자 여부 확인</h1>
             <p className="text-gray-600 mt-2">
-              미국 세법상 거주자 판정을 위한 실질적 거주 테스트 (Substantial Presence Test)<br/>
-              <span className="text-sm font-medium text-blue-600">
-                현재 날짜 기준: 2025년 8월 19일 (예시)
-              </span>
+              미국 세법상 거주자 판정을 위한 실질적 거주 테스트 (Substantial Presence Test)
             </p>
           </div>
         </div>
@@ -140,26 +146,41 @@ const ResidencyChecker: React.FC = () => {
           <CardContent>
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                {/* 현재 날짜 입력 */}
+                {/* 현재 날짜 정보 */}
                 <div className="p-4 bg-blue-50 rounded-lg">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Calendar className="h-5 w-5 text-blue-600" />
+                    <span className="font-semibold text-blue-900">계산 기준일</span>
+                  </div>
+                  
                   <FormField
                     control={form.control}
                     name="currentDate"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="flex items-center gap-2 text-blue-900 font-semibold">
-                          <Calendar className="h-5 w-5" />
-                          현재 날짜 (계산 기준일)
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            type="date"
-                            {...field}
-                            className="bg-white"
-                          />
-                        </FormControl>
-                        <div className="text-sm text-blue-700 mt-1">
-                          현재 날짜를 기준으로 세금 신고 대상 연도가 자동 계산됩니다.
+                        <div className="flex items-center gap-4">
+                          <div className="text-lg font-medium text-blue-900">
+                            {new Date(field.value).toLocaleDateString('ko-KR', {
+                              year: 'numeric',
+                              month: 'long',
+                              day: 'numeric',
+                              weekday: 'long'
+                            })}
+                          </div>
+                          <FormControl>
+                            <Input
+                              type="date"
+                              {...field}
+                              className="bg-white w-auto text-sm"
+                            />
+                          </FormControl>
+                        </div>
+                        <div className="text-sm text-blue-700 mt-2">
+                          이 날짜를 기준으로 세금 신고 대상 연도가 자동 계산됩니다.
+                          <br />
+                          <span className="font-medium">
+                            세금 신고 대상: {new Date(field.value).getFullYear() - 1}년도
+                          </span>
                         </div>
                         <FormMessage />
                       </FormItem>
@@ -175,7 +196,10 @@ const ResidencyChecker: React.FC = () => {
                       <FormItem>
                         <FormLabel className="flex items-center gap-2">
                           <Calendar className="h-4 w-4" />
-                          세금신고 대상년도 (2024년) 체류일수
+                          세금신고 대상년도 체류일수
+                          <span className="text-sm text-gray-500">
+                            ({new Date(form.watch('currentDate')).getFullYear() - 1}년)
+                          </span>
                         </FormLabel>
                         <FormControl>
                           <Input
@@ -199,7 +223,10 @@ const ResidencyChecker: React.FC = () => {
                       <FormItem>
                         <FormLabel className="flex items-center gap-2">
                           <Calendar className="h-4 w-4" />
-                          전년도 (2023년) 체류일수
+                          전년도 체류일수
+                          <span className="text-sm text-gray-500">
+                            ({new Date(form.watch('currentDate')).getFullYear() - 2}년)
+                          </span>
                         </FormLabel>
                         <FormControl>
                           <Input
@@ -223,7 +250,10 @@ const ResidencyChecker: React.FC = () => {
                       <FormItem>
                         <FormLabel className="flex items-center gap-2">
                           <Calendar className="h-4 w-4" />
-                          전전년도 (2022년) 체류일수
+                          전전년도 체류일수
+                          <span className="text-sm text-gray-500">
+                            ({new Date(form.watch('currentDate')).getFullYear() - 3}년)
+                          </span>
                         </FormLabel>
                         <FormControl>
                           <Input
