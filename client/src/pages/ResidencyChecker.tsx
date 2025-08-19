@@ -11,11 +11,12 @@ import { Calculator, Home, Calendar, GraduationCap } from 'lucide-react';
 import { ChatBot } from '@/components/ChatBot';
 
 const residencySchema = z.object({
-  currentYearDays: z.number().min(0).max(365),
-  previousYearDays: z.number().min(0).max(365),
-  twoPreviousYearDays: z.number().min(0).max(365),
+  currentDate: z.string().min(1, "현재 날짜를 입력해주세요"),
+  currentYearDays: z.number().min(0).max(366),
+  previousYearDays: z.number().min(0).max(366),
+  twoPreviousYearDays: z.number().min(0).max(366),
   isStudent: z.boolean(),
-  studentYearsCompleted: z.number().min(0).max(10).optional(),
+  studentVisaStartDate: z.string().optional(),
 });
 
 type ResidencyData = z.infer<typeof residencySchema>;
@@ -39,17 +40,32 @@ const ResidencyChecker: React.FC = () => {
   const form = useForm<ResidencyData>({
     resolver: zodResolver(residencySchema),
     defaultValues: {
+      currentDate: "2025-08-19", // 기본값: 현재 날짜
       currentYearDays: 0,
       previousYearDays: 0,
       twoPreviousYearDays: 0,
       isStudent: false,
-      studentYearsCompleted: 0,
+      studentVisaStartDate: "",
     }
   });
 
   const calculateResidency = (data: ResidencyData): ResidencyResult => {
-    // F1, J1, M1 학생 비자 예외 규정 확인
-    if (data.isStudent && (data.studentYearsCompleted || 0) < 5) {
+    // 현재 날짜와 세금 신고 대상 연도 계산
+    const currentDate = new Date(data.currentDate);
+    const currentYear = currentDate.getFullYear();
+    const taxYear = currentYear - 1; // 세금 신고 대상 연도 (예: 2025년 → 2024년 신고)
+    
+    // 학생 비자 기간 계산
+    let studentYears = 0;
+    if (data.isStudent && data.studentVisaStartDate) {
+      const visaStartDate = new Date(data.studentVisaStartDate);
+      const yearsDiff = currentDate.getFullYear() - visaStartDate.getFullYear();
+      const monthsDiff = currentDate.getMonth() - visaStartDate.getMonth();
+      studentYears = yearsDiff + (monthsDiff >= 0 ? 0 : -1);
+    }
+
+    // F1, J1, M1 학생 비자 예외 규정 확인 (5년 미만)
+    if (data.isStudent && studentYears < 5) {
       return {
         totalDays: 0,
         isResident: false,
@@ -59,7 +75,7 @@ const ResidencyChecker: React.FC = () => {
           twoPrevious: 0,
         },
         isStudentException: true,
-        studentNote: `학생 비자 ${data.studentYearsCompleted || 0}년차: 5년 미만으로 자동 비거주자 처리`
+        studentNote: `학생 비자 ${Math.round(studentYears * 10) / 10}년차: 5년 미만으로 자동 비거주자 처리`
       };
     }
 
@@ -80,8 +96,8 @@ const ResidencyChecker: React.FC = () => {
         twoPrevious: twoPreviousYearDays,
       },
       isStudentException: false,
-      studentNote: data.isStudent && (data.studentYearsCompleted || 0) >= 5 
-        ? `학생 비자 ${data.studentYearsCompleted}년차: 5년 초과로 일반 SPT 규칙 적용`
+      studentNote: data.isStudent && studentYears >= 5 
+        ? `학생 비자 ${Math.round(studentYears * 10) / 10}년차: 5년 초과로 일반 SPT 규칙 적용`
         : undefined
     };
   };
@@ -104,7 +120,10 @@ const ResidencyChecker: React.FC = () => {
           <div>
             <h1 className="text-3xl font-bold text-gray-900">미국 거주자 여부 확인</h1>
             <p className="text-gray-600 mt-2">
-              미국 세법상 거주자 판정을 위한 실질적 거주 테스트 (Substantial Presence Test)
+              미국 세법상 거주자 판정을 위한 실질적 거주 테스트 (Substantial Presence Test)<br/>
+              <span className="text-sm font-medium text-blue-600">
+                현재 날짜 기준: 2025년 8월 19일 (예시)
+              </span>
             </p>
           </div>
         </div>
@@ -121,6 +140,33 @@ const ResidencyChecker: React.FC = () => {
           <CardContent>
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                {/* 현재 날짜 입력 */}
+                <div className="p-4 bg-blue-50 rounded-lg">
+                  <FormField
+                    control={form.control}
+                    name="currentDate"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="flex items-center gap-2 text-blue-900 font-semibold">
+                          <Calendar className="h-5 w-5" />
+                          현재 날짜 (계산 기준일)
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            type="date"
+                            {...field}
+                            className="bg-white"
+                          />
+                        </FormControl>
+                        <div className="text-sm text-blue-700 mt-1">
+                          현재 날짜를 기준으로 세금 신고 대상 연도가 자동 계산됩니다.
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <FormField
                     control={form.control}
@@ -232,24 +278,21 @@ const ResidencyChecker: React.FC = () => {
                     <div className="mt-4 p-4 bg-blue-50 rounded-lg">
                       <FormField
                         control={form.control}
-                        name="studentYearsCompleted"
+                        name="studentVisaStartDate"
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel className="text-sm font-medium text-blue-900">
-                              미국에서 학생 비자로 체류한 총 연수
+                              학생 비자 시작일 (F1/J1/M1)
                             </FormLabel>
                             <FormControl>
                               <Input
-                                type="number"
-                                placeholder="0"
-                                min="0"
-                                max="10"
+                                type="date"
                                 {...field}
-                                onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
                                 className="bg-white"
                               />
                             </FormControl>
                             <div className="text-xs text-blue-700 mt-1">
+                              • 비자 시작일부터 현재까지의 기간을 자동 계산합니다<br/>
                               • 5년 미만: 자동으로 비거주자 처리<br/>
                               • 5년 이상: 일반 SPT 규칙 적용
                             </div>
@@ -283,12 +326,15 @@ const ResidencyChecker: React.FC = () => {
           <CardContent>
             <div className="space-y-4">
               <div className="bg-blue-50 p-4 rounded-lg">
-                <h3 className="font-semibold text-blue-900 mb-2">계산 공식 (2025년 세금신고 기준)</h3>
+                <h3 className="font-semibold text-blue-900 mb-2">계산 공식</h3>
                 <p className="text-blue-800">
-                  <strong>2024년 체류일수</strong> + 
-                  (<strong>2023년 체류일수</strong> × 1/3) + 
-                  (<strong>2022년 체류일수</strong> × 1/6) = <strong>183일 이상</strong>
+                  <strong>세금신고 대상년도 체류일수</strong> + 
+                  (<strong>전년도 체류일수</strong> × 1/3) + 
+                  (<strong>전전년도 체류일수</strong> × 1/6) = <strong>183일 이상</strong>
                 </p>
+                <div className="text-xs text-blue-600 mt-2">
+                  입력하신 현재 날짜를 기준으로 해당 연도들이 자동 계산됩니다.
+                </div>
               </div>
               
               <div className="text-sm text-gray-600 space-y-2">
