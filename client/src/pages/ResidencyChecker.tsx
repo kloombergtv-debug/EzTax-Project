@@ -510,7 +510,7 @@ const ResidencyChecker: React.FC = () => {
                             ✈️ 미국 세법상 비거주자입니다 
                             {result.isVisaException ? "(비자 예외)" : "(183일 미만)"}
                             <br />
-                            <span className="text-lg">미국 원천소득에 대해서만 세금 신고 의무가 있습니다.</span>
+                            <span className="text-lg">미국 원천소득에 대해서만 세금 신고 의무가 있습니다-비거주자(1040-NR)로 신고</span>
                           </span>
                         )}
                       </AlertDescription>
