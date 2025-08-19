@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
+import { z, type ZodType } from 'zod';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
@@ -75,6 +75,14 @@ const ResidencyChecker: React.FC = () => {
       const timeDiff = currentDate.getTime() - firstEntryDate.getTime();
       exemptDays = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
       exemptYears = Math.floor(exemptDays / 365.25); // 윤년 고려
+      
+      console.log('거주자 계산 디버그:', {
+        visaType: data.visaType,
+        firstEntryDate: firstEntryDate.toLocaleDateString(),
+        currentDate: currentDate.toLocaleDateString(),
+        exemptDays,
+        exemptYears
+      });
     }
 
     // 비자별 예외 규정 확인
@@ -101,7 +109,14 @@ const ResidencyChecker: React.FC = () => {
       }
     } else if (data.visaType === 'j1_non_student') {
       exemptionLimit = 2;
+      console.log('J-1 Non-student 계산:', {
+        exemptYears,
+        exemptDays,
+        condition: exemptYears < 2
+      });
+      
       if (exemptYears < 2) {
+        console.log('J-1 Non-student: 2년 미만으로 비거주자 반환');
         return {
           totalDays: 0,
           isResident: false,
