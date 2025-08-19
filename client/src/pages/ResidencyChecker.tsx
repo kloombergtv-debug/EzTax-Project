@@ -15,8 +15,8 @@ const residencySchema = z.object({
   currentYearDays: z.number().min(0).max(366),
   previousYearDays: z.number().min(0).max(366),
   twoPreviousYearDays: z.number().min(0).max(366),
-  isStudent: z.boolean(),
-  studentVisaStartDate: z.string().optional(),
+  visaType: z.enum(['none', 'f1_student', 'j1_student', 'm1_student', 'j1_non_student']),
+  visaStartDate: z.string().optional(),
 });
 
 type ResidencyData = z.infer<typeof residencySchema>;
@@ -29,13 +29,14 @@ interface ResidencyResult {
     previous: number;
     twoPrevious: number;
   };
-  isStudentException: boolean;
-  studentNote?: string;
+  isVisaException: boolean;
+  visaNote?: string;
+  exemptionYears?: number;
 }
 
 const ResidencyChecker: React.FC = () => {
   const [result, setResult] = useState<ResidencyResult | null>(null);
-  const [showStudentFields, setShowStudentFields] = useState(false);
+  const [showVisaFields, setShowVisaFields] = useState(false);
 
   // 현재 날짜를 자동으로 설정
   const getCurrentDate = () => {
@@ -53,8 +54,8 @@ const ResidencyChecker: React.FC = () => {
       currentYearDays: 0,
       previousYearDays: 0,
       twoPreviousYearDays: 0,
-      isStudent: false,
-      studentVisaStartDate: "",
+      visaType: 'none' as const,
+      visaStartDate: "",
     }
   });
 
@@ -64,31 +65,65 @@ const ResidencyChecker: React.FC = () => {
     const currentYear = currentDate.getFullYear();
     const taxYear = currentYear - 1; // 세금 신고 대상 연도 (예: 2025년 → 2024년 신고)
     
-    // 학생 비자 기간 계산
-    let studentYears = 0;
-    if (data.isStudent && data.studentVisaStartDate) {
-      const visaStartDate = new Date(data.studentVisaStartDate);
+    // 비자 기간 계산
+    let visaYears = 0;
+    if (data.visaType !== 'none' && data.visaStartDate) {
+      const visaStartDate = new Date(data.visaStartDate);
       const yearsDiff = currentDate.getFullYear() - visaStartDate.getFullYear();
       const monthsDiff = currentDate.getMonth() - visaStartDate.getMonth();
-      studentYears = yearsDiff + (monthsDiff >= 0 ? 0 : -1);
+      visaYears = yearsDiff + (monthsDiff >= 0 ? 0 : -1);
     }
 
-    // F1, J1, M1 학생 비자 예외 규정 확인 (5년 미만)
-    if (data.isStudent && studentYears < 5) {
-      return {
-        totalDays: 0,
-        isResident: false,
-        breakdown: {
-          current: 0,
-          previous: 0,
-          twoPrevious: 0,
-        },
-        isStudentException: true,
-        studentNote: `학생 비자 ${Math.round(studentYears * 10) / 10}년차: 5년 미만으로 자동 비거주자 처리`
-      };
+    // 비자별 예외 규정 확인
+    let exemptionYears = 0;
+    let visaNote = '';
+    
+    if (data.visaType === 'f1_student' || data.visaType === 'j1_student' || data.visaType === 'm1_student') {
+      exemptionYears = 5;
+      if (visaYears < 5) {
+        return {
+          totalDays: 0,
+          isResident: false,
+          breakdown: {
+            current: 0,
+            previous: 0,
+            twoPrevious: 0,
+          },
+          isVisaException: true,
+          visaNote: `${data.visaType.toUpperCase()} 학생 비자 ${Math.round(visaYears * 10) / 10}년차: 5년 미만으로 자동 비거주자 처리`,
+          exemptionYears: 5
+        };
+      } else {
+        visaNote = `${data.visaType.toUpperCase()} 학생 비자 ${Math.round(visaYears * 10) / 10}년차: 5년 초과로 일반 SPT 규칙 적용`;
+      }
+    } else if (data.visaType === 'j1_non_student') {
+      exemptionYears = 2;
+      if (visaYears < 2) {
+        return {
+          totalDays: 0,
+          isResident: false,
+          breakdown: {
+            current: 0,
+            previous: 0,
+            twoPrevious: 0,
+          },
+          isVisaException: true,
+          visaNote: `J-1 비학생 (교수/연구원) 비자 ${Math.round(visaYears * 10) / 10}년차: 2년 미만으로 자동 비거주자 처리`,
+          exemptionYears: 2
+        };
+      } else {
+        // J-1 Non-Student는 6년 중 2년 룰 적용
+        const lastSixYears = 6;
+        const exemptYears = 2;
+        if (visaYears >= 2 && visaYears < 6) {
+          visaNote = `J-1 비학생 비자 ${Math.round(visaYears * 10) / 10}년차: 2년 이상이므로 일반 SPT 규칙 적용`;
+        } else if (visaYears >= 6) {
+          visaNote = `J-1 비학생 비자 ${Math.round(visaYears * 10) / 10}년차: 6년 중 2년 면제 규칙 확인 필요`;
+        }
+      }
     }
 
-    // 일반 SPT 계산 (학생 5년 초과 포함)
+    // 일반 SPT 계산
     const currentYearDays = data.currentYearDays;
     const previousYearDays = Math.round(data.previousYearDays * (1/3));
     const twoPreviousYearDays = Math.round(data.twoPreviousYearDays * (1/6));
@@ -104,10 +139,9 @@ const ResidencyChecker: React.FC = () => {
         previous: previousYearDays,
         twoPrevious: twoPreviousYearDays,
       },
-      isStudentException: false,
-      studentNote: data.isStudent && studentYears >= 5 
-        ? `학생 비자 ${Math.round(studentYears * 10) / 10}년차: 5년 초과로 일반 SPT 규칙 적용`
-        : undefined
+      isVisaException: false,
+      visaNote: visaNote || undefined,
+      exemptionYears
     };
   };
 
@@ -271,48 +305,50 @@ const ResidencyChecker: React.FC = () => {
                   />
                 </div>
 
-                {/* 학생 비자 예외 규정 */}
+                {/* 비자 타입 선택 */}
                 <div className="border-t pt-6">
                   <div className="flex items-center gap-3 mb-4">
                     <GraduationCap className="h-5 w-5 text-blue-600" />
                     <label className="text-sm font-medium">
-                      F1, J1, M1 학생 비자 소지자입니까?
+                      비자 타입 (해당되는 경우)
                     </label>
                   </div>
                   
                   <FormField
                     control={form.control}
-                    name="isStudent"
+                    name="visaType"
                     render={({ field }) => (
-                      <FormItem className="flex items-center gap-3">
+                      <FormItem>
                         <FormControl>
-                          <input
-                            type="checkbox"
-                            checked={field.value}
+                          <select
+                            {...field}
                             onChange={(e) => {
-                              field.onChange(e.target.checked);
-                              setShowStudentFields(e.target.checked);
+                              field.onChange(e.target.value);
+                              setShowVisaFields(e.target.value !== 'none');
                             }}
-                            className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                          />
+                            className="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                          >
+                            <option value="none">해당 없음 (일반 비자)</option>
+                            <option value="f1_student">F-1 Student (학생)</option>
+                            <option value="j1_student">J-1 Student (학생)</option>
+                            <option value="m1_student">M-1 Student (학생)</option>
+                            <option value="j1_non_student">J-1 Non-Student (교수/연구원 등)</option>
+                          </select>
                         </FormControl>
-                        <FormLabel className="text-sm text-gray-600 cursor-pointer">
-                          네, 학생 비자 소지자입니다 (F1/J1/M1)
-                        </FormLabel>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
 
-                  {showStudentFields && (
+                  {showVisaFields && (
                     <div className="mt-4 p-4 bg-blue-50 rounded-lg">
                       <FormField
                         control={form.control}
-                        name="studentVisaStartDate"
+                        name="visaStartDate"
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel className="text-sm font-medium text-blue-900">
-                              학생 비자 시작일 (F1/J1/M1)
+                              비자 시작일
                             </FormLabel>
                             <FormControl>
                               <Input
@@ -321,10 +357,11 @@ const ResidencyChecker: React.FC = () => {
                                 className="bg-white"
                               />
                             </FormControl>
-                            <div className="text-xs text-blue-700 mt-1">
-                              • 비자 시작일부터 현재까지의 기간을 자동 계산합니다<br/>
-                              • 5년 미만: 자동으로 비거주자 처리<br/>
-                              • 5년 이상: 일반 SPT 규칙 적용
+                            <div className="text-xs text-blue-700 mt-1 space-y-1">
+                              <div><strong>면제 규정:</strong></div>
+                              <div>• <strong>F-1, J-1, M-1 Student:</strong> 5년 미만 자동 비거주자</div>
+                              <div>• <strong>J-1 Non-Student:</strong> 2년 미만 자동 비거주자</div>
+                              <div>• 면제 기간 초과 시 일반 SPT 규칙 적용</div>
                             </div>
                             <FormMessage />
                           </FormItem>
@@ -376,11 +413,12 @@ const ResidencyChecker: React.FC = () => {
               <div className="mt-4 p-4 bg-amber-50 rounded-lg">
                 <h4 className="font-semibold text-amber-900 mb-2 flex items-center gap-2">
                   <GraduationCap className="h-4 w-4" />
-                  학생 비자 특별 규정 (F1/J1/M1)
+                  비자별 특별 규정
                 </h4>
                 <div className="text-sm text-amber-800 space-y-1">
-                  <p>• <strong>처음 5년:</strong> SPT 계산에서 체류일수 완전 제외 → 자동 비거주자</p>
-                  <p>• <strong>5년 초과:</strong> 일반 SPT 규칙 적용 (183일 기준)</p>
+                  <p>• <strong>F-1, J-1, M-1 Student:</strong> 처음 5년간 SPT 제외 → 자동 비거주자</p>
+                  <p>• <strong>J-1 Non-Student:</strong> 처음 2년간 SPT 제외 → 자동 비거주자</p>
+                  <p>• <strong>면제 기간 초과:</strong> 일반 SPT 규칙 적용 (183일 기준)</p>
                   <p>• <strong>추가 혜택:</strong> Closer Connection Exception, 한미조세조약 적용 가능</p>
                 </div>
               </div>
@@ -421,17 +459,17 @@ const ResidencyChecker: React.FC = () => {
 
                 <div className="border-t pt-4">
                   <div className="text-center">
-                    {!result.isStudentException && (
+                    {!result.isVisaException && (
                       <div className="text-3xl font-bold mb-2">
                         총 {result.totalDays}일
                       </div>
                     )}
                     
-                    {result.studentNote && (
+                    {result.visaNote && (
                       <div className="mb-4 p-3 bg-blue-100 rounded-lg">
                         <div className="flex items-center justify-center gap-2 text-blue-800">
                           <GraduationCap className="h-5 w-5" />
-                          <span className="font-medium">{result.studentNote}</span>
+                          <span className="font-medium">{result.visaNote}</span>
                         </div>
                       </div>
                     )}
@@ -440,14 +478,14 @@ const ResidencyChecker: React.FC = () => {
                       <AlertDescription className={result.isResident ? "text-red-800" : "text-green-800"}>
                         {result.isResident ? (
                           <span className="font-semibold">
-                            🏠 미국 세법상 거주자입니다 {!result.isStudentException && "(183일 이상)"}
+                            🏠 미국 세법상 거주자입니다 {!result.isVisaException && "(183일 이상)"}
                             <br />
                             전 세계 소득에 대해 미국 세금 신고 의무가 있습니다.
                           </span>
                         ) : (
                           <span className="font-semibold">
                             ✈️ 미국 세법상 비거주자입니다 
-                            {result.isStudentException ? "(학생 비자 예외)" : "(183일 미만)"}
+                            {result.isVisaException ? "(비자 예외)" : "(183일 미만)"}
                             <br />
                             미국 원천소득에 대해서만 세금 신고 의무가 있습니다.
                           </span>
