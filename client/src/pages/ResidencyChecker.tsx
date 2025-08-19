@@ -167,7 +167,6 @@ const ResidencyChecker: React.FC = () => {
           </div>
         </div>
       </div>
-
       <div className="grid grid-cols-1 gap-6">
         <Card>
           <CardHeader>
@@ -346,9 +345,7 @@ const ResidencyChecker: React.FC = () => {
                         name="visaStartDate"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-sm font-medium text-blue-900">
-                              미국 최초 입국일 (면제 체류자로)
-                            </FormLabel>
+                            <FormLabel className="text-sm font-medium text-blue-900">미국 최초 입국일 (해당 비자를 가지고 미국에 입국한 날짜)</FormLabel>
                             <FormControl>
                               <Input
                                 type="date"
@@ -500,7 +497,6 @@ const ResidencyChecker: React.FC = () => {
           </Card>
         )}
       </div>
-
       <ChatBot context="거주자여부확인" />
     </div>
   );
