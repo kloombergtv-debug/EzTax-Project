@@ -229,6 +229,7 @@ const ResidencyChecker: React.FC = () => {
   };
 
   const onSubmit = (data: ResidencyData) => {
+    console.log('onSubmit 받은 데이터:', data);
     const calculationResult = calculateResidency(data);
     setResult(calculationResult);
   };
@@ -276,12 +277,16 @@ const ResidencyChecker: React.FC = () => {
                       <FormItem>
                         <div className="flex items-center gap-4">
                           <div className="text-lg font-medium text-blue-900">
-                            {new Date(field.value).toLocaleDateString('ko-KR', {
-                              year: 'numeric',
-                              month: 'long',
-                              day: 'numeric',
-                              weekday: 'long'
-                            })}
+                            {(() => {
+                              const [year, month, day] = field.value.split('-').map(Number);
+                              const date = new Date(year, month - 1, day);
+                              return date.toLocaleDateString('ko-KR', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric',
+                                weekday: 'long'
+                              });
+                            })()}
                           </div>
                           <FormControl>
                             <Input
@@ -295,11 +300,11 @@ const ResidencyChecker: React.FC = () => {
                           이 날짜를 기준으로 세금 신고 대상 연도가 자동 계산됩니다.
                           <br />
                           <span className="font-medium">
-                            세금 신고 대상: {new Date(field.value).getFullYear() - 1}년도
+                            세금 신고 대상: {field.value.split('-')[0] - 1}년도
                           </span>
                           <br />
                           <span className="text-green-600">
-                            ✓ 거주자 판정은 자동으로 {new Date(field.value).getFullYear() - 1}년 12월 31일까지 계산됩니다
+                            ✓ 거주자 판정은 자동으로 {field.value.split('-')[0] - 1}년 12월 31일까지 계산됩니다
                           </span>
                         </div>
                         <FormMessage />
