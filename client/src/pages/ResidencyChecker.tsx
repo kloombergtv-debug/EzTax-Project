@@ -15,7 +15,7 @@ const residencySchema = z.object({
   currentYearDays: z.number().min(0).max(366),
   previousYearDays: z.number().min(0).max(366),
   twoPreviousYearDays: z.number().min(0).max(366),
-  visaType: z.enum(['none', 'f1_student', 'j1_student', 'm1_student', 'j1_non_student', 'h1b', 'l1', 'o1', 'tn', 'e2', 'eb_immigrant']),
+  visaType: z.enum(['f1_student', 'j1_student', 'm1_student', 'j1_non_student', 'h1b', 'l1', 'o1', 'tn', 'e2', 'eb_immigrant']),
   visaStartDate: z.string().optional(),
 });
 
@@ -36,7 +36,7 @@ interface ResidencyResult {
 
 const ResidencyChecker: React.FC = () => {
   const [result, setResult] = useState<ResidencyResult | null>(null);
-  const [showVisaFields, setShowVisaFields] = useState(false);
+  const [showVisaFields, setShowVisaFields] = useState(true);
 
   // 현재 날짜를 자동으로 설정
   const getCurrentDate = () => {
@@ -54,7 +54,7 @@ const ResidencyChecker: React.FC = () => {
       currentYearDays: 0,
       previousYearDays: 0,
       twoPreviousYearDays: 0,
-      visaType: 'none' as const,
+      visaType: 'f1_student' as const,
       visaStartDate: "",
     }
   });
@@ -67,7 +67,7 @@ const ResidencyChecker: React.FC = () => {
     
     // 면제 체류 기간 계산 (미국 최초 입국일부터)
     let exemptYears = 0;
-    if (data.visaType !== 'none' && data.visaStartDate) {
+    if (data.visaStartDate) {
       const firstEntryDate = new Date(data.visaStartDate);
       const firstEntryYear = firstEntryDate.getFullYear();
       const currentYear = currentDate.getFullYear();
@@ -322,9 +322,7 @@ const ResidencyChecker: React.FC = () => {
                       비자 타입 선택
                     </label>
                   </div>
-                  <div className="text-xs text-gray-600 mb-3">
-                    • <strong>"해당 없음"</strong>은 B1/B2 관광/출장 비자나 기타 면제 규정이 없는 모든 비자 타입을 포함합니다
-                  </div>
+
                   
                   <FormField
                     control={form.control}
@@ -337,11 +335,10 @@ const ResidencyChecker: React.FC = () => {
                             onChange={(e) => {
                               field.onChange(e.target.value);
                               const hasExemption = ['f1_student', 'j1_student', 'm1_student', 'j1_non_student'].includes(e.target.value);
-                              setShowVisaFields(e.target.value !== 'none' && hasExemption);
+                              setShowVisaFields(hasExemption);
                             }}
                             className="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                           >
-                            <option value="none">해당 없음 (B1/B2 관광/출장, 기타 일반 비자)</option>
                             <optgroup label="학생 비자 (면제 기간 있음)">
                               <option value="f1_student">F-1 Student (학생)</option>
                               <option value="j1_student">J-1 Student (학생)</option>
