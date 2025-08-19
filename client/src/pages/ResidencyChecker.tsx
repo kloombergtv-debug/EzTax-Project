@@ -7,13 +7,15 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Calculator, Home, Calendar } from 'lucide-react';
+import { Calculator, Home, Calendar, GraduationCap } from 'lucide-react';
 import { ChatBot } from '@/components/ChatBot';
 
 const residencySchema = z.object({
   currentYearDays: z.number().min(0).max(365),
   previousYearDays: z.number().min(0).max(365),
   twoPreviousYearDays: z.number().min(0).max(365),
+  isStudent: z.boolean(),
+  studentYearsCompleted: z.number().min(0).max(10).optional(),
 });
 
 type ResidencyData = z.infer<typeof residencySchema>;
@@ -26,10 +28,13 @@ interface ResidencyResult {
     previous: number;
     twoPrevious: number;
   };
+  isStudentException: boolean;
+  studentNote?: string;
 }
 
 const ResidencyChecker: React.FC = () => {
   const [result, setResult] = useState<ResidencyResult | null>(null);
+  const [showStudentFields, setShowStudentFields] = useState(false);
 
   const form = useForm<ResidencyData>({
     resolver: zodResolver(residencySchema),
@@ -37,10 +42,28 @@ const ResidencyChecker: React.FC = () => {
       currentYearDays: 0,
       previousYearDays: 0,
       twoPreviousYearDays: 0,
+      isStudent: false,
+      studentYearsCompleted: 0,
     }
   });
 
   const calculateResidency = (data: ResidencyData): ResidencyResult => {
+    // F1, J1, M1 학생 비자 예외 규정 확인
+    if (data.isStudent && (data.studentYearsCompleted || 0) < 5) {
+      return {
+        totalDays: 0,
+        isResident: false,
+        breakdown: {
+          current: 0,
+          previous: 0,
+          twoPrevious: 0,
+        },
+        isStudentException: true,
+        studentNote: `학생 비자 ${data.studentYearsCompleted || 0}년차: 5년 미만으로 자동 비거주자 처리`
+      };
+    }
+
+    // 일반 SPT 계산 (학생 5년 초과 포함)
     const currentYearDays = data.currentYearDays;
     const previousYearDays = Math.round(data.previousYearDays * (1/3));
     const twoPreviousYearDays = Math.round(data.twoPreviousYearDays * (1/6));
@@ -55,7 +78,11 @@ const ResidencyChecker: React.FC = () => {
         current: currentYearDays,
         previous: previousYearDays,
         twoPrevious: twoPreviousYearDays,
-      }
+      },
+      isStudentException: false,
+      studentNote: data.isStudent && (data.studentYearsCompleted || 0) >= 5 
+        ? `학생 비자 ${data.studentYearsCompleted}년차: 5년 초과로 일반 SPT 규칙 적용`
+        : undefined
     };
   };
 
@@ -168,6 +195,72 @@ const ResidencyChecker: React.FC = () => {
                   />
                 </div>
 
+                {/* 학생 비자 예외 규정 */}
+                <div className="border-t pt-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <GraduationCap className="h-5 w-5 text-blue-600" />
+                    <label className="text-sm font-medium">
+                      F1, J1, M1 학생 비자 소지자입니까?
+                    </label>
+                  </div>
+                  
+                  <FormField
+                    control={form.control}
+                    name="isStudent"
+                    render={({ field }) => (
+                      <FormItem className="flex items-center gap-3">
+                        <FormControl>
+                          <input
+                            type="checkbox"
+                            checked={field.value}
+                            onChange={(e) => {
+                              field.onChange(e.target.checked);
+                              setShowStudentFields(e.target.checked);
+                            }}
+                            className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                          />
+                        </FormControl>
+                        <FormLabel className="text-sm text-gray-600 cursor-pointer">
+                          네, 학생 비자 소지자입니다 (F1/J1/M1)
+                        </FormLabel>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {showStudentFields && (
+                    <div className="mt-4 p-4 bg-blue-50 rounded-lg">
+                      <FormField
+                        control={form.control}
+                        name="studentYearsCompleted"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-sm font-medium text-blue-900">
+                              미국에서 학생 비자로 체류한 총 연수
+                            </FormLabel>
+                            <FormControl>
+                              <Input
+                                type="number"
+                                placeholder="0"
+                                min="0"
+                                max="10"
+                                {...field}
+                                onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
+                                className="bg-white"
+                              />
+                            </FormControl>
+                            <div className="text-xs text-blue-700 mt-1">
+                              • 5년 미만: 자동으로 비거주자 처리<br/>
+                              • 5년 이상: 일반 SPT 규칙 적용
+                            </div>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  )}
+                </div>
+
                 <div className="flex gap-4 justify-center">
                   <Button type="submit" className="bg-blue-600 hover:bg-blue-700">
                     <Calculator className="h-4 w-4 mr-2" />
@@ -202,6 +295,18 @@ const ResidencyChecker: React.FC = () => {
                 <p>• 계산 결과가 183일 이상이면 미국 세법상 거주자로 분류됩니다.</p>
                 <p>• 미국 거주자는 전 세계 소득에 대해 미국에서 세금을 납부해야 합니다.</p>
                 <p>• 조약 혜택(Tax Treaty)이나 기타 예외사항이 있을 수 있으니 전문가와 상담하세요.</p>
+              </div>
+              
+              <div className="mt-4 p-4 bg-amber-50 rounded-lg">
+                <h4 className="font-semibold text-amber-900 mb-2 flex items-center gap-2">
+                  <GraduationCap className="h-4 w-4" />
+                  학생 비자 특별 규정 (F1/J1/M1)
+                </h4>
+                <div className="text-sm text-amber-800 space-y-1">
+                  <p>• <strong>처음 5년:</strong> SPT 계산에서 체류일수 완전 제외 → 자동 비거주자</p>
+                  <p>• <strong>5년 초과:</strong> 일반 SPT 규칙 적용 (183일 기준)</p>
+                  <p>• <strong>추가 혜택:</strong> Closer Connection Exception, 한미조세조약 적용 가능</p>
+                </div>
               </div>
             </div>
           </CardContent>
@@ -240,21 +345,33 @@ const ResidencyChecker: React.FC = () => {
 
                 <div className="border-t pt-4">
                   <div className="text-center">
-                    <div className="text-3xl font-bold mb-2">
-                      총 {result.totalDays}일
-                    </div>
+                    {!result.isStudentException && (
+                      <div className="text-3xl font-bold mb-2">
+                        총 {result.totalDays}일
+                      </div>
+                    )}
+                    
+                    {result.studentNote && (
+                      <div className="mb-4 p-3 bg-blue-100 rounded-lg">
+                        <div className="flex items-center justify-center gap-2 text-blue-800">
+                          <GraduationCap className="h-5 w-5" />
+                          <span className="font-medium">{result.studentNote}</span>
+                        </div>
+                      </div>
+                    )}
                     
                     <Alert className={result.isResident ? "border-red-200 bg-red-50" : "border-green-200 bg-green-50"}>
                       <AlertDescription className={result.isResident ? "text-red-800" : "text-green-800"}>
                         {result.isResident ? (
                           <span className="font-semibold">
-                            🏠 미국 세법상 거주자입니다 (183일 이상)
+                            🏠 미국 세법상 거주자입니다 {!result.isStudentException && "(183일 이상)"}
                             <br />
                             전 세계 소득에 대해 미국 세금 신고 의무가 있습니다.
                           </span>
                         ) : (
                           <span className="font-semibold">
-                            ✈️ 미국 세법상 비거주자입니다 (183일 미만)
+                            ✈️ 미국 세법상 비거주자입니다 
+                            {result.isStudentException ? "(학생 비자 예외)" : "(183일 미만)"}
                             <br />
                             미국 원천소득에 대해서만 세금 신고 의무가 있습니다.
                           </span>
