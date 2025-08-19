@@ -24,7 +24,7 @@ const Footer: React.FC = () => {
               <h4 className="font-heading font-semibold mb-4">리소스</h4>
               <ul className="space-y-2 text-sm text-gray-light">
                 <li><Link href="/personal-info"><div className="hover:text-white cursor-pointer">세금계산기</div></Link></li>
-                <li><a href="https://www.ssa.gov/OACT/quickcalc/" target="_blank" rel="noopener noreferrer" className="hover:text-white cursor-pointer">Social Security 계산기</a></li>
+                <li><Link href="/social-security-calculator"><div className="hover:text-white cursor-pointer">Social Security 계산기</div></Link></li>
                 <li><Link href="/residency-checker"><div className="hover:text-white cursor-pointer">거주자여부확인</div></Link></li>
                 <li><Link href="#"><div className="hover:text-white cursor-pointer">블로그</div></Link></li>
               </ul>
