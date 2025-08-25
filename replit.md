@@ -48,6 +48,7 @@ Page Layout Preference:
 - **PDF Generation**: Capable of generating Form 1040 PDFs.
 - **AI ChatBot Integration**: Integrated across all major application pages (e.g., PersonalInfo, TaxCredits, Deductions) for contextual support. Utilizes OpenAI GPT-4o model with Korean tax expertise and EzTax-specific training.
 - **US Tax Residency Checker**: Dedicated page (`/residency-checker`) for determining US tax residency status using the IRS Substantial Presence Test formula, including student visa exception rules and accurate date calculations. Features F-1 student calendar year-based exemption calculation, J-1 Non-student 2-year exemption rules, and timezone-safe date parsing for consistent results across different environments.
+- **State-Based Expert Consultation System**: Professional expert consultation system with state-specific routing (`/expert-consultation/:state`). Features detailed expert profiles with credentials, experience, specialties, and real-time consultation booking. Includes email integration for consultation requests and comprehensive expert information display.
 
 ## External Dependencies
 
@@ -57,3 +58,81 @@ Page Layout Preference:
 - **Payment Processing**: Stripe and PayPal
 - **UI Components**: Radix UI primitives (via shadcn/ui)
 - **Development Tools**: TypeScript, ESLint/Prettier, Vite, Drizzle Kit
+
+## Expert Profile System
+
+### Profile Format Standard
+When creating expert profiles, use the following comprehensive format:
+
+#### Basic Information
+- **Name**: Full Korean name
+- **Title**: Professional designation (e.g., "세무전문가(EA)")
+- **Photo**: Real professional headshot (144x144px, circular frame with white border)
+- **Rating**: Professional rating out of 5.0
+- **Review Count**: Number of client reviews
+- **Credentials**: Professional certifications displayed as colored badges
+
+#### Detailed Sections
+1. **주요 이력** (Career History)
+   - Current positions with date ranges
+   - Key professional roles and affiliations
+   - Academic positions and board memberships
+   - Significant professional contributions
+
+2. **학력** (Education)
+   - Universities attended with degrees
+   - Graduation years where applicable
+   - Specialized academic focus areas
+
+3. **전문 분야** (Professional Specialties)
+   - 7-8 specific service areas
+   - Bullet-pointed format with colored indicators
+   - Client-focused language
+
+4. **회사소개** (Company Introduction)
+   - Company philosophy and mission
+   - Service approach and values
+   - Vision statement
+
+#### Visual Design Standards
+- **Card Layout**: Gradient background (blue-to-purple)
+- **Photo Frame**: 144x144px circular with 4px white border and shadow
+- **Badge Colors**: 
+  - IRS EA: Blue background (#bg-blue-100, #text-blue-700)
+  - NAKAEA 부회장: Green background (#bg-green-100, #text-green-700)
+- **Section Icons**: 
+  - 주요 이력: FileText icon (blue)
+  - 학력: Users icon (green) 
+  - 전문 분야: Star icon (pink)
+- **Button Styling**: Gradient action buttons with hover effects
+
+### Image Handling Process
+1. **Upload Location**: Save expert photos to `attached_assets/` folder
+2. **Copy to Public**: Copy image to `client/public/` with descriptive name
+3. **Reference Path**: Use `/filename.png` format for public folder access
+4. **Fallback System**: Implement error handling with initial-based SVG fallback
+
+### Expert Data Structure
+```typescript
+{
+  id: number,
+  name: string,
+  title: string,
+  image: string, // Public folder path
+  rating: number,
+  reviews: number,
+  certifications: string[],
+  education: string[],
+  career: string[],
+  expertise: string[],
+  bio: string, // Company introduction
+  phone: string,
+  email: string
+}
+```
+
+### State-Based Routing
+- Route pattern: `/expert-consultation/:state`
+- State codes: 'NY' (뉴욕), 'CA' (캘리포니아), etc.
+- Each state has dedicated expert listings
+- Automatic redirect from Review page based on user's selected state
