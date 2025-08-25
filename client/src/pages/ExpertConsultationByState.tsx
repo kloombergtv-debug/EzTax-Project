@@ -30,7 +30,7 @@ const expertsByState = {
         id: 1,
         name: '정승욱',
         title: '세무전문가(EA)',
-        image: '/attached_assets/image_1756087452828.png',
+        image: 'https://via.placeholder.com/150x150/4285f4/ffffff?text=%EC%A0%95',
         rating: 4.9,
         reviews: 127,
         experience: '15년+',
@@ -221,20 +221,8 @@ const ExpertConsultationByState: React.FC<ExpertConsultationByStateProps> = () =
               <div className="flex flex-col lg:flex-row gap-8">
                 {/* Expert Photo & Basic Info */}
                 <div className="flex-shrink-0 text-center lg:text-left">
-                  <div className="w-36 h-36 rounded-full mx-auto lg:mx-0 mb-6 shadow-lg overflow-hidden border-4 border-white bg-gray-100">
-                    <img 
-                      src={expert.image}
-                      alt={expert.name} 
-                      className="w-full h-full object-cover"
-                      onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-                        const target = e.currentTarget;
-                        target.style.display = 'none';
-                        const fallbackDiv = document.createElement('div');
-                        fallbackDiv.className = 'w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-600 to-purple-600';
-                        fallbackDiv.innerHTML = `<span class="text-white text-2xl font-bold">${expert.name.charAt(0)}</span>`;
-                        target.parentElement?.appendChild(fallbackDiv);
-                      }}
-                    />
+                  <div className="w-36 h-36 rounded-full mx-auto lg:mx-0 mb-6 shadow-lg overflow-hidden border-4 border-white bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center">
+                    <span className="text-white text-4xl font-bold">정</span>
                   </div>
                   <h3 className="text-2xl font-bold text-gray-900 mb-2">{expert.name} 대표</h3>
                   <p className="text-blue-700 font-semibold mb-4 text-lg">{expert.title}</p>
@@ -246,14 +234,11 @@ const ExpertConsultationByState: React.FC<ExpertConsultationByStateProps> = () =
                   </div>
                   
                   <div className="flex flex-wrap gap-2 justify-center lg:justify-start mb-6">
-                    <Badge className="bg-red-100 text-red-700 border-red-200 px-3 py-1 text-sm font-semibold">
-                      FINRA Series 65
-                    </Badge>
                     <Badge className="bg-blue-100 text-blue-700 border-blue-200 px-3 py-1 text-sm font-semibold">
                       IRS EA
                     </Badge>
                     <Badge className="bg-green-100 text-green-700 border-green-200 px-3 py-1 text-sm font-semibold">
-                      지식
+                      NAKAEA 부회장
                     </Badge>
                   </div>
                 </div>
