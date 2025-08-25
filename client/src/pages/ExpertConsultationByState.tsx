@@ -343,26 +343,7 @@ const ExpertConsultationByState: React.FC<ExpertConsultationByStateProps> = () =
                         </div>
                       </div>
                       
-                      <div className="bg-white rounded-lg p-4 shadow-inner">
-                        <div className="space-y-3">
-                          <div className="flex items-center gap-3">
-                            <Clock className="h-5 w-5 text-blue-600" />
-                            <span className="font-medium text-gray-800">경력: {expert.experience}</span>
-                          </div>
-                          <div className="flex items-center gap-3">
-                            <DollarSign className="h-5 w-5 text-green-600" />
-                            <span className="font-medium text-gray-800">상담료: {expert.hourlyRate}/시간</span>
-                          </div>
-                          <div className="flex items-center gap-3">
-                            <CheckCircle className="h-5 w-5 text-green-500" />
-                            <span className="font-medium text-gray-800">응답시간: {expert.responseTime}</span>
-                          </div>
-                          <div className="flex items-center gap-3">
-                            <Calendar className="h-5 w-5 text-purple-600" />
-                            <span className="font-medium text-gray-800">{expert.availability}</span>
-                          </div>
-                        </div>
-                      </div>
+
                     </div>
                   </div>
                   
