@@ -124,7 +124,7 @@ export default function About() {
               <div className="flex justify-center">
                 <img 
                   src={missionImagePath} 
-                  alt="EzTax Mission - 혁신적인 핀테크 솔루션을 통해 개인의 재정적 성공을 지원" 
+                  alt="EzFintech Mission - 혁신적인 핀테크 솔루션을 통해 개인의 재정적 성공을 지원" 
                   className="max-w-full h-auto rounded-lg shadow-md"
                 />
               </div>
@@ -155,7 +155,7 @@ export default function About() {
               <div className="flex justify-center">
                 <img 
                   src={visionImagePath} 
-                  alt="EzTax Vision - 절세, 그 이상의 가치를 전하는 재정플랜 플랫폼" 
+                  alt="EzFintech Vision - 절세, 그 이상의 가치를 전하는 재정플랜 플랫폼" 
                   className="max-w-full h-auto rounded-lg shadow-md"
                 />
               </div>
@@ -273,12 +273,12 @@ export default function About() {
               <div className="bg-white/80 p-6 rounded-lg mb-6">
                 <h4 className="font-semibold text-blue-800 mb-3">💭 CEO 메시지</h4>
                 <p className="text-blue-800 leading-relaxed mb-4">
-                  <strong>📌 "Less Tax, More Wealth"</strong> 철학을 바탕으로 EzTax를 설립했습니다. 
+                  <strong>📌 "Less Tax, More Wealth"</strong> 철학을 바탕으로 EzFintech를 설립했습니다. 
                   국내외 유수의 금융·기업 그룹에서 재무 및 IR 책임자로 경력을 쌓으며, 
                   복잡한 세무와 투자의 세계에서 많은 사람들이 겪는 어려움을 목격했습니다.
                 </p>
                 <p className="text-blue-800 leading-relaxed mb-4">
-                  EzTax는 단순한 세무 계산기가 아닙니다. 첨단 AI 기술과 몬테카를로 시뮬레이션을 활용하여 
+                  EzFintech는 단순한 세무 계산기가 아닙니다. 첨단 AI 기술과 몬테카를로 시뮬레이션을 활용하여 
                   개인의 재정 상황을 종합적으로 분석하고, 세금 절감과 부의 극대화를 동시에 달성할 수 있는 
                   맞춤형 전략을 제시합니다.
                 </p>
