@@ -347,12 +347,11 @@ export default function About() {
                 <div>
                   <h4 className="font-semibold text-green-800 mb-3">💼 주요 이력</h4>
                   <ul className="text-sm text-green-700 space-y-2">
-                    <li>🚀 EzFintech CTO (2023~현재)</li>
-                    <li>🅾️ O'Reilly Auto Parts - UI/UX Engineer B2B (2022년 6월~현재, 3년 3개월)</li>
-                    <li>▶️ Accenture Federal Services - Salesforce UI/UX Developer (2021년 10월~2022년 4월, 7개월)</li>
-                    <li>🅾️ O'Reilly Auto Parts - UI/UX Engineer (2019년 2월~2021년 9월, 2년 8개월)</li>
-                    <li>🏢 Lennox International - Application Developer III (2013년 11월~2018년 1월, 4년 3개월)</li>
-                    <li>🏒 National Hockey League (NHL) - Application Developer (2011년 8월~2013년 11월, 2년 4개월)</li>
+                    <li>🚀 EzFintech CTO</li>
+                    <li>🅾️ O'Reilly Auto Parts</li>
+                    <li>▶️ Accenture Federal Services</li>
+                    <li>🏢 Lennox International</li>
+                    <li>🏒 National Hockey League (NHL)</li>
                   </ul>
                   
                   <h4 className="font-semibold text-green-800 mb-3 mt-4">🎓 학력</h4>
