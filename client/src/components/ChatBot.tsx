@@ -135,7 +135,7 @@ export function ChatBot({ context = "소득 입력" }: ChatBotProps) {
           </div>
         </CardHeader>
         <div className="px-4 py-2 bg-yellow-50 border-b border-yellow-200">
-          <p className="text-xs text-yellow-800 text-center">
+          <p className="text-sm text-yellow-800 text-center">
             ⚠️ AI Chatbot의 정보는 부정확할 수 있습니다. 중요한 사항은 전문가 또는 게시판에 질의해주시기 바랍니다.
           </p>
         </div>
