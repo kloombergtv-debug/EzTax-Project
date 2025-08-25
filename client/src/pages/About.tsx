@@ -226,7 +226,7 @@ export default function About() {
                 지대현 대표
               </h3>
               <p className="text-blue-700 font-medium mb-4">
-                EzTax 창립자 & CEO | FINRA Series 65 투자자문사 | 세무전문가
+                EzTax 창립자 & CEO | 세무전문가(EA)/투자자문사(Series 65)
               </p>
               <div className="flex flex-wrap gap-2 justify-center lg:justify-start">
                 <Badge variant="outline" className="border-red-300 text-red-700 bg-red-50">FINRA Series 65</Badge>
