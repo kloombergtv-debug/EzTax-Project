@@ -315,7 +315,18 @@ export default function About() {
         <CardContent>
           <div className="flex flex-col lg:flex-row gap-8">
             <div className="flex-shrink-0 text-center lg:text-left">
-              <div className="w-32 h-32 rounded-full bg-gradient-to-br from-green-400 to-emerald-600 flex items-center justify-center text-white text-4xl font-bold border-4 border-green-200 mx-auto lg:mx-0">
+              <img 
+                src="/cto-photo.png"
+                alt="김영일 CTO"
+                className="w-32 h-32 rounded-full object-cover border-4 border-green-200 mx-auto lg:mx-0"
+                onError={(e) => {
+                  const target = e.currentTarget;
+                  target.style.display = 'none';
+                  const fallback = target.nextElementSibling as HTMLElement;
+                  if (fallback) fallback.style.display = 'flex';
+                }}
+              />
+              <div className="w-32 h-32 rounded-full bg-gradient-to-br from-green-400 to-emerald-600 items-center justify-center text-white text-4xl font-bold border-4 border-green-200 mx-auto lg:mx-0 hidden">
                 김
               </div>
               <h3 className="text-2xl font-bold text-green-800 mt-4 mb-2">
