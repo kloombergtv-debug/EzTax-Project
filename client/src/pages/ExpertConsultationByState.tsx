@@ -38,8 +38,17 @@ const expertsByState = {
         languages: ['한국어', '영어'],
         hourlyRate: '$150-200',
         responseTime: '2시간 이내',
-        bio: '뉴욕 지역 한인 커뮤니티를 위한 세무 및 투자 전문가입니다. FINRA Series 65 투자자문사 및 IRS EA 자격을 보유하고 있으며, 개인 맞춤형 절세 전략과 은퇴 설계를 제공합니다.',
-        certifications: ['FINRA Series 65', 'IRS EA', 'CPA'],
+        bio: 'GTAX Consulting Group 대표이자 재미한인등록세무사협회(NAKAEA) 부회장으로 활동하고 있습니다. 서울대학교 법학박사 출신으로 홍익대학교·중앙대학교에서 강의하며, 대법원 판례평석위원회 위원을 역임했습니다.',
+        certifications: ['FINRA Series 65', 'IRS EA'],
+        education: ['한국외국어대학교 법학 학사', '서울대학교 법학석사 (1990)', '서울대학교 법학박사 (1998)'],
+        career: [
+          'GTAX Consulting Group 대표 (2021~현재)',
+          '재미한인등록세무사협회(NAKAEA) 부회장 (2024~현재)',
+          '홍익대학교·중앙대학교 강의',
+          '대법원 판례평석위원회 위원',
+          'IMF 외환위기 시기 예금보험공사(KDIC) 기업·금융 구조조정 참여'
+        ],
+        expertise: ['세금 보고 및 조세 전략 수립', '회계 시스템 선택 및 구축', 'IRS 감사 대응 및 관련 자문'],
         availability: 'Mon-Fri 9AM-6PM EST',
         phone: '(212) 555-0123',
         email: 'expert.ny@ezfintech.com'
@@ -287,12 +296,45 @@ const ExpertConsultationByState: React.FC<ExpertConsultationByStateProps> = () =
                           <span className="text-sm text-gray-600">{expert.availability}</span>
                         </div>
                       </div>
+                      
+                      {expert.education && (
+                        <div className="mt-4">
+                          <h5 className="font-medium text-gray-800 mb-2">학력</h5>
+                          <ul className="text-sm text-gray-600 space-y-1">
+                            {expert.education.map((edu, index) => (
+                              <li key={index}>• {edu}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                      
+                      {expert.career && (
+                        <div className="mt-4">
+                          <h5 className="font-medium text-gray-800 mb-2">주요 경력</h5>
+                          <ul className="text-sm text-gray-600 space-y-1">
+                            {expert.career.slice(0, 3).map((career, index) => (
+                              <li key={index}>• {career}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
                     </div>
                   </div>
                   
                   <div className="mb-6">
                     <h4 className="font-semibold text-gray-800 mb-2">전문가 소개</h4>
-                    <p className="text-gray-600 leading-relaxed">{expert.bio}</p>
+                    <p className="text-gray-600 leading-relaxed mb-4">{expert.bio}</p>
+                    
+                    {expert.expertise && (
+                      <div>
+                        <h5 className="font-medium text-gray-800 mb-2">전문 서비스</h5>
+                        <ul className="text-sm text-gray-600 space-y-1">
+                          {expert.expertise.map((item, index) => (
+                            <li key={index}>• {item}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                   </div>
                   
                   <div className="flex flex-col sm:flex-row gap-3">
