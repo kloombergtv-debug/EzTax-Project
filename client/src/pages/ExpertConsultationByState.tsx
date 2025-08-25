@@ -30,7 +30,7 @@ const expertsByState = {
         id: 1,
         name: '정승욱',
         title: '세무전문가(EA)',
-        image: 'https://via.placeholder.com/150x150/4285f4/ffffff?text=%EC%A0%95',
+        image: 'attached_assets/image_1756087452828.png',
         rating: 4.9,
         reviews: 127,
         experience: '15년+',
@@ -223,9 +223,13 @@ const ExpertConsultationByState: React.FC<ExpertConsultationByStateProps> = () =
                 <div className="flex-shrink-0 text-center lg:text-left">
                   <div className="w-36 h-36 rounded-full mx-auto lg:mx-0 mb-6 shadow-lg overflow-hidden border-4 border-white bg-gray-100">
                     <img 
-                      src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgdmlld0JveD0iMCAwIDE1MCAxNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxNTAiIGhlaWdodD0iMTUwIiBmaWxsPSIjNDI4NWY0Ii8+Cjx0ZXh0IHg9Ijc1IiB5PSI5MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjM2IiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0iI2ZmZmZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+7KCV7Iq57JqpPC90ZXh0Pgo8L3N2Zz4K"
+                      src={expert.image}
                       alt={expert.name} 
                       className="w-full h-full object-cover"
+                      onError={(e) => {
+                        const target = e.currentTarget;
+                        target.src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgdmlld0JveD0iMCAwIDE1MCAxNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxNTAiIGhlaWdodD0iMTUwIiBmaWxsPSIjNDI4NWY0Ii8+Cjx0ZXh0IHg9Ijc1IiB5PSI5MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjQ4IiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0iI2ZmZmZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+7KCVPC90ZXh0Pgo8L3N2Zz4K";
+                      }}
                     />
                   </div>
                   <h3 className="text-2xl font-bold text-gray-900 mb-2">{expert.name} 대표</h3>
