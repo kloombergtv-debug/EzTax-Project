@@ -30,7 +30,7 @@ const expertsByState = {
         id: 1,
         name: '정승욱',
         title: '세무전문가(EA)',
-        image: 'attached_assets/image_1756087452828.png',
+        image: '/expert-photo.png',
         rating: 4.9,
         reviews: 127,
         experience: '15년+',
