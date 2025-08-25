@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MessageSquare, Users, BookOpen, HelpCircle, ChevronRight, Calendar, User, Plus, X } from 'lucide-react';
+import { MessageSquare, Users, BookOpen, HelpCircle, ChevronRight, Calendar, User, Plus, X, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -66,6 +66,7 @@ const Board: React.FC = () => {
     { id: 'all', name: '전체', icon: MessageSquare, count: getCountByCategory('all') },
     { id: 'usage', name: 'EzTax 사용법', icon: BookOpen, count: getCountByCategory('usage') },
     { id: 'tax', name: '세금신고 질문', icon: HelpCircle, count: getCountByCategory('tax') },
+    { id: 'faq', name: 'FAQ', icon: Info, count: getCountByCategory('faq') },
     { id: 'general', name: '일반 질문', icon: Users, count: getCountByCategory('general') }
   ];
 
@@ -215,6 +216,7 @@ const Board: React.FC = () => {
                       <SelectContent>
                         <SelectItem value="usage">EzTax 사용법</SelectItem>
                         <SelectItem value="tax">세금신고 질문</SelectItem>
+                        <SelectItem value="faq">FAQ</SelectItem>
                         <SelectItem value="general">일반 질문</SelectItem>
                       </SelectContent>
                     </Select>
