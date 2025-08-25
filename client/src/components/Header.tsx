@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Logo from './Logo';
 import { useToast } from "@/hooks/use-toast";
-import { HelpCircle, Save, LogIn, LogOut, User, RefreshCcw, ClipboardCheck, Shield, Home, DollarSign, PiggyBank, FileText, CreditCard, Calculator, Eye, Lock } from 'lucide-react';
+import { HelpCircle, Save, LogIn, LogOut, User, RefreshCcw, ClipboardCheck, Shield, Home, DollarSign, PiggyBank, FileText, CreditCard, Calculator, Eye, Lock, MessageSquare } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useLocation } from 'wouter';
 // import { useTaxContext } from '@/context/TaxContext';
@@ -129,6 +129,15 @@ const Header: React.FC = () => {
             onClick={() => navigate('/review')}
           >
             검토
+          </Button>
+          <Button 
+            variant={location === '/board' ? "default" : "ghost"} 
+            size="sm"
+            className="text-sm flex items-center gap-1"
+            onClick={() => navigate('/board')}
+          >
+            <MessageSquare className="h-4 w-4" />
+            게시판
           </Button>
         </nav>
 
