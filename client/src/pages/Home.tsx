@@ -29,7 +29,7 @@ const Home: React.FC = () => {
           당신의 평생 세금+은퇴 전략을 함께 설계합니다.
         </p> */}
         <p className="text-xl text-gray-dark mb-8 text-center">
-          세금시뮬레이터로 간단하게 계산하시고 노후준비도 진단하세요.
+          AI 세금시뮬레이터로 간단하게 계산하시고 노후준비도 진단하세요.
         </p>
         
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
