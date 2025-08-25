@@ -111,10 +111,10 @@ const Home: React.FC = () => {
         <div className="text-center mt-8">
           <Button 
             variant="ghost" 
-            className="text-gray-600 hover:text-primary underline"
+            className="text-gray-600 hover:text-primary underline text-lg font-medium"
             onClick={() => navigate('/about')}
           >
-            EzTax와 운영진에 대해 더 알아보기 →
+            EzFintech와 운영진에 대해 더 알아보기 →
           </Button>
         </div>
       </section>
