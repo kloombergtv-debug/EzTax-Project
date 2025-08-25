@@ -283,7 +283,7 @@ const Board: React.FC = () => {
                   {selectedCategory === 'all' ? '전체 게시글' : categories.find(cat => cat.id === selectedCategory)?.name}
                 </CardTitle>
                 <div className="text-sm text-gray-500">
-                  총 {posts.length}개의 글
+                  총 {Array.isArray(posts) ? posts.length : 0}개의 글
                 </div>
               </div>
             </CardHeader>
@@ -293,7 +293,7 @@ const Board: React.FC = () => {
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
                   <p className="mt-2 text-gray-500">게시글을 불러오는 중...</p>
                 </div>
-              ) : posts.length === 0 ? (
+              ) : !Array.isArray(posts) || posts.length === 0 ? (
                 <div className="text-center py-8">
                   <MessageSquare className="h-12 w-12 text-gray-400 mx-auto mb-4" />
                   <p className="text-gray-500">아직 게시글이 없습니다.</p>
@@ -301,7 +301,7 @@ const Board: React.FC = () => {
                 </div>
               ) : (
                 <div className="space-y-4">
-                  {posts.map((post: BoardPost) => (
+                  {Array.isArray(posts) && posts.map((post: BoardPost) => (
                     <div
                       key={post.id}
                       className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors cursor-pointer"
@@ -346,7 +346,7 @@ const Board: React.FC = () => {
                 </div>
               )}
 
-              {posts.length > 0 && (
+              {Array.isArray(posts) && posts.length > 0 && (
                 <div className="flex justify-center mt-8">
                   <div className="flex items-center space-x-2">
                     <Button variant="outline" size="sm" disabled>
