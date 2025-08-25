@@ -48,7 +48,12 @@ const expertsByState = {
           '대법원 판례평석위원회 위원',
           'IMF 외환위기 시기 예금보험공사(KDIC) 기업·금융 구조조정 참여'
         ],
-        expertise: ['세금 보고 및 조세 전략 수립', '회계 시스템 선택 및 구축', 'IRS 감사 대응 및 관련 자문'],
+        expertise: [
+          '• 세금 보고 및 조세 전략 수립',
+          '• 회계 시스템 선택 및 구축', 
+          '• IRS 감사 대응 및 관련 자문',
+          '• 해외자산 및 글로벌 세무 규정 대응'
+        ],
         availability: 'Mon-Fri 9AM-6PM EST',
         phone: '(212) 555-0123',
         email: 'expert.ny@ezfintech.com'
