@@ -216,123 +216,183 @@ const ExpertConsultationByState: React.FC<ExpertConsultationByStateProps> = () =
       {/* Experts Grid */}
       <div className="grid gap-6">
         {stateData.experts.map((expert) => (
-          <Card key={expert.id} className="border-2 hover:border-blue-200 transition-colors">
-            <CardContent className="p-6">
-              <div className="flex flex-col lg:flex-row gap-6">
+          <Card key={expert.id} className="border-0 shadow-lg bg-gradient-to-r from-blue-50 to-purple-50 hover:shadow-xl transition-all duration-300">
+            <CardContent className="p-8">
+              <div className="flex flex-col lg:flex-row gap-8">
                 {/* Expert Photo & Basic Info */}
                 <div className="flex-shrink-0 text-center lg:text-left">
-                  <div className="w-32 h-32 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full mx-auto lg:mx-0 flex items-center justify-center mb-4">
-                    <Users className="h-16 w-16 text-blue-600" />
+                  <div className="w-36 h-36 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full mx-auto lg:mx-0 flex items-center justify-center mb-6 shadow-lg">
+                    <Users className="h-20 w-20 text-white" />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-1">{expert.name}</h3>
-                  <p className="text-blue-700 font-medium mb-3">{expert.title}</p>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">{expert.name} 대표</h3>
+                  <p className="text-blue-700 font-semibold mb-4 text-lg">{expert.title}</p>
                   
-                  <div className="flex items-center justify-center lg:justify-start gap-2 mb-2">
-                    <Star className="h-4 w-4 text-yellow-500 fill-current" />
-                    <span className="font-medium">{expert.rating}</span>
-                    <span className="text-gray-500">({expert.reviews}개 리뷰)</span>
+                  <div className="flex items-center justify-center lg:justify-start gap-2 mb-4">
+                    <Star className="h-5 w-5 text-yellow-500 fill-current" />
+                    <span className="font-bold text-lg">{expert.rating}</span>
+                    <span className="text-gray-600">({expert.reviews}개 리뷰)</span>
                   </div>
                   
-                  <div className="flex flex-wrap gap-1 justify-center lg:justify-start">
-                    {expert.certifications.map((cert) => (
-                      <Badge key={cert} variant="outline" className="text-xs">
-                        {cert}
-                      </Badge>
-                    ))}
+                  <div className="flex flex-wrap gap-2 justify-center lg:justify-start mb-6">
+                    <Badge className="bg-red-100 text-red-700 border-red-200 px-3 py-1 text-sm font-semibold">
+                      FINRA Series 65
+                    </Badge>
+                    <Badge className="bg-blue-100 text-blue-700 border-blue-200 px-3 py-1 text-sm font-semibold">
+                      IRS EA
+                    </Badge>
+                    <Badge className="bg-green-100 text-green-700 border-green-200 px-3 py-1 text-sm font-semibold">
+                      지식
+                    </Badge>
                   </div>
                 </div>
 
                 {/* Expert Details */}
                 <div className="flex-1">
-                  <div className="grid md:grid-cols-2 gap-6 mb-6">
-                    <div>
-                      <h4 className="font-semibold text-gray-800 mb-3">전문 분야</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {expert.specialties.map((specialty) => (
-                          <Badge key={specialty} className="bg-blue-100 text-blue-800">
-                            {specialty}
-                          </Badge>
-                        ))}
-                      </div>
-                      
-                      <h4 className="font-semibold text-gray-800 mb-2 mt-4">언어</h4>
-                      <p className="text-gray-600">{expert.languages.join(', ')}</p>
-                    </div>
-                    
-                    <div>
-                      <div className="space-y-3">
-                        <div className="flex items-center gap-2">
-                          <Clock className="h-4 w-4 text-gray-500" />
-                          <span className="text-sm text-gray-600">경력: {expert.experience}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <DollarSign className="h-4 w-4 text-gray-500" />
-                          <span className="text-sm text-gray-600">상담료: {expert.hourlyRate}/시간</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <CheckCircle className="h-4 w-4 text-green-500" />
-                          <span className="text-sm text-gray-600">응답시간: {expert.responseTime}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Calendar className="h-4 w-4 text-gray-500" />
-                          <span className="text-sm text-gray-600">{expert.availability}</span>
-                        </div>
-                      </div>
-                      
-                      {expert.education && (
-                        <div className="mt-4">
-                          <h5 className="font-medium text-gray-800 mb-2">학력</h5>
-                          <ul className="text-sm text-gray-600 space-y-1">
-                            {expert.education.map((edu, index) => (
-                              <li key={index}>• {edu}</li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-                      
-                      {expert.career && (
-                        <div className="mt-4">
-                          <h5 className="font-medium text-gray-800 mb-2">주요 경력</h5>
-                          <ul className="text-sm text-gray-600 space-y-1">
-                            {expert.career.slice(0, 3).map((career, index) => (
-                              <li key={index}>• {career}</li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  
-                  <div className="mb-6">
-                    <h4 className="font-semibold text-gray-800 mb-2">전문가 소개</h4>
-                    <p className="text-gray-600 leading-relaxed mb-4">{expert.bio}</p>
-                    
-                    {expert.expertise && (
+                  <div className="grid md:grid-cols-2 gap-8 mb-8">
+                    <div className="space-y-6">
                       <div>
-                        <h5 className="font-medium text-gray-800 mb-2">전문 서비스</h5>
-                        <ul className="text-sm text-gray-600 space-y-1">
-                          {expert.expertise.map((item, index) => (
-                            <li key={index}>• {item}</li>
-                          ))}
-                        </ul>
+                        <h4 className="font-bold text-gray-800 mb-4 text-lg flex items-center">
+                          <FileText className="h-5 w-5 mr-2 text-blue-600" />
+                          주요 이력
+                        </h4>
+                        <div className="space-y-3">
+                          <div className="flex items-start gap-3">
+                            <div className="w-2 h-2 bg-blue-600 rounded-full mt-2"></div>
+                            <span className="text-gray-700 font-medium">FINRA Series 65 투자자문사</span>
+                          </div>
+                          <div className="flex items-start gap-3">
+                            <div className="w-2 h-2 bg-blue-600 rounded-full mt-2"></div>
+                            <span className="text-gray-700 font-medium">IRS 공인 EA (Enrolled Agent)</span>
+                          </div>
+                          <div className="flex items-start gap-3">
+                            <div className="w-2 h-2 bg-blue-600 rounded-full mt-2"></div>
+                            <span className="text-gray-700 font-medium">한양그룹 - 재무담당 임원</span>
+                          </div>
+                          <div className="flex items-start gap-3">
+                            <div className="w-2 h-2 bg-blue-600 rounded-full mt-2"></div>
+                            <span className="text-gray-700 font-medium">교보생명 - 재무분석가</span>
+                          </div>
+                          <div className="flex items-start gap-3">
+                            <div className="w-2 h-2 bg-blue-600 rounded-full mt-2"></div>
+                            <span className="text-gray-700 font-medium">LG전자 - IR팀 과장</span>
+                          </div>
+                          <div className="flex items-start gap-3">
+                            <div className="w-2 h-2 bg-blue-600 rounded-full mt-2"></div>
+                            <span className="text-gray-700 font-medium">Nomura Securities - 애널리스트</span>
+                          </div>
+                          <div className="flex items-start gap-3">
+                            <div className="w-2 h-2 bg-red-600 rounded-full mt-2"></div>
+                            <span className="text-gray-700 font-bold">EzFintech 창립자&CEO</span>
+                          </div>
+                        </div>
                       </div>
-                    )}
+                      
+                      <div>
+                        <h5 className="font-bold text-gray-800 mb-3 flex items-center">
+                          <Users className="h-4 w-4 mr-2 text-green-600" />
+                          학력
+                        </h5>
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-2">
+                            <div className="w-1.5 h-1.5 bg-green-600 rounded-full"></div>
+                            <span className="text-gray-700">University of Pennsylvania - 경제학 학사</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <div className="w-1.5 h-1.5 bg-green-600 rounded-full"></div>
+                            <span className="text-gray-700">연세대학교 국제대학원 - MBA</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-6">
+                      <div>
+                        <h4 className="font-bold text-gray-800 mb-4 text-lg flex items-center">
+                          <Star className="h-5 w-5 mr-2 text-pink-500" />
+                          전문 분야
+                        </h4>
+                        <div className="space-y-3">
+                          <div className="flex items-start gap-3">
+                            <div className="w-2 h-2 bg-pink-500 rounded-full mt-2"></div>
+                            <span className="text-gray-700">미국 개인 및 사업자 세무 상담</span>
+                          </div>
+                          <div className="flex items-start gap-3">
+                            <div className="w-2 h-2 bg-pink-500 rounded-full mt-2"></div>
+                            <span className="text-gray-700">자산관리 및 투자 불린 최적화</span>
+                          </div>
+                          <div className="flex items-start gap-3">
+                            <div className="w-2 h-2 bg-pink-500 rounded-full mt-2"></div>
+                            <span className="text-gray-700">투자정보 수익, 자산운용</span>
+                          </div>
+                          <div className="flex items-start gap-3">
+                            <div className="w-2 h-2 bg-pink-500 rounded-full mt-2"></div>
+                            <span className="text-gray-700">고액자산가 명품 정책 컨설팅</span>
+                          </div>
+                          <div className="flex items-start gap-3">
+                            <div className="w-2 h-2 bg-pink-500 rounded-full mt-2"></div>
+                            <span className="text-gray-700">해외자산 및 글로벌 세무 규정 대응</span>
+                          </div>
+                          <div className="flex items-start gap-3">
+                            <div className="w-2 h-2 bg-pink-500 rounded-full mt-2"></div>
+                            <span className="text-gray-700">투자수익 대비 서술세율 분석</span>
+                          </div>
+                          <div className="flex items-start gap-3">
+                            <div className="w-2 h-2 bg-pink-500 rounded-full mt-2"></div>
+                            <span className="text-gray-700">은퇴자금 시뮬레이션 모델링</span>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="bg-white rounded-lg p-4 shadow-inner">
+                        <div className="space-y-3">
+                          <div className="flex items-center gap-3">
+                            <Clock className="h-5 w-5 text-blue-600" />
+                            <span className="font-medium text-gray-800">경력: {expert.experience}</span>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <DollarSign className="h-5 w-5 text-green-600" />
+                            <span className="font-medium text-gray-800">상담료: {expert.hourlyRate}/시간</span>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <CheckCircle className="h-5 w-5 text-green-500" />
+                            <span className="font-medium text-gray-800">응답시간: {expert.responseTime}</span>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <Calendar className="h-5 w-5 text-purple-600" />
+                            <span className="font-medium text-gray-800">{expert.availability}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                   
-                  <div className="flex flex-col sm:flex-row gap-3">
+                  <div className="mb-8">
+                    <h4 className="font-bold text-gray-800 mb-4 text-lg">전문가 소개</h4>
+                    <div className="bg-white rounded-lg p-6 shadow-inner">
+                      <p className="text-gray-700 leading-relaxed text-base">{expert.bio}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex flex-col sm:flex-row gap-4">
                     <Button 
-                      className="bg-blue-600 hover:bg-blue-700"
+                      className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
                       onClick={() => openConsultationDialog(expert)}
                     >
-                      <Calendar className="mr-2 h-4 w-4" />
+                      <Calendar className="mr-2 h-5 w-5" />
                       상담 예약하기
                     </Button>
-                    <Button variant="outline">
-                      <Phone className="mr-2 h-4 w-4" />
+                    <Button 
+                      variant="outline" 
+                      className="border-2 border-blue-600 text-blue-600 hover:bg-blue-50 font-semibold py-3 px-6 rounded-lg"
+                    >
+                      <Phone className="mr-2 h-5 w-5" />
                       {expert.phone}
                     </Button>
-                    <Button variant="outline">
-                      <Mail className="mr-2 h-4 w-4" />
+                    <Button 
+                      variant="outline" 
+                      className="border-2 border-green-600 text-green-600 hover:bg-green-50 font-semibold py-3 px-6 rounded-lg"
+                    >
+                      <Mail className="mr-2 h-5 w-5" />
                       이메일 문의
                     </Button>
                   </div>
