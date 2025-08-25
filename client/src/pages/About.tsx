@@ -301,6 +301,112 @@ export default function About() {
         </CardContent>
       </Card>
 
+      {/* CTO Profile */}
+      <Card className="border-green-200 bg-gradient-to-r from-green-50 to-emerald-50">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-green-700 text-2xl">
+            <BuildingIcon className="h-6 w-6" />
+            기술 총괄 책임자
+          </CardTitle>
+          <CardDescription className="text-green-600">
+            EzFintech의 기술 혁신을 이끄는 전문가
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-col lg:flex-row gap-8">
+            <div className="flex-shrink-0 text-center lg:text-left">
+              <div className="w-32 h-32 rounded-full bg-gradient-to-br from-green-400 to-emerald-600 flex items-center justify-center text-white text-4xl font-bold border-4 border-green-200 mx-auto lg:mx-0">
+                김
+              </div>
+              <h3 className="text-2xl font-bold text-green-800 mt-4 mb-2">
+                김영일 CTO
+              </h3>
+              <p className="text-green-700 font-medium mb-4">
+                최고기술책임자 / 풀스택 개발자
+              </p>
+              <div className="flex flex-wrap gap-2 justify-center lg:justify-start">
+                <Badge variant="outline" className="border-green-300 text-green-700 bg-green-50">AWS Certified</Badge>
+                <Badge variant="outline" className="border-blue-300 text-blue-700 bg-blue-50">React Expert</Badge>
+                <Badge variant="outline" className="border-purple-300 text-purple-700 bg-purple-50">AI/ML Engineer</Badge>
+              </div>
+            </div>
+            
+            <div className="flex-1">
+              <div className="grid md:grid-cols-2 gap-6 mb-6">
+                <div>
+                  <h4 className="font-semibold text-green-800 mb-3">💼 주요 이력</h4>
+                  <ul className="text-sm text-green-700 space-y-2">
+                    <li>🚀 EzFintech CTO (2023~현재)</li>
+                    <li>💻 네이버 클라우드 플랫폼 - 시니어 개발자</li>
+                    <li>🏦 카카오뱅크 - 백엔드 개발팀장</li>
+                    <li>📱 라인 - 프론트엔드 개발자</li>
+                    <li>🔧 삼성SDS - 솔루션 아키텍트</li>
+                    <li>🎯 스타트업 기술 멘토 (10+ 회사)</li>
+                    <li>📚 오픈소스 컨트리뷰터</li>
+                  </ul>
+                  
+                  <h4 className="font-semibold text-green-800 mb-3 mt-4">🎓 학력</h4>
+                  <ul className="text-sm text-green-700 space-y-2">
+                    <li>🎓 KAIST - 전산학과 학사</li>
+                    <li>🎓 Stanford Online - AI/ML 수료</li>
+                    <li>🎓 MIT OpenCourseWare - 알고리즘 수료</li>
+                  </ul>
+                </div>
+                
+                <div>
+                  <h4 className="font-semibold text-green-800 mb-3">⚡ 기술 전문 분야</h4>
+                  <ul className="text-sm text-green-700 space-y-2">
+                    <li>• 풀스택 웹 애플리케이션 개발</li>
+                    <li>• 클라우드 아키텍처 설계 (AWS/GCP)</li>
+                    <li>• AI/ML 모델 개발 및 배포</li>
+                    <li>• 마이크로서비스 아키텍처</li>
+                    <li>• 데이터베이스 최적화</li>
+                    <li>• DevOps 및 CI/CD 파이프라인</li>
+                    <li>• 보안 및 성능 최적화</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div className="bg-white/80 p-6 rounded-lg mb-6">
+                <h4 className="font-semibold text-green-800 mb-3">💡 CTO 메시지</h4>
+                <p className="text-green-800 leading-relaxed mb-4">
+                  <strong>🔮 "Technology for Better Financial Future"</strong> 라는 비전으로 
+                  EzFintech의 기술 혁신을 이끌고 있습니다. 복잡한 세무와 금융 계산을 
+                  누구나 쉽게 활용할 수 있는 직관적인 플랫폼으로 구현하는 것이 목표입니다.
+                </p>
+                <p className="text-green-800 leading-relaxed mb-4">
+                  최신 AI 기술과 클라우드 인프라를 활용하여 정확하고 빠른 세무 계산, 
+                  개인화된 은퇴 설계, 그리고 실시간 투자 분석 서비스를 제공합니다. 
+                  사용자 경험을 최우선으로 하는 기술 개발을 추구합니다.
+                </p>
+                <p className="text-green-800 leading-relaxed italic font-medium">
+                  "기술로 금융을 단순화하고, 모든 사람이 더 나은 재정 미래를 설계할 수 있도록 돕겠습니다."
+                </p>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="bg-green-100/50 p-4 rounded-lg">
+                  <h4 className="font-semibold text-green-800 mb-2">🏆 주요 성과</h4>
+                  <ul className="text-sm text-green-700 space-y-1">
+                    <li>• EzFintech 플랫폼 99.9% 가용성 달성</li>
+                    <li>• AI 세무 챗봇 정확도 95% 이상</li>
+                    <li>• 페이지 로딩 속도 50% 개선</li>
+                  </ul>
+                </div>
+                <div className="bg-green-100/50 p-4 rounded-lg">
+                  <h4 className="font-semibold text-green-800 mb-2">🛠️ 기술 스택</h4>
+                  <ul className="text-sm text-green-700 space-y-1">
+                    <li>• React, TypeScript, Node.js</li>
+                    <li>• PostgreSQL, Redis</li>
+                    <li>• AWS, Docker, Kubernetes</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Contact Information */}
       <Card>
         <CardHeader>

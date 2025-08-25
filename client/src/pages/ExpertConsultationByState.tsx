@@ -77,6 +77,18 @@ const expertsByState = {
         responseTime: '1시간 이내',
         bio: '실리콘밸리 지역 테크 업계 종사자를 위한 세무 전문가입니다. 스톡옵션, RSU 세무처리와 캘리포니아 주세 최적화에 특화되어 있습니다.',
         certifications: ['IRS EA', 'CFP'],
+        education: ['UC Berkeley 경영학 학사', 'Stanford MBA'],
+        career: [
+          'Silicon Valley Tax Solutions 대표 (2018~현재)',
+          'PwC 세무 컨설턴트 (2012-2018)',
+          '애플, 구글 직원 세무 자문'
+        ],
+        expertise: [
+          '캘리포니아 주세 최적화',
+          '스톡옵션 및 RSU 세무처리',
+          '스타트업 세무 전략',
+          '국제세무 및 해외소득 신고'
+        ],
         availability: 'Mon-Fri 7AM-8PM PST',
         phone: '(650) 555-0789',
         email: 'park.ea@catax.com'
