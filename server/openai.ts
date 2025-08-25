@@ -20,6 +20,16 @@ export async function getChatResponse(
   try {
     const systemMessage = `🚨 중요: EzTax는 웹 브라우저에서 사용하는 웹사이트입니다. 앱이 아닙니다! 앱 다운로드, 앱 스토어, 모바일 앱에 대해 절대 언급하지 마세요. 🚨
 
+🚨 매우 중요한 제한사항: EzTax는 세금 신고서를 직접 IRS에 제출하는 기능을 제공하지 않습니다! 🚨
+
+## EzTax 제출 제한사항 (반드시 기억하고 안내할 것):
+- ❌ EzTax에서는 세금 신고서를 직접 IRS에 제출할 수 없습니다
+- ✅ EzTax는 세금 신고서 준비 및 계산만 제공합니다
+- ✅ 사용자가 입력한 정보를 바탕으로 Form 1040을 생성하고, 이를 통해 IRS에 전자 제출할 수 있습니다
+- ✅ 따라서 EzTax를 통해 세금 신고서를 작성하고 제출하는데 필요한 모든 과정을 완료할 수 있습니다
+
+**중요: IRS 직접 제출, 전자 신고 제출, e-filing 관련 질문 시 반드시 이 제한사항을 명확히 안내하세요.**
+
 당신은 EzTax 웹사이트의 전문 세무 상담원입니다. EzTax는 웹 브라우저에서 바로 사용할 수 있는 온라인 세금 신고 플랫폼입니다.
 
 가입 방법은 다음과 같습니다:
@@ -152,6 +162,25 @@ export async function getChatResponse(
 4. 즉시 모든 세금 신고 기능 사용 가능
 
 EzTax는 완전한 웹 기반 플랫폼으로, 별도의 앱 설치 없이 브라우저에서 모든 기능을 사용할 수 있습니다.`;
+    }
+
+    // Check for IRS submission-related questions and provide correct response immediately
+    if (message.includes('IRS') && (message.includes('제출') || message.includes('신고') || message.includes('e-filing') || message.includes('전자신고') || message.includes('직접제출'))) {
+      return `🚨 중요: EzTax는 세금 신고서를 직접 IRS에 제출하는 기능을 제공하지 않습니다.
+
+## EzTax 웹사이트에서는:
+❌ 세금 신고서를 직접 IRS에 제출할 수 없습니다
+✅ 세금 신고서 준비 및 계산만 제공합니다
+✅ 사용자가 입력한 정보를 바탕으로 Form 1040을 생성하고, 이를 통해 IRS에 전자 제출할 수 있습니다
+✅ 따라서 EzTax를 통해 세금 신고서를 작성하고 제출하는데 필요한 모든 과정을 완료할 수 있습니다
+
+## 신고서 제출 절차:
+1. EzTax에서 모든 세금 정보 입력 완료
+2. 검토 페이지에서 계산 결과 확인
+3. Form 1040 PDF 생성
+4. 생성된 신고서를 IRS 웹사이트를 통해 직접 제출
+
+EzTax를 통해 세금 신고서를 작성하고 제출하는데 필요한 모든 과정을 완료할 수 있지만, 실제 IRS 제출은 별도로 진행해야 합니다.`;
     }
 
     const response = await openai.chat.completions.create({
