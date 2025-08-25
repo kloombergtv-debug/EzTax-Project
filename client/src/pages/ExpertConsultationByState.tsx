@@ -262,31 +262,23 @@ const ExpertConsultationByState: React.FC<ExpertConsultationByStateProps> = () =
                         <div className="space-y-3">
                           <div className="flex items-start gap-3">
                             <div className="w-2 h-2 bg-blue-600 rounded-full mt-2"></div>
-                            <span className="text-gray-700 font-medium">FINRA Series 65 투자자문사</span>
+                            <span className="text-gray-700 font-medium">GTAX Consulting Group 대표 (2021~현재)</span>
                           </div>
                           <div className="flex items-start gap-3">
                             <div className="w-2 h-2 bg-blue-600 rounded-full mt-2"></div>
-                            <span className="text-gray-700 font-medium">IRS 공인 EA (Enrolled Agent)</span>
+                            <span className="text-gray-700 font-medium">재미한인등록세무사협회(NAKAEA) 부회장 (2024~현재)</span>
                           </div>
                           <div className="flex items-start gap-3">
                             <div className="w-2 h-2 bg-blue-600 rounded-full mt-2"></div>
-                            <span className="text-gray-700 font-medium">한양그룹 - 재무담당 임원</span>
+                            <span className="text-gray-700 font-medium">홍익대학교·중앙대학교 강의</span>
                           </div>
                           <div className="flex items-start gap-3">
                             <div className="w-2 h-2 bg-blue-600 rounded-full mt-2"></div>
-                            <span className="text-gray-700 font-medium">교보생명 - 재무분석가</span>
+                            <span className="text-gray-700 font-medium">대법원 판례평석위원회 위원</span>
                           </div>
                           <div className="flex items-start gap-3">
                             <div className="w-2 h-2 bg-blue-600 rounded-full mt-2"></div>
-                            <span className="text-gray-700 font-medium">LG전자 - IR팀 과장</span>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <div className="w-2 h-2 bg-blue-600 rounded-full mt-2"></div>
-                            <span className="text-gray-700 font-medium">Nomura Securities - 애널리스트</span>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <div className="w-2 h-2 bg-red-600 rounded-full mt-2"></div>
-                            <span className="text-gray-700 font-bold">EzFintech 창립자&CEO</span>
+                            <span className="text-gray-700 font-medium">IMF 외환위기 시기, 예금보험공사(KDIC)에서 기업 및 금융 구조조정 참여</span>
                           </div>
                         </div>
                       </div>
