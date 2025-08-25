@@ -208,7 +208,7 @@ export default function About() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-blue-700 text-2xl">
             <BuildingIcon className="h-6 w-6" />
-            EzTax 경영진 소개
+            EzFintech 경영진 소개
           </CardTitle>
           <CardDescription className="text-blue-600">
             EzTax를 이끄는 세무·투자 전문가를 만나보세요
