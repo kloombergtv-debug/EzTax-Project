@@ -347,11 +347,11 @@ export default function About() {
                 <div>
                   <h4 className="font-semibold text-green-800 mb-3">💼 주요 이력</h4>
                   <ul className="text-sm text-green-700 space-y-2">
-                    <li>🚀 EzFintech CTO</li>
                     <li>🅾️ O'Reilly Auto Parts</li>
                     <li>▶️ Accenture Federal Services</li>
                     <li>🏢 Lennox International</li>
                     <li>🏒 National Hockey League (NHL)</li>
+                    <li>🚀 EzFintech 창립자&CTO</li>
                   </ul>
                   
                   <h4 className="font-semibold text-green-800 mb-3 mt-4">🎓 학력</h4>
