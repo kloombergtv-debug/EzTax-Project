@@ -356,9 +356,7 @@ export default function About() {
                   
                   <h4 className="font-semibold text-green-800 mb-3 mt-4">🎓 학력</h4>
                   <ul className="text-sm text-green-700 space-y-2">
-                    <li>🎓 KAIST - 전산학과 학사</li>
-                    <li>🎓 Stanford Online - AI/ML 수료</li>
-                    <li>🎓 MIT OpenCourseWare - 알고리즘 수료</li>
+                    <li>🎓 전북대학교 Computer Engineering</li>
                   </ul>
                 </div>
                 
