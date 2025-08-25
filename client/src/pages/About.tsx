@@ -365,13 +365,10 @@ export default function About() {
                 <div>
                   <h4 className="font-semibold text-green-800 mb-3">⚡ 기술 전문 분야</h4>
                   <ul className="text-sm text-green-700 space-y-2">
-                    <li>• 풀스택 웹 애플리케이션 개발</li>
-                    <li>• 클라우드 아키텍처 설계 (AWS/GCP)</li>
-                    <li>• AI/ML 모델 개발 및 배포</li>
-                    <li>• 마이크로서비스 아키텍처</li>
-                    <li>• 데이터베이스 최적화</li>
-                    <li>• DevOps 및 CI/CD 파이프라인</li>
-                    <li>• 보안 및 성능 최적화</li>
+                    <li>• UI/UX Engineer</li>
+                    <li>• Salesforce UI/UX Developer</li>
+                    <li>• Application Developer III</li>
+                    <li>• Application Developer</li>
                   </ul>
                 </div>
               </div>
