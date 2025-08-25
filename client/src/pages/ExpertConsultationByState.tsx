@@ -348,9 +348,13 @@ const ExpertConsultationByState: React.FC<ExpertConsultationByStateProps> = () =
                   </div>
                   
                   <div className="mb-8">
-                    <h4 className="font-bold text-gray-800 mb-4 text-lg">전문가 소개</h4>
+                    <h4 className="font-bold text-gray-800 mb-4 text-lg">회사소개</h4>
                     <div className="bg-white rounded-lg p-6 shadow-inner">
-                      <p className="text-gray-700 leading-relaxed text-base">{expert.bio}</p>
+                      <p className="text-gray-700 leading-relaxed text-base">
+                        G-Tax는 Grace Tax입니다.
+                        <br /><br />
+                        G-Tax는 Grace Tax를 줄인 말입니다. 은혜는 값 없이 받은 선물입니다. 은혜를 받은 자가 다시 그 은혜를 베푸는 것은 당연합니다. 한인디아스포라로서 저희가 가진 세법지식과 경험을 나눔으로써 언어와 문화가 다른 타국에 와서 고생하는 동족과 다민족의 정착과 성공을 돕고, 다시 그 고객이 축복의 통로가 되어 베품과 나눔을 실현하는 것이 저희의 꿈(Vision)입니다.
+                      </p>
                     </div>
                   </div>
                   
