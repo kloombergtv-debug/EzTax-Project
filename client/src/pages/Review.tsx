@@ -335,6 +335,18 @@ const Review: React.FC = () => {
                   </Button>
                   
                   <Button
+                    variant="outline"
+                    className="bg-green-50 text-green-700 border-green-200 font-semibold rounded hover:bg-green-100 transition duration-200 w-[160px] justify-center"
+                    onClick={() => {
+                      const personalInfo = JSON.parse(localStorage.getItem('personalInfo') || '{}');
+                      const state = personalInfo.state || 'NY';
+                      navigate(`/expert-consultation/${state}`);
+                    }}
+                  >
+                    전문가상담하기
+                  </Button>
+                  
+                  <Button
                     className="bg-primary text-white font-semibold rounded hover:bg-primary-dark transition duration-200 w-[160px] justify-center"
                     onClick={() => navigate('/tax-savings')}
                   >

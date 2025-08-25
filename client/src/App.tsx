@@ -21,6 +21,7 @@ import Review from "@/pages/Review";
 import TaxSavingAdvice from "@/pages/TaxSavingAdvice";
 import TaxSavings from "@/pages/TaxSavings";
 import ExpertConsultation from "@/pages/ExpertConsultation";
+import ExpertConsultationByState from "@/pages/ExpertConsultationByState";
 import RetirementScore from "@/pages/RetirementScore";
 import PricingPage from "@/pages/PricingPage";
 import ApplicationForm from "@/pages/ApplicationForm";
@@ -75,6 +76,7 @@ function Router() {
       <Route path="/tax-savings" component={TaxSavings} />
       <ProtectedRoute path="/tax-saving-advice" component={TaxSavingAdvice} />
       <ProtectedRoute path="/expert-consultation" component={ExpertConsultation} />
+      <Route path="/expert-consultation/:state" component={ExpertConsultationByState} />
       <ProtectedRoute path="/pricing" component={PricingPage} />
       <ProtectedRoute path="/admin" component={AdminPanel} />
       <Route path="/application" component={ApplicationForm} />
