@@ -226,11 +226,11 @@ export default function About() {
                 지대현 EA
               </h3>
               <p className="text-blue-700 font-medium mb-4">
-                EzTax 창립자 & CEO | 세무·투자 전문가
+                EzTax 창립자 & CEO | FINRA Series 65 투자자문사 | 세무전문가
               </p>
               <div className="flex flex-wrap gap-2 justify-center lg:justify-start">
+                <Badge variant="outline" className="border-red-300 text-red-700 bg-red-50">FINRA Series 65</Badge>
                 <Badge variant="outline" className="border-blue-300 text-blue-700">IRS EA</Badge>
-
                 <Badge variant="outline" className="border-blue-300 text-blue-700">저자</Badge>
               </div>
             </div>
@@ -240,6 +240,7 @@ export default function About() {
                 <div>
                   <h4 className="font-semibold text-blue-800 mb-3">📚 주요 이력</h4>
                   <ul className="text-sm text-blue-700 space-y-2">
+                    <li>📊 <strong>FINRA Series 65 투자자문사</strong> (Investment Adviser Representative)</li>
                     <li>🧾 IRS 공인 EA (Enrolled Agent)</li>
                     <li>🏭 한화그룹 – 재무담당 임원</li>
                     <li>🏦 교보생명 – 재무실부장</li>
