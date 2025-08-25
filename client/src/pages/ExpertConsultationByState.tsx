@@ -291,11 +291,15 @@ const ExpertConsultationByState: React.FC<ExpertConsultationByStateProps> = () =
                         <div className="space-y-2">
                           <div className="flex items-center gap-2">
                             <div className="w-1.5 h-1.5 bg-green-600 rounded-full"></div>
-                            <span className="text-gray-700">University of Pennsylvania - 경제학 학사</span>
+                            <span className="text-gray-700">한국외국어대학교 법학 학사</span>
                           </div>
                           <div className="flex items-center gap-2">
                             <div className="w-1.5 h-1.5 bg-green-600 rounded-full"></div>
-                            <span className="text-gray-700">연세대학교 국제대학원 - MBA</span>
+                            <span className="text-gray-700">서울대학교 법학석사(LL.M., 1990)</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <div className="w-1.5 h-1.5 bg-green-600 rounded-full"></div>
+                            <span className="text-gray-700">서울대학교 법학박사(1998) 상법전공</span>
                           </div>
                         </div>
                       </div>
