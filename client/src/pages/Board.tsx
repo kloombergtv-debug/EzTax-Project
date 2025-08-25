@@ -58,6 +58,7 @@ const Board: React.FC = () => {
   });
 
   const getCountByCategory = (categoryId: string) => {
+    if (!Array.isArray(allPosts)) return 0;
     if (categoryId === 'all') return allPosts.length;
     return allPosts.filter((post: BoardPost) => post.category === categoryId).length;
   };
