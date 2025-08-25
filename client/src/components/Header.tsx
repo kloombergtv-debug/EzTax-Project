@@ -159,6 +159,16 @@ const Header: React.FC = () => {
                   관리자
                 </Button>
               )}
+              
+              <Button 
+                variant="outline" 
+                size="sm"
+                className="text-primary-dark hover:text-primary flex items-center text-sm"
+                onClick={() => window.open('https://ezclient-portal.replit.app/', '_blank')}
+              >
+                <Lock className="h-4 w-4 mr-1" />
+                Client Portal
+              </Button>
 
               <Button 
                 variant="outline" 
