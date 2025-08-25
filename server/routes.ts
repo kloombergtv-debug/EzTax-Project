@@ -1002,18 +1002,18 @@ ${message || '상담 요청'}
     }
   });
 
-  // Create new board post
-  app.post('/api/board/posts', async (req, res) => {
+  // Create new board post - Authentication required
+  app.post('/api/board/posts', (req, res, next) => {
+    if (!req.isAuthenticated || !req.isAuthenticated()) {
+      return res.status(401).json({ message: 'Authentication required' });
+    }
+    next();
+  }, async (req: any, res) => {
     try {
-      // Extract user info from session if authenticated, otherwise use anonymous
-      let userId = 1; // Default user ID
-      let authorName = '익명';
-      
-      if (req.isAuthenticated && req.isAuthenticated()) {
-        const user = req.user as any;
-        userId = user.id;
-        authorName = user.displayName || user.username || '사용자';
-      }
+      // User must be authenticated to create posts
+      const user = req.user as any;
+      const userId = user.id;
+      const authorName = user.displayName || user.username || '사용자';
 
       const postData = insertBoardPostSchema.parse({
         ...req.body,

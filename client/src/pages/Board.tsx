@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/hooks/use-auth';
 
 interface BoardPost {
   id: number;
@@ -35,6 +36,8 @@ const Board: React.FC = () => {
   
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { user, isLoading: authLoading } = useAuth();
+  const isAuthenticated = !!user;
 
   // Fetch board posts
   const { data: posts = [], isLoading } = useQuery({
@@ -92,6 +95,18 @@ const Board: React.FC = () => {
   });
 
   const handleSubmitPost = () => {
+    if (!isAuthenticated) {
+      toast({
+        title: "로그인 필요",
+        description: "게시글을 작성하려면 로그인이 필요합니다.",
+        variant: "destructive"
+      });
+      setTimeout(() => {
+        window.location.href = '/login';
+      }, 1000);
+      return;
+    }
+
     if (!newPost.title.trim() || !newPost.content.trim()) {
       toast({
         title: "입력 오류",
@@ -178,62 +193,82 @@ const Board: React.FC = () => {
           </Card>
 
           {/* 글쓰기 버튼 */}
-          <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
-            <DialogTrigger asChild>
-              <Button className="w-full mt-4" size="lg">
-                <Plus className="h-4 w-4 mr-2" />
-                새 글 작성
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-2xl">
-              <DialogHeader>
-                <DialogTitle>새 게시글 작성</DialogTitle>
-              </DialogHeader>
-              <div className="space-y-4">
-                <div>
-                  <label className="text-sm font-medium mb-2 block">카테고리</label>
-                  <Select value={newPost.category} onValueChange={(value) => setNewPost({...newPost, category: value})}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="카테고리를 선택하세요" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="usage">EzTax 사용법</SelectItem>
-                      <SelectItem value="tax">세금신고 질문</SelectItem>
-                      <SelectItem value="general">일반 질문</SelectItem>
-                    </SelectContent>
-                  </Select>
+          {isAuthenticated ? (
+            <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
+              <DialogTrigger asChild>
+                <Button className="w-full mt-4" size="lg">
+                  <Plus className="h-4 w-4 mr-2" />
+                  새 글 작성
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-2xl">
+                <DialogHeader>
+                  <DialogTitle>새 게시글 작성</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-sm font-medium mb-2 block">카테고리</label>
+                    <Select value={newPost.category} onValueChange={(value) => setNewPost({...newPost, category: value})}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="카테고리를 선택하세요" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="usage">EzTax 사용법</SelectItem>
+                        <SelectItem value="tax">세금신고 질문</SelectItem>
+                        <SelectItem value="general">일반 질문</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium mb-2 block">제목</label>
+                    <Input
+                      placeholder="제목을 입력하세요"
+                      value={newPost.title}
+                      onChange={(e) => setNewPost({...newPost, title: e.target.value})}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium mb-2 block">내용</label>
+                    <Textarea
+                      placeholder="질문이나 의견을 자세히 작성해주세요"
+                      rows={8}
+                      value={newPost.content}
+                      onChange={(e) => setNewPost({...newPost, content: e.target.value})}
+                    />
+                  </div>
+                  <div className="flex justify-end space-x-2">
+                    <Button variant="outline" onClick={() => setIsCreateModalOpen(false)}>
+                      취소
+                    </Button>
+                    <Button 
+                      onClick={handleSubmitPost}
+                      disabled={createPostMutation.isPending}
+                    >
+                      {createPostMutation.isPending ? '작성 중...' : '게시글 작성'}
+                    </Button>
+                  </div>
                 </div>
-                <div>
-                  <label className="text-sm font-medium mb-2 block">제목</label>
-                  <Input
-                    placeholder="제목을 입력하세요"
-                    value={newPost.title}
-                    onChange={(e) => setNewPost({...newPost, title: e.target.value})}
-                  />
-                </div>
-                <div>
-                  <label className="text-sm font-medium mb-2 block">내용</label>
-                  <Textarea
-                    placeholder="질문이나 의견을 자세히 작성해주세요"
-                    rows={8}
-                    value={newPost.content}
-                    onChange={(e) => setNewPost({...newPost, content: e.target.value})}
-                  />
-                </div>
-                <div className="flex justify-end space-x-2">
-                  <Button variant="outline" onClick={() => setIsCreateModalOpen(false)}>
-                    취소
-                  </Button>
-                  <Button 
-                    onClick={handleSubmitPost}
-                    disabled={createPostMutation.isPending}
-                  >
-                    {createPostMutation.isPending ? '작성 중...' : '게시글 작성'}
-                  </Button>
-                </div>
-              </div>
-            </DialogContent>
-          </Dialog>
+              </DialogContent>
+            </Dialog>
+          ) : (
+            <Button 
+              onClick={() => {
+                toast({
+                  title: "로그인 필요",
+                  description: "게시글을 작성하려면 로그인이 필요합니다.",
+                  variant: "destructive"
+                });
+                setTimeout(() => {
+                  window.location.href = '/login';
+                }, 1000);
+              }}
+              className="w-full mt-4 bg-gray-400 hover:bg-gray-500" 
+              size="lg"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              로그인 후 글 작성
+            </Button>
+          )}
         </div>
 
         {/* 게시글 목록 */}
