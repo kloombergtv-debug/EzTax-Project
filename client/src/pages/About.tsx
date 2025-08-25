@@ -211,7 +211,7 @@ export default function About() {
             EzFintech 경영진 소개
           </CardTitle>
           <CardDescription className="text-blue-600">
-            EzTax를 이끄는 세무·투자 전문가를 만나보세요
+            EzFintech을 이끄는 세무·투자 전문가를 만나보세요
           </CardDescription>
         </CardHeader>
         <CardContent>
