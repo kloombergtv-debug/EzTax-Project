@@ -316,7 +316,7 @@ export default function About() {
           <div className="flex flex-col lg:flex-row gap-8">
             <div className="flex-shrink-0 text-center lg:text-left">
               <img 
-                src="/cto-photo.png"
+                src="/cto-photo-new.png"
                 alt="김영일 CTO"
                 className="w-32 h-32 rounded-full object-cover border-4 border-green-200 mx-auto lg:mx-0"
                 onError={(e) => {
