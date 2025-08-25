@@ -44,6 +44,16 @@ const Footer: React.FC = () => {
                 <li><Link href="#"><div className="hover:text-white cursor-pointer">개인정보 처리방침</div></Link></li>
                 <li><Link href="#"><div className="hover:text-white cursor-pointer">서비스 이용약관</div></Link></li>
                 <li><Link href="#"><div className="hover:text-white cursor-pointer">보안</div></Link></li>
+                <li>
+                  <a 
+                    href="https://ezclient-portal.replit.app/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="hover:text-white cursor-pointer block"
+                  >
+                    Client Portal
+                  </a>
+                </li>
               </ul>
             </div>
           </div>
