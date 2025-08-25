@@ -50,7 +50,7 @@ const Footer: React.FC = () => {
         </div>
         
         <div className="border-t border-gray-700 mt-8 pt-6 text-sm text-gray-light flex flex-col md:flex-row justify-between items-center">
-          <p>&copy; {new Date().getFullYear()} EzTax Inc. 모든 권리 보유.</p>
+          <p>&copy; {new Date().getFullYear()} EzFintech Inc. 모든 권리 보유.</p>
           <div className="mt-4 md:mt-0 flex space-x-4">
             <a href="#" className="hover:text-white">
               <Facebook className="h-5 w-5" />
