@@ -30,7 +30,7 @@ const expertsByState = {
         id: 1,
         name: '정승욱',
         title: '세무전문가(EA)',
-        image: '/attached_assets/image_1756086631274.png',
+        image: '/attached_assets/image_1756087452828.png',
         rating: 4.9,
         reviews: 127,
         experience: '15년+',
@@ -222,26 +222,19 @@ const ExpertConsultationByState: React.FC<ExpertConsultationByStateProps> = () =
                 {/* Expert Photo & Basic Info */}
                 <div className="flex-shrink-0 text-center lg:text-left">
                   <div className="w-36 h-36 rounded-full mx-auto lg:mx-0 mb-6 shadow-lg overflow-hidden border-4 border-white bg-gray-100">
-                    {expert.image ? (
-                      <img 
-                        src={expert.image.startsWith('@') ? expert.image.replace('@', '/') : expert.image}
-                        alt={expert.name} 
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.style.display = 'none';
-                          target.parentElement!.innerHTML = `
-                            <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-600 to-purple-600">
-                              <span class="text-white text-2xl font-bold">${expert.name.charAt(0)}</span>
-                            </div>
-                          `;
-                        }}
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-600 to-purple-600">
-                        <span className="text-white text-2xl font-bold">{expert.name.charAt(0)}</span>
-                      </div>
-                    )}
+                    <img 
+                      src={expert.image}
+                      alt={expert.name} 
+                      className="w-full h-full object-cover"
+                      onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+                        const target = e.currentTarget;
+                        target.style.display = 'none';
+                        const fallbackDiv = document.createElement('div');
+                        fallbackDiv.className = 'w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-600 to-purple-600';
+                        fallbackDiv.innerHTML = `<span class="text-white text-2xl font-bold">${expert.name.charAt(0)}</span>`;
+                        target.parentElement?.appendChild(fallbackDiv);
+                      }}
+                    />
                   </div>
                   <h3 className="text-2xl font-bold text-gray-900 mb-2">{expert.name} 대표</h3>
                   <p className="text-blue-700 font-semibold mb-4 text-lg">{expert.title}</p>
