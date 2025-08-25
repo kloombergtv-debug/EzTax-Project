@@ -1,4 +1,4 @@
-import { users, type User, type InsertUser, taxReturns, type TaxReturn, type InsertTaxReturn, retirementAssessments, type RetirementAssessment, type InsertRetirementAssessment } from "@shared/schema";
+import { users, type User, type InsertUser, taxReturns, type TaxReturn, type InsertTaxReturn, retirementAssessments, type RetirementAssessment, type InsertRetirementAssessment, boardPosts, type BoardPost, type InsertBoardPost } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc } from "drizzle-orm";
 
@@ -33,6 +33,16 @@ export interface IStorage {
   updateRetirementAssessment(id: number, assessment: Partial<RetirementAssessment>): Promise<RetirementAssessment>;
   deleteRetirementAssessment(id: number): Promise<void>;
   deleteUserRetirementAssessments(userId: number): Promise<void>;
+  
+  // Board post methods
+  getBoardPost(id: number): Promise<BoardPost | undefined>;
+  getAllBoardPosts(): Promise<BoardPost[]>;
+  getBoardPostsByCategory(category: string): Promise<BoardPost[]>;
+  getBoardPostsByUserId(userId: number): Promise<BoardPost[]>;
+  createBoardPost(post: InsertBoardPost): Promise<BoardPost>;
+  updateBoardPost(id: number, post: Partial<BoardPost>): Promise<BoardPost>;
+  deleteBoardPost(id: number): Promise<void>;
+  incrementBoardPostViews(id: number): Promise<void>;
 }
 
 export class DbStorage implements IStorage {
@@ -287,6 +297,76 @@ export class DbStorage implements IStorage {
     await db
       .delete(retirementAssessments)
       .where(eq(retirementAssessments.userId, userId));
+  }
+
+  // Board Post Methods
+  async getBoardPost(id: number): Promise<BoardPost | undefined> {
+    const [post] = await db.select().from(boardPosts).where(eq(boardPosts.id, id));
+    return post || undefined;
+  }
+
+  async getAllBoardPosts(): Promise<BoardPost[]> {
+    return await db.select().from(boardPosts).orderBy(desc(boardPosts.createdAt));
+  }
+
+  async getBoardPostsByCategory(category: string): Promise<BoardPost[]> {
+    if (category === 'all') {
+      return this.getAllBoardPosts();
+    }
+    return await db.select().from(boardPosts)
+      .where(eq(boardPosts.category, category))
+      .orderBy(desc(boardPosts.createdAt));
+  }
+
+  async getBoardPostsByUserId(userId: number): Promise<BoardPost[]> {
+    return await db.select().from(boardPosts)
+      .where(eq(boardPosts.userId, userId))
+      .orderBy(desc(boardPosts.createdAt));
+  }
+
+  async createBoardPost(insertPost: InsertBoardPost): Promise<BoardPost> {
+    const [post] = await db
+      .insert(boardPosts)
+      .values({
+        ...insertPost,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      })
+      .returning();
+    return post;
+  }
+
+  async updateBoardPost(id: number, post: Partial<BoardPost>): Promise<BoardPost> {
+    const updateData = {
+      ...post,
+      updatedAt: new Date().toISOString()
+    };
+
+    const [updatedPost] = await db
+      .update(boardPosts)
+      .set(updateData)
+      .where(eq(boardPosts.id, id))
+      .returning();
+    
+    if (!updatedPost) {
+      throw new Error(`게시글 ID ${id}를 찾을 수 없습니다`);
+    }
+    
+    return updatedPost;
+  }
+
+  async deleteBoardPost(id: number): Promise<void> {
+    await db.delete(boardPosts).where(eq(boardPosts.id, id));
+  }
+
+  async incrementBoardPostViews(id: number): Promise<void> {
+    await db
+      .update(boardPosts)
+      .set({ 
+        views: boardPosts.views + 1,
+        updatedAt: new Date().toISOString()
+      })
+      .where(eq(boardPosts.id, id));
   }
 }
 

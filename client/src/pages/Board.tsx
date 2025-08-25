@@ -1,75 +1,122 @@
 import React, { useState } from 'react';
-import { MessageSquare, Users, BookOpen, HelpCircle, ChevronRight, Calendar, User } from 'lucide-react';
+import { MessageSquare, Users, BookOpen, HelpCircle, ChevronRight, Calendar, User, Plus, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { apiRequest } from '@/lib/queryClient';
+import { useToast } from '@/hooks/use-toast';
+
+interface BoardPost {
+  id: number;
+  title: string;
+  content: string;
+  category: string;
+  authorName: string;
+  views: number;
+  replies: number;
+  isNew: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
 
 const Board: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [newPost, setNewPost] = useState({
+    title: '',
+    content: '',
+    category: 'usage'
+  });
+  
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  // Fetch board posts
+  const { data: posts = [], isLoading } = useQuery({
+    queryKey: ['/api/board/posts', selectedCategory],
+    queryFn: () => apiRequest({
+      url: `/api/board/posts?category=${selectedCategory}`,
+      method: 'GET'
+    })
+  });
+
+  // Count posts by category
+  const { data: allPosts = [] } = useQuery({
+    queryKey: ['/api/board/posts', 'all'],
+    queryFn: () => apiRequest({
+      url: '/api/board/posts',
+      method: 'GET'
+    })
+  });
+
+  const getCountByCategory = (categoryId: string) => {
+    if (categoryId === 'all') return allPosts.length;
+    return allPosts.filter((post: BoardPost) => post.category === categoryId).length;
+  };
 
   const categories = [
-    { id: 'all', name: '전체', icon: MessageSquare, count: 156 },
-    { id: 'usage', name: 'EzTax 사용법', icon: BookOpen, count: 42 },
-    { id: 'tax', name: '세금신고 질문', icon: HelpCircle, count: 73 },
-    { id: 'general', name: '일반 질문', icon: Users, count: 41 }
+    { id: 'all', name: '전체', icon: MessageSquare, count: getCountByCategory('all') },
+    { id: 'usage', name: 'EzTax 사용법', icon: BookOpen, count: getCountByCategory('usage') },
+    { id: 'tax', name: '세금신고 질문', icon: HelpCircle, count: getCountByCategory('tax') },
+    { id: 'general', name: '일반 질문', icon: Users, count: getCountByCategory('general') }
   ];
 
-  const samplePosts = [
-    {
-      id: 1,
-      title: 'Form 1040 작성 시 W-2 입력하는 방법이 궁금합니다',
-      category: 'usage',
-      author: '김○○',
-      date: '2025-01-25',
-      replies: 3,
-      views: 45,
-      isNew: true
+  // Create post mutation
+  const createPostMutation = useMutation({
+    mutationFn: (postData: typeof newPost) => apiRequest({
+      url: '/api/board/posts',
+      method: 'POST',
+      body: postData
+    }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/board/posts'] });
+      setIsCreateModalOpen(false);
+      setNewPost({ title: '', content: '', category: 'usage' });
+      toast({
+        title: "게시글이 성공적으로 작성되었습니다!",
+        description: "다른 사용자들이 곧 답변해드릴 것입니다.",
+      });
     },
-    {
-      id: 2,
-      title: '자영업자 세금 계산에서 Schedule C 경비 항목 질문',
-      category: 'tax',
-      author: '이○○',
-      date: '2025-01-25',
-      replies: 7,
-      views: 89,
-      isNew: true
-    },
-    {
-      id: 3,
-      title: 'Child Tax Credit 계산이 이상한 것 같아요',
-      category: 'tax',
-      author: '박○○',
-      date: '2025-01-24',
-      replies: 12,
-      views: 156,
-      isNew: false
-    },
-    {
-      id: 4,
-      title: 'EzTax에서 IRS 직접 제출이 안 되는 이유가 궁금합니다',
-      category: 'usage',
-      author: '최○○',
-      date: '2025-01-24',
-      replies: 5,
-      views: 234,
-      isNew: false
-    },
-    {
-      id: 5,
-      title: '부양가족 추가하는 방법을 모르겠어요',
-      category: 'usage',
-      author: '정○○',
-      date: '2025-01-23',
-      replies: 8,
-      views: 167,
-      isNew: false
+    onError: (error: any) => {
+      toast({
+        title: "게시글 작성 실패",
+        description: error.message || "다시 시도해주세요.",
+        variant: "destructive",
+      });
     }
-  ];
+  });
 
-  const filteredPosts = selectedCategory === 'all' 
-    ? samplePosts 
-    : samplePosts.filter(post => post.category === selectedCategory);
+  const handleSubmitPost = () => {
+    if (!newPost.title.trim() || !newPost.content.trim()) {
+      toast({
+        title: "입력 오류",
+        description: "제목과 내용을 모두 입력해주세요.",
+        variant: "destructive",
+      });
+      return;
+    }
+    createPostMutation.mutate(newPost);
+  };
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('ko-KR', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    });
+  };
+
+  const isPostNew = (createdAt: string) => {
+    const postDate = new Date(createdAt);
+    const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+    return postDate > oneDayAgo;
+  };
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-6xl">
@@ -131,10 +178,62 @@ const Board: React.FC = () => {
           </Card>
 
           {/* 글쓰기 버튼 */}
-          <Button className="w-full mt-4" size="lg">
-            <MessageSquare className="h-4 w-4 mr-2" />
-            새 글 작성
-          </Button>
+          <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
+            <DialogTrigger asChild>
+              <Button className="w-full mt-4" size="lg">
+                <Plus className="h-4 w-4 mr-2" />
+                새 글 작성
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-2xl">
+              <DialogHeader>
+                <DialogTitle>새 게시글 작성</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4">
+                <div>
+                  <label className="text-sm font-medium mb-2 block">카테고리</label>
+                  <Select value={newPost.category} onValueChange={(value) => setNewPost({...newPost, category: value})}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="카테고리를 선택하세요" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="usage">EzTax 사용법</SelectItem>
+                      <SelectItem value="tax">세금신고 질문</SelectItem>
+                      <SelectItem value="general">일반 질문</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <label className="text-sm font-medium mb-2 block">제목</label>
+                  <Input
+                    placeholder="제목을 입력하세요"
+                    value={newPost.title}
+                    onChange={(e) => setNewPost({...newPost, title: e.target.value})}
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium mb-2 block">내용</label>
+                  <Textarea
+                    placeholder="질문이나 의견을 자세히 작성해주세요"
+                    rows={8}
+                    value={newPost.content}
+                    onChange={(e) => setNewPost({...newPost, content: e.target.value})}
+                  />
+                </div>
+                <div className="flex justify-end space-x-2">
+                  <Button variant="outline" onClick={() => setIsCreateModalOpen(false)}>
+                    취소
+                  </Button>
+                  <Button 
+                    onClick={handleSubmitPost}
+                    disabled={createPostMutation.isPending}
+                  >
+                    {createPostMutation.isPending ? '작성 중...' : '게시글 작성'}
+                  </Button>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
 
         {/* 게시글 목록 */}
@@ -146,76 +245,84 @@ const Board: React.FC = () => {
                   {selectedCategory === 'all' ? '전체 게시글' : categories.find(cat => cat.id === selectedCategory)?.name}
                 </CardTitle>
                 <div className="text-sm text-gray-500">
-                  총 {filteredPosts.length}개의 글
+                  총 {posts.length}개의 글
                 </div>
               </div>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                {filteredPosts.map((post) => (
-                  <div
-                    key={post.id}
-                    className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors cursor-pointer"
-                  >
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <div className="flex items-center space-x-2 mb-2">
-                          {post.isNew && (
-                            <Badge variant="destructive" className="text-xs">
-                              새글
-                            </Badge>
-                          )}
-                          <Badge variant="outline" className="text-xs">
-                            {categories.find(cat => cat.id === post.category)?.name}
-                          </Badge>
-                        </div>
-                        <h3 className="font-semibold text-gray-800 mb-2 hover:text-blue-600">
-                          {post.title}
-                        </h3>
-                        <div className="flex items-center space-x-4 text-sm text-gray-500">
-                          <div className="flex items-center space-x-1">
-                            <User className="h-3 w-3" />
-                            <span>{post.author}</span>
-                          </div>
-                          <div className="flex items-center space-x-1">
-                            <Calendar className="h-3 w-3" />
-                            <span>{post.date}</span>
-                          </div>
-                          <div className="flex items-center space-x-1">
-                            <MessageSquare className="h-3 w-3" />
-                            <span>답글 {post.replies}</span>
-                          </div>
-                          <div>
-                            조회 {post.views}
-                          </div>
-                        </div>
-                      </div>
-                      <ChevronRight className="h-4 w-4 text-gray-400" />
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* 페이지네이션 */}
-              <div className="flex justify-center mt-8">
-                <div className="flex items-center space-x-2">
-                  <Button variant="outline" size="sm" disabled>
-                    이전
-                  </Button>
-                  <Button variant="default" size="sm">
-                    1
-                  </Button>
-                  <Button variant="outline" size="sm">
-                    2
-                  </Button>
-                  <Button variant="outline" size="sm">
-                    3
-                  </Button>
-                  <Button variant="outline" size="sm">
-                    다음
-                  </Button>
+              {isLoading ? (
+                <div className="text-center py-8">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+                  <p className="mt-2 text-gray-500">게시글을 불러오는 중...</p>
                 </div>
-              </div>
+              ) : posts.length === 0 ? (
+                <div className="text-center py-8">
+                  <MessageSquare className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <p className="text-gray-500">아직 게시글이 없습니다.</p>
+                  <p className="text-sm text-gray-400">첫 번째 게시글을 작성해보세요!</p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {posts.map((post: BoardPost) => (
+                    <div
+                      key={post.id}
+                      className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors cursor-pointer"
+                    >
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center space-x-2 mb-2">
+                            {isPostNew(post.createdAt) && (
+                              <Badge variant="destructive" className="text-xs">
+                                새글
+                              </Badge>
+                            )}
+                            <Badge variant="outline" className="text-xs">
+                              {categories.find(cat => cat.id === post.category)?.name}
+                            </Badge>
+                          </div>
+                          <h3 className="font-semibold text-gray-800 mb-2 hover:text-blue-600">
+                            {post.title}
+                          </h3>
+                          <div className="flex items-center space-x-4 text-sm text-gray-500">
+                            <div className="flex items-center space-x-1">
+                              <User className="h-3 w-3" />
+                              <span>{post.authorName}</span>
+                            </div>
+                            <div className="flex items-center space-x-1">
+                              <Calendar className="h-3 w-3" />
+                              <span>{formatDate(post.createdAt)}</span>
+                            </div>
+                            <div className="flex items-center space-x-1">
+                              <MessageSquare className="h-3 w-3" />
+                              <span>답글 {post.replies}</span>
+                            </div>
+                            <div>
+                              조회 {post.views}
+                            </div>
+                          </div>
+                        </div>
+                        <ChevronRight className="h-4 w-4 text-gray-400" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {posts.length > 0 && (
+                <div className="flex justify-center mt-8">
+                  <div className="flex items-center space-x-2">
+                    <Button variant="outline" size="sm" disabled>
+                      이전
+                    </Button>
+                    <Button variant="default" size="sm">
+                      1
+                    </Button>
+                    <Button variant="outline" size="sm">
+                      다음
+                    </Button>
+                  </div>
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>

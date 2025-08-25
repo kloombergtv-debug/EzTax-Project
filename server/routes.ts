@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { DbStorage } from "./storage";
-import { insertTaxReturnSchema, insertRetirementAssessmentSchema, retirementAssessmentDataSchema } from "@shared/schema";
+import { insertTaxReturnSchema, insertRetirementAssessmentSchema, retirementAssessmentDataSchema, insertBoardPostSchema } from "@shared/schema";
 import { z } from "zod";
 import nodemailer from "nodemailer";
 import path from "path";
@@ -959,6 +959,132 @@ ${message || '상담 요청'}
     } catch (error) {
       console.error('Error deleting user retirement assessments:', error);
       res.status(500).json({ message: 'Failed to delete retirement assessments' });
+    }
+  });
+
+  // Board Posts API
+  // Get all board posts or by category
+  app.get('/api/board/posts', async (req, res) => {
+    try {
+      const category = req.query.category as string;
+      let posts;
+      
+      if (category && category !== 'all') {
+        posts = await storage.getBoardPostsByCategory(category);
+      } else {
+        posts = await storage.getAllBoardPosts();
+      }
+      
+      res.json(posts);
+    } catch (error) {
+      console.error('Error getting board posts:', error);
+      res.status(500).json({ message: 'Failed to get board posts' });
+    }
+  });
+
+  // Get single board post
+  app.get('/api/board/posts/:id', async (req, res) => {
+    try {
+      const postId = parseInt(req.params.id);
+      const post = await storage.getBoardPost(postId);
+      
+      if (!post) {
+        return res.status(404).json({ message: 'Post not found' });
+      }
+      
+      // Increment view count
+      await storage.incrementBoardPostViews(postId);
+      
+      res.json(post);
+    } catch (error) {
+      console.error('Error getting board post:', error);
+      res.status(500).json({ message: 'Failed to get board post' });
+    }
+  });
+
+  // Create new board post
+  app.post('/api/board/posts', async (req, res) => {
+    try {
+      // Extract user info from session if authenticated, otherwise use anonymous
+      let userId = 1; // Default user ID
+      let authorName = '익명';
+      
+      if (req.isAuthenticated && req.isAuthenticated()) {
+        const user = req.user as any;
+        userId = user.id;
+        authorName = user.displayName || user.username || '사용자';
+      }
+
+      const postData = insertBoardPostSchema.parse({
+        ...req.body,
+        userId,
+        authorName
+      });
+
+      const newPost = await storage.createBoardPost(postData);
+      res.status(201).json(newPost);
+    } catch (error) {
+      console.error('Error creating board post:', error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: 'Invalid post data', errors: error.errors });
+      }
+      res.status(500).json({ message: 'Failed to create board post' });
+    }
+  });
+
+  // Update board post
+  app.put('/api/board/posts/:id', async (req, res) => {
+    try {
+      const postId = parseInt(req.params.id);
+      const post = await storage.getBoardPost(postId);
+      
+      if (!post) {
+        return res.status(404).json({ message: 'Post not found' });
+      }
+
+      // Check if user is the author or admin
+      if (req.isAuthenticated && req.isAuthenticated()) {
+        const user = req.user as any;
+        if (post.userId !== user.id && user.username !== 'admin') {
+          return res.status(403).json({ message: 'Unauthorized to edit this post' });
+        }
+      } else {
+        return res.status(401).json({ message: 'Authentication required' });
+      }
+
+      const updatedPost = await storage.updateBoardPost(postId, req.body);
+      res.json(updatedPost);
+    } catch (error) {
+      console.error('Error updating board post:', error);
+      res.status(500).json({ message: 'Failed to update board post' });
+    }
+  });
+
+  // Delete board post
+  app.delete('/api/board/posts/:id', async (req, res) => {
+    try {
+      const postId = parseInt(req.params.id);
+      const post = await storage.getBoardPost(postId);
+      
+      if (!post) {
+        return res.status(404).json({ message: 'Post not found' });
+      }
+
+      // Check if user is the author or admin
+      if (req.isAuthenticated && req.isAuthenticated()) {
+        const user = req.user as any;
+        if (post.userId !== user.id && user.username !== 'admin') {
+          return res.status(403).json({ message: 'Unauthorized to delete this post' });
+        }
+      } else {
+        return res.status(401).json({ message: 'Authentication required' });
+      }
+
+      await storage.deleteBoardPost(postId);
+      res.json({ success: true, message: 'Post deleted successfully' });
+    } catch (error) {
+      console.error('Error deleting board post:', error);
+      res.status(500).json({ message: 'Failed to delete board post' });
     }
   });
 
