@@ -318,34 +318,12 @@ const ExpertConsultationByState: React.FC<ExpertConsultationByStateProps> = () =
                           전문 분야
                         </h4>
                         <div className="space-y-3">
-                          <div className="flex items-start gap-3">
-                            <div className="w-2 h-2 bg-pink-500 rounded-full mt-2"></div>
-                            <span className="text-gray-700">미국 개인 및 사업자 세무 상담</span>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <div className="w-2 h-2 bg-pink-500 rounded-full mt-2"></div>
-                            <span className="text-gray-700">자산관리 및 투자 불린 최적화</span>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <div className="w-2 h-2 bg-pink-500 rounded-full mt-2"></div>
-                            <span className="text-gray-700">투자정보 수익, 자산운용</span>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <div className="w-2 h-2 bg-pink-500 rounded-full mt-2"></div>
-                            <span className="text-gray-700">고액자산가 명품 정책 컨설팅</span>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <div className="w-2 h-2 bg-pink-500 rounded-full mt-2"></div>
-                            <span className="text-gray-700">해외자산 및 글로벌 세무 규정 대응</span>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <div className="w-2 h-2 bg-pink-500 rounded-full mt-2"></div>
-                            <span className="text-gray-700">투자수익 대비 서술세율 분석</span>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <div className="w-2 h-2 bg-pink-500 rounded-full mt-2"></div>
-                            <span className="text-gray-700">은퇴자금 시뮬레이션 모델링</span>
-                          </div>
+                          {expert.expertise.map((item, index) => (
+                            <div key={index} className="flex items-start gap-3">
+                              <div className="w-2 h-2 bg-pink-500 rounded-full mt-2"></div>
+                              <span className="text-gray-700">{item}</span>
+                            </div>
+                          ))}
                         </div>
                       </div>
                       
