@@ -348,12 +348,11 @@ export default function About() {
                   <h4 className="font-semibold text-green-800 mb-3">💼 주요 이력</h4>
                   <ul className="text-sm text-green-700 space-y-2">
                     <li>🚀 EzFintech CTO (2023~현재)</li>
-                    <li>💻 네이버 클라우드 플랫폼 - 시니어 개발자</li>
-                    <li>🏦 카카오뱅크 - 백엔드 개발팀장</li>
-                    <li>📱 라인 - 프론트엔드 개발자</li>
-                    <li>🔧 삼성SDS - 솔루션 아키텍트</li>
-                    <li>🎯 스타트업 기술 멘토 (10+ 회사)</li>
-                    <li>📚 오픈소스 컨트리뷰터</li>
+                    <li>🅾️ O'Reilly Auto Parts - UI/UX Engineer B2B (2022년 6월~현재, 3년 3개월)</li>
+                    <li>▶️ Accenture Federal Services - Salesforce UI/UX Developer (2021년 10월~2022년 4월, 7개월)</li>
+                    <li>🅾️ O'Reilly Auto Parts - UI/UX Engineer (2019년 2월~2021년 9월, 2년 8개월)</li>
+                    <li>🏢 Lennox International - Application Developer III (2013년 11월~2018년 1월, 4년 3개월)</li>
+                    <li>🏒 National Hockey League (NHL) - Application Developer (2011년 8월~2013년 11월, 2년 4개월)</li>
                   </ul>
                   
                   <h4 className="font-semibold text-green-800 mb-3 mt-4">🎓 학력</h4>
