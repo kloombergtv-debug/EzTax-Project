@@ -28,8 +28,8 @@ const expertsByState = {
     experts: [
       {
         id: 1,
-        name: '지대현',
-        title: '세무전문가(EA)/투자자문사(Series 65)',
+        name: '정승욱',
+        title: '세무전문가(EA)',
         image: '/api/placeholder/150/150',
         rating: 4.9,
         reviews: 127,
@@ -52,24 +52,6 @@ const expertsByState = {
         availability: 'Mon-Fri 9AM-6PM EST',
         phone: '(212) 555-0123',
         email: 'expert.ny@ezfintech.com'
-      },
-      {
-        id: 2,
-        name: '김미선',
-        title: 'CPA/세무전문가',
-        image: '/api/placeholder/150/150',
-        rating: 4.8,
-        reviews: 95,
-        experience: '12년+',
-        specialties: ['개인세무', '사업자세무', '상속세', 'SALT공제'],
-        languages: ['한국어', '영어'],
-        hourlyRate: '$120-160',
-        responseTime: '4시간 이내',
-        bio: '맨하탄에서 활동하는 공인회계사로, 뉴욕주 특화 세무 서비스를 제공합니다. 특히 SALT 공제 최적화와 상속세 플래닝에 전문성을 가지고 있습니다.',
-        certifications: ['CPA', 'CFP'],
-        availability: 'Mon-Sat 8AM-7PM EST',
-        phone: '(212) 555-0456',
-        email: 'kim.cpa@nytax.com'
       }
     ]
   },
