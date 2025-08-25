@@ -240,7 +240,7 @@ export default function About() {
                 <div>
                   <h4 className="font-semibold text-blue-800 mb-3">📚 주요 이력</h4>
                   <ul className="text-sm text-blue-700 space-y-2">
-                    <li>📊 <strong>FINRA Series 65 투자자문사</strong> (Investment Adviser Representative)</li>
+                    <li>📊 <strong>FINRA Series 65 투자자문사</strong></li>
                     <li>🧾 IRS 공인 EA (Enrolled Agent)</li>
                     <li>🏭 한화그룹 – 재무담당 임원</li>
                     <li>🏦 교보생명 – 재무실부장</li>
