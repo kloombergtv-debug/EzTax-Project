@@ -138,17 +138,8 @@ export async function getChatResponse(
         const ragAnswer = await generateRAGAnswer(message, relevantDocs, context);
         
         if (ragAnswer) {
-          // Add EzTax context and limitations to RAG answer
-          const enhancedAnswer = `${ragAnswer}
-
----
-💡 **EzTax 안내**: 
-- EzTax는 웹 브라우저에서 사용하는 온라인 세금 신고 플랫폼입니다
-- 현재 "${context}" 섹션에서 작업 중이시네요
-- 추가 질문이 있으시면 언제든 물어보세요!`;
-          
-          console.log(`RAG 답변 생성 완료 (길이: ${enhancedAnswer.length}자)`);
-          return enhancedAnswer;
+          console.log(`RAG 답변 생성 완료 (길이: ${ragAnswer.length}자)`);
+          return ragAnswer;
         }
       }
     } catch (ragError) {
