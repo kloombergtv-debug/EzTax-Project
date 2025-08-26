@@ -108,19 +108,21 @@ export default function About() {
               우리의 미션
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="grid md:grid-cols-2 gap-8 items-center">
-              <div>
-                <p className="text-gray-700 leading-relaxed mb-4">
-                  기술의 힘으로 복잡한 세무와 은퇴 계획을 누구나 쉽게 이해하고 실행할 수 있게 만듭니다. 
-                  혁신적인 핀테크 솔루션을 통해 개인의 재정적 성공을 지원하고, 
-                  더 풍요로운 미래를 향한 여정에 동행합니다.
-                </p>
-                <p className="text-blue-600 font-medium text-sm">
-                  혁신적인 핀테크 솔루션을 통해 개인의 재정적 성공을 지원
-                </p>
-              </div>
-              
+          <CardContent className="py-4">
+            <div className="space-y-3">
+              <p className="text-gray-700 leading-relaxed text-sm">
+                기술의 힘으로 복잡한 세무와 은퇴 계획을 누구나 쉽게 이해하고 실행할 수 있게 만듭니다. 
+                혁신적인 핀테크 솔루션을 통해 개인의 재정적 성공을 지원하고, 더 풍요로운 미래를 향한 여정에 동행합니다.
+              </p>
+              <p className="text-gray-700 leading-relaxed text-sm">
+                AI 기술과 빅데이터 분석을 활용하여 개인 맞춤형 세무 전략을 제시하고, 
+                복잡한 세법을 직관적으로 이해할 수 있는 시각화 도구를 제공합니다. 
+                세금 절약은 물론 장기적인 자산 증대까지 고려한 종합적인 재정 솔루션을 구현하여, 
+                모든 사용자가 경제적 자유를 달성할 수 있도록 돕는 것이 우리의 사명입니다.
+              </p>
+              <p className="text-blue-600 font-medium text-xs">
+                혁신적인 핀테크 솔루션을 통해 개인의 재정적 성공을 지원
+              </p>
             </div>
           </CardContent>
         </Card>
@@ -132,19 +134,21 @@ export default function About() {
               우리의 비전
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="grid md:grid-cols-2 gap-8 items-center">
-              <div>
-                <p className="text-gray-700 leading-relaxed mb-4">
-                  세계 최고의 AI 기반 세무·은퇴 플랫폼이 되어 모든 사람이 재정적 자유를 달성할 수 있도록 돕겠습니다. 
-                  몬테카를로 시뮬레이션과 같은 첨단 기술로 정확한 예측을 제공하고, 
-                  개인 맞춤형 전략으로 부의 창조를 실현합니다.
-                </p>
-                <p className="text-green-600 font-medium text-sm">
-                  절세, 그 이상의 가치를 전하는 재정플랜 플랫폼
-                </p>
-              </div>
-              
+          <CardContent className="py-4">
+            <div className="space-y-3">
+              <p className="text-gray-700 leading-relaxed text-sm">
+                세계 최고의 AI 기반 세무·은퇴 플랫폼이 되어 모든 사람이 재정적 자유를 달성할 수 있도록 돕겠습니다. 
+                몬테카를로 시뮬레이션과 같은 첨단 기술로 정확한 예측을 제공하고, 개인 맞춤형 전략으로 부의 창조를 실현합니다.
+              </p>
+              <p className="text-gray-700 leading-relaxed text-sm">
+                글로벌 금융 트렌드와 각국의 세법 변화를 실시간으로 분석하여 최적의 투자 및 절세 전략을 도출합니다. 
+                머신러닝 알고리즘을 통해 개인의 소득 패턴, 투자 성향, 라이프 사이클을 종합적으로 고려한 
+                맞춤형 은퇴 설계 서비스를 제공하며, 단순한 세금 계산을 넘어 포괄적인 재정 컨설팅 플랫폼으로 
+                발전하여 모든 계층의 경제적 성공을 견인하는 것이 우리의 비전입니다.
+              </p>
+              <p className="text-green-600 font-medium text-xs">
+                절세, 그 이상의 가치를 전하는 재정플랜 플랫폼
+              </p>
             </div>
           </CardContent>
         </Card>
