@@ -128,30 +128,35 @@ export async function getChatResponse(
   previousMessages: ChatMessage[] = []
 ): Promise<string> {
   try {
-    // First, try to get RAG-based answer for tax-related questions
-    console.log(`RAG 검색 시도: "${message.substring(0, 50)}..."`);
-    const relevantDocs = await searchRelevantDocs(message, 3);
-    
-    if (relevantDocs && relevantDocs.length > 0) {
-      console.log(`관련 문서 ${relevantDocs.length}개 발견, RAG 답변 생성 중...`);
-      const ragAnswer = await generateRAGAnswer(message, relevantDocs, context);
+    // Try RAG-based answer for tax-related questions
+    try {
+      console.log(`RAG 검색 시도: "${message.substring(0, 50)}..."`);
+      const relevantDocs = await searchRelevantDocs(message, 3);
       
-      if (ragAnswer) {
-        // Add EzTax context and limitations to RAG answer
-        const enhancedAnswer = `${ragAnswer}
+      if (relevantDocs && relevantDocs.length > 0) {
+        console.log(`관련 문서 ${relevantDocs.length}개 발견, RAG 답변 생성 중...`);
+        const ragAnswer = await generateRAGAnswer(message, relevantDocs, context);
+        
+        if (ragAnswer) {
+          // Add EzTax context and limitations to RAG answer
+          const enhancedAnswer = `${ragAnswer}
 
 ---
 💡 **EzTax 안내**: 
 - EzTax는 웹 브라우저에서 사용하는 온라인 세금 신고 플랫폼입니다
 - 현재 "${context}" 섹션에서 작업 중이시네요
 - 추가 질문이 있으시면 언제든 물어보세요!`;
-        
-        console.log(`RAG 답변 생성 완료 (길이: ${enhancedAnswer.length}자)`);
-        return enhancedAnswer;
+          
+          console.log(`RAG 답변 생성 완료 (길이: ${enhancedAnswer.length}자)`);
+          return enhancedAnswer;
+        }
       }
+    } catch (ragError) {
+      console.error('RAG 검색 오류:', ragError);
+      console.log('RAG 실패, 기본 OpenAI 답변으로 대체...');
     }
     
-    console.log('RAG 답변 불가, 기본 OpenAI 답변으로 대체...');
+    console.log('기본 OpenAI 답변 생성...');
     const systemMessage = `🚨 중요: EzTax는 웹 브라우저에서 사용하는 웹사이트입니다. 앱이 아닙니다! 앱 다운로드, 앱 스토어, 모바일 앱에 대해 절대 언급하지 마세요. 🚨
 
 🚨 매우 중요한 제한사항: EzTax는 세금 신고서를 직접 IRS에 제출하는 기능을 제공하지 않습니다! 🚨
