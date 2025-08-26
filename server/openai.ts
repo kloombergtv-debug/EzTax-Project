@@ -1,4 +1,6 @@
 import OpenAI from "openai";
+import fs from 'fs';
+import path from 'path';
 
 if (!process.env.OPENAI_API_KEY) {
   throw new Error("OPENAI_API_KEY environment variable must be set");
@@ -12,12 +14,144 @@ export interface ChatMessage {
   content: string;
 }
 
+// RAG 기능을 위한 유틸 함수들
+async function generateEmbedding(text: string) {
+  try {
+    const response = await openai.embeddings.create({
+      model: "text-embedding-3-small",
+      input: text,
+    });
+    return response.data[0].embedding;
+  } catch (error) {
+    console.error('임베딩 생성 오류:', error);
+    return null;
+  }
+}
+
+function cosineSimilarity(vecA: number[], vecB: number[]) {
+  const dotProduct = vecA.reduce((sum, a, i) => sum + a * vecB[i], 0);
+  const magnitudeA = Math.sqrt(vecA.reduce((sum, a) => sum + a * a, 0));
+  const magnitudeB = Math.sqrt(vecB.reduce((sum, b) => sum + b * b, 0));
+  return dotProduct / (magnitudeA * magnitudeB);
+}
+
+function loadVectorStore() {
+  try {
+    if (!fs.existsSync('./vector_store.json')) {
+      console.log('벡터 저장소를 찾을 수 없습니다.');
+      return [];
+    }
+    
+    const data = fs.readFileSync('./vector_store.json', 'utf-8');
+    return JSON.parse(data);
+  } catch (error) {
+    console.error('벡터 저장소 로드 오류:', error);
+    return [];
+  }
+}
+
+async function searchRelevantDocs(query: string, topK = 3) {
+  const vectorStore = loadVectorStore();
+  
+  if (vectorStore.length === 0) {
+    return [];
+  }
+  
+  const queryEmbedding = await generateEmbedding(query);
+  if (!queryEmbedding) return [];
+  
+  const similarities = vectorStore.map((doc: any) => ({
+    ...doc,
+    similarity: cosineSimilarity(queryEmbedding, doc.embedding)
+  }));
+  
+  return similarities
+    .sort((a: any, b: any) => b.similarity - a.similarity)
+    .slice(0, topK)
+    .filter((doc: any) => doc.similarity > 0.1);
+}
+
+async function generateRAGAnswer(query: string, relevantDocs: any[], context = "") {
+  if (!relevantDocs || relevantDocs.length === 0) {
+    return null;
+  }
+  
+  const docContext = relevantDocs
+    .map(doc => `[출처: ${doc.source}]\n${doc.content}`)
+    .join('\n\n---\n\n');
+  
+  const systemPrompt = `당신은 미국 세법 전문가입니다. 다음 규칙을 따라 답변해주세요:
+
+1. 제공된 컨텍스트 정보만을 기반으로 답변하세요
+2. 정확한 수치나 금액이 있다면 반드시 명시하세요
+3. 2024년 기준 정보임을 명확히 하세요
+4. 불확실한 정보는 "추가 확인이 필요합니다"라고 언급하세요
+5. 한국어로 정확하고 친절하게 답변하세요
+6. 복잡한 내용은 이해하기 쉽게 설명하세요
+
+${context ? `추가 컨텍스트: ${context}` : ''}`;
+  
+  const userPrompt = `다음 정보를 바탕으로 질문에 답변해주세요:
+
+컨텍스트:
+${docContext}
+
+질문: ${query}`;
+
+  try {
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o", // the newest OpenAI model is "gpt-5" which was released August 7, 2025. do not change this unless explicitly requested by the user
+      messages: [
+        {
+          role: "system",
+          content: systemPrompt
+        },
+        {
+          role: "user",
+          content: userPrompt
+        }
+      ],
+      max_tokens: 1000,
+      temperature: 0.1
+    });
+    
+    return response.choices[0].message.content;
+  } catch (error) {
+    console.error('RAG 답변 생성 오류:', error);
+    return null;
+  }
+}
+
 export async function getChatResponse(
   message: string,
   context: string = "",
   previousMessages: ChatMessage[] = []
 ): Promise<string> {
   try {
+    // First, try to get RAG-based answer for tax-related questions
+    console.log(`RAG 검색 시도: "${message.substring(0, 50)}..."`);
+    const relevantDocs = await searchRelevantDocs(message, 3);
+    
+    if (relevantDocs && relevantDocs.length > 0) {
+      console.log(`관련 문서 ${relevantDocs.length}개 발견, RAG 답변 생성 중...`);
+      const ragAnswer = await generateRAGAnswer(message, relevantDocs, context);
+      
+      if (ragAnswer) {
+        // Add EzTax context and limitations to RAG answer
+        const enhancedAnswer = `${ragAnswer}
+
+---
+💡 **EzTax 안내**: 
+- EzTax는 웹 브라우저에서 사용하는 온라인 세금 신고 플랫폼입니다
+- 현재 "${context}" 섹션에서 작업 중이시네요
+- 추가 질문이 있으시면 언제든 물어보세요!`;
+        
+        console.log(`RAG 답변 생성 완료 (길이: ${enhancedAnswer.length}자)`);
+        return enhancedAnswer;
+      }
+    }
+    
+    console.log('RAG 답변 불가, 기본 OpenAI 답변으로 대체...');
     const systemMessage = `🚨 중요: EzTax는 웹 브라우저에서 사용하는 웹사이트입니다. 앱이 아닙니다! 앱 다운로드, 앱 스토어, 모바일 앱에 대해 절대 언급하지 마세요. 🚨
 
 🚨 매우 중요한 제한사항: EzTax는 세금 신고서를 직접 IRS에 제출하는 기능을 제공하지 않습니다! 🚨
@@ -190,7 +324,9 @@ EzTax를 통해 세금 신고서를 작성하고 제출하는데 필요한 모�
       temperature: 0.3,
     });
 
-    return response.choices[0].message.content || "죄송합니다. 응답을 생성할 수 없습니다.";
+    const result = response.choices[0].message.content || "죄송합니다. 응답을 생성할 수 없습니다.";
+    console.log(`일반 OpenAI 답변 생성 완료 (길이: ${result.length}자)`);
+    return result;
   } catch (error) {
     console.error("OpenAI API 오류:", error);
     
