@@ -1,0 +1,54 @@
+IRS Publication 17 - Your Federal Income Tax (For Individuals)
+
+CHAPTER 1 - FILING INFORMATION
+
+Who Must File
+You must file a federal income tax return if your income is above certain amounts. These amounts depend on your filing status, age, and the type of income you have.
+
+Filing Status
+Your filing status determines your filing requirements, standard deduction, and tax liability. There are five filing statuses:
+1. Single
+2. Married Filing Jointly
+3. Married Filing Separately
+4. Head of Household
+5. Qualifying Widow(er) with Dependent Child
+
+Standard Deduction for 2024
+- Single: $14,600
+- Married Filing Jointly: $29,200
+- Married Filing Separately: $14,600
+- Head of Household: $21,900
+- Qualifying Widow(er): $29,200
+
+Additional Standard Deduction
+If you are 65 or older or blind, you may be entitled to an additional standard deduction.
+
+CHAPTER 12 - OTHER INCOME
+
+Canceled Debt
+If a debt you owe is canceled or forgiven, other than as a gift or bequest, you generally must include the canceled amount in your income.
+
+Gambling Winnings
+You must include your gambling winnings in your income. If you receive a Form W-2G, the payer has already reported your winnings to the IRS.
+
+CHAPTER 21 - ITEMIZED DEDUCTIONS
+
+Medical and Dental Expenses
+You can deduct medical and dental expenses that exceed 7.5% of your adjusted gross income.
+
+State and Local Taxes
+You can deduct state and local income taxes, sales taxes, and property taxes, subject to a $10,000 limit ($5,000 if married filing separately).
+
+Charitable Contributions
+You can deduct charitable contributions to qualified organizations, subject to certain limits based on your adjusted gross income.
+
+CHAPTER 24 - TAX CREDITS
+
+Child Tax Credit
+For 2024, the Child Tax Credit is up to $2,000 per qualifying child under age 17. The credit begins to phase out for higher income taxpayers.
+
+Earned Income Tax Credit
+The Earned Income Tax Credit (EITC) is a refundable credit for working people with low to moderate income.
+
+American Opportunity Tax Credit
+The American Opportunity Tax Credit is available for qualified education expenses for the first four years of higher education.

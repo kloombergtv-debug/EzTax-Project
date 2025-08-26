@@ -1,0 +1,96 @@
+RETIREMENT PLANS AND TAX IMPLICATIONS
+
+TRADITIONAL IRA
+Contribution Limits 2024:
+- Under 50: $7,000
+- 50 and older: $8,000 (includes $1,000 catch-up)
+
+Tax Benefits:
+- Contributions may be tax-deductible
+- Earnings grow tax-deferred
+- Withdrawals taxed as ordinary income
+
+Deductibility Limits (if covered by workplace plan):
+- Single: Full deduction if MAGI under $77,000, phase-out $77,000-$87,000
+- Married Filing Jointly: Full deduction if MAGI under $123,000, phase-out $123,000-$143,000
+
+Required Minimum Distributions (RMDs):
+- Must begin by April 1 following the year you turn 73
+- Penalty for not taking RMD: 25% of required amount (reduced to 10% if corrected timely)
+
+ROTH IRA
+Contribution Limits 2024:
+- Same as Traditional IRA: $7,000 (under 50), $8,000 (50+)
+
+Tax Benefits:
+- Contributions made with after-tax dollars
+- Earnings grow tax-free
+- Qualified withdrawals are tax-free
+
+Income Limits for Contributions:
+- Single: Phase-out $138,000-$153,000
+- Married Filing Jointly: Phase-out $218,000-$228,000
+
+Withdrawal Rules:
+- Contributions can be withdrawn anytime tax-free
+- Earnings withdrawn before age 59½ may be subject to 10% penalty
+- No RMDs during owner's lifetime
+
+401(k) PLANS
+Contribution Limits 2024:
+- Employee deferrals: $23,000
+- Catch-up (50+): Additional $7,500
+- Total contributions (employee + employer): $69,000 (under 50), $76,500 (50+)
+
+Types:
+- Traditional 401(k): Pre-tax contributions, taxable withdrawals
+- Roth 401(k): After-tax contributions, tax-free qualified withdrawals
+
+Employer Match:
+- Always vested immediately for employee contributions
+- Employer contributions may have vesting schedule
+
+Early Withdrawal Penalties:
+- 10% penalty on withdrawals before age 59½
+- Exceptions: hardship, loan, separation from service after age 55
+
+403(b) PLANS
+- Available to employees of public schools and certain tax-exempt organizations
+- Similar contribution limits to 401(k)
+- May have additional catch-up for employees with 15+ years of service
+
+SEP-IRA
+- For self-employed individuals and small business owners
+- Contribution limit: 25% of compensation or $69,000, whichever is less
+- Must contribute equally for all eligible employees
+
+SIMPLE IRA
+- For small businesses with 100 or fewer employees
+- Employee contribution limit: $16,000 (under 50), $19,500 (50+)
+- Employer must make matching or non-elective contributions
+
+SOLO 401(k)
+- For self-employed individuals with no employees
+- Can contribute as both employee and employer
+- Higher contribution limits than SEP-IRA
+
+HSA (Health Savings Account)
+Contribution Limits 2024:
+- Self-only: $4,150
+- Family: $8,300
+- Catch-up (55+): Additional $1,000
+
+Triple Tax Advantage:
+- Tax-deductible contributions
+- Tax-free growth
+- Tax-free withdrawals for qualified medical expenses
+
+EARLY WITHDRAWAL EXCEPTIONS
+10% penalty does not apply for:
+- First-time home purchase (up to $10,000 lifetime)
+- Higher education expenses
+- Medical expenses exceeding 7.5% of AGI
+- Health insurance premiums while unemployed
+- Substantially equal periodic payments (SEPP)
+- Disability
+- Military reservist distributions

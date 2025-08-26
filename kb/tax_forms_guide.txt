@@ -1,0 +1,52 @@
+COMMON TAX FORMS GUIDE
+
+FORM 1040 - U.S. Individual Income Tax Return
+The main form used by U.S. taxpayers to file their annual income tax returns.
+
+Key Sections:
+- Personal Information and Filing Status
+- Income (Lines 1-8z)
+- Adjusted Gross Income (Lines 9-11)
+- Standard/Itemized Deductions (Lines 12-14)
+- Tax and Credits (Lines 15-19)
+- Other Taxes (Lines 20-23)
+- Payments (Lines 24-33)
+- Refund or Amount Owed (Lines 34-37)
+
+SCHEDULE A - Itemized Deductions
+Use this schedule if your itemized deductions exceed the standard deduction.
+
+Common Itemized Deductions:
+- Medical and dental expenses (over 7.5% of AGI)
+- State and local taxes (up to $10,000)
+- Home mortgage interest
+- Charitable contributions
+- Casualty and theft losses
+- Miscellaneous deductions
+
+SCHEDULE B - Interest and Ordinary Dividends
+Required if you received over $1,500 in taxable interest or ordinary dividends.
+
+SCHEDULE C - Profit or Loss from Business
+For reporting income and expenses from sole proprietorships and single-member LLCs.
+
+SCHEDULE D - Capital Gains and Losses
+For reporting sales of capital assets like stocks, bonds, and real estate.
+
+SCHEDULE E - Supplemental Income and Loss
+For reporting rental real estate, royalties, partnerships, S corporations, estates, and trusts.
+
+FORM W-2 - Wage and Tax Statement
+Shows your annual wages and tax withholdings from employers.
+
+FORM 1099-INT - Interest Income
+Reports interest income of $10 or more.
+
+FORM 1099-DIV - Dividends and Distributions
+Reports dividend payments and capital gain distributions.
+
+FORM 1099-R - Distributions from Retirement Plans
+Reports distributions from pensions, annuities, retirement plans, IRAs, or insurance contracts.
+
+FORM 8962 - Premium Tax Credit
+For claiming the premium tax credit for health insurance purchased through the Marketplace.
