@@ -121,13 +121,6 @@ export default function About() {
                 </p>
               </div>
               
-              <div className="flex justify-center">
-                <img 
-                  src={missionImagePath} 
-                  alt="EzFintech Mission - 혁신적인 핀테크 솔루션을 통해 개인의 재정적 성공을 지원" 
-                  className="max-w-full h-auto rounded-lg shadow-md"
-                />
-              </div>
             </div>
           </CardContent>
         </Card>
@@ -152,13 +145,6 @@ export default function About() {
                 </p>
               </div>
               
-              <div className="flex justify-center">
-                <img 
-                  src={visionImagePath} 
-                  alt="EzFintech Vision - 절세, 그 이상의 가치를 전하는 재정플랜 플랫폼" 
-                  className="max-w-full h-auto rounded-lg shadow-md"
-                />
-              </div>
             </div>
           </CardContent>
         </Card>
