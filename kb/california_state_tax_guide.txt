@@ -1,0 +1,159 @@
+California State Tax Guide 2024
+
+CHAPTER 1 - CALIFORNIA INCOME TAX
+
+California Income Tax Overview
+California has a progressive income tax system with nine tax brackets ranging from 1% to 12.3%. The state also imposes additional taxes that can bring the total effective rate higher for certain taxpayers.
+
+2024 California Income Tax Rates and Brackets
+California uses nine progressive tax brackets:
+- 1% on income up to specific thresholds
+- 2% on the next income level  
+- 4% on the next income level
+- 6% on the next income level
+- 8% on the next income level
+- 9.3% on the next income level
+- 10.3% on the next income level
+- 11.3% on the next income level
+- 12.3% on the highest income level
+
+Additional Taxes:
+- Mental Health Services Tax: Additional 1% on income over $1 million (bringing top rate to 13.3%)
+- Payroll Tax on Wages: 1.1% on all wage income (expanded in 2024 with no wage ceiling)
+- Effective Top Rate: Up to 14.4% for high earners with wage income over $1 million
+
+Standard Deductions (2024 Tax Year)
+- Single or Married Filing Separately: $5,540
+- Married Filing Jointly, Head of Household, or Qualifying Surviving Spouse: $11,080
+
+Note: These amounts apply to tax returns filed in 2025 for 2024 income
+
+Filing Requirements
+You must file a California return if you're a resident, part-year resident, or nonresident and:
+- Required to file a federal tax return, OR
+- Have income from California sources during the tax year
+
+Residency Status and Tax Implications
+California Resident: All income from sources inside and outside California is taxed
+Part-Year Resident: All income while CA resident plus CA-source income while nonresident is taxed
+Nonresident: Only income from California sources is taxed
+
+CHAPTER 2 - CALIFORNIA TAX CREDITS
+
+California Earned Income Tax Credit (CalEITC)
+- Available to low-income workers earning up to $31,950 annually
+- Maximum credit: Up to $3,644 for tax year 2024
+- Provides tax relief for households with greatest need
+
+Young Child Tax Credit (YCTC)
+- For CalEITC-qualifying families with children under 6
+- Maximum credit: $1,154 per tax return for 2024
+- Available even without earned income (starting 2022)
+
+Senior Tax Benefits
+- Additional exemption credit for taxpayers 65+ by December 31, 2024
+- Senior Head of Household Credit for qualifying seniors
+- Both spouses can claim if both are 65+
+
+CHAPTER 3 - SPECIAL INCOME TREATMENT
+
+Tax-Free Income in California
+- Social Security benefits (not taxed by California)
+- Combat pay (military)
+
+Income Taxed as Regular Income
+- Retirement/pension distributions (401k, 403b, IRA)
+- Investment income (interest, dividends, capital gains)
+- Military pay for CA residents
+
+Additional Taxes
+- Early retirement withdrawal penalty: 2.5% (before age 59½)
+
+CHAPTER 4 - FILING DEADLINES
+
+Important Dates for 2024 Tax Year
+- Regular Deadline: April 15, 2025
+- Extension Deadline: October 15, 2025 (automatic 6-month extension)
+- Wildfire Relief: Los Angeles County residents affected by 2025 wildfires get until October 15, 2025 for both filing and payment
+
+CHAPTER 5 - PROPERTY TAX
+
+California Homeowner's Exemption
+The California Homeowner's Exemption reduces your property's assessed value by $7,000, saving homeowners approximately $70-$80 annually in property taxes.
+
+Exemption Amount and Savings
+- Reduction: $7,000 off assessed value
+- Annual Tax Savings: approximately $70-$80 (varies by county due to different tax rates)
+- No Fee: Application is completely free
+
+Eligibility Requirements
+To qualify, you must:
+- Own the property (as owner, co-owner, or contract purchaser)
+- Occupy it as your primary residence on January 1st (lien date)
+- Not have another homeowner exemption on any other property
+- File a completed application
+
+Disqualifying Properties
+- Rental properties
+- Vacant/unoccupied homes
+- Vacation or secondary homes
+
+Application Deadlines
+- January 1 - February 15: 100% exemption ($7,000)
+- February 16 - December 10: 80% exemption ($5,600)
+- After December 10: Cannot file
+
+Important Property Tax Details
+- File once: Exemption automatically renews each year while you qualify
+- Your responsibility: Must notify assessor when no longer eligible
+- Moving: Must file new exemption for new home AND cancel old exemption
+- Lien Date: January 1, 2024 (must occupy home as primary residence)
+
+CHAPTER 6 - SALES AND USE TAX
+
+California Sales Tax Structure
+California has a statewide base sales tax rate of 7.25%, which includes:
+- 6.0% state sales tax
+- 1.25% mandatory local tax (collected at state level)
+
+Total Tax Range
+- Minimum: 7.25% (statewide base)
+- Maximum: Up to 10.75% (with local district taxes)
+- Most Common: 8.25% - 9.25% in major metropolitan areas
+
+Tax Components
+1. State Tax: 6.0%
+2. Mandatory Local: 1.25%
+3. District Taxes: 0.10% - 2.00% (varies by location)
+4. City Taxes: Varies by municipality
+5. County Taxes: Varies by county
+
+Use Tax Guide
+Use tax applies to:
+- Goods purchased out-of-state for use in California
+- Online purchases without California sales tax paid
+- Mail order, telephone, and internet purchases
+
+Rate Determination for Use Tax
+- Same rate as local sales tax where item is used
+- Must be reported on California income tax returns
+
+Business Requirements
+- Seller's Permit: Required through CDTFA for collecting sales tax
+- Rate Updates: Effective first day of calendar quarter
+- Collection: Must charge correct rate based on business/buyer location
+- Reporting: Required for all registered retailers
+
+CHAPTER 7 - CALCULATION METHODS
+
+Tax Calculation Guidelines
+- For taxable income $100,000 or less: Use California Tax Table
+- For income over $100,000: Use tax rate schedules
+- California uses tax credits (not deductions) for personal exemptions
+- Progressive system means you pay different rates on different income portions
+
+Resources
+- Official Calculator: Available at FTB.ca.gov
+- Forms and Publications: California Franchise Tax Board website
+- Rate Lookup Tool: https://maps.cdtfa.ca.gov/
+- Customer Service: 1-800-400-7115 (7:30 AM - 5:00 PM, Mon-Fri)
