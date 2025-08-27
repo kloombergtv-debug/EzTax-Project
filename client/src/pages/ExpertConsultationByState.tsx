@@ -215,7 +215,7 @@ const ExpertConsultationByState: React.FC<ExpertConsultationByStateProps> = () =
         <div className="flex items-center gap-3 mb-4">
           <MapPin className="h-8 w-8 text-blue-600" />
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">{stateData.stateName} 세무 전문가</h1>
+            <h1 className="text-3xl font-bold text-gray-900"> 세무 전문가</h1>
             <p className="text-gray-600 mt-2">
               {stateData.stateName} 지역의 검증된 세무 전문가들과 상담하세요
             </p>
