@@ -217,7 +217,7 @@ const ExpertConsultationByState: React.FC<ExpertConsultationByStateProps> = () =
           <div>
             <h1 className="text-3xl font-bold text-gray-900"> 세무 전문가</h1>
             <p className="text-gray-600 mt-2">
-              {stateData.stateName} 지역의 검증된 세무 전문가들과 상담하세요
+              와싱턴/버지니아 지역의 검증된 세무 전문가님과 상담하세요
             </p>
           </div>
         </div>
