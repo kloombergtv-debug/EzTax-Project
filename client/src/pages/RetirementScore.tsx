@@ -666,61 +666,61 @@ export default function RetirementScoreStepByStep() {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+          <Card className="h-full">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-base">
                 <TargetIcon className="h-5 w-5" />
                 필요 자금
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-red-600 mb-2">
-                ${analysis.calculationDetails.requiredAmount.toLocaleString()}
+            <CardContent className="pt-0">
+              <div className="text-2xl font-bold text-red-600">
+                ${Math.round(analysis.calculationDetails.requiredAmount).toLocaleString()}
               </div>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+          <Card className="h-full">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-base">
                 <TrendingUpIcon className="h-5 w-5" />
                 예상 은퇴 자금
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-green-600 mb-2">
-                ${analysis.projectedSavings.toLocaleString()}
+            <CardContent className="pt-0">
+              <div className="text-2xl font-bold text-green-600">
+                ${Math.round(analysis.projectedSavings).toLocaleString()}
               </div>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+          <Card className="h-full">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-base">
                 <PiggyBankIcon className="h-5 w-5" />
                 준비율
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-blue-600 mb-2">
+            <CardContent className="pt-0">
+              <div className="text-2xl font-bold text-blue-600">
                 {((analysis.projectedSavings / analysis.calculationDetails.requiredAmount) * 100).toFixed(1)}%
               </div>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+          <Card className="h-full">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-base">
                 <TargetIcon className="h-5 w-5" />
                 추가 필요 금액
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-orange-600 mb-2">
-                ${Math.max(0, analysis.calculationDetails.requiredAmount - analysis.projectedSavings).toLocaleString()}
+            <CardContent className="pt-0">
+              <div className="text-2xl font-bold text-orange-600 mb-2">
+                ${Math.round(Math.max(0, analysis.calculationDetails.requiredAmount - analysis.projectedSavings)).toLocaleString()}
               </div>
-              <p className="text-gray-600">
-                월 ${analysis.monthlyNeeded.toLocaleString()} 추가 저축 필요
+              <p className="text-sm text-gray-600">
+                월 ${Math.round(analysis.monthlyNeeded).toLocaleString()} 추가 저축 필요
               </p>
             </CardContent>
           </Card>
