@@ -665,7 +665,21 @@ export default function RetirementScoreStepByStep() {
           <Progress value={analysis.score} className="w-full max-w-md mx-auto" />
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <TargetIcon className="h-5 w-5" />
+                필요 자금
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold text-red-600 mb-2">
+                ${analysis.calculationDetails.requiredAmount.toLocaleString()}
+              </div>
+            </CardContent>
+          </Card>
+
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -683,31 +697,31 @@ export default function RetirementScoreStepByStep() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <TargetIcon className="h-5 w-5" />
-                추가 필요 금액
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-orange-600 mb-2">
-                ${analysis.additionalNeeded.toLocaleString()}
-              </div>
-              <p className="text-gray-600">
-                월 ${analysis.monthlyNeeded.toLocaleString()} 추가 저축 필요
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
                 <PiggyBankIcon className="h-5 w-5" />
                 준비율
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold text-blue-600 mb-2">
-                {((analysis.projectedSavings / (form.getValues('desiredRetirementIncome') * 12 * 25)) * 100).toFixed(1)}%
+                {((analysis.projectedSavings / analysis.calculationDetails.requiredAmount) * 100).toFixed(1)}%
               </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <TargetIcon className="h-5 w-5" />
+                추가 필요 금액
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold text-orange-600 mb-2">
+                ${Math.max(0, analysis.calculationDetails.requiredAmount - analysis.projectedSavings).toLocaleString()}
+              </div>
+              <p className="text-gray-600">
+                월 ${analysis.monthlyNeeded.toLocaleString()} 추가 저축 필요
+              </p>
             </CardContent>
           </Card>
         </div>
