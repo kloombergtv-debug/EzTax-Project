@@ -703,7 +703,7 @@ export default function RetirementScoreStepByStep() {
             </CardHeader>
             <CardContent className="pt-0">
               <div className="text-2xl font-bold text-blue-600">
-                {((analysis.projectedSavings / analysis.calculationDetails.requiredAmount) * 100).toFixed(1)}%
+                {Math.round((analysis.projectedSavings / analysis.calculationDetails.requiredAmount) * 100)}%
               </div>
             </CardContent>
           </Card>
