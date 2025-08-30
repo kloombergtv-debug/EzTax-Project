@@ -464,8 +464,21 @@ export default function RetirementScoreStepByStep() {
     const yearsToRetirement = Math.max(1, data.expectedRetirementAge - data.currentAge);
     const annualContribution = data.monthlyContribution * 12;
     
-    // 복리 계산 개선: Social Security도 포함
-    const investmentGrowth = data.currentSavings * Math.pow(1 + data.expectedAnnualReturn / 100, yearsToRetirement);
+    // 은퇴 전까지의 생활비 계산 (현재 소득이 없거나 부족한 경우)
+    const currentMonthlyIncome = data.currentIncome / 12;
+    const currentMonthlyExpenses = data.desiredRetirementIncome; // 은퇴 후 생활비를 현재 생활비로 가정
+    const monthlyDeficit = Math.max(0, currentMonthlyExpenses - currentMonthlyIncome);
+    const preRetirementExpenses = monthlyDeficit * 12 * yearsToRetirement; // 은퇴 전까지 부족한 생활비
+    
+    // 복리 계산 개선: 은퇴 전 생활비 차감 고려
+    let availableSavings = data.currentSavings;
+    
+    // 현재 저축에서 은퇴 전 부족한 생활비를 먼저 차감
+    if (preRetirementExpenses > 0) {
+      availableSavings = Math.max(0, data.currentSavings - preRetirementExpenses);
+    }
+    
+    const investmentGrowth = availableSavings * Math.pow(1 + data.expectedAnnualReturn / 100, yearsToRetirement);
     const contributionGrowth = data.expectedAnnualReturn > 0 
       ? annualContribution * (Math.pow(1 + data.expectedAnnualReturn / 100, yearsToRetirement) - 1) / (data.expectedAnnualReturn / 100)
       : annualContribution * yearsToRetirement;
@@ -481,6 +494,11 @@ export default function RetirementScoreStepByStep() {
     
     console.log("계산 결과:", {
       yearsToRetirement,
+      currentMonthlyIncome,
+      currentMonthlyExpenses,
+      monthlyDeficit,
+      preRetirementExpenses,
+      availableSavings,
       investmentGrowth,
       contributionGrowth,
       socialSecurityAnnualValue,
