@@ -41,20 +41,13 @@ const Board: React.FC = () => {
 
   // Fetch board posts
   const { data: posts = [], isLoading } = useQuery({
-    queryKey: ['/api/board/posts', selectedCategory],
-    queryFn: () => apiRequest({
-      url: `/api/board/posts?category=${selectedCategory}`,
-      method: 'GET'
-    })
+    queryKey: [`/api/board/posts?category=${selectedCategory}`]
   });
+
 
   // Count posts by category
   const { data: allPosts = [] } = useQuery({
-    queryKey: ['/api/board/posts', 'all'],
-    queryFn: () => apiRequest({
-      url: '/api/board/posts',
-      method: 'GET'
-    })
+    queryKey: ['/api/board/posts']
   });
 
   const getCountByCategory = (categoryId: string) => {
@@ -74,13 +67,18 @@ const Board: React.FC = () => {
 
   // Create post mutation
   const createPostMutation = useMutation({
-    mutationFn: (postData: typeof newPost) => apiRequest({
-      url: '/api/board/posts',
-      method: 'POST',
-      body: postData
-    }),
+    mutationFn: async (postData: typeof newPost) => {
+      const response = await apiRequest({
+        url: '/api/board/posts',
+        method: 'POST',
+        body: postData
+      });
+      return response.json();
+    },
     onSuccess: () => {
+      // Force invalidate all board posts queries
       queryClient.invalidateQueries({ queryKey: ['/api/board/posts'] });
+      queryClient.refetchQueries({ queryKey: ['/api/board/posts'] });
       setIsCreateModalOpen(false);
       setNewPost({ title: '', content: '', category: 'usage' });
       toast({
