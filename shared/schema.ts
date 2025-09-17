@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, boolean, numeric, json } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, numeric, json, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 import type { InferInsertModel, InferSelectModel } from "drizzle-orm";
@@ -510,16 +510,17 @@ export type RetirementAssessment = InferSelectModel<typeof retirementAssessments
 // Board Posts Schema
 export const boardPosts = pgTable("board_posts", {
   id: serial("id").primaryKey(),
-  userId: integer("user_id").notNull(),
+  userId: integer("user_id"),
   title: text("title").notNull(),
   content: text("content").notNull(),
   category: text("category").notNull(), // 'usage', 'tax', 'general'
+  authorId: text("author_id").notNull(), // String ID for author
   authorName: text("author_name").notNull(),
-  views: integer("views").notNull().default(0),
-  replies: integer("replies").notNull().default(0),
-  isNew: boolean("is_new").notNull().default(true),
-  createdAt: text("created_at").notNull(),
-  updatedAt: text("updated_at").notNull(),
+  views: integer("views").default(0),
+  replies: integer("replies").default(0),
+  isNew: boolean("is_new").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
 });
 
 export const insertBoardPostSchema = createInsertSchema(boardPosts).omit({

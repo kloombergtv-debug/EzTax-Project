@@ -1018,6 +1018,7 @@ ${message || '상담 요청'}
       const postData = insertBoardPostSchema.parse({
         ...req.body,
         userId,
+        authorId: userId.toString(), // Set authorId as string ID
         authorName
       });
 
