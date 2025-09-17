@@ -328,23 +328,20 @@ export class DbStorage implements IStorage {
     const [post] = await db
       .insert(boardPosts)
       .values({
-        ...insertPost,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+        ...insertPost
+        // createdAt and updatedAt will be set automatically by defaultNow()
       })
       .returning();
     return post;
   }
 
   async updateBoardPost(id: number, post: Partial<BoardPost>): Promise<BoardPost> {
-    const updateData = {
-      ...post,
-      updatedAt: new Date().toISOString()
-    };
-
     const [updatedPost] = await db
       .update(boardPosts)
-      .set(updateData)
+      .set({
+        ...post,
+        updatedAt: new Date()  // Use Date object for timestamp column
+      })
       .where(eq(boardPosts.id, id))
       .returning();
     
@@ -364,7 +361,7 @@ export class DbStorage implements IStorage {
       .update(boardPosts)
       .set({ 
         views: boardPosts.views + 1,
-        updatedAt: new Date().toISOString()
+        updatedAt: new Date()  // Use Date object for timestamp column
       })
       .where(eq(boardPosts.id, id));
   }
