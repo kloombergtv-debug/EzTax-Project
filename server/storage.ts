@@ -1,6 +1,6 @@
 import { users, type User, type InsertUser, taxReturns, type TaxReturn, type InsertTaxReturn, retirementAssessments, type RetirementAssessment, type InsertRetirementAssessment, boardPosts, type BoardPost, type InsertBoardPost } from "@shared/schema";
 import { db } from "./db";
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, sql } from "drizzle-orm";
 
 export interface IStorage {
   // User methods
@@ -360,7 +360,7 @@ export class DbStorage implements IStorage {
     await db
       .update(boardPosts)
       .set({ 
-        views: boardPosts.views + 1,
+        views: sql`${boardPosts.views} + 1`,
         updatedAt: new Date()  // Use Date object for timestamp column
       })
       .where(eq(boardPosts.id, id));

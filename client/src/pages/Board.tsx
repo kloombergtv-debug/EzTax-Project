@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useLocation } from 'wouter';
 import { MessageSquare, Users, BookOpen, HelpCircle, ChevronRight, Calendar, User, Plus, X, Info, DollarSign } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -38,6 +39,7 @@ const Board: React.FC = () => {
   const queryClient = useQueryClient();
   const { user, isLoading: authLoading } = useAuth();
   const isAuthenticated = !!user;
+  const [, navigate] = useLocation();
 
   // Fetch board posts
   const { data: posts = [], isLoading } = useQuery({
@@ -305,6 +307,8 @@ const Board: React.FC = () => {
                     <div
                       key={post.id}
                       className="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors cursor-pointer"
+                      onClick={() => navigate(`/board/${post.id}`)}
+                      data-testid={`card-post-${post.id}`}
                     >
                       <div className="flex items-start justify-between">
                         <div className="flex-1">

@@ -41,6 +41,7 @@ import FilingStatusChecker from "@/pages/FilingStatusChecker";
 import ResidencyChecker from "@/pages/ResidencyChecker";
 import SocialSecurityCalculator from "@/pages/SocialSecurityCalculator";
 import Board from "@/pages/Board";
+import BoardDetail from "@/pages/BoardDetail";
 import { AuthProvider } from "@/hooks/use-auth";
 import { ProtectedRoute } from "@/lib/protected-route";
 import { TaxProvider } from "@/context/TaxContext";
@@ -65,6 +66,7 @@ function Router() {
       <Route path="/residency-checker" component={ResidencyChecker} />
       <Route path="/social-security-calculator" component={SocialSecurityCalculator} />
       <Route path="/board" component={Board} />
+      <Route path="/board/:id" component={BoardDetail} />
       <ProtectedRoute path="/additional-income" component={AdditionalIncomePage} />
       <ProtectedRoute path="/additional-adjustments" component={AdditionalAdjustmentsPage} />
       <Route path="/retirement-contributions" component={RetirementContributions} />

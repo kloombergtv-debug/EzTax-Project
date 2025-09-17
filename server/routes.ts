@@ -986,6 +986,11 @@ ${message || '상담 요청'}
   app.get('/api/board/posts/:id', async (req, res) => {
     try {
       const postId = parseInt(req.params.id);
+      
+      if (isNaN(postId)) {
+        return res.status(400).json({ message: 'Invalid post ID' });
+      }
+      
       const post = await storage.getBoardPost(postId);
       
       if (!post) {
