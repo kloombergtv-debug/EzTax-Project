@@ -80,6 +80,7 @@ const BoardDetail = () => {
     content: '',
     category: ''
   });
+  const [isEditPreviewMode, setIsEditPreviewMode] = useState(false);
   
   const { user } = useAuth();
   const { toast } = useToast();
@@ -103,7 +104,10 @@ const BoardDetail = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [`/api/board/posts/${id}`] });
-      queryClient.invalidateQueries({ queryKey: ['/api/board/posts'] });
+      queryClient.invalidateQueries({ 
+        queryKey: ['/api/board/posts'], 
+        exact: false 
+      });
       setIsEditing(false);
       toast({
         title: "게시글이 성공적으로 수정되었습니다!",
@@ -129,7 +133,10 @@ const BoardDetail = () => {
       return response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/board/posts'] });
+      queryClient.invalidateQueries({ 
+        queryKey: ['/api/board/posts'], 
+        exact: false 
+      });
       toast({
         title: "게시글이 성공적으로 삭제되었습니다!",
         description: "게시글이 완전히 삭제되었습니다.",
@@ -147,10 +154,9 @@ const BoardDetail = () => {
   });
 
   const categories = [
-    { id: 'usage', name: '사용법 문의' },
-    { id: 'tax', name: '세금 질문' },
-    { id: 'retirement', name: '은퇴 계획' },
-    { id: 'tips', name: '절세/노후준비팁' },
+    { id: 'usage', name: 'EzTax 사용법' },
+    { id: 'tax', name: '세금신고 질문' },
+    { id: 'tax-tips', name: '절세/노후준비팁' },
     { id: 'faq', name: 'FAQ' },
     { id: 'general', name: '일반 질문' }
   ];
@@ -188,9 +194,94 @@ const BoardDetail = () => {
     }
   };
 
+  // Image upload for editing
+  const handleEditImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      toast({
+        title: "잘못된 파일 형식",
+        description: "이미지 파일만 업로드 가능합니다.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      toast({
+        title: "파일 크기 초과", 
+        description: "이미지는 5MB 이하만 업로드 가능합니다.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('image', file);
+
+    try {
+      const response = await fetch('/api/uploads/images', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('업로드 실패');
+      }
+
+      const result = await response.json();
+      const imageMarkdown = `![${file.name}](${result.url})`;
+      
+      setEditForm(prev => ({
+        ...prev,
+        content: prev.content + '\n' + imageMarkdown
+      }));
+
+      toast({
+        title: "이미지 업로드 완료",
+        description: "이미지가 성공적으로 업로드되었습니다.",
+      });
+    } catch (error) {
+      toast({
+        title: "업로드 실패",
+        description: "이미지 업로드 중 오류가 발생했습니다.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  // Markdown formatting helpers for editing
+  const insertEditMarkdown = (prefix: string, suffix?: string) => {
+    const textarea = document.getElementById('edit-content-textarea') as HTMLTextAreaElement;
+    if (!textarea) return;
+
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selectedText = textarea.value.substring(start, end);
+    
+    const newText = suffix 
+      ? `${prefix}${selectedText}${suffix}` 
+      : `${prefix}${selectedText}`;
+    
+    const newContent = 
+      textarea.value.substring(0, start) + 
+      newText + 
+      textarea.value.substring(end);
+    
+    setEditForm(prev => ({ ...prev, content: newContent }));
+    
+    setTimeout(() => {
+      const newCursorPos = start + prefix.length + selectedText.length + (suffix?.length || 0);
+      textarea.setSelectionRange(newCursorPos, newCursorPos);
+      textarea.focus();
+    }, 0);
+  };
+
   // Cancel editing
   const handleEditCancel = () => {
     setIsEditing(false);
+    setIsEditPreviewMode(false);
     setEditForm({ title: '', content: '', category: '' });
   };
 
@@ -409,13 +500,117 @@ const BoardDetail = () => {
         <CardContent>
           {isEditing ? (
             <div className="space-y-4">
-              <Textarea
-                value={editForm.content}
-                onChange={(e) => setEditForm(prev => ({ ...prev, content: e.target.value }))}
-                placeholder="게시글 내용을 입력하세요"
-                className="min-h-64 resize-y"
-                data-testid="textarea-edit-content"
-              />
+              <div className="flex items-center justify-between mb-2">
+                <label className="text-sm font-medium">내용</label>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setIsEditPreviewMode(!isEditPreviewMode)}
+                  data-testid={isEditPreviewMode ? "button-edit-edit-mode" : "button-edit-preview-mode"}
+                >
+                  {isEditPreviewMode ? (
+                    <>
+                      <EyeOff className="h-4 w-4 mr-1" />
+                      편집
+                    </>
+                  ) : (
+                    <>
+                      <Eye className="h-4 w-4 mr-1" />
+                      미리보기
+                    </>
+                  )}
+                </Button>
+              </div>
+              
+              {!isEditPreviewMode && (
+                <>
+                  {/* Markdown Toolbar for Editing */}
+                  <div className="flex items-center space-x-1 p-2 bg-gray-50 dark:bg-gray-800 rounded-t-md border border-b-0">
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => insertEditMarkdown('**', '**')}
+                      data-testid="button-edit-bold"
+                      title="굵게"
+                    >
+                      <Bold className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => insertEditMarkdown('*', '*')}
+                      data-testid="button-edit-italic"
+                      title="기울임"
+                    >
+                      <Italic className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => insertEditMarkdown('[', '](url)')}
+                      data-testid="button-edit-link"
+                      title="링크"
+                    >
+                      <Link className="h-4 w-4" />
+                    </Button>
+                    <div className="border-l border-gray-300 h-6 mx-2" />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => insertEditMarkdown('| 헤더1 | 헤더2 |\n|-------|-------|\n| 데이터1 | 데이터2 |')}
+                      data-testid="button-edit-table"
+                      title="표 삽입"
+                    >
+                      <Table className="h-4 w-4" />
+                    </Button>
+                    <div className="border-l border-gray-300 h-6 mx-2" />
+                    <label className="flex">
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        data-testid="button-edit-image-upload"
+                        title="이미지 업로드"
+                        asChild
+                      >
+                        <span>
+                          <Image className="h-4 w-4" />
+                        </span>
+                      </Button>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleEditImageUpload}
+                        className="hidden"
+                        data-testid="input-edit-image-upload"
+                      />
+                    </label>
+                  </div>
+                  <Textarea
+                    id="edit-content-textarea"
+                    value={editForm.content}
+                    onChange={(e) => setEditForm(prev => ({ ...prev, content: e.target.value }))}
+                    placeholder="게시글 내용을 수정하세요.&#10;&#10;📝 Markdown 사용 가능:&#10;- **굵은 글씨** 또는 *기울임*&#10;- [링크](URL)&#10;- 표와 이미지 업로드&#10;- 미리보기로 확인해보세요!"
+                    className="min-h-64 resize-y rounded-t-none border-t-0 focus:ring-0"
+                    data-testid="textarea-edit-content"
+                  />
+                </>
+              )}
+              
+              {isEditPreviewMode && (
+                <div className="min-h-64 p-4 border rounded-md bg-white dark:bg-gray-900">
+                  {editForm.content.trim() ? (
+                    <SafeMarkdown content={editForm.content} />
+                  ) : (
+                    <p className="text-gray-500 italic">수정할 내용을 입력하면 여기에 미리보기가 표시됩니다.</p>
+                  )}
+                </div>
+              )}
               <div className="flex justify-end space-x-2">
                 <Button 
                   onClick={handleEditSave}

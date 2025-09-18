@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { useLocation } from 'wouter';
-import { MessageSquare, Users, BookOpen, HelpCircle, ChevronRight, Calendar, User, Plus, X, Info, DollarSign } from 'lucide-react';
+import { MessageSquare, Users, BookOpen, HelpCircle, ChevronRight, Calendar, User, Plus, X, Info, DollarSign, Bold, Italic, Link, Eye, EyeOff, Image, Table } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import remarkBreaks from 'remark-breaks';
+import DOMPurify from 'dompurify';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -12,6 +16,49 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/use-auth';
+
+// SafeMarkdown component for secure rendering
+const SafeMarkdown: React.FC<{ content: string }> = ({ content }) => {
+  const sanitizedContent = DOMPurify.sanitize(content);
+  
+  return (
+    <div className="prose prose-sm max-w-none dark:prose-invert">
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm, remarkBreaks]}
+        components={{
+          table: ({ children }) => (
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse border border-gray-300 dark:border-gray-600">
+                {children}
+              </table>
+            </div>
+          ),
+          th: ({ children }) => (
+            <th className="border border-gray-300 dark:border-gray-600 px-4 py-2 bg-gray-50 dark:bg-gray-800 text-left font-semibold">
+              {children}
+            </th>
+          ),
+          td: ({ children }) => (
+            <td className="border border-gray-300 dark:border-gray-600 px-4 py-2">
+              {children}
+            </td>
+          ),
+          img: ({ src, alt }) => (
+            <img 
+              src={src} 
+              alt={alt} 
+              className="max-w-full h-auto rounded-lg shadow-sm"
+              loading="lazy"
+              style={{ maxHeight: '400px' }}
+            />
+          ),
+        }}
+      >
+        {sanitizedContent}
+      </ReactMarkdown>
+    </div>
+  );
+};
 
 interface BoardPost {
   id: number;
@@ -29,6 +76,7 @@ interface BoardPost {
 const Board: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isPreviewMode, setIsPreviewMode] = useState(false);
   const [newPost, setNewPost] = useState({
     title: '',
     content: '',
@@ -43,13 +91,13 @@ const Board: React.FC = () => {
 
   // Fetch board posts
   const { data: posts = [], isLoading } = useQuery({
-    queryKey: [`/api/board/posts?category=${selectedCategory}`]
+    queryKey: ['/api/board/posts', { category: selectedCategory }]
   });
 
 
   // Count posts by category
   const { data: allPosts = [] } = useQuery({
-    queryKey: ['/api/board/posts']
+    queryKey: ['/api/board/posts', { category: 'all' }]
   });
 
   const getCountByCategory = (categoryId: string) => {
@@ -68,6 +116,91 @@ const Board: React.FC = () => {
   ];
 
   // Create post mutation
+  // Image upload functionality
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      toast({
+        title: "잘못된 파일 형식",
+        description: "이미지 파일만 업로드 가능합니다.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) { // 5MB limit
+      toast({
+        title: "파일 크기 초과",
+        description: "이미지는 5MB 이하만 업로드 가능합니다.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('image', file);
+
+    try {
+      const response = await fetch('/api/uploads/images', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('업로드 실패');
+      }
+
+      const result = await response.json();
+      const imageMarkdown = `![${file.name}](${result.url})`;
+      
+      setNewPost(prev => ({
+        ...prev,
+        content: prev.content + '\n' + imageMarkdown
+      }));
+
+      toast({
+        title: "이미지 업로드 완료",
+        description: "이미지가 성공적으로 업로드되었습니다.",
+      });
+    } catch (error) {
+      toast({
+        title: "업로드 실패",
+        description: "이미지 업로드 중 오류가 발생했습니다.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  // Markdown formatting helpers
+  const insertMarkdown = (prefix: string, suffix?: string) => {
+    const textarea = document.getElementById('content-textarea') as HTMLTextAreaElement;
+    if (!textarea) return;
+
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selectedText = textarea.value.substring(start, end);
+    
+    const newText = suffix 
+      ? `${prefix}${selectedText}${suffix}` 
+      : `${prefix}${selectedText}`;
+    
+    const newContent = 
+      textarea.value.substring(0, start) + 
+      newText + 
+      textarea.value.substring(end);
+    
+    setNewPost(prev => ({ ...prev, content: newContent }));
+    
+    // Set cursor position after formatting
+    setTimeout(() => {
+      const newCursorPos = start + prefix.length + selectedText.length + (suffix?.length || 0);
+      textarea.setSelectionRange(newCursorPos, newCursorPos);
+      textarea.focus();
+    }, 0);
+  };
+
   const createPostMutation = useMutation({
     mutationFn: async (postData: typeof newPost) => {
       const response = await apiRequest({
@@ -78,11 +211,14 @@ const Board: React.FC = () => {
       return response.json();
     },
     onSuccess: () => {
-      // Force invalidate all board posts queries
-      queryClient.invalidateQueries({ queryKey: ['/api/board/posts'] });
-      queryClient.refetchQueries({ queryKey: ['/api/board/posts'] });
+      // Invalidate all variants of board posts queries
+      queryClient.invalidateQueries({ 
+        queryKey: ['/api/board/posts'],
+        exact: false // This will invalidate all queries that start with this key
+      });
       setIsCreateModalOpen(false);
       setNewPost({ title: '', content: '', category: 'usage' });
+      setIsPreviewMode(false); // Reset preview mode
       toast({
         title: "게시글이 성공적으로 작성되었습니다!",
         description: "다른 사용자들이 곧 답변해드릴 것입니다.",
@@ -105,7 +241,7 @@ const Board: React.FC = () => {
         variant: "destructive"
       });
       setTimeout(() => {
-        window.location.href = '/login';
+        navigate('/login');
       }, 1000);
       return;
     }
@@ -233,13 +369,120 @@ const Board: React.FC = () => {
                     />
                   </div>
                   <div>
-                    <label className="text-sm font-medium mb-2 block">내용</label>
-                    <Textarea
-                      placeholder="질문이나 의견을 자세히 작성해주세요"
-                      rows={8}
-                      value={newPost.content}
-                      onChange={(e) => setNewPost({...newPost, content: e.target.value})}
-                    />
+                    <div className="flex items-center justify-between mb-2">
+                      <label className="text-sm font-medium">내용</label>
+                      <div className="flex items-center space-x-2">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setIsPreviewMode(!isPreviewMode)}
+                          data-testid={isPreviewMode ? "button-edit-mode" : "button-preview-mode"}
+                        >
+                          {isPreviewMode ? (
+                            <>
+                              <EyeOff className="h-4 w-4 mr-1" />
+                              편집
+                            </>
+                          ) : (
+                            <>
+                              <Eye className="h-4 w-4 mr-1" />
+                              미리보기
+                            </>
+                          )}
+                        </Button>
+                      </div>
+                    </div>
+                    
+                    {!isPreviewMode && (
+                      <>
+                        {/* Markdown Toolbar */}
+                        <div className="flex items-center space-x-1 p-2 bg-gray-50 dark:bg-gray-800 rounded-t-md border border-b-0">
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => insertMarkdown('**', '**')}
+                            data-testid="button-bold"
+                            title="굵게"
+                          >
+                            <Bold className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => insertMarkdown('*', '*')}
+                            data-testid="button-italic"
+                            title="기울임"
+                          >
+                            <Italic className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => insertMarkdown('[', '](url)')}
+                            data-testid="button-link"
+                            title="링크"
+                          >
+                            <Link className="h-4 w-4" />
+                          </Button>
+                          <div className="border-l border-gray-300 h-6 mx-2" />
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => insertMarkdown('| 헤더1 | 헤더2 |\n|-------|-------|\n| 데이터1 | 데이터2 |')}
+                            data-testid="button-table"
+                            title="표 삽입"
+                          >
+                            <Table className="h-4 w-4" />
+                          </Button>
+                          <div className="border-l border-gray-300 h-6 mx-2" />
+                          <label className="flex">
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              data-testid="button-image-upload"
+                              title="이미지 업로드"
+                              asChild
+                            >
+                              <span>
+                                <Image className="h-4 w-4" />
+                              </span>
+                            </Button>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              onChange={handleImageUpload}
+                              className="hidden"
+                              data-testid="input-image-upload"
+                            />
+                          </label>
+                        </div>
+                        <Textarea
+                          id="content-textarea"
+                          placeholder="질문이나 의견을 자세히 작성해주세요.&#10;&#10;📝 Markdown 사용 가능:&#10;- **굵은 글씨** 또는 *기울임*&#10;- [링크](URL)&#10;- 표와 이미지 업로드&#10;- 미리보기로 확인해보세요!"
+                          rows={12}
+                          value={newPost.content}
+                          onChange={(e) => setNewPost({...newPost, content: e.target.value})}
+                          className="rounded-t-none border-t-0 focus:ring-0"
+                          data-testid="textarea-post-content"
+                        />
+                      </>
+                    )}
+                    
+                    {isPreviewMode && (
+                      <div className="min-h-[300px] p-4 border rounded-md bg-white dark:bg-gray-900">
+                        {newPost.content.trim() ? (
+                          <SafeMarkdown content={newPost.content} />
+                        ) : (
+                          <p className="text-gray-500 italic">내용을 입력하면 여기에 미리보기가 표시됩니다.</p>
+                        )}
+                      </div>
+                    )}
                   </div>
                   <div className="flex justify-end space-x-2">
                     <Button variant="outline" onClick={() => setIsCreateModalOpen(false)}>
@@ -264,7 +507,7 @@ const Board: React.FC = () => {
                   variant: "destructive"
                 });
                 setTimeout(() => {
-                  window.location.href = '/login';
+                  navigate('/login');
                 }, 1000);
               }}
               className="w-full mt-4 bg-gray-400 hover:bg-gray-500" 

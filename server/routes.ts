@@ -1,4 +1,5 @@
 import type { Express } from "express";
+import express from "express";
 import { createServer, type Server } from "http";
 import { DbStorage } from "./storage";
 import { insertTaxReturnSchema, insertRetirementAssessmentSchema, retirementAssessmentDataSchema, insertBoardPostSchema } from "@shared/schema";
@@ -6,6 +7,9 @@ import { z } from "zod";
 import nodemailer from "nodemailer";
 import path from "path";
 import { getChatResponse } from "./openai";
+import multer from "multer";
+import { randomUUID } from "crypto";
+import fs from "fs/promises";
 
 // Configure email transporter for Gmail with better error handling
 const createEmailTransporter = () => {
@@ -34,6 +38,39 @@ const createEmailTransporter = () => {
 export async function registerRoutes(app: Express): Promise<Server> {
   // Create storage instance
   const storage = new DbStorage();
+  
+  // Configure multer for image uploads
+  const uploadsDir = path.join(process.cwd(), 'server', 'uploads');
+  await fs.mkdir(uploadsDir, { recursive: true }).catch(() => {});
+
+  const upload = multer({
+    storage: multer.diskStorage({
+      destination: (req, file, cb) => {
+        cb(null, uploadsDir);
+      },
+      filename: (req, file, cb) => {
+        const ext = path.extname(file.originalname);
+        const filename = `${randomUUID()}${ext}`;
+        cb(null, filename);
+      }
+    }),
+    fileFilter: (req, file, cb) => {
+      // Only allow image files
+      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+      if (allowedTypes.includes(file.mimetype)) {
+        cb(null, true);
+      } else {
+        cb(new Error('Only image files (JPG, PNG, GIF, WebP) are allowed'));
+      }
+    },
+    limits: {
+      fileSize: 5 * 1024 * 1024, // 5MB limit
+      files: 1 // Only one file at a time
+    }
+  });
+
+  // Serve uploaded images  
+  app.use('/uploads', express.static(uploadsDir));
   
   app.get("/api/ping", (req, res) => {
     res.json({ ok: true });
@@ -963,6 +1000,33 @@ ${message || '상담 요청'}
   });
 
   // Board Posts API
+  // Image upload endpoint - Authentication required
+  app.post('/api/uploads/images', (req, res, next) => {
+    if (!req.isAuthenticated || !req.isAuthenticated()) {
+      return res.status(401).json({ message: 'Authentication required' });
+    }
+    next();
+  }, upload.single('image'), (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ message: 'No image file uploaded' });
+      }
+
+      // Return the URL that can be used in markdown
+      const imageUrl = `/uploads/${req.file.filename}`;
+      res.json({ 
+        success: true, 
+        url: imageUrl,
+        filename: req.file.filename,
+        originalName: req.file.originalname,
+        size: req.file.size
+      });
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      res.status(500).json({ message: 'Image upload failed' });
+    }
+  });
+
   // Get all board posts or by category
   app.get('/api/board/posts', async (req, res) => {
     try {
