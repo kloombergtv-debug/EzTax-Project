@@ -237,7 +237,17 @@ const BoardDetail = () => {
       }
 
       const result = await response.json();
-      const imageMarkdown = `![${file.name}](${result.url})`;
+      
+      // 이미지 크기 선택 다이얼로그 표시
+      const size = await showEditImageSizeDialog();
+      
+      let imageMarkdown;
+      if (size === 'markdown') {
+        imageMarkdown = `![${file.name}](${result.url})`;
+      } else {
+        const sizeStyle = getEditImageSizeStyle(size);
+        imageMarkdown = `<img src="${result.url}" alt="${file.name}" ${sizeStyle}>`;
+      }
       
       setEditForm(prev => ({
         ...prev,
@@ -294,6 +304,40 @@ const BoardDetail = () => {
     );
     
     return `| ${headers} |\n|${separator}|\n${dataRows.map(row => `| ${row} |`).join('\n')}`;
+  };
+
+  // Image size functions for editing
+  const getEditImageSizeStyle = (size: string) => {
+    switch (size) {
+      case 'small': return 'style="width: 200px;"';
+      case 'medium': return 'style="width: 400px;"';
+      case 'large': return 'style="width: 600px;"';
+      case 'full': return 'style="width: 100%;"';
+      default: return 'style="width: 400px;"';
+    }
+  };
+
+  const showEditImageSizeDialog = (): Promise<string> => {
+    return new Promise((resolve) => {
+      const size = window.prompt(
+        '이미지 크기를 선택하세요:\n\n' +
+        '1 - 작음 (200px)\n' +
+        '2 - 중간 (400px)\n' +
+        '3 - 큼 (600px)\n' +
+        '4 - 전체 폭\n' +
+        '5 - 기본 마크다운\n\n' +
+        '번호를 입력하세요 (1-5):'
+      );
+      
+      switch (size) {
+        case '1': resolve('small'); break;
+        case '2': resolve('medium'); break;
+        case '3': resolve('large'); break;
+        case '4': resolve('full'); break;
+        case '5': resolve('markdown'); break;
+        default: resolve('medium'); break;
+      }
+    });
   };
 
   const handleEditCancel = () => {
