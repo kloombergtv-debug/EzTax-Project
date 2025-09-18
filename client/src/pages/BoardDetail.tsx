@@ -48,7 +48,6 @@ const SafeMarkdown = ({ content }: { content: string }) => {
         remarkPlugins={[remarkGfm, remarkBreaks]}
         components={{
           // Security: Disable HTML tags that could be dangerous
-          html: () => null,
           script: () => null,
           style: () => null,
           // Safe handling of images
@@ -245,8 +244,9 @@ const BoardDetail = () => {
       if (size === 'markdown') {
         imageMarkdown = `![${file.name}](${result.url})`;
       } else {
-        const sizeStyle = getEditImageSizeStyle(size);
-        imageMarkdown = `<img src="${result.url}" alt="${file.name}" ${sizeStyle}>`;
+        // 마크다운 형식으로 크기 정보를 포함
+        const sizeClass = getEditImageSizeClass(size);
+        imageMarkdown = `![${file.name}](${result.url})\n<!-- ${sizeClass} -->`;
       }
       
       setEditForm(prev => ({
@@ -307,13 +307,13 @@ const BoardDetail = () => {
   };
 
   // Image size functions for editing
-  const getEditImageSizeStyle = (size: string) => {
+  const getEditImageSizeClass = (size: string) => {
     switch (size) {
-      case 'small': return 'style="width: 200px;"';
-      case 'medium': return 'style="width: 400px;"';
-      case 'large': return 'style="width: 600px;"';
-      case 'full': return 'style="width: 100%;"';
-      default: return 'style="width: 400px;"';
+      case 'small': return 'IMAGE_SIZE_SMALL';
+      case 'medium': return 'IMAGE_SIZE_MEDIUM';
+      case 'large': return 'IMAGE_SIZE_LARGE';
+      case 'full': return 'IMAGE_SIZE_FULL';
+      default: return 'IMAGE_SIZE_MEDIUM';
     }
   };
 

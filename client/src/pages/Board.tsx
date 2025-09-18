@@ -107,13 +107,13 @@ const Board: React.FC = () => {
   };
 
   // Image size functions
-  const getImageSizeStyle = (size: string) => {
+  const getImageSizeClass = (size: string) => {
     switch (size) {
-      case 'small': return 'style="width: 200px;"';
-      case 'medium': return 'style="width: 400px;"';
-      case 'large': return 'style="width: 600px;"';
-      case 'full': return 'style="width: 100%;"';
-      default: return 'style="width: 400px;"';
+      case 'small': return 'IMAGE_SIZE_SMALL';
+      case 'medium': return 'IMAGE_SIZE_MEDIUM';
+      case 'large': return 'IMAGE_SIZE_LARGE';
+      case 'full': return 'IMAGE_SIZE_FULL';
+      default: return 'IMAGE_SIZE_MEDIUM';
     }
   };
 
@@ -212,8 +212,9 @@ const Board: React.FC = () => {
       if (size === 'markdown') {
         imageMarkdown = `![${file.name}](${result.url})`;
       } else {
-        const sizeStyle = getImageSizeStyle(size);
-        imageMarkdown = `<img src="${result.url}" alt="${file.name}" ${sizeStyle}>`;
+        // 마크다운 형식으로 크기 정보를 포함
+        const sizeClass = getImageSizeClass(size);
+        imageMarkdown = `![${file.name}](${result.url})\n<!-- ${sizeClass} -->`;
       }
       
       setNewPost(prev => ({
