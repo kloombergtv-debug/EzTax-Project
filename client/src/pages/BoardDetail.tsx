@@ -1,6 +1,10 @@
 import { useParams, useLocation } from "wouter";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import remarkBreaks from 'remark-breaks';
+import DOMPurify from 'dompurify';
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -29,6 +33,43 @@ import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { BoardPost } from "@shared/schema";
+
+// Safe Markdown renderer component
+const SafeMarkdown = ({ content }: { content: string }) => {
+  return (
+    <div className="prose prose-sm max-w-none prose-gray dark:prose-invert prose-headings:font-bold prose-h1:text-xl prose-h2:text-lg prose-h3:text-base prose-p:leading-relaxed prose-table:text-sm prose-th:border prose-th:border-gray-300 prose-th:px-3 prose-th:py-2 prose-th:bg-gray-50 prose-td:border prose-td:border-gray-300 prose-td:px-3 prose-td:py-2">
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm, remarkBreaks]}
+        components={{
+          // Security: Disable HTML tags that could be dangerous
+          html: () => null,
+          script: () => null,
+          style: () => null,
+          // Safe handling of images
+          img: ({ src, alt, ...props }) => (
+            <img 
+              src={src} 
+              alt={alt} 
+              className="max-w-full h-auto rounded-md"
+              loading="lazy"
+              {...props}
+            />
+          ),
+          // Table styling
+          table: ({ children, ...props }) => (
+            <div className="overflow-x-auto my-4">
+              <table className="min-w-full border-collapse" {...props}>
+                {children}
+              </table>
+            </div>
+          ),
+        }}
+      >
+        {DOMPurify.sanitize(content)}
+      </ReactMarkdown>
+    </div>
+  );
+};
 
 const BoardDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -405,13 +446,8 @@ const BoardDetail = () => {
               </div>
             </div>
           ) : (
-            <div className="prose max-w-none">
-              <div 
-                className="whitespace-pre-wrap text-gray-800 leading-relaxed"
-                data-testid="text-content"
-              >
-                {post.content}
-              </div>
+            <div data-testid="text-content">
+              <SafeMarkdown content={post.content} />
             </div>
           )}
         </CardContent>
