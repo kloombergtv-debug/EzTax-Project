@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowLeft, Calendar, User, MessageSquare, Eye, Edit, Save, X } from "lucide-react";
+import { ArrowLeft, Calendar, User, MessageSquare, Eye, Edit, Save, X, Trash2 } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -14,6 +14,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
@@ -62,6 +73,33 @@ const BoardDetail = () => {
       toast({
         title: "게시글 수정 실패",
         description: error.message || "게시글 수정 중 오류가 발생했습니다.",
+        variant: "destructive",
+      });
+    }
+  });
+
+  // Delete post mutation
+  const deletePostMutation = useMutation({
+    mutationFn: async () => {
+      const response = await apiRequest({
+        url: `/api/board/posts/${id}`,
+        method: 'DELETE'
+      });
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/board/posts'] });
+      toast({
+        title: "게시글이 성공적으로 삭제되었습니다!",
+        description: "게시글이 완전히 삭제되었습니다.",
+      });
+      // Redirect to board list
+      navigate('/board');
+    },
+    onError: (error: any) => {
+      toast({
+        title: "게시글 삭제 실패",
+        description: error.message || "게시글 삭제 중 오류가 발생했습니다.",
         variant: "destructive",
       });
     }
@@ -126,6 +164,11 @@ const BoardDetail = () => {
         variant: "destructive",
       });
     }
+  };
+
+  // Delete post handler
+  const handleDelete = () => {
+    deletePostMutation.mutate();
   };
 
   if (isLoading) {
@@ -199,7 +242,7 @@ const BoardDetail = () => {
               )}
             </div>
             
-            {/* Edit buttons - only show to author or admin */}
+            {/* Edit/Delete buttons - only show to author or admin */}
             {canEdit && (
               <div className="flex items-center space-x-2">
                 {isEditing ? (
@@ -225,15 +268,62 @@ const BoardDetail = () => {
                     </Button>
                   </>
                 ) : (
-                  <Button 
-                    size="sm" 
-                    variant="outline" 
-                    onClick={handleEditStart}
-                    data-testid="button-edit"
-                  >
-                    <Edit className="h-4 w-4 mr-1" />
-                    수정
-                  </Button>
+                  <>
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      onClick={handleEditStart}
+                      data-testid="button-edit"
+                    >
+                      <Edit className="h-4 w-4 mr-1" />
+                      수정
+                    </Button>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button 
+                          size="sm" 
+                          variant="destructive"
+                          data-testid="button-delete"
+                        >
+                          <Trash2 className="h-4 w-4 mr-1" />
+                          삭제
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>게시글 삭제 확인</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            정말로 이 게시글을 삭제하시겠습니까? 
+                            <br />
+                            <strong>삭제된 게시글은 복구할 수 없습니다.</strong>
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel data-testid="button-delete-cancel">
+                            취소
+                          </AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={handleDelete}
+                            disabled={deletePostMutation.isPending}
+                            className="bg-red-600 hover:bg-red-700"
+                            data-testid="button-delete-confirm"
+                          >
+                            {deletePostMutation.isPending ? (
+                              <>
+                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                                삭제 중...
+                              </>
+                            ) : (
+                              <>
+                                <Trash2 className="h-4 w-4 mr-2" />
+                                삭제하기
+                              </>
+                            )}
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </>
                 )}
               </div>
             )}
