@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowLeft, Calendar, User, MessageSquare, Eye, Edit, Save, X, Trash2 } from "lucide-react";
+import { ArrowLeft, Calendar, User, MessageSquare, Eye, EyeOff, Edit, Save, X, Trash2, Bold, Italic, Link, Table, Image } from "lucide-react";
 import {
   Select,
   SelectContent,
