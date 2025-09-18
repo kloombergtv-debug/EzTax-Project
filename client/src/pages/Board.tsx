@@ -109,11 +109,11 @@ const Board: React.FC = () => {
   // Image size functions
   const getImageSizeStyle = (size: string) => {
     switch (size) {
-      case 'small': return 'width: 200px;';
-      case 'medium': return 'width: 400px;';
-      case 'large': return 'width: 600px;';
+      case 'small': return 'width: 600px;';
+      case 'medium': return 'width: 800px;';
+      case 'large': return 'width: 1000px;';
       case 'full': return 'width: 100%;';
-      default: return 'width: 400px;';
+      default: return 'width: 800px;';
     }
   };
 
@@ -121,11 +121,11 @@ const Board: React.FC = () => {
     return new Promise((resolve) => {
       const size = window.prompt(
         '이미지 크기를 선택하세요:\n\n' +
-        '1 - 작음 (200px)\n' +
-        '2 - 중간 (400px)\n' +
-        '3 - 큼 (600px)\n' +
-        '4 - 전체 폭\n' +
-        '5 - 기본 마크다운\n\n' +
+        '1 - 작음 (600px)\n' +
+        '2 - 중간 (800px)\n' +
+        '3 - 크게 (1000px)\n' +
+        '4 - 전체폭 (100%)\n' +
+        '5 - 마크다운 형식\n\n' +
         '번호를 입력하세요 (1-5):'
       );
       
