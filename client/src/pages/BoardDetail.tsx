@@ -314,10 +314,10 @@ const BoardDetail = () => {
   const getEditImageSizeStyle = (size: string) => {
     switch (size) {
       case 'small': return 'width: 600px;';
-      case 'medium': return 'width: 800px;';
-      case 'large': return 'width: 1000px;';
+      case 'medium': return 'width: 700px;';
+      case 'large': return 'width: 800px;';
       case 'full': return 'width: 100%;';
-      default: return 'width: 800px;';
+      default: return 'width: 700px;';
     }
   };
 
@@ -326,8 +326,8 @@ const BoardDetail = () => {
       const size = window.prompt(
         '이미지 크기를 선택하세요:\n\n' +
         '1 - 작음 (600px)\n' +
-        '2 - 중간 (800px)\n' +
-        '3 - 크게 (1000px)\n' +
+        '2 - 중간 (700px) ← 기본값\n' +
+        '3 - 크게 (800px)\n' +
         '4 - 전체폭 (100%)\n' +
         '5 - 마크다운 형식\n\n' +
         '번호를 입력하세요 (1-5):'
