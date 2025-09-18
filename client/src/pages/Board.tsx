@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation } from 'wouter';
-import { MessageSquare, Users, BookOpen, HelpCircle, ChevronRight, Calendar, User, Plus, X, Info, DollarSign, Bold, Italic, Link, Eye, EyeOff, Image, Table } from 'lucide-react';
+import { MessageSquare, Users, BookOpen, HelpCircle, ChevronRight, Calendar, User, Plus, X, Info, DollarSign, Bold, Italic, Link, Eye, EyeOff, Image, Table, ChevronDown } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks';
@@ -12,6 +12,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
@@ -88,6 +94,17 @@ const Board: React.FC = () => {
   const { user, isLoading: authLoading } = useAuth();
   const isAuthenticated = !!user;
   const [, navigate] = useLocation();
+
+  // Generate table template based on size
+  const generateTableTemplate = (rows: number, cols: number) => {
+    const headers = Array.from({ length: cols }, (_, i) => `헤더${i + 1}`).join(' | ');
+    const separator = Array.from({ length: cols }, () => '-------').join(' | ');
+    const dataRows = Array.from({ length: rows - 1 }, (_, rowIndex) => 
+      Array.from({ length: cols }, (_, colIndex) => `데이터${rowIndex + 1}-${colIndex + 1}`).join(' | ')
+    );
+    
+    return `| ${headers} |\n|${separator}|\n${dataRows.map(row => `| ${row} |`).join('\n')}`;
+  };
 
   // Fetch board posts
   const { data: posts = [], isLoading } = useQuery({
@@ -429,16 +446,40 @@ const Board: React.FC = () => {
                             <Link className="h-4 w-4" />
                           </Button>
                           <div className="border-l border-gray-300 h-6 mx-2" />
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => insertMarkdown('| 헤더1 | 헤더2 |\n|-------|-------|\n| 데이터1 | 데이터2 |')}
-                            data-testid="button-table"
-                            title="표 삽입"
-                          >
-                            <Table className="h-4 w-4" />
-                          </Button>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                data-testid="button-table-dropdown"
+                                title="표 크기 선택"
+                              >
+                                <Table className="h-4 w-4" />
+                                <ChevronDown className="h-3 w-3 ml-1" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent>
+                              <DropdownMenuItem onClick={() => insertMarkdown(generateTableTemplate(2, 2))}>
+                                2x2 표 (2행 2열)
+                              </DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => insertMarkdown(generateTableTemplate(3, 3))}>
+                                3x3 표 (3행 3열)
+                              </DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => insertMarkdown(generateTableTemplate(4, 4))}>
+                                4x4 표 (4행 4열)
+                              </DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => insertMarkdown(generateTableTemplate(5, 5))}>
+                                5x5 표 (5행 5열)
+                              </DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => insertMarkdown(generateTableTemplate(3, 2))}>
+                                3x2 표 (3행 2열)
+                              </DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => insertMarkdown(generateTableTemplate(2, 4))}>
+                                2x4 표 (2행 4열)
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
                           <div className="border-l border-gray-300 h-6 mx-2" />
                           <label className="flex">
                             <Button

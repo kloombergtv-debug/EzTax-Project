@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowLeft, Calendar, User, MessageSquare, Eye, EyeOff, Edit, Save, X, Trash2, Bold, Italic, Link, Table, Image } from "lucide-react";
+import { ArrowLeft, Calendar, User, MessageSquare, Eye, EyeOff, Edit, Save, X, Trash2, Bold, Italic, Link, Table, Image, ChevronDown } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -29,6 +29,12 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
@@ -279,6 +285,17 @@ const BoardDetail = () => {
   };
 
   // Cancel editing
+  // Generate table template based on size for editing
+  const generateEditTableTemplate = (rows: number, cols: number) => {
+    const headers = Array.from({ length: cols }, (_, i) => `헤더${i + 1}`).join(' | ');
+    const separator = Array.from({ length: cols }, () => '-------').join(' | ');
+    const dataRows = Array.from({ length: rows - 1 }, (_, rowIndex) => 
+      Array.from({ length: cols }, (_, colIndex) => `데이터${rowIndex + 1}-${colIndex + 1}`).join(' | ')
+    );
+    
+    return `| ${headers} |\n|${separator}|\n${dataRows.map(row => `| ${row} |`).join('\n')}`;
+  };
+
   const handleEditCancel = () => {
     setIsEditing(false);
     setIsEditPreviewMode(false);
@@ -558,16 +575,40 @@ const BoardDetail = () => {
                       <Link className="h-4 w-4" />
                     </Button>
                     <div className="border-l border-gray-300 h-6 mx-2" />
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => insertEditMarkdown('| 헤더1 | 헤더2 |\n|-------|-------|\n| 데이터1 | 데이터2 |')}
-                      data-testid="button-edit-table"
-                      title="표 삽입"
-                    >
-                      <Table className="h-4 w-4" />
-                    </Button>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          data-testid="button-edit-table-dropdown"
+                          title="표 크기 선택"
+                        >
+                          <Table className="h-4 w-4" />
+                          <ChevronDown className="h-3 w-3 ml-1" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent>
+                        <DropdownMenuItem onClick={() => insertEditMarkdown(generateEditTableTemplate(2, 2))}>
+                          2x2 표 (2행 2열)
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => insertEditMarkdown(generateEditTableTemplate(3, 3))}>
+                          3x3 표 (3행 3열)
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => insertEditMarkdown(generateEditTableTemplate(4, 4))}>
+                          4x4 표 (4행 4열)
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => insertEditMarkdown(generateEditTableTemplate(5, 5))}>
+                          5x5 표 (5행 5열)
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => insertEditMarkdown(generateEditTableTemplate(3, 2))}>
+                          3x2 표 (3행 2열)
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => insertEditMarkdown(generateEditTableTemplate(2, 4))}>
+                          2x4 표 (2행 4열)
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                     <div className="border-l border-gray-300 h-6 mx-2" />
                     <label className="flex">
                       <Button
