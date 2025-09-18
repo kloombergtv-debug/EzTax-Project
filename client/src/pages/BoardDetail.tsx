@@ -39,17 +39,22 @@ import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { BoardPost } from "@shared/schema";
+import rehypeRaw from 'rehype-raw';
 
 // Safe Markdown renderer component
 const SafeMarkdown = ({ content }: { content: string }) => {
+  // Configure DOMPurify to allow safe HTML tags for images
+  const cleanContent = DOMPurify.sanitize(content, {
+    ALLOWED_TAGS: ['img', 'a', 'p', 'br', 'strong', 'em', 'ul', 'ol', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'code', 'pre', 'blockquote'],
+    ALLOWED_ATTR: ['src', 'alt', 'href', 'title', 'style', 'width', 'height']
+  });
+
   return (
     <div className="prose prose-sm max-w-none prose-gray dark:prose-invert prose-headings:font-bold prose-h1:text-xl prose-h2:text-lg prose-h3:text-base prose-p:leading-relaxed prose-table:text-sm prose-th:border prose-th:border-gray-300 prose-th:px-3 prose-th:py-2 prose-th:bg-gray-50 prose-td:border prose-td:border-gray-300 prose-td:px-3 prose-td:py-2">
       <ReactMarkdown
         remarkPlugins={[remarkGfm, remarkBreaks]}
+        rehypePlugins={[rehypeRaw]}
         components={{
-          // Security: Disable HTML tags that could be dangerous
-          script: () => null,
-          style: () => null,
           // Safe handling of images
           img: ({ src, alt, ...props }) => (
             <img 
@@ -70,7 +75,7 @@ const SafeMarkdown = ({ content }: { content: string }) => {
           ),
         }}
       >
-        {DOMPurify.sanitize(content)}
+        {cleanContent}
       </ReactMarkdown>
     </div>
   );
