@@ -244,9 +244,8 @@ const BoardDetail = () => {
       if (size === 'markdown') {
         imageMarkdown = `![${file.name}](${result.url})`;
       } else {
-        // 마크다운 형식으로 크기 정보를 포함
-        const sizeClass = getEditImageSizeClass(size);
-        imageMarkdown = `![${file.name}](${result.url})\n<!-- ${sizeClass} -->`;
+        const sizeStyle = getEditImageSizeStyle(size);
+        imageMarkdown = `<img src="${result.url}" alt="${file.name}" style="${sizeStyle} height: auto; border-radius: 8px; max-width: 100%;">`;
       }
       
       setEditForm(prev => ({
@@ -307,13 +306,13 @@ const BoardDetail = () => {
   };
 
   // Image size functions for editing
-  const getEditImageSizeClass = (size: string) => {
+  const getEditImageSizeStyle = (size: string) => {
     switch (size) {
-      case 'small': return 'IMAGE_SIZE_SMALL';
-      case 'medium': return 'IMAGE_SIZE_MEDIUM';
-      case 'large': return 'IMAGE_SIZE_LARGE';
-      case 'full': return 'IMAGE_SIZE_FULL';
-      default: return 'IMAGE_SIZE_MEDIUM';
+      case 'small': return 'width: 200px;';
+      case 'medium': return 'width: 400px;';
+      case 'large': return 'width: 600px;';
+      case 'full': return 'width: 100%;';
+      default: return 'width: 400px;';
     }
   };
 
