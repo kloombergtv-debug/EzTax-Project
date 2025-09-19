@@ -334,7 +334,7 @@ const Board: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-6xl">
+    <div className="container mx-auto px-4 py-8 max-w-4xl">
       {/* 헤더 */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-800 mb-4">사용자 게시판</h1>

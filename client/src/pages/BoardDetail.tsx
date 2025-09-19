@@ -82,7 +82,7 @@ const SafeMarkdown = ({ content }: { content: string }) => {
 };
 
 const BoardDetail = () => {
-  const { id } = useParams<{ id: string }>();
+  const { id } = useParams();
   const [, navigate] = useLocation();
   const [isEditing, setIsEditing] = useState(false);
   const [editForm, setEditForm] = useState({
@@ -119,14 +119,15 @@ const BoardDetail = () => {
         exact: false 
       });
       setIsEditing(false);
+      setIsEditPreviewMode(false);
       toast({
-        title: "게시글이 성공적으로 수정되었습니다!",
-        description: "변경사항이 저장되었습니다.",
+        title: "게시글 수정 완료",
+        description: "게시글이 성공적으로 수정되었습니다.",
       });
     },
     onError: (error: any) => {
       toast({
-        title: "게시글 수정 실패",
+        title: "수정 실패",
         description: error.message || "게시글 수정 중 오류가 발생했습니다.",
         variant: "destructive",
       });
@@ -138,7 +139,7 @@ const BoardDetail = () => {
     mutationFn: async () => {
       const response = await apiRequest({
         url: `/api/board/posts/${id}`,
-        method: 'DELETE'
+        method: 'DELETE',
       });
       return response.json();
     },
@@ -148,15 +149,14 @@ const BoardDetail = () => {
         exact: false 
       });
       toast({
-        title: "게시글이 성공적으로 삭제되었습니다!",
-        description: "게시글이 완전히 삭제되었습니다.",
+        title: "게시글 삭제 완료",
+        description: "게시글이 성공적으로 삭제되었습니다.",
       });
-      // Redirect to board list
       navigate('/board');
     },
     onError: (error: any) => {
       toast({
-        title: "게시글 삭제 실패",
+        title: "삭제 실패",
         description: error.message || "게시글 삭제 중 오류가 발생했습니다.",
         variant: "destructive",
       });
@@ -185,11 +185,10 @@ const BoardDetail = () => {
   const isPostNew = (createdAt: string) => {
     const postDate = new Date(createdAt);
     const now = new Date();
-    const diffHours = (now.getTime() - postDate.getTime()) / (1000 * 60 * 60);
-    return diffHours < 24;
+    const oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+    return postDate > oneDayAgo;
   };
 
-  // Check if user can edit post (author or admin)
   const canEdit = post && user && (post.userId === user.id || user.username === 'admin');
 
   // Start editing
@@ -263,51 +262,16 @@ const BoardDetail = () => {
         description: "이미지가 성공적으로 업로드되었습니다.",
       });
     } catch (error) {
+      console.error('Image upload error:', error);
       toast({
         title: "업로드 실패",
         description: "이미지 업로드 중 오류가 발생했습니다.",
         variant: "destructive",
       });
+    } finally {
+      // Reset file input
+      event.target.value = '';
     }
-  };
-
-  // Markdown formatting helpers for editing
-  const insertEditMarkdown = (prefix: string, suffix?: string) => {
-    const textarea = document.getElementById('edit-content-textarea') as HTMLTextAreaElement;
-    if (!textarea) return;
-
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
-    const selectedText = textarea.value.substring(start, end);
-    
-    const newText = suffix 
-      ? `${prefix}${selectedText}${suffix}` 
-      : `${prefix}${selectedText}`;
-    
-    const newContent = 
-      textarea.value.substring(0, start) + 
-      newText + 
-      textarea.value.substring(end);
-    
-    setEditForm(prev => ({ ...prev, content: newContent }));
-    
-    setTimeout(() => {
-      const newCursorPos = start + prefix.length + selectedText.length + (suffix?.length || 0);
-      textarea.setSelectionRange(newCursorPos, newCursorPos);
-      textarea.focus();
-    }, 0);
-  };
-
-  // Cancel editing
-  // Generate table template based on size for editing
-  const generateEditTableTemplate = (rows: number, cols: number) => {
-    const headers = Array.from({ length: cols }, (_, i) => `헤더${i + 1}`).join(' | ');
-    const separator = Array.from({ length: cols }, () => '-------').join(' | ');
-    const dataRows = Array.from({ length: rows - 1 }, (_, rowIndex) => 
-      Array.from({ length: cols }, (_, colIndex) => `데이터${rowIndex + 1}-${colIndex + 1}`).join(' | ')
-    );
-    
-    return `| ${headers} |\n|${separator}|\n${dataRows.map(row => `| ${row} |`).join('\n')}`;
   };
 
   // Image size functions for editing
@@ -370,7 +334,7 @@ const BoardDetail = () => {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 max-w-4xl">
         <div className="text-center py-8">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
           <p className="mt-2 text-gray-500">게시글을 불러오는 중...</p>
@@ -381,7 +345,7 @@ const BoardDetail = () => {
 
   if (!post) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 max-w-4xl">
         <div className="text-center py-8">
           <h2 className="text-2xl font-bold text-gray-800 mb-4">게시글을 찾을 수 없습니다</h2>
           <Button onClick={() => navigate('/board')} data-testid="button-back-to-board">
@@ -394,7 +358,7 @@ const BoardDetail = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 max-w-4xl">
       {/* Header */}
       <div className="mb-6">
         <Button 
@@ -444,78 +408,91 @@ const BoardDetail = () => {
               <div className="flex items-center space-x-2">
                 {isEditing ? (
                   <>
-                    <Button 
-                      size="sm" 
-                      onClick={handleEditSave}
-                      disabled={updatePostMutation.isPending}
-                      data-testid="button-save"
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setIsEditPreviewMode(!isEditPreviewMode)}
+                      data-testid="button-preview-toggle"
                     >
-                      <Save className="h-4 w-4 mr-1" />
-                      저장
+                      {isEditPreviewMode ? (
+                        <>
+                          <EyeOff className="h-4 w-4 mr-2" />
+                          편집
+                        </>
+                      ) : (
+                        <>
+                          <Eye className="h-4 w-4 mr-2" />
+                          미리보기
+                        </>
+                      )}
                     </Button>
                     <Button 
-                      size="sm" 
+                      onClick={handleEditSave}
+                      disabled={updatePostMutation.isPending}
+                      size="sm"
+                      data-testid="button-save"
+                    >
+                      {updatePostMutation.isPending ? (
+                        <>
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                          저장 중...
+                        </>
+                      ) : (
+                        <>
+                          <Save className="h-4 w-4 mr-2" />
+                          저장
+                        </>
+                      )}
+                    </Button>
+                    <Button 
                       variant="outline" 
                       onClick={handleEditCancel}
                       disabled={updatePostMutation.isPending}
+                      size="sm"
                       data-testid="button-cancel"
                     >
-                      <X className="h-4 w-4 mr-1" />
+                      <X className="h-4 w-4 mr-2" />
                       취소
                     </Button>
                   </>
                 ) : (
                   <>
                     <Button 
-                      size="sm" 
-                      variant="outline" 
                       onClick={handleEditStart}
+                      variant="outline"
+                      size="sm"
                       data-testid="button-edit"
                     >
-                      <Edit className="h-4 w-4 mr-1" />
+                      <Edit className="h-4 w-4 mr-2" />
                       수정
                     </Button>
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
                         <Button 
-                          size="sm" 
-                          variant="destructive"
+                          variant="destructive" 
+                          size="sm"
                           data-testid="button-delete"
                         >
-                          <Trash2 className="h-4 w-4 mr-1" />
+                          <Trash2 className="h-4 w-4 mr-2" />
                           삭제
                         </Button>
                       </AlertDialogTrigger>
-                      <AlertDialogContent>
+                      <AlertDialogContent data-testid="dialog-delete-confirm">
                         <AlertDialogHeader>
-                          <AlertDialogTitle>게시글 삭제 확인</AlertDialogTitle>
+                          <AlertDialogTitle>게시글 삭제</AlertDialogTitle>
                           <AlertDialogDescription>
-                            정말로 이 게시글을 삭제하시겠습니까? 
-                            <br />
-                            <strong>삭제된 게시글은 복구할 수 없습니다.</strong>
+                            정말로 이 게시글을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
-                          <AlertDialogCancel data-testid="button-delete-cancel">
-                            취소
-                          </AlertDialogCancel>
-                          <AlertDialogAction
+                          <AlertDialogCancel data-testid="button-delete-cancel">취소</AlertDialogCancel>
+                          <AlertDialogAction 
                             onClick={handleDelete}
-                            disabled={deletePostMutation.isPending}
                             className="bg-red-600 hover:bg-red-700"
+                            disabled={deletePostMutation.isPending}
                             data-testid="button-delete-confirm"
                           >
-                            {deletePostMutation.isPending ? (
-                              <>
-                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                                삭제 중...
-                              </>
-                            ) : (
-                              <>
-                                <Trash2 className="h-4 w-4 mr-2" />
-                                삭제하기
-                              </>
-                            )}
+                            {deletePostMutation.isPending ? "삭제 중..." : "삭제"}
                           </AlertDialogAction>
                         </AlertDialogFooter>
                       </AlertDialogContent>
@@ -526,144 +503,156 @@ const BoardDetail = () => {
             )}
           </div>
           
+          {/* Title */}
           {isEditing ? (
             <Input
               value={editForm.title}
               onChange={(e) => setEditForm(prev => ({ ...prev, title: e.target.value }))}
-              className="text-2xl font-bold border-0 px-0 focus-visible:ring-0"
-              placeholder="게시글 제목을 입력하세요"
+              placeholder="게시글 제목을 입력하세요..."
+              className="text-lg font-semibold mb-2"
               data-testid="input-edit-title"
             />
           ) : (
-            <CardTitle className="text-2xl text-gray-800 mb-4">
-              {post.title}
-            </CardTitle>
+            <CardTitle className="text-xl" data-testid="text-title">{post.title}</CardTitle>
           )}
-          <div className="flex items-center justify-between text-sm text-gray-500">
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-1">
-                <User className="h-4 w-4" />
-                <span data-testid="text-author">{post.authorName}</span>
-              </div>
-              <div className="flex items-center space-x-1">
-                <Calendar className="h-4 w-4" />
-                <span data-testid="text-date">{formatDate(post.createdAt)}</span>
-              </div>
+
+          {/* Meta info */}
+          <div className="flex items-center space-x-4 text-sm text-gray-500">
+            <div className="flex items-center space-x-1">
+              <User className="h-4 w-4" />
+              <span data-testid="text-author">{post.author}</span>
             </div>
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-1">
-                <MessageSquare className="h-4 w-4" />
-                <span data-testid="text-replies">답글 {post.replies || 0}</span>
-              </div>
-              <div className="flex items-center space-x-1">
-                <Eye className="h-4 w-4" />
-                <span data-testid="text-views">조회 {post.views || 0}</span>
-              </div>
+            <div className="flex items-center space-x-1">
+              <Calendar className="h-4 w-4" />
+              <span data-testid="text-date">{formatDate(post.createdAt)}</span>
             </div>
           </div>
         </CardHeader>
+
         <CardContent>
+          {/* Content */}
           {isEditing ? (
             <div className="space-y-4">
-              <div className="flex items-center justify-between mb-2">
-                <label className="text-sm font-medium">내용</label>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setIsEditPreviewMode(!isEditPreviewMode)}
-                  data-testid={isEditPreviewMode ? "button-edit-edit-mode" : "button-edit-preview-mode"}
-                >
-                  {isEditPreviewMode ? (
-                    <>
-                      <EyeOff className="h-4 w-4 mr-1" />
-                      편집
-                    </>
-                  ) : (
-                    <>
-                      <Eye className="h-4 w-4 mr-1" />
-                      미리보기
-                    </>
-                  )}
-                </Button>
-              </div>
-              
               {!isEditPreviewMode && (
                 <>
-                  {/* Markdown Toolbar for Editing */}
-                  <div className="flex items-center space-x-1 p-2 bg-gray-50 dark:bg-gray-800 rounded-t-md border border-b-0">
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => insertEditMarkdown('**', '**')}
-                      data-testid="button-edit-bold"
-                      title="굵게"
-                    >
-                      <Bold className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => insertEditMarkdown('*', '*')}
-                      data-testid="button-edit-italic"
-                      title="기울임"
-                    >
-                      <Italic className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => insertEditMarkdown('[', '](url)')}
-                      data-testid="button-edit-link"
-                      title="링크"
-                    >
-                      <Link className="h-4 w-4" />
-                    </Button>
-                    <div className="border-l border-gray-300 h-6 mx-2" />
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          data-testid="button-edit-table-dropdown"
-                          title="표 크기 선택"
-                        >
-                          <Table className="h-4 w-4" />
-                          <ChevronDown className="h-3 w-3 ml-1" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent>
-                        <DropdownMenuItem onClick={() => insertEditMarkdown(generateEditTableTemplate(2, 2))}>
-                          2x2 표 (2행 2열)
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => insertEditMarkdown(generateEditTableTemplate(3, 3))}>
-                          3x3 표 (3행 3열)
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => insertEditMarkdown(generateEditTableTemplate(4, 4))}>
-                          4x4 표 (4행 4열)
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => insertEditMarkdown(generateEditTableTemplate(5, 5))}>
-                          5x5 표 (5행 5열)
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => insertEditMarkdown(generateEditTableTemplate(3, 2))}>
-                          3x2 표 (3행 2열)
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => insertEditMarkdown(generateEditTableTemplate(2, 4))}>
-                          2x4 표 (2행 4열)
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                    <div className="border-l border-gray-300 h-6 mx-2" />
-                    <label className="flex">
+                  <div className="flex items-center justify-between bg-gray-50 rounded-t-md p-2 border border-b-0">
+                    <div className="flex items-center space-x-1">
                       <Button
                         type="button"
-                        variant="ghost"
+                        variant="ghost" 
                         size="sm"
-                        data-testid="button-edit-image-upload"
+                        onClick={() => {
+                          const textarea = document.getElementById('edit-content-textarea') as HTMLTextAreaElement;
+                          if (textarea) {
+                            const start = textarea.selectionStart;
+                            const end = textarea.selectionEnd;
+                            const selectedText = textarea.value.substring(start, end);
+                            const newText = `**${selectedText}**`;
+                            const newContent = textarea.value.substring(0, start) + newText + textarea.value.substring(end);
+                            setEditForm(prev => ({ ...prev, content: newContent }));
+                            
+                            setTimeout(() => {
+                              textarea.focus();
+                              textarea.setSelectionRange(start + 2, start + 2 + selectedText.length);
+                            }, 0);
+                          }
+                        }}
+                        data-testid="button-bold"
+                      >
+                        <Bold className="h-4 w-4" />
+                      </Button>
+                      
+                      <Button
+                        type="button"
+                        variant="ghost" 
+                        size="sm"
+                        onClick={() => {
+                          const textarea = document.getElementById('edit-content-textarea') as HTMLTextAreaElement;
+                          if (textarea) {
+                            const start = textarea.selectionStart;
+                            const end = textarea.selectionEnd;
+                            const selectedText = textarea.value.substring(start, end);
+                            const newText = `*${selectedText}*`;
+                            const newContent = textarea.value.substring(0, start) + newText + textarea.value.substring(end);
+                            setEditForm(prev => ({ ...prev, content: newContent }));
+                            
+                            setTimeout(() => {
+                              textarea.focus();
+                              textarea.setSelectionRange(start + 1, start + 1 + selectedText.length);
+                            }, 0);
+                          }
+                        }}
+                        data-testid="button-italic"
+                      >
+                        <Italic className="h-4 w-4" />
+                      </Button>
+                      
+                      <Button
+                        type="button"
+                        variant="ghost" 
+                        size="sm"
+                        onClick={() => {
+                          const url = window.prompt('링크 URL을 입력하세요:');
+                          const text = window.prompt('링크 텍스트를 입력하세요:') || url;
+                          if (url && text) {
+                            const linkMarkdown = `[${text}](${url})`;
+                            setEditForm(prev => ({
+                              ...prev,
+                              content: prev.content + linkMarkdown
+                            }));
+                          }
+                        }}
+                        data-testid="button-link"
+                      >
+                        <Link className="h-4 w-4" />
+                      </Button>
+                      
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            type="button"
+                            variant="ghost" 
+                            size="sm"
+                            data-testid="button-table-dropdown"
+                          >
+                            <Table className="h-4 w-4" />
+                            <ChevronDown className="h-3 w-3 ml-1" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                          <DropdownMenuItem 
+                            onClick={() => {
+                              const tableMarkdown = `| 헤더1 | 헤더2 | 헤더3 |\n|-------|-------|-------|\n| 데이터1 | 데이터2 | 데이터3 |\n| 데이터4 | 데이터5 | 데이터6 |`;
+                              setEditForm(prev => ({
+                                ...prev,
+                                content: prev.content + '\n' + tableMarkdown + '\n'
+                              }));
+                            }}
+                            data-testid="menu-item-table-3x3"
+                          >
+                            3×3 표
+                          </DropdownMenuItem>
+                          <DropdownMenuItem 
+                            onClick={() => {
+                              const tableMarkdown = `| 헤더1 | 헤더2 | 헤더3 | 헤더4 |\n|-------|-------|-------|-------|\n| 데이터1 | 데이터2 | 데이터3 | 데이터4 |\n| 데이터5 | 데이터6 | 데이터7 | 데이터8 |\n| 데이터9 | 데이터10 | 데이터11 | 데이터12 |`;
+                              setEditForm(prev => ({
+                                ...prev,
+                                content: prev.content + '\n' + tableMarkdown + '\n'
+                              }));
+                            }}
+                            data-testid="menu-item-table-4x4"
+                          >
+                            4×4 표
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
+                    
+                    <label className="cursor-pointer">
+                      <Button
+                        type="button"
+                        variant="ghost" 
+                        size="sm"
                         title="이미지 업로드"
                         asChild
                       >
