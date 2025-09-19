@@ -142,7 +142,7 @@ const Board: React.FC = () => {
 
   // Fetch board posts
   const { data: posts = [], isLoading } = useQuery({
-    queryKey: ['/api/board/posts', { category: selectedCategory }]
+    queryKey: [selectedCategory === 'all' ? '/api/board/posts' : `/api/board/posts?category=${selectedCategory}`]
   });
 
 
