@@ -191,7 +191,7 @@ export default function About() {
             EzTax 운용자 소개
           </CardTitle>
           <CardDescription className="text-blue-600">
-            EzFintech을 이끄는 세무·투자 전문가를 만나보세요
+            EzTax를 이끄는 세무·투자 전문가를 만나보세요
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -226,7 +226,7 @@ export default function About() {
                     <li>🏦 교보생명 – 재무실부장</li>
                     <li>🏢 LG전자 – IR팀 과장</li>
                     <li>📈 Nomura Securities – 애널리스트</li>
-                    <li>💼 EzFintech 창립자&CEO</li>
+                    <li>💼 EzTax 창립자&CEO</li>
                   </ul>
                   
                   <h4 className="font-semibold text-blue-800 mb-3 mt-4">🎓 학력</h4>
@@ -253,12 +253,12 @@ export default function About() {
               <div className="bg-white/80 p-6 rounded-lg mb-6">
                 <h4 className="font-semibold text-blue-800 mb-3">💭 CEO 메시지</h4>
                 <p className="text-blue-800 leading-relaxed mb-4">
-                  <strong>📌 "Less Tax, More Wealth"</strong> 철학을 바탕으로 EzFintech를 설립했습니다. 
+                  <strong>📌 "Less Tax, More Wealth"</strong> 철학을 바탕으로 EzTax를 설립했습니다. 
                   국내외 유수의 금융·기업 그룹에서 재무 및 IR 책임자로 경력을 쌓으며, 
                   복잡한 세무와 투자의 세계에서 많은 사람들이 겪는 어려움을 목격했습니다.
                 </p>
                 <p className="text-blue-800 leading-relaxed mb-4">
-                  EzFintech는 단순한 세무 계산기가 아닙니다. 첨단 AI 기술과 몬테카를로 시뮬레이션을 활용하여 
+                  EzTax는 단순한 세무 계산기가 아닙니다. 첨단 AI 기술과 몬테카를로 시뮬레이션을 활용하여 
                   개인의 재정 상황을 종합적으로 분석하고, 세금 절감과 부의 극대화를 동시에 달성할 수 있는 
                   맞춤형 전략을 제시합니다.
                 </p>
@@ -289,7 +289,7 @@ export default function About() {
             기술 총괄 책임자
           </CardTitle>
           <CardDescription className="text-green-600">
-            EzFintech의 기술 혁신을 이끄는 전문가
+            EzTax의 기술 혁신을 이끄는 전문가
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -331,7 +331,7 @@ export default function About() {
                     <li>▶️ Accenture Federal Services</li>
                     <li>🏢 Lennox International</li>
                     <li>🏒 National Hockey League (NHL)</li>
-                    <li>🚀 EzFintech 창립자&CTO</li>
+                    <li>🚀 EzTax 창립자&CTO</li>
                   </ul>
                   
                   <h4 className="font-semibold text-green-800 mb-3 mt-4">🎓 학력</h4>
@@ -355,7 +355,7 @@ export default function About() {
                 <h4 className="font-semibold text-green-800 mb-3">💡 CTO 메시지</h4>
                 <p className="text-green-800 leading-relaxed mb-4">
                   <strong>🔮 "Technology for Better Financial Future"</strong> 라는 비전으로 
-                  EzFintech의 기술 혁신을 이끌고 있습니다. 복잡한 세무와 금융 계산을 
+                  EzTax의 기술 혁신을 이끌고 있습니다. 복잡한 세무와 금융 계산을 
                   누구나 쉽게 활용할 수 있는 직관적인 플랫폼으로 구현하는 것이 목표입니다.
                 </p>
                 <p className="text-green-800 leading-relaxed mb-4">
@@ -372,7 +372,7 @@ export default function About() {
                 <div className="bg-green-100/50 p-4 rounded-lg">
                   <h4 className="font-semibold text-green-800 mb-2">🏆 주요 성과</h4>
                   <ul className="text-sm text-green-700 space-y-1">
-                    <li>• EzFintech 플랫폼 99.9% 가용성 달성</li>
+                    <li>• EzTax 플랫폼 99.9% 가용성 달성</li>
                     <li>• AI 세무 챗봇 정확도 95% 이상</li>
                     <li>• 페이지 로딩 속도 50% 개선</li>
                   </ul>
