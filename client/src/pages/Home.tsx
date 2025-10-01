@@ -152,7 +152,7 @@ const Home: React.FC = () => {
               </div>
             </div>
           </CardContent>
-          <CardFooter className="flex flex-col sm:flex-row gap-4">
+          <CardFooter className="flex flex-col sm:flex-row gap-4 hidden">
             <Button 
               size="lg"
               className="w-full bg-primary hover:bg-primary-dark text-white font-bold"
