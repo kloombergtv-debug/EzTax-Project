@@ -106,7 +106,7 @@ export function ChatBot({ context = "소득 입력" }: ChatBotProps) {
       <div className="fixed bottom-24 right-6 z-50">
         <Button
           onClick={() => setIsOpen(true)}
-          className="h-20 w-20 rounded-full bg-blue-600 hover:bg-blue-700 shadow-xl animate-pulse hover:animate-none hover:scale-110 transition-transform"
+          className="h-20 w-20 rounded-full bg-yellow-600 hover:bg-yellow-700 shadow-xl animate-pulse hover:animate-none hover:scale-110 transition-transform"
           size="icon"
         >
           <Bot className="h-10 w-10 text-white" />
@@ -121,7 +121,7 @@ export function ChatBot({ context = "소득 입력" }: ChatBotProps) {
         <CardHeader className="pb-2">
           <div className="flex items-center justify-between">
             <CardTitle className="text-lg flex items-center gap-2">
-              <Bot className="h-5 w-5 text-blue-600" />
+              <Bot className="h-5 w-5 text-yellow-600" />
               세금 AI 상담
             </CardTitle>
             <Button
@@ -157,7 +157,7 @@ export function ChatBot({ context = "소득 입력" }: ChatBotProps) {
                     <div
                       className={`w-8 h-8 rounded-full flex items-center justify-center ${
                         message.role === 'user'
-                          ? 'bg-blue-600'
+                          ? 'bg-yellow-600'
                           : 'bg-gray-200'
                       }`}
                     >
@@ -170,7 +170,7 @@ export function ChatBot({ context = "소득 입력" }: ChatBotProps) {
                     <div
                       className={`rounded-lg px-3 py-2 ${
                         message.role === 'user'
-                          ? 'bg-blue-600 text-white'
+                          ? 'bg-yellow-600 text-white'
                           : 'bg-gray-100 text-gray-900'
                       }`}
                     >
@@ -220,7 +220,7 @@ export function ChatBot({ context = "소득 입력" }: ChatBotProps) {
                 onClick={sendMessage}
                 disabled={!input.trim() || isLoading}
                 size="icon"
-                className="bg-blue-600 hover:bg-blue-700"
+                className="bg-yellow-600 hover:bg-yellow-700"
               >
                 <Send className="h-4 w-4" />
               </Button>

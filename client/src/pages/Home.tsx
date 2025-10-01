@@ -32,7 +32,7 @@ const Home: React.FC = () => {
                 <Button 
                   size="lg" 
                   variant="secondary"
-                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold w-full sm:w-64"
+                  className="bg-yellow-600 hover:bg-yellow-700 text-white font-bold w-full sm:w-64"
                   onClick={() => navigate('/personal-info')}
                 >
                   세금진단(AI절세방안)
