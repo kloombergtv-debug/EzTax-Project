@@ -61,7 +61,7 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      <section className="mb-12 hidden">
+      <section className="mb-12">
         <h2 className="text-2xl font-heading font-bold text-primary-dark text-center mb-8">
           왜 EzTax인가요?
         </h2>
@@ -120,50 +120,40 @@ const Home: React.FC = () => {
       </section>
 
       <section className="mb-12">
-        <div className="grid md:grid-cols-2 gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-2xl font-heading text-primary-dark">세금 시뮬레이션의 6단계</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="mb-4">
-                저희의 간단한 과정은 다음 여섯 가지 섹션으로 안내합니다:
-              </p>
-              <ol className="list-decimal pl-6 mb-4 space-y-2">
-                <li><strong>개인 정보</strong> - 기본 정보 및 신고 상태</li>
-                <li><strong>소득 정보</strong> - 급여, 이자, 기타 소득 입력</li>
-                <li><strong>공제 항목</strong> - 표준 공제 또는 항목별 공제 선택</li>
-                <li><strong>세액 공제</strong> - 자격이 있는 공제 항목 확인</li>
-                <li><strong>추가 세금</strong> - 자영업 및 기타 소득</li>
-                <li><strong>검토 및 계산</strong> - 최종 확인 및 신고서 생성</li>
-              </ol>
-            </CardContent>
-            <CardFooter className="flex flex-col sm:flex-row gap-4 hidden">
-              <Button 
-                size="lg"
-                className="w-full bg-primary hover:bg-primary-dark text-white font-bold"
-                onClick={() => user ? navigate('/personal-info') : navigate('/auth')}
-              >
-                {user ? '지금 시작하기' : '로그인하고 시작하기(Login to Start)'}
-              </Button>
-              <Button 
-                size="lg"
-                className="w-full bg-green-500 hover:bg-green-600 text-white font-bold"
-                onClick={() => navigate('/personal-info')}
-              >
-                세금시뮬레이터(Tax Simulator)
-              </Button>
-            </CardFooter>
-          </Card>
-
-          <div className="flex items-center justify-center">
-            <img 
-              src="/ceo-profile.png"
-              alt="지대현 CEO"
-              className="w-64 h-auto"
-            />
-          </div>
-        </div>
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-2xl font-heading text-primary-dark">세금 시뮬레이션의 6단계</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="mb-4">
+              저희의 간단한 과정은 다음 여섯 가지 섹션으로 안내합니다:
+            </p>
+            <ol className="list-decimal pl-6 mb-4 space-y-2">
+              <li><strong>개인 정보</strong> - 기본 정보 및 신고 상태</li>
+              <li><strong>소득 정보</strong> - 급여, 이자, 기타 소득 입력</li>
+              <li><strong>공제 항목</strong> - 표준 공제 또는 항목별 공제 선택</li>
+              <li><strong>세액 공제</strong> - 자격이 있는 공제 항목 확인</li>
+              <li><strong>추가 세금</strong> - 자영업 및 기타 소득</li>
+              <li><strong>검토 및 계산</strong> - 최종 확인 및 신고서 생성</li>
+            </ol>
+          </CardContent>
+          <CardFooter className="flex flex-col sm:flex-row gap-4">
+            <Button 
+              size="lg"
+              className="w-full bg-primary hover:bg-primary-dark text-white font-bold"
+              onClick={() => user ? navigate('/personal-info') : navigate('/auth')}
+            >
+              {user ? '지금 시작하기' : '로그인하고 시작하기(Login to Start)'}
+            </Button>
+            <Button 
+              size="lg"
+              className="w-full bg-green-500 hover:bg-green-600 text-white font-bold"
+              onClick={() => navigate('/personal-info')}
+            >
+              세금시뮬레이터(Tax Simulator)
+            </Button>
+          </CardFooter>
+        </Card>
       </section>
     </div>
   );

@@ -32,16 +32,7 @@ const Footer: React.FC = () => {
             <div>
               <h4 className="font-heading font-semibold mb-4">회사 소개</h4>
               <ul className="space-y-2 text-sm text-gray-light">
-                <li>
-                  <a 
-                    href="https://rethinkwealth.com" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="hover:text-white cursor-pointer block"
-                  >
-                    회사 소개
-                  </a>
-                </li>
+                <li><Link href="/about"><div className="hover:text-white cursor-pointer">회사 소개</div></Link></li>
                 <li><Link href="#"><div className="hover:text-white cursor-pointer">채용 정보</div></Link></li>
                 <li><Link href="#"><div className="hover:text-white cursor-pointer">보도 자료</div></Link></li>
                 <li><Link href="#"><div className="hover:text-white cursor-pointer">문의하기</div></Link></li>
@@ -69,7 +60,7 @@ const Footer: React.FC = () => {
         </div>
         
         <div className="border-t border-gray-700 mt-8 pt-6 text-sm text-gray-light flex flex-col md:flex-row justify-between items-center">
-          <p>&copy; {new Date().getFullYear()} Dae Hyun Jee 모든 권리 보유.</p>
+          <p>&copy; {new Date().getFullYear()} EzTax Inc. 모든 권리 보유.</p>
           <div className="mt-4 md:mt-0 flex space-x-4">
             <a href="#" className="hover:text-white">
               <Facebook className="h-5 w-5" />
