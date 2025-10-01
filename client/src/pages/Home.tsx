@@ -108,7 +108,7 @@ const Home: React.FC = () => {
           </Card>
         </div>
         
-        <div className="text-center mt-8">
+        <div className="text-center mt-8 hidden">
           <Button 
             variant="ghost" 
             className="text-gray-600 hover:text-primary underline text-lg font-medium"
