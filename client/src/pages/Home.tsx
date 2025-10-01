@@ -61,7 +61,7 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      <section className="mb-12">
+      <section className="mb-12 hidden">
         <h2 className="text-2xl font-heading font-bold text-primary-dark text-center mb-8">
           왜 EzTax인가요?
         </h2>
