@@ -115,7 +115,7 @@ const Home: React.FC = () => {
       <section className="mb-12">
         <Card>
           <CardHeader>
-            <CardTitle className="text-2xl font-heading text-primary-dark">지대현 Financial Advisor</CardTitle>
+            <CardTitle className="text-2xl font-heading text-primary-dark">지대현 Financial Advisor/연방세무사(EA)</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
