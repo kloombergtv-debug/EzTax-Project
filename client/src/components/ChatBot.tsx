@@ -18,7 +18,7 @@ interface ChatBotProps {
 }
 
 export function ChatBot({ context = "소득 입력" }: ChatBotProps) {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
