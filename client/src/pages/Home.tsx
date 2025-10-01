@@ -138,7 +138,7 @@ const Home: React.FC = () => {
                 <li><strong>검토 및 계산</strong> - 최종 확인 및 신고서 생성</li>
               </ol>
             </CardContent>
-            <CardFooter className="flex flex-col sm:flex-row gap-4">
+            <CardFooter className="flex flex-col sm:flex-row gap-4 hidden">
               <Button 
                 size="lg"
                 className="w-full bg-primary hover:bg-primary-dark text-white font-bold"
