@@ -227,7 +227,6 @@ export default function About() {
                     <li>🏦 교보생명 – 재무실부장</li>
                     <li>🏢 LG전자 – IR팀 과장</li>
                     <li>📈 Nomura Securities – 애널리스트</li>
-                    <li>💼 EzTax 창립자&CEO</li>
                   </ul>
                   
                   <h4 className="font-semibold text-blue-800 mb-3 mt-4">🎓 학력</h4>
