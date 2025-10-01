@@ -120,40 +120,72 @@ const Home: React.FC = () => {
       </section>
 
       <section className="mb-12">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-2xl font-heading text-primary-dark">세금 시뮬레이션의 6단계</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="mb-4">
-              저희의 간단한 과정은 다음 여섯 가지 섹션으로 안내합니다:
-            </p>
-            <ol className="list-decimal pl-6 mb-4 space-y-2">
-              <li><strong>개인 정보</strong> - 기본 정보 및 신고 상태</li>
-              <li><strong>소득 정보</strong> - 급여, 이자, 기타 소득 입력</li>
-              <li><strong>공제 항목</strong> - 표준 공제 또는 항목별 공제 선택</li>
-              <li><strong>세액 공제</strong> - 자격이 있는 공제 항목 확인</li>
-              <li><strong>추가 세금</strong> - 자영업 및 기타 소득</li>
-              <li><strong>검토 및 계산</strong> - 최종 확인 및 신고서 생성</li>
-            </ol>
-          </CardContent>
-          <CardFooter className="flex flex-col sm:flex-row gap-4">
-            <Button 
-              size="lg"
-              className="w-full bg-primary hover:bg-primary-dark text-white font-bold"
-              onClick={() => user ? navigate('/personal-info') : navigate('/auth')}
-            >
-              {user ? '지금 시작하기' : '로그인하고 시작하기(Login to Start)'}
-            </Button>
-            <Button 
-              size="lg"
-              className="w-full bg-green-500 hover:bg-green-600 text-white font-bold"
-              onClick={() => navigate('/personal-info')}
-            >
-              세금시뮬레이터(Tax Simulator)
-            </Button>
-          </CardFooter>
-        </Card>
+        <div className="grid md:grid-cols-2 gap-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-2xl font-heading text-primary-dark">세금 시뮬레이션의 6단계</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="mb-4">
+                저희의 간단한 과정은 다음 여섯 가지 섹션으로 안내합니다:
+              </p>
+              <ol className="list-decimal pl-6 mb-4 space-y-2">
+                <li><strong>개인 정보</strong> - 기본 정보 및 신고 상태</li>
+                <li><strong>소득 정보</strong> - 급여, 이자, 기타 소득 입력</li>
+                <li><strong>공제 항목</strong> - 표준 공제 또는 항목별 공제 선택</li>
+                <li><strong>세액 공제</strong> - 자격이 있는 공제 항목 확인</li>
+                <li><strong>추가 세금</strong> - 자영업 및 기타 소득</li>
+                <li><strong>검토 및 계산</strong> - 최종 확인 및 신고서 생성</li>
+              </ol>
+            </CardContent>
+            <CardFooter className="flex flex-col sm:flex-row gap-4">
+              <Button 
+                size="lg"
+                className="w-full bg-primary hover:bg-primary-dark text-white font-bold"
+                onClick={() => user ? navigate('/personal-info') : navigate('/auth')}
+              >
+                {user ? '지금 시작하기' : '로그인하고 시작하기(Login to Start)'}
+              </Button>
+              <Button 
+                size="lg"
+                className="w-full bg-green-500 hover:bg-green-600 text-white font-bold"
+                onClick={() => navigate('/personal-info')}
+              >
+                세금시뮬레이터(Tax Simulator)
+              </Button>
+            </CardFooter>
+          </Card>
+
+          <Card className="border-blue-200 bg-gradient-to-r from-blue-50 to-indigo-50">
+            <CardHeader>
+              <CardTitle className="text-xl font-heading text-blue-700">EzTax 운용자</CardTitle>
+            </CardHeader>
+            <CardContent className="flex flex-col items-center text-center">
+              <img 
+                src="/ceo-profile.png"
+                alt="지대현 CEO"
+                className="w-32 h-32 rounded-full object-cover border-4 border-blue-200 mb-4"
+              />
+              <h3 className="text-xl font-bold text-blue-800 mb-2">
+                지대현 CEO
+              </h3>
+              <p className="text-blue-700 font-medium mb-3">
+                세무사/Investment Advisor
+              </p>
+              <div className="flex flex-wrap gap-2 justify-center mb-4">
+                <span className="px-2 py-1 bg-red-100 text-red-700 text-xs rounded-md border border-red-300">FINRA Series 65</span>
+                <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-md border border-blue-300">IRS EA</span>
+                <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-md border border-blue-300">저자</span>
+              </div>
+              <p className="text-sm text-blue-700 mb-2">
+                현 Rethink Wealth 재정관리사
+              </p>
+              <p className="text-xs text-blue-600">
+                『절세로 시작하는 은퇴설계 Less Tax, Better Retirement』
+              </p>
+            </CardContent>
+          </Card>
+        </div>
       </section>
     </div>
   );
