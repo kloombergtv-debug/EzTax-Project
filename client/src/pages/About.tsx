@@ -100,7 +100,7 @@ export default function About() {
 
 
       {/* Company Mission & Vision */}
-      <div className="grid md:grid-cols-2 gap-8">
+      <div className="grid md:grid-cols-2 gap-8 hidden">
         <Card className="border-primary/20">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-primary">
@@ -145,7 +145,7 @@ export default function About() {
       </div>
 
       {/* Core Values */}
-      <Card>
+      <Card className="hidden">
         <CardHeader>
           <CardTitle className="text-center text-2xl">핵심 가치</CardTitle>
         </CardHeader>
