@@ -139,12 +139,15 @@ const Home: React.FC = () => {
                   <li><strong>검토 및 계산</strong> - 최종 확인 및 신고서 생성</li>
                 </ol>
               </div>
-              <div className="flex justify-center items-center">
+              <div className="flex flex-col justify-center items-center">
                 <img 
                   src="/ceo-profile.png" 
                   alt="CEO Profile"
-                  className="w-64 h-auto object-cover shadow-lg"
+                  className="w-64 h-64 rounded-full object-cover border border-gray-300 shadow-lg"
                 />
+                <p className="mt-4 text-center font-semibold text-gray-700">
+                  지대현 FA, Rethink Wealth Inc.
+                </p>
               </div>
             </div>
           </CardContent>
