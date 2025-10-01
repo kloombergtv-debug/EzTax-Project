@@ -147,7 +147,7 @@ const Home: React.FC = () => {
                   onClick={() => navigate('/about')}
                 />
                 <p className="mt-4 text-center font-semibold text-gray-700">
-                  지대현 FA, Rethink Wealth Inc.
+                  지대현 FA, Rethink Wealth LLC.
                 </p>
               </div>
             </div>
