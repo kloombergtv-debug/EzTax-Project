@@ -206,7 +206,7 @@ export default function About() {
                 지대현 CEO
               </h3>
               <p className="text-blue-700 font-medium mb-4">
-                세무전문가(EA)/투자자문사(Series 65)
+                세무사/Investment Advisor
               </p>
               <div className="flex flex-wrap gap-2 justify-center lg:justify-start">
                 <Badge variant="outline" className="border-red-300 text-red-700 bg-red-50">FINRA Series 65</Badge>
