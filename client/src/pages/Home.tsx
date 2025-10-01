@@ -42,7 +42,7 @@ const Home: React.FC = () => {
                   className="bg-green-500 hover:bg-green-600 text-white font-bold w-full sm:w-64"
                   onClick={() => navigate('/personal-info')}
                 >
-                  세금시뮬레이터(Tax Simulator)
+                  세금진단(AI절세방안)
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
