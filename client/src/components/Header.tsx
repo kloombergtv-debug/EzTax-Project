@@ -58,7 +58,7 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="bg-white shadow-sm">
+    <header className="bg-black shadow-sm">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
         <div className="cursor-pointer" onClick={() => navigate('/')}>
           <Logo />
@@ -69,7 +69,7 @@ const Header: React.FC = () => {
           <Button 
             variant={location === '/' ? "default" : "ghost"} 
             size="sm"
-            className={`text-sm ${location !== '/' ? 'text-black hover:text-black' : ''}`}
+            className={`text-sm ${location !== '/' ? 'text-white hover:text-white' : ''}`}
             onClick={() => navigate('/')}
           >
             Home
@@ -77,7 +77,7 @@ const Header: React.FC = () => {
           <Button 
             variant={location === '/personal-info' ? "default" : "ghost"} 
             size="sm"
-            className={`text-sm ${location !== '/personal-info' ? 'text-black hover:text-black' : ''}`}
+            className={`text-sm ${location !== '/personal-info' ? 'text-white hover:text-white' : ''}`}
             onClick={() => navigate('/personal-info')}
           >
             기본정보
@@ -85,7 +85,7 @@ const Header: React.FC = () => {
           <Button 
             variant={location === '/income' ? "default" : "ghost"} 
             size="sm"
-            className={`text-sm ${location !== '/income' ? 'text-black hover:text-black' : ''}`}
+            className={`text-sm ${location !== '/income' ? 'text-white hover:text-white' : ''}`}
             onClick={() => navigate('/income')}
           >
             소득
@@ -93,7 +93,7 @@ const Header: React.FC = () => {
           <Button 
             variant={location === '/retirement-contributions' ? "default" : "ghost"} 
             size="sm"
-            className={`text-sm ${location !== '/retirement-contributions' ? 'text-black hover:text-black' : ''}`}
+            className={`text-sm ${location !== '/retirement-contributions' ? 'text-white hover:text-white' : ''}`}
             onClick={() => navigate('/retirement-contributions')}
           >
             퇴직연금
@@ -101,7 +101,7 @@ const Header: React.FC = () => {
           <Button 
             variant={location === '/deductions' ? "default" : "ghost"} 
             size="sm"
-            className={`text-sm ${location !== '/deductions' ? 'text-black hover:text-black' : ''}`}
+            className={`text-sm ${location !== '/deductions' ? 'text-white hover:text-white' : ''}`}
             onClick={() => navigate('/deductions')}
           >
             공제
@@ -109,7 +109,7 @@ const Header: React.FC = () => {
           <Button 
             variant={location === '/tax-credits' ? "default" : "ghost"} 
             size="sm"
-            className={`text-sm ${location !== '/tax-credits' ? 'text-black hover:text-black' : ''}`}
+            className={`text-sm ${location !== '/tax-credits' ? 'text-white hover:text-white' : ''}`}
             onClick={() => navigate('/tax-credits')}
           >
             세액공제
@@ -117,7 +117,7 @@ const Header: React.FC = () => {
           <Button 
             variant={location === '/additional-tax' ? "default" : "ghost"} 
             size="sm"
-            className={`text-sm ${location !== '/additional-tax' ? 'text-black hover:text-black' : ''}`}
+            className={`text-sm ${location !== '/additional-tax' ? 'text-white hover:text-white' : ''}`}
             onClick={() => navigate('/additional-tax')}
           >
             추가세금
@@ -125,7 +125,7 @@ const Header: React.FC = () => {
           <Button 
             variant={location === '/review' ? "default" : "ghost"} 
             size="sm"
-            className={`text-sm ${location !== '/review' ? 'text-black hover:text-black' : ''}`}
+            className={`text-sm ${location !== '/review' ? 'text-white hover:text-white' : ''}`}
             onClick={() => navigate('/review')}
           >
             검토
@@ -133,7 +133,7 @@ const Header: React.FC = () => {
           <Button 
             variant={location === '/board' ? "default" : "ghost"} 
             size="sm"
-            className={`text-sm flex items-center gap-1 ${location !== '/board' ? 'text-black hover:text-black' : ''}`}
+            className={`text-sm flex items-center gap-1 ${location !== '/board' ? 'text-white hover:text-white' : ''}`}
             onClick={() => navigate('/board')}
           >
             <MessageSquare className="h-4 w-4" />

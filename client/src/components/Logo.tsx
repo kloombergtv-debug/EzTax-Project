@@ -9,7 +9,7 @@ const Logo: React.FC<LogoProps> = ({ theme = 'light' }) => {
   return (
     <Link href="/">
       <div className="flex items-center cursor-pointer">
-        <span className="text-black font-bold text-xl">
+        <span className="text-white font-bold text-xl">
           Tax&Wealth
         </span>
       </div>
