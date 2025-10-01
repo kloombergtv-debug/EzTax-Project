@@ -122,22 +122,27 @@ const Home: React.FC = () => {
       <section className="mb-12">
         <Card>
           <CardHeader>
-            <CardTitle className="text-2xl font-heading text-primary-dark">세금 시뮬레이션의 6단계</CardTitle>
+            <CardTitle className="text-2xl font-heading text-primary-dark">지대현 FA 프로필</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
               <div>
-                <p className="mb-4">
-                  저희의 간단한 과정은 다음 여섯 가지 섹션으로 안내합니다:
-                </p>
-                <ol className="list-decimal pl-6 mb-4 space-y-2">
-                  <li><strong>개인 정보</strong> - 기본 정보 및 신고 상태</li>
-                  <li><strong>소득 정보</strong> - 급여, 이자, 기타 소득 입력</li>
-                  <li><strong>공제 항목</strong> - 표준 공제 또는 항목별 공제 선택</li>
-                  <li><strong>세액 공제</strong> - 자격이 있는 공제 항목 확인</li>
-                  <li><strong>추가 세금</strong> - 자영업 및 기타 소득</li>
-                  <li><strong>검토 및 계산</strong> - 최종 확인 및 신고서 생성</li>
-                </ol>
+                <h4 className="font-semibold text-lg text-primary-dark mb-3">📚 주요 이력</h4>
+                <ul className="mb-6 space-y-2">
+                  <li>💼 현 Rethink Wealth 재정관리사</li>
+                  <li>📊 FINRA Series 65 투자자문사</li>
+                  <li>🧾 IRS 공인 EA (Enrolled Agent)</li>
+                  <li>🏭 한화그룹 – 재무담당 임원</li>
+                  <li>🏦 교보생명 – 재무실부장</li>
+                  <li>🏢 LG전자 – IR팀 과장</li>
+                  <li>📈 Nomura Securities – 애널리스트</li>
+                </ul>
+                
+                <h4 className="font-semibold text-lg text-primary-dark mb-3">🎓 학력</h4>
+                <ul className="space-y-2">
+                  <li>🎓 University of Pennsylvania – 경제학 학사</li>
+                  <li>🎓 연세대학교 국제대학원 – MBA</li>
+                </ul>
               </div>
               <div className="flex flex-col justify-center items-center">
                 <img 
