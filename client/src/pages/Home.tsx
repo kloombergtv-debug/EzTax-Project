@@ -122,7 +122,7 @@ const Home: React.FC = () => {
       <section className="mb-12">
         <Card>
           <CardHeader>
-            <CardTitle className="text-2xl font-heading text-primary-dark">지대현 FA 프로필</CardTitle>
+            <CardTitle className="text-2xl font-heading text-primary-dark">지대현 Financial Advisor</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
