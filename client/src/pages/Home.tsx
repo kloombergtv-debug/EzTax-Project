@@ -80,7 +80,7 @@ const Home: React.FC = () => {
           <Card>
             <CardHeader className="pb-2">
               <FileText className="h-10 w-10 text-primary mb-2" />
-              <CardTitle className="text-lg">최대 공제 혜택</CardTitle>
+              <CardTitle className="text-lg">절세 방안</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-gray-dark">귀하가 받을 수 있는 모든 공제와 세액 공제를 찾아드립니다.</p>
