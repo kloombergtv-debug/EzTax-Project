@@ -58,7 +58,7 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="bg-white shadow-sm">
+    <header className="bg-black shadow-sm">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
         <div className="cursor-pointer" onClick={() => navigate('/')}>
           <Logo />
