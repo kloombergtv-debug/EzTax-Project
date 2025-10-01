@@ -282,7 +282,7 @@ export default function About() {
       </Card>
 
       {/* CTO Profile */}
-      <Card className="border-green-200 bg-gradient-to-r from-green-50 to-emerald-50">
+      <Card className="border-green-200 bg-gradient-to-r from-green-50 to-emerald-50 hidden">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-green-700 text-2xl">
             <BuildingIcon className="h-6 w-6" />
