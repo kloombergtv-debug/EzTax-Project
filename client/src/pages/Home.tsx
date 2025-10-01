@@ -32,7 +32,7 @@ const Home: React.FC = () => {
                 <Button 
                   size="lg" 
                   variant="secondary"
-                  className="bg-green-500 hover:bg-green-600 text-white font-bold w-full sm:w-64"
+                  className="bg-yellow-600 hover:bg-yellow-700 text-white font-bold w-full sm:w-64"
                   onClick={() => navigate('/personal-info')}
                 >
                   세금진단(AI절세방안)
@@ -46,7 +46,7 @@ const Home: React.FC = () => {
           
           <Button 
             size="lg" 
-            className="bg-primary hover:bg-primary-dark text-white font-bold w-full sm:w-64"
+            className="bg-black hover:bg-gray-800 text-white font-bold w-full sm:w-64"
             onClick={() => navigate('/retirement-score')}
           >
             은퇴준비상태진단
