@@ -69,7 +69,7 @@ const Header: React.FC = () => {
           <Button 
             variant={location === '/' ? "default" : "ghost"} 
             size="sm"
-            className={`text-sm ${location !== '/' ? 'text-black hover:text-gray-800' : ''}`}
+            className={`text-sm ${location === '/' ? 'bg-yellow-600 hover:bg-yellow-700 text-white' : 'text-black hover:text-gray-800'}`}
             onClick={() => navigate('/')}
           >
             Home
@@ -77,7 +77,7 @@ const Header: React.FC = () => {
           <Button 
             variant={location === '/personal-info' ? "default" : "ghost"} 
             size="sm"
-            className={`text-sm ${location !== '/personal-info' ? 'text-black hover:text-gray-800' : ''}`}
+            className={`text-sm ${location === '/personal-info' ? 'bg-yellow-600 hover:bg-yellow-700 text-white' : 'text-black hover:text-gray-800'}`}
             onClick={() => navigate('/personal-info')}
           >
             기본정보
@@ -85,7 +85,7 @@ const Header: React.FC = () => {
           <Button 
             variant={location === '/income' ? "default" : "ghost"} 
             size="sm"
-            className={`text-sm ${location !== '/income' ? 'text-black hover:text-gray-800' : ''}`}
+            className={`text-sm ${location === '/income' ? 'bg-yellow-600 hover:bg-yellow-700 text-white' : 'text-black hover:text-gray-800'}`}
             onClick={() => navigate('/income')}
           >
             소득
@@ -93,7 +93,7 @@ const Header: React.FC = () => {
           <Button 
             variant={location === '/retirement-contributions' ? "default" : "ghost"} 
             size="sm"
-            className={`text-sm ${location !== '/retirement-contributions' ? 'text-black hover:text-gray-800' : ''}`}
+            className={`text-sm ${location === '/retirement-contributions' ? 'bg-yellow-600 hover:bg-yellow-700 text-white' : 'text-black hover:text-gray-800'}`}
             onClick={() => navigate('/retirement-contributions')}
           >
             퇴직연금
@@ -101,7 +101,7 @@ const Header: React.FC = () => {
           <Button 
             variant={location === '/deductions' ? "default" : "ghost"} 
             size="sm"
-            className={`text-sm ${location !== '/deductions' ? 'text-black hover:text-gray-800' : ''}`}
+            className={`text-sm ${location === '/deductions' ? 'bg-yellow-600 hover:bg-yellow-700 text-white' : 'text-black hover:text-gray-800'}`}
             onClick={() => navigate('/deductions')}
           >
             공제
@@ -109,7 +109,7 @@ const Header: React.FC = () => {
           <Button 
             variant={location === '/tax-credits' ? "default" : "ghost"} 
             size="sm"
-            className={`text-sm ${location !== '/tax-credits' ? 'text-black hover:text-gray-800' : ''}`}
+            className={`text-sm ${location === '/tax-credits' ? 'bg-yellow-600 hover:bg-yellow-700 text-white' : 'text-black hover:text-gray-800'}`}
             onClick={() => navigate('/tax-credits')}
           >
             세액공제
@@ -117,7 +117,7 @@ const Header: React.FC = () => {
           <Button 
             variant={location === '/additional-tax' ? "default" : "ghost"} 
             size="sm"
-            className={`text-sm ${location !== '/additional-tax' ? 'text-black hover:text-gray-800' : ''}`}
+            className={`text-sm ${location === '/additional-tax' ? 'bg-yellow-600 hover:bg-yellow-700 text-white' : 'text-black hover:text-gray-800'}`}
             onClick={() => navigate('/additional-tax')}
           >
             추가세금
@@ -125,7 +125,7 @@ const Header: React.FC = () => {
           <Button 
             variant={location === '/review' ? "default" : "ghost"} 
             size="sm"
-            className={`text-sm ${location !== '/review' ? 'text-black hover:text-gray-800' : ''}`}
+            className={`text-sm ${location === '/review' ? 'bg-yellow-600 hover:bg-yellow-700 text-white' : 'text-black hover:text-gray-800'}`}
             onClick={() => navigate('/review')}
           >
             검토
@@ -133,7 +133,7 @@ const Header: React.FC = () => {
           <Button 
             variant={location === '/board' ? "default" : "ghost"} 
             size="sm"
-            className={`text-sm flex items-center gap-1 ${location !== '/board' ? 'text-white hover:text-white' : ''}`}
+            className={`text-sm flex items-center gap-1 ${location === '/board' ? 'bg-yellow-600 hover:bg-yellow-700 text-white' : 'text-white hover:text-white'}`}
             onClick={() => navigate('/board')}
           >
             <MessageSquare className="h-4 w-4" />
@@ -184,7 +184,7 @@ const Header: React.FC = () => {
               <Button 
                 variant="default" 
                 size="sm"
-                className="bg-primary hover:bg-primary-dark text-white flex items-center text-sm"
+                className="bg-yellow-600 hover:bg-yellow-700 text-white flex items-center text-sm"
                 onClick={() => navigate('/auth?tab=register')}
               >
                 <User className="h-4 w-4 mr-1" />
