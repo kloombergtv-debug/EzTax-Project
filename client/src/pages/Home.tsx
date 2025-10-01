@@ -143,7 +143,7 @@ const Home: React.FC = () => {
                 <img 
                   src="/ceo-profile.png" 
                   alt="CEO Profile"
-                  className="w-64 h-64 rounded-full object-cover border-4 border-primary shadow-lg"
+                  className="w-64 h-auto object-cover shadow-lg"
                 />
               </div>
             </div>
