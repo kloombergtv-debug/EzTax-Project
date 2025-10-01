@@ -220,6 +220,7 @@ export default function About() {
                 <div>
                   <h4 className="font-semibold text-blue-800 mb-3">📚 주요 이력</h4>
                   <ul className="text-sm text-blue-700 space-y-2">
+                    <li>💼 현 Rethink Wealth 재정관리사</li>
                     <li>📊 FINRA Series 65 투자자문사</li>
                     <li>🧾 IRS 공인 EA (Enrolled Agent)</li>
                     <li>🏭 한화그룹 – 재무담당 임원</li>
