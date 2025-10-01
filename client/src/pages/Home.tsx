@@ -114,7 +114,7 @@ const Home: React.FC = () => {
             className="text-gray-600 hover:text-primary underline text-lg font-medium"
             onClick={() => navigate('/about')}
           >
-            EzFintech와 운영진에 대해 더 알아보기 →
+            EzTax 의 운영자 소개 →
           </Button>
         </div>
       </section>
