@@ -1186,7 +1186,7 @@ const Deductions: React.FC = () => {
                     
                     <Button
                       type="button"
-                      className="px-6 py-2 bg-primary text-white font-semibold rounded hover:bg-primary-dark transition duration-200"
+                      className="px-6 py-2 bg-yellow-600 text-white font-semibold rounded hover:bg-yellow-700 transition duration-200"
                       onClick={async () => {
                         console.log("Next 버튼 클릭됨");
                         

@@ -246,7 +246,7 @@ const ApplicationForm: React.FC = () => {
             <div className="pt-4">
               <Button 
                 type="submit" 
-                className="w-full bg-primary hover:bg-primary-dark text-white"
+                className="w-full bg-yellow-600 hover:bg-yellow-700 text-white"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? (

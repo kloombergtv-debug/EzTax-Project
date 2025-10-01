@@ -328,7 +328,7 @@ const Review: React.FC = () => {
                 <div className="flex flex-col sm:flex-row gap-3">
                   <Button
                     variant="outline"
-                    className="bg-blue-50 text-blue-700 border-blue-200 font-semibold rounded hover:bg-blue-100 transition duration-200 w-[160px] justify-center"
+                    className="bg-yellow-50 text-yellow-700 border-yellow-200 font-semibold rounded hover:bg-yellow-100 transition duration-200 w-[160px] justify-center"
                     onClick={() => navigate('/state-tax')}
                   >
                     주정부 세금
@@ -347,7 +347,7 @@ const Review: React.FC = () => {
                   </Button>
                   
                   <Button
-                    className="bg-primary text-white font-semibold rounded hover:bg-primary-dark transition duration-200 w-[160px] justify-center"
+                    className="bg-yellow-600 text-white font-semibold rounded hover:bg-yellow-700 transition duration-200 w-[160px] justify-center"
                     onClick={() => navigate('/tax-savings')}
                   >
                     절세방안 제안
