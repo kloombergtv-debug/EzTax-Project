@@ -125,17 +125,28 @@ const Home: React.FC = () => {
             <CardTitle className="text-2xl font-heading text-primary-dark">세금 시뮬레이션의 6단계</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="mb-4">
-              저희의 간단한 과정은 다음 여섯 가지 섹션으로 안내합니다:
-            </p>
-            <ol className="list-decimal pl-6 mb-4 space-y-2">
-              <li><strong>개인 정보</strong> - 기본 정보 및 신고 상태</li>
-              <li><strong>소득 정보</strong> - 급여, 이자, 기타 소득 입력</li>
-              <li><strong>공제 항목</strong> - 표준 공제 또는 항목별 공제 선택</li>
-              <li><strong>세액 공제</strong> - 자격이 있는 공제 항목 확인</li>
-              <li><strong>추가 세금</strong> - 자영업 및 기타 소득</li>
-              <li><strong>검토 및 계산</strong> - 최종 확인 및 신고서 생성</li>
-            </ol>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+              <div>
+                <p className="mb-4">
+                  저희의 간단한 과정은 다음 여섯 가지 섹션으로 안내합니다:
+                </p>
+                <ol className="list-decimal pl-6 mb-4 space-y-2">
+                  <li><strong>개인 정보</strong> - 기본 정보 및 신고 상태</li>
+                  <li><strong>소득 정보</strong> - 급여, 이자, 기타 소득 입력</li>
+                  <li><strong>공제 항목</strong> - 표준 공제 또는 항목별 공제 선택</li>
+                  <li><strong>세액 공제</strong> - 자격이 있는 공제 항목 확인</li>
+                  <li><strong>추가 세금</strong> - 자영업 및 기타 소득</li>
+                  <li><strong>검토 및 계산</strong> - 최종 확인 및 신고서 생성</li>
+                </ol>
+              </div>
+              <div className="flex justify-center items-center">
+                <img 
+                  src="/ceo-profile.png" 
+                  alt="CEO Profile"
+                  className="w-64 h-64 rounded-full object-cover border-4 border-primary shadow-lg"
+                />
+              </div>
+            </div>
           </CardContent>
           <CardFooter className="flex flex-col sm:flex-row gap-4">
             <Button 
