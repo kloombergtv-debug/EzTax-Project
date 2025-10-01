@@ -10,7 +10,11 @@ const Footer: React.FC = () => {
         <div className="flex flex-col md:flex-row justify-between">
           <div className="mb-6 md:mb-0">
             <div className="flex items-center mb-4">
-              <Logo theme="dark" />
+              <img 
+                src="/rethink-wealth-logo.png" 
+                alt="Rethink Wealth" 
+                className="h-10 w-auto"
+              />
             </div>
             <p className="text-sm text-gray-light max-w-md">
               EzTax는 간단한 과정을 통해 절세 방안과 최적의 은퇴계획을 세울 수 있도록 지원합니다.
