@@ -250,7 +250,7 @@ export default function About() {
                 </div>
               </div>
               
-              <div className="bg-white/80 p-6 rounded-lg mb-6">
+              <div className="bg-white/80 p-6 rounded-lg mb-6 hidden">
                 <h4 className="font-semibold text-blue-800 mb-3">💭 CEO 메시지</h4>
                 <p className="text-blue-800 leading-relaxed mb-4">
                   <strong>📌 "Less Tax, More Wealth"</strong> 철학을 바탕으로 EzTax를 설립했습니다. 
@@ -351,7 +351,7 @@ export default function About() {
                 </div>
               </div>
               
-              <div className="bg-white/80 p-6 rounded-lg mb-6">
+              <div className="bg-white/80 p-6 rounded-lg mb-6 hidden">
                 <h4 className="font-semibold text-green-800 mb-3">💡 CTO 메시지</h4>
                 <p className="text-green-800 leading-relaxed mb-4">
                   <strong>🔮 "Technology for Better Financial Future"</strong> 라는 비전으로 
