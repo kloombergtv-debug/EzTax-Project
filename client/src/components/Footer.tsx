@@ -17,7 +17,7 @@ const Footer: React.FC = () => {
               />
             </div>
             <p className="text-sm text-gray-light max-w-md">
-              EzTax는 간단한 과정을 통해 절세 방안과 최적의 은퇴계획을 세울 수 있도록 지원합니다.
+              이 싸이트는 간단한 과정을 통해 절세 방안과 최적의 은퇴계획을 세울 수 있도록 지원합니다.
               <br />
               EzTax supports you in creating optimal tax-saving strategies and retirement plans through a simple process.
             </p>
