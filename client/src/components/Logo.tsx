@@ -9,11 +9,9 @@ const Logo: React.FC<LogoProps> = ({ theme = 'light' }) => {
   return (
     <Link href="/">
       <div className="flex items-center cursor-pointer">
-        <img 
-          src="/rethink-wealth-logo.png" 
-          alt="Rethink Wealth" 
-          className="h-10 w-auto"
-        />
+        <span className="text-white font-bold text-xl">
+          Tax&Wealth
+        </span>
       </div>
     </Link>
   );
