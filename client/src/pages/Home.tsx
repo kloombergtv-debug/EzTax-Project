@@ -143,7 +143,8 @@ const Home: React.FC = () => {
                 <img 
                   src="/ceo-profile.png" 
                   alt="CEO Profile"
-                  className="w-64 h-64 rounded-full object-cover border border-gray-300 shadow-lg"
+                  className="w-64 h-64 rounded-full object-cover border border-gray-300 shadow-lg cursor-pointer hover:shadow-xl transition-shadow"
+                  onClick={() => navigate('/about')}
                 />
                 <p className="mt-4 text-center font-semibold text-gray-700">
                   지대현 FA, Rethink Wealth Inc.
