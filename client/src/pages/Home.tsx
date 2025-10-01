@@ -160,7 +160,7 @@ const Home: React.FC = () => {
             <img 
               src="/ceo-profile.png"
               alt="지대현 CEO"
-              className="w-64 h-auto rounded-lg shadow-lg"
+              className="w-64 h-auto"
             />
           </div>
         </div>
