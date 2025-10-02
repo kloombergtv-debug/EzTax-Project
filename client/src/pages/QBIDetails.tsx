@@ -523,10 +523,10 @@ export default function QBIDetails() {
               
               <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mt-4">
                 <div className="flex items-start gap-2">
-                  <InfoIcon className="h-5 w-5 text-yellow-600 mt-0.5" />
+                  <InfoIcon className="h-5 w-5 text-blue-600 mt-0.5" />
                   <div className="text-sm">
                     <p className="font-medium text-yellow-800 mb-2">QBI 공제 한도 (2024년 기준)</p>
-                    <div className="text-yellow-700 space-y-3">
+                    <div className="text-blue-700 space-y-3">
                       <div>
                         <p className="font-medium mb-1">일반 사업:</p>
                         <p>• 단독/세대주: $191,950 초과시 W-2 급여/자산 제한 적용<br/>

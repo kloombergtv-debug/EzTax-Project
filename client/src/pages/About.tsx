@@ -415,7 +415,7 @@ export default function About() {
               </div>
               <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogTrigger asChild>
-                  <Button className="mt-4 bg-yellow-600 hover:bg-yellow-700">
+                  <Button className="mt-4 bg-blue-600 hover:bg-blue-700">
                     상담 예약하기
                   </Button>
                 </DialogTrigger>
@@ -488,7 +488,7 @@ export default function About() {
                       <Button
                         type="submit"
                         disabled={isSubmitting}
-                        className="bg-yellow-600 hover:bg-yellow-700"
+                        className="bg-blue-600 hover:bg-blue-700"
                       >
                         {isSubmitting ? '전송 중...' : '상담 요청하기'}
                       </Button>

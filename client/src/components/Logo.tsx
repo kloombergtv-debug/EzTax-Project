@@ -9,7 +9,7 @@ const Logo: React.FC<LogoProps> = ({ theme = 'light' }) => {
   return (
     <Link href="/">
       <div className="flex items-center cursor-pointer">
-        <span className="text-2xl font-bold text-yellow-600">
+        <span className="text-2xl font-bold text-blue-600">
           Dae Hyun Jee
         </span>
       </div>
