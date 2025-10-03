@@ -18,8 +18,8 @@ const Home: React.FC = () => {
   return (
     <div className="max-w-5xl mx-auto">
       <section className="mb-12 text-center py-10">
-        <h1 className="text-4xl md:text-5xl font-heading font-bold text-primary-dark mb-2">
-          AI 세금시뮬레이터로 간단하게 계산하시고 노후준비도 진단하세요
+        <h1 className="text-xl md:text-2xl font-heading font-bold text-primary-dark mb-2">
+          Financial Advisor 은 최적의 은퇴 준비와 자녀 교육비 마련, 병이나 갑작스런 해고(Layoff) 또는 사 같은 위기에도 경제적 어려움에 빠지지 않도록 방안을 마련해드립니다. 한마디로 돈 걱정 없이 살 수 있는 방법을 함께 찾아주는 전문가입니다.
         </h1>
         <p className="text-2xl md:text-3xl font-bold text-gray-600 mb-4 tracking-wide" style={{ fontFamily: 'Georgia, serif' }}>
           Less Tax, More Wealth
