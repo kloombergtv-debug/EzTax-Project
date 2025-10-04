@@ -21,6 +21,15 @@ const Home: React.FC = () => {
         <h1 className="text-xl md:text-2xl font-bold text-primary-dark mb-2" style={{ fontFamily: 'Batang, "Noto Serif KR", "Nanum Myeongjo", serif' }}>
           안녕하십니까. 저는 세무와 금융 전반에 걸쳐, 고객님의 재정적 안정과 미래 설계를 돕는 종합 재정 전문가 지대현 FA입니다. 복잡하고 까다로운 재정 문제는 아이비리그 출신 금융 전문가인 저에게 맡기시고, 고객님께서는 더 소중한 일과 삶의 가치에 집중하시기 바랍니다.
         </h1>
+        <div className="mt-4">
+          <span 
+            onClick={() => navigate('/services')}
+            className="text-blue-600 hover:text-blue-800 cursor-pointer underline font-semibold text-lg"
+            data-testid="link-services"
+          >
+            더 자세히 알아보기
+          </span>
+        </div>
       </section>
 
       <section className="mb-12 hidden">
