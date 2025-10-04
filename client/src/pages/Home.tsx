@@ -85,6 +85,7 @@ const Home: React.FC = () => {
         <Card>
           <CardHeader>
             <CardTitle className="text-2xl font-heading text-primary-dark">지대현 Financial Advisor/연방세무사(EA)</CardTitle>
+            <CardDescription className="text-lg font-semibold text-gray-600 mt-1">Rethink Wealth LLC</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
