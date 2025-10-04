@@ -198,7 +198,7 @@ export default function About() {
           <div className="flex flex-col lg:flex-row gap-8">
             <div className="flex-shrink-0 text-center lg:text-left">
               <img 
-                src={expertPhotoPath}
+                src="/about-ceo-profile.png"
                 alt="지대현 FA"
                 className="w-32 h-32 rounded-full object-cover border-4 border-blue-200 mx-auto lg:mx-0"
               />
@@ -206,7 +206,7 @@ export default function About() {
                 지대현 FA
               </h3>
               <p className="text-blue-700 font-medium mb-4">
-                세무사/Investment Advisor
+                세무사/Financial Advisor
               </p>
               <div className="flex flex-wrap gap-2 justify-center lg:justify-start">
                 <Badge variant="outline" className="border-red-300 text-red-700 bg-red-50">FINRA Series 65</Badge>
