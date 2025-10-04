@@ -114,9 +114,6 @@ const Home: React.FC = () => {
                   className="w-[36rem] h-auto object-cover cursor-pointer hover:scale-105 transition-transform"
                   onClick={() => navigate('/about')}
                 />
-                <p className="mt-4 text-center font-semibold text-gray-700">
-                  지대현 FA, Rethink Wealth LLC.
-                </p>
               </div>
             </div>
           </CardContent>
