@@ -93,7 +93,7 @@ const Home: React.FC = () => {
       <section className="mb-12">
         <Card>
           <CardHeader>
-            <CardTitle className="text-2xl font-heading text-primary-dark">지대현 Financial Advisor/연방세무사(EA)</CardTitle>
+            <CardTitle className="text-2xl font-heading text-primary-dark">지대현 Financial Advisor/세무사(EA)</CardTitle>
             <CardDescription className="text-lg font-semibold text-gray-600 mt-1">Rethink Wealth LLC</CardDescription>
           </CardHeader>
           <CardContent>
