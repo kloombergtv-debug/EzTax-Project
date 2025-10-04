@@ -27,7 +27,7 @@ const Home: React.FC = () => {
             className="text-blue-600 hover:text-blue-800 cursor-pointer underline font-semibold text-lg"
             data-testid="link-services"
           >
-            더 자세히 알아보기
+            FA가 하는일 더 자세히 알아보기
           </span>
         </div>
       </section>
