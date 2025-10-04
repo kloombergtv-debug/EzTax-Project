@@ -88,7 +88,7 @@ const Home: React.FC = () => {
             <CardDescription className="text-lg font-semibold text-gray-600 mt-1">Rethink Wealth LLC</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
               <div>
                 <h4 className="font-semibold text-lg text-primary-dark mb-3">📚 주요 이력</h4>
                 <ul className="mb-6 space-y-2">
@@ -107,11 +107,11 @@ const Home: React.FC = () => {
                   <li>🎓 연세대학교 국제대학원 – MBA</li>
                 </ul>
               </div>
-              <div className="flex flex-col justify-center items-center">
+              <div className="flex flex-col items-center">
                 <img 
                   src="/ceo-profile.png" 
                   alt="CEO Profile"
-                  className="w-[36rem] h-auto object-cover cursor-pointer hover:scale-105 transition-transform"
+                  className="w-[48rem] h-auto object-cover cursor-pointer hover:scale-105 transition-transform"
                   onClick={() => navigate('/about')}
                 />
               </div>
