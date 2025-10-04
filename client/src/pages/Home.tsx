@@ -19,7 +19,7 @@ const Home: React.FC = () => {
     <div className="max-w-5xl mx-auto">
       <section className="mb-12 text-center py-10">
         <h1 className="text-xl md:text-2xl font-heading font-bold text-primary-dark mb-2">
-          Financial Advisor 은 최적의 은퇴 준비와 자녀 교육비 마련, 병이나 갑작스런 해고(Layoff) 또는 사 같은 위기에도 경제적 어려움에 빠지지 않도록 방안을 마련해드립니다. 한마디로 돈 걱정 없이 살 수 있는 방법을 함께 찾아주는 전문가입니다.
+          안녕하십니까. 저는 재정적 안정을 위한 종합적인 조언과 계획 수립을 돕는 세무, 금융전문가 지대현 FA입니다.
         </h1>
         <p className="text-2xl md:text-3xl font-bold text-gray-600 mb-4 tracking-wide" style={{ fontFamily: 'Georgia, serif' }}>
           Less Tax, More Wealth
