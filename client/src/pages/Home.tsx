@@ -23,37 +23,6 @@ const Home: React.FC = () => {
           저는 세무와 금융 전반에 걸쳐, 고객님의 재정적 안정과 미래 설계를 돕는 종합 재정 전문가 지대현 FA입니다.<br />
           복잡하고 까다로운 재정 문제는 아이비리그 출신 금융 전문가인 저에게 맡기시고, 고객님께서는 더 소중한 일과 삶의 가치에 집중하시기 바랍니다.
         </h1>
-        <p className="text-2xl md:text-3xl font-bold text-gray-600 mb-4 tracking-wide" style={{ fontFamily: 'Georgia, serif' }}>
-          Less Tax, More Wealth
-        </p>
-        
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button 
-                  size="lg" 
-                  variant="secondary"
-                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold w-full sm:w-64"
-                  onClick={() => navigate('/personal-info')}
-                >
-                  세금진단(AI절세방안)
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>가입없이도 세금을 계산해볼수 있습니다</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-          
-          <Button 
-            size="lg" 
-            className="bg-black hover:bg-gray-800 text-white font-bold w-full sm:w-64"
-            onClick={() => navigate('/retirement-score')}
-          >
-            은퇴준비상태진단
-          </Button>
-        </div>
       </section>
 
       <section className="mb-12 hidden">
@@ -169,6 +138,40 @@ const Home: React.FC = () => {
             </Button>
           </CardFooter>
         </Card>
+      </section>
+
+      <section className="mb-12 text-center">
+        <p className="text-2xl md:text-3xl font-bold text-gray-600 mb-4 tracking-wide" style={{ fontFamily: 'Georgia, serif' }}>
+          Less Tax, More Wealth
+        </p>
+        
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button 
+                  size="lg" 
+                  variant="secondary"
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold w-full sm:w-64"
+                  onClick={() => navigate('/personal-info')}
+                >
+                  세금진단(AI절세방안)
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>가입없이도 세금을 계산해볼수 있습니다</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          
+          <Button 
+            size="lg" 
+            className="bg-black hover:bg-gray-800 text-white font-bold w-full sm:w-64"
+            onClick={() => navigate('/retirement-score')}
+          >
+            은퇴준비상태진단
+          </Button>
+        </div>
       </section>
     </div>
   );
