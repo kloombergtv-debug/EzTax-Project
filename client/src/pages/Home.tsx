@@ -17,7 +17,7 @@ const Home: React.FC = () => {
 
   return (
     <div className="max-w-5xl mx-auto">
-      <section className="mb-12 text-center py-10">
+      <section className="mb-4 text-center py-10">
         <h1 className="text-xl md:text-2xl font-heading font-bold text-primary-dark mb-2">
           안녕하십니까.<br />
           저는 세무와 금융 전반에 걸쳐, 고객님의 재정적 안정과 미래 설계를 돕는 종합 재정 전문가 지대현 FA입니다.<br />
