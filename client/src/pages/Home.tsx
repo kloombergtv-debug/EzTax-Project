@@ -141,7 +141,7 @@ const Home: React.FC = () => {
                 <img 
                   src="/ceo-profile.png" 
                   alt="CEO Profile"
-                  className="w-96 h-auto object-cover border border-gray-300 shadow-lg cursor-pointer hover:shadow-xl transition-shadow rounded-lg"
+                  className="w-[28rem] h-auto object-cover cursor-pointer hover:scale-105 transition-transform"
                   onClick={() => navigate('/about')}
                 />
                 <p className="mt-4 text-center font-semibold text-gray-700">
