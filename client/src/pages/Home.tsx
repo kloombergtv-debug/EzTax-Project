@@ -19,7 +19,9 @@ const Home: React.FC = () => {
     <div className="max-w-5xl mx-auto">
       <section className="mb-12 text-center py-10">
         <h1 className="text-xl md:text-2xl font-heading font-bold text-primary-dark mb-2">
-          안녕하십니까. 저는 재정적 안정을 위한 종합적인 조언과 계획 수립을 돕는 세무, 금융전문가 지대현 FA입니다.
+          안녕하십니까.<br />
+          저는 세무와 금융 전반에 걸쳐, 고객님의 재정적 안정과 미래 설계를 돕는 종합 재정 전문가 지대현 FA입니다.<br />
+          복잡하고 까다로운 재정 문제는 아이비리그 출신 금융 전문가인 저에게 맡기시고, 고객님께서는 더 소중한 일과 삶의 가치에 집중하시기 바랍니다.
         </h1>
         <p className="text-2xl md:text-3xl font-bold text-gray-600 mb-4 tracking-wide" style={{ fontFamily: 'Georgia, serif' }}>
           Less Tax, More Wealth
