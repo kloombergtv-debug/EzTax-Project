@@ -120,7 +120,7 @@ const Home: React.FC = () => {
                 <img 
                   src="/ceo-profile-new.jpg" 
                   alt="CEO Profile"
-                  className="w-[48rem] h-auto object-cover cursor-pointer hover:scale-105 transition-transform"
+                  className="w-80 h-auto object-cover cursor-pointer hover:scale-105 transition-transform"
                   onClick={() => navigate('/about')}
                 />
               </div>
