@@ -6,7 +6,7 @@ const Services = () => {
     <div className="max-w-5xl mx-auto px-4 py-12">
       <div className="text-center mb-12">
         <h1 className="text-3xl md:text-4xl font-bold text-primary-dark mb-4">
-          저와저희 Rethink Wealth 재정 전문가팀이 도와드리는 것은 아래 네가지 입니다.
+          저와 저희 Rethink Wealth 재정 전문가팀이 도와드리는 것은:
         </h1>
       </div>
 
