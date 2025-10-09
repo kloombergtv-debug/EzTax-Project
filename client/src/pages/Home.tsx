@@ -118,7 +118,7 @@ const Home: React.FC = () => {
               </div>
               <div className="flex flex-col items-center -mt-8">
                 <img 
-                  src="/ceo-profile.png" 
+                  src="/ceo-profile-new.jpg" 
                   alt="CEO Profile"
                   className="w-[48rem] h-auto object-cover cursor-pointer hover:scale-105 transition-transform"
                   onClick={() => navigate('/about')}
