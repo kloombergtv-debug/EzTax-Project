@@ -185,7 +185,7 @@ export default function About() {
 
       {/* Founder & CEO Profile */}
       <Card className="border-blue-200 bg-gradient-to-r from-blue-50 to-indigo-50">
-        <CardContent>
+        <CardContent className="pt-8">
           <div className="flex flex-col lg:flex-row gap-8">
             <div className="flex-shrink-0 text-center lg:text-left">
               <img 
