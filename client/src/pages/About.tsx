@@ -201,6 +201,7 @@ export default function About() {
                 src="/ceo-profile-circle2.png"
                 alt="지대현 FA"
                 className="w-48 h-48 object-contain mx-auto lg:mx-0"
+                style={{ objectPosition: 'center 30%' }}
               />
               <h3 className="text-2xl font-bold text-blue-800 mt-4 mb-2">
                 지대현 FA
