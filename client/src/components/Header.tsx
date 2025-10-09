@@ -65,75 +65,67 @@ const Header: React.FC = () => {
         </div>
         
         {/* 주요 페이지 네비게이션 */}
-        <nav className="hidden lg:flex items-center space-x-2">
+        <nav className="flex items-center space-x-1">
           <Button 
             variant={location === '/' ? "default" : "ghost"} 
             size="sm"
-            className={`text-sm ${location === '/' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'text-black hover:text-gray-800'}`}
+            className={`text-xs ${location === '/' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'text-white hover:text-gray-300'}`}
             onClick={() => navigate('/')}
           >
             Home
           </Button>
           <Button 
+            variant={location === '/services' ? "default" : "ghost"} 
+            size="sm"
+            className={`text-xs ${location === '/services' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'text-white hover:text-gray-300'}`}
+            onClick={() => navigate('/services')}
+          >
+            서비스
+          </Button>
+          <Button 
+            variant={location === '/about' ? "default" : "ghost"} 
+            size="sm"
+            className={`text-xs ${location === '/about' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'text-white hover:text-gray-300'}`}
+            onClick={() => navigate('/about')}
+          >
+            소개
+          </Button>
+          <Button 
             variant={location === '/personal-info' ? "default" : "ghost"} 
             size="sm"
-            className={`text-sm ${location === '/personal-info' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'text-black hover:text-gray-800'}`}
+            className={`text-xs ${location === '/personal-info' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'text-white hover:text-gray-300'}`}
             onClick={() => navigate('/personal-info')}
           >
-            기본정보
+            세금진단
           </Button>
           <Button 
-            variant={location === '/income' ? "default" : "ghost"} 
+            variant={location === '/retirement-score' ? "default" : "ghost"} 
             size="sm"
-            className={`text-sm ${location === '/income' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'text-black hover:text-gray-800'}`}
-            onClick={() => navigate('/income')}
+            className={`text-xs ${location === '/retirement-score' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'text-white hover:text-gray-300'}`}
+            onClick={() => navigate('/retirement-score')}
           >
-            소득
+            은퇴준비
           </Button>
           <Button 
-            variant={location === '/retirement-contributions' ? "default" : "ghost"} 
+            variant={location === '/residency-checker' ? "default" : "ghost"} 
             size="sm"
-            className={`text-sm ${location === '/retirement-contributions' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'text-black hover:text-gray-800'}`}
-            onClick={() => navigate('/retirement-contributions')}
+            className={`text-xs ${location === '/residency-checker' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'text-white hover:text-gray-300'}`}
+            onClick={() => navigate('/residency-checker')}
           >
-            퇴직연금
+            거주지확인
           </Button>
           <Button 
-            variant={location === '/deductions' ? "default" : "ghost"} 
+            variant={location === '/capital-gains' ? "default" : "ghost"} 
             size="sm"
-            className={`text-sm ${location === '/deductions' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'text-black hover:text-gray-800'}`}
-            onClick={() => navigate('/deductions')}
+            className={`text-xs ${location === '/capital-gains' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'text-white hover:text-gray-300'}`}
+            onClick={() => navigate('/capital-gains')}
           >
-            공제
-          </Button>
-          <Button 
-            variant={location === '/tax-credits' ? "default" : "ghost"} 
-            size="sm"
-            className={`text-sm ${location === '/tax-credits' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'text-black hover:text-gray-800'}`}
-            onClick={() => navigate('/tax-credits')}
-          >
-            세액공제
-          </Button>
-          <Button 
-            variant={location === '/additional-tax' ? "default" : "ghost"} 
-            size="sm"
-            className={`text-sm ${location === '/additional-tax' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'text-black hover:text-gray-800'}`}
-            onClick={() => navigate('/additional-tax')}
-          >
-            추가세금
-          </Button>
-          <Button 
-            variant={location === '/review' ? "default" : "ghost"} 
-            size="sm"
-            className={`text-sm ${location === '/review' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'text-black hover:text-gray-800'}`}
-            onClick={() => navigate('/review')}
-          >
-            검토
+            자본이득
           </Button>
           <Button 
             variant={location === '/board' ? "default" : "ghost"} 
             size="sm"
-            className={`text-sm flex items-center gap-1 ${location === '/board' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'text-white hover:text-white'}`}
+            className={`text-xs flex items-center gap-1 ${location === '/board' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'text-white hover:text-gray-300'}`}
             onClick={() => navigate('/board')}
           >
             <MessageSquare className="h-4 w-4" />
