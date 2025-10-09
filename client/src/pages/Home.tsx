@@ -116,7 +116,7 @@ const Home: React.FC = () => {
                   <li>🎓 연세대학교 국제대학원 – MBA</li>
                 </ul>
               </div>
-              <div className="flex flex-col items-center -mt-8">
+              <div className="flex flex-col items-center -mt-16">
                 <img 
                   src="/ceo-profile-new.jpg" 
                   alt="CEO Profile"
