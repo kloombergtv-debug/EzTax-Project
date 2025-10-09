@@ -198,7 +198,7 @@ export default function About() {
           <div className="flex flex-col lg:flex-row gap-8">
             <div className="flex-shrink-0 text-center lg:text-left">
               <img 
-                src="/ceo-profile-new.jpg"
+                src="/ceo-profile-final.png"
                 alt="지대현 FA"
                 className="w-32 h-32 rounded-full object-cover border-4 border-blue-200 mx-auto lg:mx-0"
               />
