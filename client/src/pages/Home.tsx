@@ -19,9 +19,9 @@ const Home: React.FC = () => {
     <div className="max-w-5xl mx-auto">
       <section className="mb-4 text-center py-10">
         <h1 className="text-xl md:text-2xl font-bold text-primary-dark mb-2" style={{ fontFamily: '"Malgun Gothic", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif' }}>
-          안녕하십니까. 고객님이 편안히 잠들 수 있도록, 불확실한 현재와 미래로부터 자산과 꿈을 지켜드리는 종합 재정 전문가, 지대현 FA입니다.
+          안녕하십니까. 😴 고객님이 편안히 잠들 수 있도록, 불확실한 현재와 미래로부터 💎 자산과 꿈을 지켜드리는 종합 재정 전문가, 👨‍💼 지대현 FA입니다.
           <br /><br />
-          까다로운 재정 문제는 아이비리그 출신 금융 전문가인 저와 상의하시고, 고객님께서는 더 큰 꿈과 의미 있는 삶에 집중하십시오.
+          까다로운 재정 문제는 🎓 아이비리그 출신 금융 전문가인 저와 상의하시고, 고객님께서는 더 큰 꿈과 의미 있는 삶에 집중하십시오.
         </h1>
         <div className="mt-4">
           <span 
