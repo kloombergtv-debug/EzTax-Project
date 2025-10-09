@@ -214,7 +214,7 @@ export default function About() {
                   <ul className="text-sm text-blue-700 space-y-2">
                     <li>💼 현 Rethink Wealth 재정관리사</li>
                     <li>📊 FINRA Series 65 투자자문사</li>
-                    <li>🧾 IRS 공인 EA (Enrolled Agent)</li>
+                    <li>🧾 IRS 공인 세무사 (Enrolled Agent)</li>
                     <li>🏭 한화그룹 – 재무담당 임원</li>
                     <li>🏦 교보생명 – 재무실부장</li>
                     <li>🏢 LG전자 – IR팀 과장</li>
