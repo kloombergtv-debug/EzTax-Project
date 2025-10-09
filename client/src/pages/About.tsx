@@ -185,15 +185,6 @@ export default function About() {
 
       {/* Founder & CEO Profile */}
       <Card className="border-blue-200 bg-gradient-to-r from-blue-50 to-indigo-50">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-blue-700 text-2xl">
-            <BuildingIcon className="h-6 w-6" />
-            EzTax 운용자 소개
-          </CardTitle>
-          <CardDescription className="text-blue-600">
-            EzTax를 이끄는 세무·투자 전문가를 만나보세요
-          </CardDescription>
-        </CardHeader>
         <CardContent>
           <div className="flex flex-col lg:flex-row gap-8">
             <div className="flex-shrink-0 text-center lg:text-left">
