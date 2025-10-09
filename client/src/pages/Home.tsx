@@ -112,7 +112,7 @@ const Home: React.FC = () => {
                 
                 <h4 className="font-semibold text-lg text-primary-dark mb-3">🎓 학력</h4>
                 <ul className="space-y-2">
-                  <li>🎓 University of Pennsylvania – 경제학</li>
+                  <li>🎓 U Penn – 경제학</li>
                   <li>🎓 연세대학교 국제대학원 – MBA</li>
                 </ul>
               </div>

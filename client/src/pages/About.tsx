@@ -231,7 +231,7 @@ export default function About() {
                   
                   <h4 className="font-semibold text-blue-800 mb-3 mt-4">🎓 학력</h4>
                   <ul className="text-sm text-blue-700 space-y-2">
-                    <li>🎓 University of Pennsylvania – 경제학 학사</li>
+                    <li>🎓 U Penn – 경제학 학사</li>
                     <li>🎓 연세대학교 국제대학원 – MBA</li>
                   </ul>
                 </div>
