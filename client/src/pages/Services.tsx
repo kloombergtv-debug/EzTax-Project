@@ -6,7 +6,7 @@ const Services = () => {
     <div className="max-w-5xl mx-auto px-4 py-12">
       <div className="text-center mb-12">
         <h1 className="text-3xl md:text-4xl font-bold text-primary-dark mb-4">
-          저희가 주로 도와드리는 부분은 네 가지예요.
+          제가 도와드리는 부분은 다음 네가지 입니다.
         </h1>
       </div>
 
