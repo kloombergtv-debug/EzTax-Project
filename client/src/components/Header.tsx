@@ -112,7 +112,7 @@ const Header: React.FC = () => {
             className={`text-xs ${location === '/residency-checker' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'text-white hover:text-gray-300'}`}
             onClick={() => navigate('/residency-checker')}
           >
-            거주지확인
+            거주자확인
           </Button>
           <Button 
             variant={location === '/capital-gains' ? "default" : "ghost"} 
