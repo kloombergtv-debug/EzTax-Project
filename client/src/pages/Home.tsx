@@ -17,7 +17,7 @@ const Home: React.FC = () => {
 
   return (
     <div className="max-w-5xl mx-auto">
-      <section className="mb-8 py-12 bg-gradient-to-b from-slate-50 to-white rounded-lg">
+      <section className="mb-4 py-12 bg-gradient-to-b from-slate-50 to-white rounded-lg">
         <div className="max-w-5xl mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             <div className="text-center lg:text-left">
