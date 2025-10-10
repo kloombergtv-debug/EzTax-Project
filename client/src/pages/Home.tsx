@@ -119,7 +119,7 @@ const Home: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-              <div>
+              <div className="bg-blue-50 p-6 rounded-lg">
                 <h4 className="font-semibold text-lg text-primary-dark mb-3">📚 주요 이력</h4>
                 <ul className="mb-6 space-y-2">
                   <li>💼 현 Rethink Wealth 재정관리사</li>
@@ -138,7 +138,7 @@ const Home: React.FC = () => {
                   <li>🎓 연세대학교 국제대학원 – MBA</li>
                 </ul>
               </div>
-              <div>
+              <div className="bg-blue-50 p-6 rounded-lg">
                 <h4 className="font-semibold text-lg text-primary-dark mb-3">🏢 Rethink Wealth LLC</h4>
                 <ul className="space-y-2 text-sm text-gray-700">
                   <li>📍 <strong>본사/지사:</strong> 텍사스주 오스틴(Austin), 포트워스(Fort Worth), 휴스턴(Houston) 등에 사무소 보유</li>
