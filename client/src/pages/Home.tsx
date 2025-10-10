@@ -27,8 +27,8 @@ const Home: React.FC = () => {
                 <span className="text-primary font-semibold">전인적 (financial planning & holistic wealth) 재정 관리사 지대현</span>입니다.
               </h1>
               <p className="text-base md:text-lg text-slate-600 leading-relaxed mb-6" style={{ fontFamily: '"Noto Sans KR", "Apple SD Gothic Neo", -apple-system, sans-serif', letterSpacing: '-0.01em' }}>
-                까다로운 재정 문제는 아이비리그 출신 금융 전문가인 저와 상의하시고,<br className="hidden md:block" />
-                고객님께서는 더 큰 꿈과 의미 있는 삶에 집중하십시오.
+                까다로운 재정 문제는 <span className="text-primary font-semibold">아이비리그 출신 금융 전문가</span>인 저와 상의하시고,<br className="hidden md:block" />
+                고객님께서는 <span className="text-primary font-semibold">더 큰 꿈</span>과 <span className="text-primary font-semibold">의미 있는 삶</span>에 집중하십시오.
               </p>
               <div>
                 <span 
