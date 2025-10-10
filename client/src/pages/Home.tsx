@@ -144,7 +144,7 @@ const Home: React.FC = () => {
                   <li>📍 <strong>본사/지사:</strong> 텍사스주 오스틴(Austin), 포트워스(Fort Worth), 휴스턴(Houston) 등에 사무소 보유</li>
                   <li>💼 <strong>업종:</strong> 전인적(financial planning & holistic wealth) 금융 계획, 자산 관리, 리스크 관리, 보험 등 종합 재무 서비스 제공</li>
                   <li>💡 <strong>철학/방식:</strong> "재정적 균형(life & money balance)"을 중요시하며, 각 개인의 목표와 가치에 맞게 재정 계획을 맞춤 설계</li>
-                  <li>⚖️ <strong>독립 자문사:</strong> 바이어의 최선 이익(fiduciary duty)을 지향</li>
+                  <li>⚖️ <strong>독립 자문사:</strong> Client의 최선 이익(fiduciary duty)을 지향</li>
                   <li>🤝 <strong>파트너십:</strong> 2023년 9월부로 Summit Financial과 파트너십을 맺어, Summit의 투자 전략 팀 등이 Rethink Wealth의 재정 관리 서비스를 보강하는 구조로 운영 중</li>
                   <li>💰 <strong>투자 자산 관리(AUM):</strong> 7억 3,400만 달러</li>
                   <li>💵 <strong>현금 가치 자산(Cash Value AUM):</strong> 6억 9,700만 달러 이상</li>
