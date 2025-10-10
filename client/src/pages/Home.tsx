@@ -17,27 +17,39 @@ const Home: React.FC = () => {
 
   return (
     <div className="max-w-5xl mx-auto">
-      <section className="mb-8 text-center py-12 bg-gradient-to-b from-slate-50 to-white rounded-lg">
-        <div className="max-w-4xl mx-auto px-4">
-          <h1 className="text-lg md:text-xl font-medium text-slate-700 leading-relaxed mb-6" style={{ fontFamily: '"Noto Sans KR", "Apple SD Gothic Neo", -apple-system, sans-serif', letterSpacing: '-0.02em' }}>
-            안녕하십니까. 고객님이 매일저녁 편안히 잠들수 있도록,<br className="hidden md:block" /> 
-            불확실한 현재와 미래로부터 자산과 꿈을 지켜드리는<br className="hidden md:block" />
-            <span className="text-primary font-semibold">종합 재정 전문가, 지대현 FA</span>입니다.
-          </h1>
-          <p className="text-base md:text-lg text-slate-600 leading-relaxed" style={{ fontFamily: '"Noto Sans KR", "Apple SD Gothic Neo", -apple-system, sans-serif', letterSpacing: '-0.01em' }}>
-            까다로운 재정 문제는 아이비리그 출신 금융 전문가인 저와 상의하시고,<br className="hidden md:block" />
-            고객님께서는 더 큰 꿈과 의미 있는 삶에 집중하십시오.
-          </p>
-        </div>
-        <div className="mt-6">
-          <span 
-            onClick={() => navigate('/services')}
-            className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 cursor-pointer font-medium text-base transition-colors"
-            data-testid="link-services"
-          >
-            FA가 하는일 더 자세히 알아보기
-            <span className="text-lg">→</span>
-          </span>
+      <section className="mb-8 py-12 bg-gradient-to-b from-slate-50 to-white rounded-lg">
+        <div className="max-w-5xl mx-auto px-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            <div className="text-center lg:text-left">
+              <h1 className="text-lg md:text-xl font-medium text-slate-700 leading-relaxed mb-6" style={{ fontFamily: '"Noto Sans KR", "Apple SD Gothic Neo", -apple-system, sans-serif', letterSpacing: '-0.02em' }}>
+                안녕하십니까. 고객님이 매일저녁 편안히 잠들수 있도록,<br className="hidden md:block" /> 
+                불확실한 현재와 미래로부터 자산과 꿈을 지켜드리는<br className="hidden md:block" />
+                <span className="text-primary font-semibold">종합 재정 전문가, 지대현 FA</span>입니다.
+              </h1>
+              <p className="text-base md:text-lg text-slate-600 leading-relaxed mb-6" style={{ fontFamily: '"Noto Sans KR", "Apple SD Gothic Neo", -apple-system, sans-serif', letterSpacing: '-0.01em' }}>
+                까다로운 재정 문제는 아이비리그 출신 금융 전문가인 저와 상의하시고,<br className="hidden md:block" />
+                고객님께서는 더 큰 꿈과 의미 있는 삶에 집중하십시오.
+              </p>
+              <div>
+                <span 
+                  onClick={() => navigate('/services')}
+                  className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 cursor-pointer font-medium text-base transition-colors"
+                  data-testid="link-services"
+                >
+                  FA가 하는일 더 자세히 알아보기
+                  <span className="text-lg">→</span>
+                </span>
+              </div>
+            </div>
+            <div className="flex justify-center lg:justify-end">
+              <img 
+                src="/ceo-profile-new2.png" 
+                alt="CEO Profile"
+                className="w-64 h-auto object-cover cursor-pointer hover:scale-105 transition-transform rounded-lg"
+                onClick={() => navigate('/about')}
+              />
+            </div>
+          </div>
         </div>
       </section>
 
@@ -126,13 +138,20 @@ const Home: React.FC = () => {
                   <li>🎓 연세대학교 국제대학원 – MBA</li>
                 </ul>
               </div>
-              <div className="flex flex-col items-center -mt-24">
-                <img 
-                  src="/ceo-profile-new2.png" 
-                  alt="CEO Profile"
-                  className="w-80 h-auto object-cover cursor-pointer hover:scale-105 transition-transform"
-                  onClick={() => navigate('/about')}
-                />
+              <div>
+                <h4 className="font-semibold text-lg text-primary-dark mb-3">🏢 Rethink Wealth LLC 사역</h4>
+                <ul className="space-y-2 mb-6">
+                  <li>💰 운용자산(AUM): $734M+</li>
+                  <li>📍 텍사스 지역 사무소: Austin, Fort Worth, Houston</li>
+                  <li>🤝 Summit Financial 파트너십 (2023년 9월~)</li>
+                  <li>⚖️ 독립 자문사 (Fiduciary Duty)</li>
+                </ul>
+                
+                <h4 className="font-semibold text-lg text-primary-dark mb-3">💡 회사 철학</h4>
+                <p className="text-gray-600 leading-relaxed">
+                  재정적 균형(Life & Money Balance)을 중요시하며, 각 개인의 목표와 가치에 맞게 재정 계획을 맞춤 설계합니다. 
+                  전인적 금융 계획과 종합 재무 서비스를 제공합니다.
+                </p>
               </div>
             </div>
           </CardContent>
