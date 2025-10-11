@@ -50,7 +50,16 @@ const Footer: React.FC = () => {
                     {t('회사 소개', 'About Us')}
                   </a>
                 </li>
-                <li><Link href="#"><div className="hover:text-white cursor-pointer">{t('채용 정보', 'Careers')}</div></Link></li>
+                <li>
+                  <a 
+                    href="https://rethinkwealth.com/careers/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="hover:text-white cursor-pointer block"
+                  >
+                    {t('채용 정보', 'Careers')}
+                  </a>
+                </li>
                 <li><Link href="#"><div className="hover:text-white cursor-pointer">{t('보도 자료', 'Press')}</div></Link></li>
                 <li><Link href="#"><div className="hover:text-white cursor-pointer">{t('문의하기', 'Contact')}</div></Link></li>
               </ul>
