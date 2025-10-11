@@ -15,7 +15,7 @@ const Home: React.FC = () => {
 
   return (
     <div className="max-w-5xl mx-auto">
-      <section className="mb-4 py-12 bg-blue-50 rounded-lg">
+      <section className="mb-4 py-12 bg-white rounded-lg">
         <div className="max-w-5xl mx-auto px-4">
           <div className="flex flex-col lg:flex-row gap-8 items-center lg:items-start">
             <div className="text-left flex-1">
