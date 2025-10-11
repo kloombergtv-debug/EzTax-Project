@@ -23,11 +23,11 @@ const Home: React.FC = () => {
             <div className="text-center lg:text-left">
               <h1 className="text-lg md:text-xl font-medium text-slate-700 leading-relaxed mb-6" style={{ fontFamily: '"Noto Sans KR", "Apple SD Gothic Neo", -apple-system, sans-serif', letterSpacing: '-0.02em' }}>
                 안녕하십니까. 고객님이 매일저녁 편안히 잠들수 있도록,<br className="hidden md:block" /> 
-                불확실한 현재와 미래로부터 자산과 꿈을 지켜드리는<br className="hidden md:block" />
+                불확실한 미래로부터 가족과 꿈을 지켜드리는<br className="hidden md:block" />
                 <span className="text-primary font-semibold">전인적 (financial planning & holistic wealth) 재정 관리사 지대현</span>입니다.
               </h1>
               <p className="text-base md:text-lg text-slate-600 leading-relaxed mb-6" style={{ fontFamily: '"Noto Sans KR", "Apple SD Gothic Neo", -apple-system, sans-serif', letterSpacing: '-0.01em' }}>
-                까다로운 재정 문제는 <span className="text-primary font-semibold">아이비리그 출신 금융 전문가</span>인 저와 상의하시고,<br className="hidden md:block" />
+                까다롭고 민감한 재정 문제는 <span className="text-primary font-semibold">아이비리그 출신 금융 전문가</span>인 저와 저희 팀에게 의지하시고,<br className="hidden md:block" />
                 고객님께서는 <span className="text-primary font-semibold">더 큰 꿈</span>과 <span className="text-primary font-semibold">의미 있는 삶</span>에 집중하십시오.
               </p>
               <div>
