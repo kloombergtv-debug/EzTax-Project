@@ -20,12 +20,12 @@ const Home: React.FC = () => {
       <section className="mb-4 py-12 bg-blue-50 rounded-lg">
         <div className="max-w-5xl mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-end">
-            <div className="text-center lg:text-left">
+            <div className="text-center lg:text-left lg:self-end lg:flex lg:flex-col lg:justify-end">
               <h1 className="text-lg md:text-xl font-medium text-slate-700 leading-relaxed mb-6" style={{ fontFamily: '"Noto Sans KR", "Apple SD Gothic Neo", -apple-system, sans-serif', letterSpacing: '-0.02em' }}>
                 안녕하십니까. 고객님이 매일 편안한 마음으로 잠을 청할수 있도록, <br />
                 불확실한 내일로부터 가족과 꿈을 지켜드리는 <span className="text-primary font-semibold">전인적 (financial planning & holistic wealth) 재정 관리사 지대현</span>입니다.
               </h1>
-              <p className="text-base md:text-lg text-slate-600 leading-relaxed mb-6" style={{ fontFamily: '"Noto Sans KR", "Apple SD Gothic Neo", -apple-system, sans-serif', letterSpacing: '-0.01em' }}>
+              <p className="text-base md:text-lg text-slate-600 leading-relaxed mb-6 lg:mb-0" style={{ fontFamily: '"Noto Sans KR", "Apple SD Gothic Neo", -apple-system, sans-serif', letterSpacing: '-0.01em' }}>
                 Income protection, investment, retirement and estate planning 같은 까다롭고 민감한 재정 문제는 <span className="text-primary font-semibold">아이비리그 출신 금융 전문가</span>인 저와 저희 팀에게 의지하시고, 고객님께서는 <span className="text-primary font-semibold">더 큰 꿈</span>과 <span className="text-primary font-semibold">의미 있는 삶</span>에 집중하십시오.
               </p>
               <div>
@@ -39,7 +39,7 @@ const Home: React.FC = () => {
                 </span>
               </div>
             </div>
-            <div className="flex justify-center lg:justify-end">
+            <div className="flex justify-center lg:justify-end lg:self-end">
               <img 
                 src="/ceo-profile-no-bg.png" 
                 alt="CEO Profile"
