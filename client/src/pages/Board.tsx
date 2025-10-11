@@ -347,7 +347,7 @@ const Board: React.FC = () => {
               <h2 className="text-xl font-semibold text-gray-800 mb-2">저의 게시판에 오신 것을 환영합니다!</h2>
               <div className="text-gray-600 space-y-2">
                 <p>
-                  <strong>💡 EzTax 사용방법</strong>과 <strong>🏛️ 세금신고 관련 질문</strong>을 자유롭게 해주세요.
+                  <strong>💡 FA 사용법</strong>과 <strong>🏛️ 세금신고 관련 질문</strong>을 자유롭게 해주세요.
                 </p>
                 <p>
                   전문가와 다른 사용자들이 친절하게 답변해드립니다. 
