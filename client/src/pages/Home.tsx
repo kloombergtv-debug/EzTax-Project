@@ -4,13 +4,11 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { File, FileText, Clock, Shield } from 'lucide-react';
-import { useTaxContext } from '@/context/TaxContext';
 import { useAuth } from '@/hooks/use-auth';
 
 
 const Home: React.FC = () => {
   const [, navigate] = useLocation();
-  const { updateTaxData } = useTaxContext();
   const { user } = useAuth();
   
   // 자동 데이터 주입 제거 - 사용자가 직접 입력하도록 변경
