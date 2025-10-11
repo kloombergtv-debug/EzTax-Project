@@ -1,7 +1,7 @@
 import React from 'react';
 import Logo from './Logo';
 import { Link } from 'wouter';
-import { Facebook, Twitter, Instagram } from 'lucide-react';
+import { Facebook, Twitter, Instagram, Youtube } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 const Footer: React.FC = () => {
@@ -96,6 +96,14 @@ const Footer: React.FC = () => {
             </a>
             <a href="#" className="hover:text-white">
               <Instagram className="h-5 w-5" />
+            </a>
+            <a 
+              href="https://www.youtube.com/@BESTIR" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="hover:text-white"
+            >
+              <Youtube className="h-5 w-5" />
             </a>
           </div>
         </div>
