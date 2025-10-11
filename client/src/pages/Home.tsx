@@ -17,7 +17,7 @@ const Home: React.FC = () => {
     <div className="max-w-5xl mx-auto">
       <section className="mb-4 py-12 bg-blue-50 rounded-lg">
         <div className="max-w-5xl mx-auto px-4">
-          <div className="flex flex-col lg:flex-row gap-8 items-end">
+          <div className="flex flex-col lg:flex-row gap-8 items-start">
             <div className="text-left flex-1">
               <h1 className="text-2xl font-bold text-slate-800 mb-2" style={{ fontFamily: '"Noto Sans KR", "Apple SD Gothic Neo", -apple-system, sans-serif' }}>
                 지대현 Financial Advisor/세무사(EA)
@@ -44,11 +44,11 @@ const Home: React.FC = () => {
                 </span>
               </div>
             </div>
-            <div className="flex justify-center lg:justify-end">
+            <div className="flex justify-center lg:justify-start">
               <img 
                 src="/ceo-profile-no-bg.png" 
                 alt="CEO Profile"
-                className="w-64 h-auto object-cover cursor-pointer hover:scale-105 transition-transform"
+                className="w-40 h-auto object-cover cursor-pointer hover:scale-105 transition-transform"
                 onClick={() => navigate('/about')}
               />
             </div>
