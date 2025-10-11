@@ -37,7 +37,7 @@ const Home: React.FC = () => {
                 </p>
                 <p>
                   {t(
-                    '물론 그것이 다는 아닙니다. 우리가 최적의 저축수준을 도달하고 좋은 수익률을 올리더라도 우리의 control 밖에 있는 크리티칼한 리스크들을 대비해야 합니다. 갑작스러운 죽음이나 사고, 미국생활에 종종 터질 수 있는 말도 안되는 소송들 이런것들을 대비해 두지 않으면 나와 사랑하는 나의 가족들이 큰 고통에 빠질 수 있습니다.',
+                    '물론 그것이 다는 아닙니다. 우리가 최적의 저축수준을 도달하고 좋은 수익률을 올리더라도 우리의 control 밖에 있는 치명적 리스크(critical risks)들을 대비해야 합니다. 갑작스러운 죽음이나 사고, 미국생활에 종종 터질 수 있는 말도 안되는 소송들 이런것들을 대비해 두지 않으면 나와 사랑하는 나의 가족들이 큰 고통에 빠질 수 있습니다.',
                     'Of course, that\'s not all. Even if we reach optimal savings levels and achieve good returns, we must prepare for critical risks beyond our control. Sudden death, accidents, or absurd lawsuits that can occur in American life - without preparing for these, you and your loved ones could face great hardship.'
                   )}
                 </p>
