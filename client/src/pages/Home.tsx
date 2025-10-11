@@ -33,6 +33,35 @@ const Home: React.FC = () => {
                 <span className="text-primary font-semibold">당신의 재정 여정에 날개를 달아드립니다.</span><br/>
                 맞춤형 금융 서비스로 목표를 이루고, 더 풍요로운 미래를 함께 설계하세요
               </p>
+              
+              <div className="text-sm text-slate-600 leading-relaxed mb-6 space-y-4" style={{ fontFamily: '"Noto Sans KR", "Apple SD Gothic Neo", -apple-system, sans-serif' }}>
+                <p>
+                  미국인의 수입 대비 저축률은 4~5% 정도입니다. 그러나 연구 결과 퇴직시점에서 그 정도의 저축으로는 아무리 투자를 잘한다고 해도 현재 누리는 life style을 유지할 수 없으며 연령별로 차이는 있지만 적어도 20%는 저축을 해야 그 때부터 "리스크대비 투자수익률 극대화"가 의미가 있다고 합니다.
+                </p>
+                <p>
+                  물론 그것이 다는 아닙니다. 우리가 최적의 저축수준을 도달하고 좋은 수익률을 올리더라도 우리의 control 밖에 있는 크리티칼한 리스크들을 대비해야 합니다. 갑작스러운 죽음이나 사고, 미국생활에 종종 터질 수 있는 말도 안되는 소송들 이런것들을 대비해 두지 않으면 나와 사랑하는 나의 가족들이 큰 고통에 빠질 수 있습니다.
+                </p>
+                <div>
+                  <p className="font-semibold text-primary mb-2">Rethink Wealth FA는</p>
+                  <ol className="list-decimal list-inside space-y-1 ml-2">
+                    <li>고객님과 고객님 가족이 갑작스런 빈곤에 빠지지 않도록 Critical Risk를 대비토록 준비해 드리고</li>
+                    <li>충분한 Saving과 투자를 통해 누리고자 하시는 퇴직후에도 Life Style을 유지하실 수 있도록 설계하며</li>
+                    <li>은퇴후 소득을 어떻게 받을지 또 세금 문제와 상속 계획을 어떻게 할지 돕는 소위 Holistic Life Planning을 도와드립니다.</li>
+                  </ol>
+                </div>
+                <div>
+                  <p className="font-semibold text-primary mb-2">특히 저 지대현 FA는</p>
+                  <ol className="list-decimal list-inside space-y-1 ml-2">
+                    <li>흔치 않은 아이비리그 출신의 재정관리자로써</li>
+                    <li>30년이 넘도록 증권시장과 투자관련 분야에서 일해온 경험과</li>
+                    <li>회계, 세무영역에서의 전문가로써의 역량을 최대한 발휘하여</li>
+                  </ol>
+                  <p className="mt-2">
+                    저의 이익보다는 고객의 이익을 우선해야하는 Fiduciary Investment Advisor로써 고객님을 남이 아니라 가족의 일처럼 생각하며 함께 고민하고 solution을 찾아가겠습니다.
+                  </p>
+                </div>
+              </div>
+              
               <div>
                 <span 
                   onClick={() => navigate('/services')}
