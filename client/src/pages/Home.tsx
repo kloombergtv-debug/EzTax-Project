@@ -75,7 +75,7 @@ const Home: React.FC = () => {
                     )}</li>
                     <li>{t(
                       '회계, 세무영역에서의 전문가로써의 역량을 최대한 발휘하여',
-                      'Maximizing my expertise in accounting and tax areas'
+                      'and expertise in accounting and taxation'
                     )}</li>
                   </ol>
                   <p className="mt-2">
