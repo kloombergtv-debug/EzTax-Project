@@ -344,7 +344,7 @@ const Board: React.FC = () => {
               <MessageSquare className="h-6 w-6 text-blue-600" />
             </div>
             <div className="flex-1">
-              <h2 className="text-xl font-semibold text-gray-800 mb-2">EzTax 커뮤니티에 오신 것을 환영합니다!</h2>
+              <h2 className="text-xl font-semibold text-gray-800 mb-2">저의 게시판에 오신 것을 환영합니다!</h2>
               <div className="text-gray-600 space-y-2">
                 <p>
                   <strong>💡 EzTax 사용방법</strong>과 <strong>🏛️ 세금신고 관련 질문</strong>을 자유롭게 해주세요.
