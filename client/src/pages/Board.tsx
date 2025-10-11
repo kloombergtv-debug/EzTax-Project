@@ -159,7 +159,7 @@ const Board: React.FC = () => {
 
   const categories = [
     { id: 'all', name: '전체', icon: MessageSquare, count: getCountByCategory('all') },
-    { id: 'usage', name: 'EzTax 사용법', icon: BookOpen, count: getCountByCategory('usage') },
+    { id: 'usage', name: 'FA 사용법', icon: BookOpen, count: getCountByCategory('usage') },
     { id: 'tax', name: '세금신고 질문', icon: HelpCircle, count: getCountByCategory('tax') },
     { id: 'tax-tips', name: '절세/노후준비팁', icon: DollarSign, count: getCountByCategory('tax-tips') },
     { id: 'faq', name: 'FAQ', icon: Info, count: getCountByCategory('faq') },
@@ -413,7 +413,7 @@ const Board: React.FC = () => {
                         <SelectValue placeholder="카테고리를 선택하세요" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="usage">EzTax 사용법</SelectItem>
+                        <SelectItem value="usage">FA 사용법</SelectItem>
                         <SelectItem value="tax">세금신고 질문</SelectItem>
                         <SelectItem value="tax-tips">절세/노후준비팁</SelectItem>
                         <SelectItem value="faq">FAQ</SelectItem>

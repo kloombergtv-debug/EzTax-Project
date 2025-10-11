@@ -164,7 +164,7 @@ const BoardDetail = () => {
   });
 
   const categories = [
-    { id: 'usage', name: 'EzTax 사용법' },
+    { id: 'usage', name: 'FA 사용법' },
     { id: 'tax', name: '세금신고 질문' },
     { id: 'tax-tips', name: '절세/노후준비팁' },
     { id: 'faq', name: 'FAQ' },
