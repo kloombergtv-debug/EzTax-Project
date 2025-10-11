@@ -19,7 +19,7 @@ const Home: React.FC = () => {
     <div className="max-w-5xl mx-auto">
       <section className="mb-4 py-12 bg-blue-50 rounded-lg">
         <div className="max-w-5xl mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-end">
             <div className="text-center lg:text-left">
               <h1 className="text-lg md:text-xl font-medium text-slate-700 leading-relaxed mb-6" style={{ fontFamily: '"Noto Sans KR", "Apple SD Gothic Neo", -apple-system, sans-serif', letterSpacing: '-0.02em' }}>
                 안녕하십니까. 고객님이 매일 편안한 마음으로 잠을 청할수 있도록, <br />
