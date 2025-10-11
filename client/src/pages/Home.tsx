@@ -22,7 +22,7 @@ const Home: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             <div className="text-center lg:text-left">
               <h1 className="text-lg md:text-xl font-medium text-slate-700 leading-relaxed mb-6" style={{ fontFamily: '"Noto Sans KR", "Apple SD Gothic Neo", -apple-system, sans-serif', letterSpacing: '-0.02em' }}>
-                안녕하십니까. 고객님이 매일저녁 편안히 잠들수 있도록,<br className="hidden md:block" /> 
+                안녕하십니까. 고객님이 매일 편안한 마음으로 잠을 청할수 있도록, <br className="hidden md:block" /> 
                 불확실한 내일로부터 가족과 꿈을 지켜드리는 <br className="hidden md:block" />
                 <span className="text-primary font-semibold">전인적 (financial planning & holistic wealth) 재정 관리사 지대현</span>입니다.
               </h1>
