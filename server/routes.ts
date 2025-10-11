@@ -2,7 +2,7 @@ import type { Express } from "express";
 import express from "express";
 import { createServer, type Server } from "http";
 import { DbStorage } from "./storage";
-import { insertTaxReturnSchema, insertRetirementAssessmentSchema, retirementAssessmentDataSchema, insertBoardPostSchema } from "@shared/schema";
+import { insertTaxReturnSchema, insertRetirementAssessmentSchema, retirementAssessmentDataSchema, insertBoardPostSchema, insertBoardReplySchema } from "@shared/schema";
 import { z } from "zod";
 import nodemailer from "nodemailer";
 import path from "path";
@@ -1155,6 +1155,116 @@ ${message || '상담 요청'}
     } catch (error) {
       console.error('Error deleting board post:', error);
       res.status(500).json({ message: 'Failed to delete board post' });
+    }
+  });
+
+  // Get replies for a post
+  app.get('/api/board/posts/:postId/replies', async (req, res) => {
+    try {
+      const postId = parseInt(req.params.postId);
+      
+      if (isNaN(postId)) {
+        return res.status(400).json({ message: 'Invalid post ID' });
+      }
+      
+      const replies = await storage.getBoardRepliesByPostId(postId);
+      res.json(replies);
+    } catch (error) {
+      console.error('Error getting replies:', error);
+      res.status(500).json({ message: 'Failed to get replies' });
+    }
+  });
+
+  // Create new reply - Authentication required
+  app.post('/api/board/posts/:postId/replies', (req, res, next) => {
+    if (!req.isAuthenticated || !req.isAuthenticated()) {
+      return res.status(401).json({ message: 'Authentication required' });
+    }
+    next();
+  }, async (req: any, res) => {
+    try {
+      const postId = parseInt(req.params.postId);
+      
+      if (isNaN(postId)) {
+        return res.status(400).json({ message: 'Invalid post ID' });
+      }
+      
+      const user = req.user as any;
+      const userId = user.id;
+      const authorName = user.displayName || user.username || '사용자';
+
+      const replyData = insertBoardReplySchema.parse({
+        ...req.body,
+        postId,
+        userId,
+        authorId: userId.toString(),
+        authorName
+      });
+
+      const newReply = await storage.createBoardReply(replyData);
+      res.status(201).json(newReply);
+    } catch (error) {
+      console.error('Error creating reply:', error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: 'Invalid reply data', errors: error.errors });
+      }
+      res.status(500).json({ message: 'Failed to create reply' });
+    }
+  });
+
+  // Update reply
+  app.put('/api/board/replies/:id', async (req, res) => {
+    try {
+      const replyId = parseInt(req.params.id);
+      const reply = await storage.getBoardReply(replyId);
+      
+      if (!reply) {
+        return res.status(404).json({ message: 'Reply not found' });
+      }
+
+      // Check if user is the author or admin
+      if (req.isAuthenticated && req.isAuthenticated()) {
+        const user = req.user as any;
+        if (reply.userId !== user.id && user.username !== 'admin') {
+          return res.status(403).json({ message: 'Unauthorized to edit this reply' });
+        }
+      } else {
+        return res.status(401).json({ message: 'Authentication required' });
+      }
+
+      const updatedReply = await storage.updateBoardReply(replyId, req.body);
+      res.json(updatedReply);
+    } catch (error) {
+      console.error('Error updating reply:', error);
+      res.status(500).json({ message: 'Failed to update reply' });
+    }
+  });
+
+  // Delete reply
+  app.delete('/api/board/replies/:id', async (req, res) => {
+    try {
+      const replyId = parseInt(req.params.id);
+      const reply = await storage.getBoardReply(replyId);
+      
+      if (!reply) {
+        return res.status(404).json({ message: 'Reply not found' });
+      }
+
+      // Check if user is the author or admin
+      if (req.isAuthenticated && req.isAuthenticated()) {
+        const user = req.user as any;
+        if (reply.userId !== user.id && user.username !== 'admin') {
+          return res.status(403).json({ message: 'Unauthorized to delete this reply' });
+        }
+      } else {
+        return res.status(401).json({ message: 'Authentication required' });
+      }
+
+      await storage.deleteBoardReply(replyId);
+      res.json({ success: true, message: 'Reply deleted successfully' });
+    } catch (error) {
+      console.error('Error deleting reply:', error);
+      res.status(500).json({ message: 'Failed to delete reply' });
     }
   });
 
