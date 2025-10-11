@@ -45,7 +45,7 @@ const Home: React.FC = () => {
                   <p className="font-semibold text-primary mb-2">
                     {t('Rethink Wealth FA는', 'Rethink Wealth FA:')}
                   </p>
-                  <ol className="list-decimal list-inside space-y-1 ml-2">
+                  <ul className="list-disc list-inside space-y-1 ml-2">
                     <li>{t(
                       '고객님과 고객님 가족이 갑작스런 빈곤에 빠지지 않도록 치명적 리스크(Critical Risks)를 대비하고',
                       'Prepare for Critical Risks to protect you and your family from sudden financial hardship'
@@ -58,13 +58,13 @@ const Home: React.FC = () => {
                       '은퇴후 소득을 어떻게 받을지, 또 세금 문제와 상속 계획을 어떻게 할지 조언해드립니다.',
                       'Advise on post-retirement income, tax issues, and estate planning'
                     )}</li>
-                  </ol>
+                  </ul>
                 </div>
                 <div>
                   <p className="font-semibold text-primary mb-2">
                     {t('특히 저 지대현 FA는', 'Specifically, I, Dae Hyun Jee FA:')}
                   </p>
-                  <ol className="list-decimal list-inside space-y-1 ml-2">
+                  <ul className="list-disc list-inside space-y-1 ml-2">
                     <li>{t(
                       'Private Financial Planning 분야에 흔치 않은 아이비리그 출신의 Financial Advisor로써',
                       'As a rare Ivy League-educated Financial Advisor in Private Financial Planning'
@@ -77,7 +77,7 @@ const Home: React.FC = () => {
                       '회계, 세무영역에서의 전문가로써의 역량을 최대한 발휘하여',
                       'and expertise in accounting and taxation'
                     )}</li>
-                  </ol>
+                  </ul>
                   <p className="mt-2">
                     {t(
                       '저의 이익보다는 고객의 이익을 우선해야하는 Fiduciary Investment Advisor로써의 책임을 다하겠습니다.',
