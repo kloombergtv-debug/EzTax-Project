@@ -31,8 +31,8 @@ const Home: React.FC = () => {
               <div className="text-sm text-slate-600 leading-relaxed mb-6 space-y-4" style={{ fontFamily: '"Noto Sans KR", "Apple SD Gothic Neo", -apple-system, sans-serif' }}>
                 <p>
                   {t(
-                    '미국인의 평균 수입 대비 저축률은 4~5% 정도입니다. 그러나 연구 결과 퇴직시점에서 그 정도의 저축으로는 아무리 투자를 잘한다고 해도 현재 누리는 life style을 유지할 수 없으며 연령별로 차이는 있지만 적어도 20%는 저축을 해야 그 때부터 "리스크대비 투자수익률 극대화"가 의미가 있다고 합니다.',
-                    'The average American saving rate is only 4-5% of income. However, research shows that even with excellent investment returns, this level of saving cannot maintain your current lifestyle in retirement. While it varies by age, you need to save at least 20% before "maximizing risk-adjusted returns" becomes meaningful.'
+                    '미국인의 수입 대비 저축률은 평균 4~5% 정도 이며 한국도 비슷합니다. 그러나 연구 결과 퇴직시점에서 그 정도의 저축으로는 아무리 투자를 잘한다고 해도 현재 누리는 life style을 유지할 수 없으며 연령별로 차이는 있지만 적어도 20%는 저축을 해야 그 때부터 "리스크대비 투자수익률 극대화"가 의미가 있다고 합니다.',
+                    'The average saving rate is about 4-5% of income in both the U.S. and Korea. However, research shows that even with excellent investment returns, this level of saving cannot maintain your current lifestyle in retirement. While it varies by age, you need to save at least 20% before "maximizing risk-adjusted returns" becomes meaningful.'
                   )}
                 </p>
                 <p>
