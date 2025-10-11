@@ -26,11 +26,12 @@ const Home: React.FC = () => {
                 Rethink Wealth LLC
               </p>
               
-              <h2 className="text-lg md:text-xl font-medium text-slate-700 leading-relaxed mb-6" style={{ fontFamily: '"Noto Sans KR", "Apple SD Gothic Neo", -apple-system, sans-serif', letterSpacing: '-0.02em' }}>
-                안녕하십니까. 고객님이 매일 편안한 마음으로 잠을 청할수 있도록, 불확실한 내일로부터 가족과 꿈을 지켜드리는 <span className="text-primary font-semibold">전인적 (financial planning & holistic wealth) 재정 관리사 지대현</span>입니다.
+              <h2 className="text-lg md:text-xl font-medium text-slate-700 leading-relaxed mb-4" style={{ fontFamily: '"Noto Sans KR", "Apple SD Gothic Neo", -apple-system, sans-serif', letterSpacing: '-0.02em' }}>
+                <span className="text-primary font-semibold">Empower Your Financial Journey</span> With Tailored Financial Services to Help You Achieve Your Goals For A Prosperous Future
               </h2>
               <p className="text-base md:text-lg text-slate-600 leading-relaxed mb-6" style={{ fontFamily: '"Noto Sans KR", "Apple SD Gothic Neo", -apple-system, sans-serif', letterSpacing: '-0.01em' }}>
-                Income protection, investment, retirement and estate planning 같은 까다롭고 민감한 재정 문제는 <span className="text-primary font-semibold">아이비리그 출신 금융 전문가</span>인 저와 저희 팀에게 의지하시고, 고객님께서는 <span className="text-primary font-semibold">더 큰 꿈</span>과 <span className="text-primary font-semibold">의미 있는 삶</span>에 집중하십시오.
+                <span className="text-primary font-semibold">당신의 재정 여정에 날개를 달아드립니다.</span><br/>
+                맞춤형 금융 서비스로 목표를 이루고, 더 풍요로운 미래를 함께 설계하세요
               </p>
               <div>
                 <span 
