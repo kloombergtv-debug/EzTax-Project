@@ -37,7 +37,7 @@ const Home: React.FC = () => {
                   <p className="font-semibold text-primary mb-2">Rethink Wealth FA는</p>
                   <ol className="list-decimal list-inside space-y-1 ml-2">
                     <li>고객님과 고객님 가족이 갑작스런 빈곤에 빠지지 않도록 치명적 리스크(Critical Risks)를 대비토록 준비해 드리고</li>
-                    <li>충분한 Saving과 투자를 통해 누리고자 하시는 퇴직후에도 Life Style을 유지하실 수 있도록 설계하며</li>
+                    <li>충분한 Saving과 투자를 통해 퇴직후에도 누리고자 하시는 Life Style을 최대한 누리실 수 있도록 설계하며</li>
                     <li>은퇴후 소득을 어떻게 받을지, 또 세금 문제와 상속 계획을 어떻게 할지 조언해드립니다.</li>
                   </ol>
                 </div>
