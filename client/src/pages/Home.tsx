@@ -174,22 +174,26 @@ const Home: React.FC = () => {
           <CardContent className="pt-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
               <div className="bg-white p-6 rounded-lg border border-gray-200">
-                <h4 className="font-semibold text-lg text-primary-dark mb-3">📚 주요 이력</h4>
+                <h4 className="font-semibold text-lg text-primary-dark mb-3">
+                  📚 {t('주요 이력', 'Career Highlights')}
+                </h4>
                 <ul className="mb-6 space-y-2">
-                  <li>💼 현 Rethink Wealth 재정관리사</li>
-                  <li>📊 FINRA Series 65 투자자문사</li>
-                  <li>🧾 IRS 공인 세무사 (Enrolled Agent)</li>
-                  <li>🏭 한화에어로스페이스 재무담당 상무</li>
-                  <li>💊 동아제약 IR/PR 담당 이사</li>
-                  <li>🏦 교보생명 – 재무실부장</li>
-                  <li>🏢 LG전자 – IR팀 과장</li>
-                  <li>📈 Nomura Securities – 애널리스트</li>
+                  <li>💼 {t('현 Rethink Wealth 재정관리사', 'Current Financial Advisor at Rethink Wealth')}</li>
+                  <li>📊 {t('FINRA Series 65 투자자문사', 'FINRA Series 65 Investment Advisor')}</li>
+                  <li>🧾 {t('IRS 공인 세무사 (Enrolled Agent)', 'IRS Enrolled Agent (EA)')}</li>
+                  <li>🏭 {t('한화에어로스페이스 재무담당 상무', 'Executive Director of Finance, Hanwha Aerospace')}</li>
+                  <li>💊 {t('동아제약 IR/PR 담당 이사', 'Director of IR/PR, Dong-A Pharmaceutical')}</li>
+                  <li>🏦 {t('교보생명 – 재무실부장', 'General Manager of Finance, Kyobo Life Insurance')}</li>
+                  <li>🏢 {t('LG전자 – IR팀 과장', 'Manager of IR Team, LG Electronics')}</li>
+                  <li>📈 {t('Nomura Securities – 애널리스트', 'Analyst, Nomura Securities')}</li>
                 </ul>
                 
-                <h4 className="font-semibold text-lg text-primary-dark mb-3">🎓 학력</h4>
+                <h4 className="font-semibold text-lg text-primary-dark mb-3">
+                  🎓 {t('학력', 'Education')}
+                </h4>
                 <ul className="space-y-2">
-                  <li>🎓 U Penn – 경제학</li>
-                  <li>🎓 연세대학교 국제대학원 – MBA</li>
+                  <li>🎓 {t('U Penn – 경제학', 'University of Pennsylvania – Economics')}</li>
+                  <li>🎓 {t('연세대학교 국제대학원 – MBA', 'Yonsei Graduate School of International Studies – MBA')}</li>
                 </ul>
               </div>
               <div className="bg-white p-6 rounded-lg border border-gray-200">
@@ -200,14 +204,14 @@ const Home: React.FC = () => {
                   🏢 Rethink Wealth LLC
                 </h4>
                 <ul className="space-y-2 text-sm text-gray-700">
-                  <li>📍 <strong>본사/지사:</strong> 텍사스주 오스틴(Austin), 포트워스(Fort Worth), 휴스턴(Houston) 등에 사무소 보유</li>
-                  <li>💼 <strong>업종:</strong> 전인적(financial planning & holistic wealth) 금융 계획, 자산 관리, 리스크 관리, 보험 등 종합 재무 서비스 제공</li>
-                  <li>💡 <strong>철학/방식:</strong> "재정적 균형(life & money balance)"을 중요시하며, 각 개인의 목표와 가치에 맞게 재정 계획을 맞춤 설계</li>
-                  <li>⚖️ <strong>독립 자문사:</strong> Client의 최선 이익(fiduciary duty)을 지향</li>
-                  <li>🤝 <strong>파트너십:</strong> 2023년 9월부로 Summit Financial과 파트너십을 맺어, Summit의 투자 전략 팀 등이 Rethink Wealth의 재정 관리 서비스를 보강하는 구조로 운영 중</li>
-                  <li>💰 <strong>투자 자산 관리(AUM):</strong> 7억 3,400만 달러</li>
-                  <li>💵 <strong>현금 가치 자산(Cash Value AUM):</strong> 6억 9,700만 달러 이상</li>
-                  <li>🛡️ <strong>보험 관련:</strong> Death Benefit, Disability Benefit 등</li>
+                  <li>📍 <strong>{t('본사/지사:', 'Offices:')}</strong> {t('텍사스주 오스틴(Austin), 포트워스(Fort Worth), 휴스턴(Houston) 등에 사무소 보유', 'Austin, Fort Worth, Houston, Texas')}</li>
+                  <li>💼 <strong>{t('업종:', 'Services:')}</strong> {t('전인적(financial planning & holistic wealth) 금융 계획, 자산 관리, 리스크 관리, 보험 등 종합 재무 서비스 제공', 'Comprehensive financial planning, wealth management, risk management, insurance, and holistic wealth services')}</li>
+                  <li>💡 <strong>{t('철학/방식:', 'Philosophy:')}</strong> {t('"재정적 균형(life & money balance)"을 중요시하며, 각 개인의 목표와 가치에 맞게 재정 계획을 맞춤 설계', 'Emphasizes "life & money balance" with personalized financial planning tailored to individual goals and values')}</li>
+                  <li>⚖️ <strong>{t('독립 자문사:', 'Independent Advisory:')}</strong> {t("Client의 최선 이익(fiduciary duty)을 지향", "Committed to fiduciary duty for client's best interests")}</li>
+                  <li>🤝 <strong>{t('파트너십:', 'Partnership:')}</strong> {t('2023년 9월부로 Summit Financial과 파트너십을 맺어, Summit의 투자 전략 팀 등이 Rethink Wealth의 재정 관리 서비스를 보강하는 구조로 운영 중', 'Since September 2023, partnered with Summit Financial to enhance services with their investment strategy team')}</li>
+                  <li>💰 <strong>{t('투자 자산 관리(AUM):', 'Assets Under Management (AUM):')}</strong> {t('7억 3,400만 달러', '$734 million')}</li>
+                  <li>💵 <strong>{t('현금 가치 자산(Cash Value AUM):', 'Cash Value AUM:')}</strong> {t('6억 9,700만 달러 이상', 'Over $697 million')}</li>
+                  <li>🛡️ <strong>{t('보험 관련:', 'Insurance:')}</strong> {t('Death Benefit, Disability Benefit 등', 'Death Benefit, Disability Benefit, etc.')}</li>
                 </ul>
               </div>
             </div>
@@ -246,11 +250,11 @@ const Home: React.FC = () => {
                   className="bg-blue-600 hover:bg-blue-700 text-white font-bold w-full sm:w-64"
                   onClick={() => navigate('/personal-info')}
                 >
-                  세금진단(AI절세방안)
+                  {t('세금진단(AI절세방안)', 'Tax Diagnosis (AI Tax Saving)')}
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>가입없이도 세금을 계산해볼수 있습니다</p>
+                <p>{t('가입없이도 세금을 계산해볼수 있습니다', 'Calculate your taxes without registration')}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -260,7 +264,7 @@ const Home: React.FC = () => {
             className="bg-black hover:bg-gray-800 text-white font-bold w-full sm:w-64"
             onClick={() => navigate('/retirement-score')}
           >
-            은퇴준비상태진단
+            {t('은퇴준비상태진단', 'Retirement Readiness Assessment')}
           </Button>
         </div>
       </section>
