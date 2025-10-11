@@ -17,8 +17,8 @@ const Home: React.FC = () => {
     <div className="max-w-5xl mx-auto">
       <section className="mb-4 py-12 bg-blue-50 rounded-lg">
         <div className="max-w-5xl mx-auto px-4">
-          <div className="flex flex-col lg:flex-row gap-8 lg:items-end">
-            <div className="text-center lg:text-left flex-1">
+          <div className="flex flex-col lg:flex-row gap-8" style={{ alignItems: 'flex-end' }}>
+            <div className="text-center lg:text-left flex-1" style={{ alignSelf: 'flex-end' }}>
               <h1 className="text-lg md:text-xl font-medium text-slate-700 leading-relaxed mb-6" style={{ fontFamily: '"Noto Sans KR", "Apple SD Gothic Neo", -apple-system, sans-serif', letterSpacing: '-0.02em' }}>
                 안녕하십니까. 고객님이 매일 편안한 마음으로 잠을 청할수 있도록, <br />
                 불확실한 내일로부터 가족과 꿈을 지켜드리는 <span className="text-primary font-semibold">전인적 (financial planning & holistic wealth) 재정 관리사 지대현</span>입니다.
@@ -37,7 +37,7 @@ const Home: React.FC = () => {
                 </span>
               </div>
             </div>
-            <div className="flex justify-center lg:justify-end">
+            <div className="flex justify-center lg:justify-end" style={{ alignSelf: 'flex-end' }}>
               <img 
                 src="/ceo-profile-no-bg.png" 
                 alt="CEO Profile"
