@@ -26,14 +26,6 @@ const Home: React.FC = () => {
                 Rethink Wealth LLC
               </p>
               
-              <h2 className="text-lg md:text-xl font-medium text-slate-700 leading-relaxed mb-4" style={{ fontFamily: '"Noto Sans KR", "Apple SD Gothic Neo", -apple-system, sans-serif', letterSpacing: '-0.02em' }}>
-                <span className="text-primary font-semibold">Empower Your Financial Journey</span> With Tailored Financial Services to Help You Achieve Your Goals For A Prosperous Future
-              </h2>
-              <p className="text-base md:text-lg text-slate-600 leading-relaxed mb-6" style={{ fontFamily: '"Noto Sans KR", "Apple SD Gothic Neo", -apple-system, sans-serif', letterSpacing: '-0.01em' }}>
-                <span className="text-primary font-semibold">당신의 재정 여정에 날개를 달아드립니다.</span><br/>
-                맞춤형 금융 서비스로 목표를 이루고, 더 풍요로운 미래를 함께 설계하세요
-              </p>
-              
               <div className="text-sm text-slate-600 leading-relaxed mb-6 space-y-4" style={{ fontFamily: '"Noto Sans KR", "Apple SD Gothic Neo", -apple-system, sans-serif' }}>
                 <p>
                   미국인의 수입 대비 저축률은 4~5% 정도입니다. 그러나 연구 결과 퇴직시점에서 그 정도의 저축으로는 아무리 투자를 잘한다고 해도 현재 누리는 life style을 유지할 수 없으며 연령별로 차이는 있지만 적어도 20%는 저축을 해야 그 때부터 "리스크대비 투자수익률 극대화"가 의미가 있다고 합니다.
