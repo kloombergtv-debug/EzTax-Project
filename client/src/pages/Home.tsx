@@ -17,22 +17,17 @@ const Home: React.FC = () => {
     <div className="max-w-5xl mx-auto">
       <section className="mb-4 py-12 bg-blue-50 rounded-lg">
         <div className="max-w-5xl mx-auto px-4">
-          {/* 제목 섹션 */}
-          <div className="mb-8">
-            <h1 className="text-2xl font-bold text-slate-800 mb-2" style={{ fontFamily: '"Noto Sans KR", "Apple SD Gothic Neo", -apple-system, sans-serif' }}>
-              지대현 Financial Advisor/세무사(EA)
-            </h1>
-            <p className="text-lg text-slate-600" style={{ fontFamily: '"Noto Sans KR", "Apple SD Gothic Neo", -apple-system, sans-serif' }}>
-              Rethink Wealth LLC
-            </p>
-          </div>
-
-          {/* 인사말 + 사진 섹션 */}
           <div className="flex flex-col lg:flex-row gap-8 items-end">
             <div className="text-left flex-1">
+              <h1 className="text-2xl font-bold text-slate-800 mb-2" style={{ fontFamily: '"Noto Sans KR", "Apple SD Gothic Neo", -apple-system, sans-serif' }}>
+                지대현 Financial Advisor/세무사(EA)
+              </h1>
+              <p className="text-lg text-slate-600 mb-8" style={{ fontFamily: '"Noto Sans KR", "Apple SD Gothic Neo", -apple-system, sans-serif' }}>
+                Rethink Wealth LLC
+              </p>
+              
               <h2 className="text-lg md:text-xl font-medium text-slate-700 leading-relaxed mb-6" style={{ fontFamily: '"Noto Sans KR", "Apple SD Gothic Neo", -apple-system, sans-serif', letterSpacing: '-0.02em' }}>
-                안녕하십니까. 고객님이 매일 편안한 마음으로 잠을 청할수 있도록, 
-                불확실한 내일로부터 가족과 꿈을 지켜드리는 <span className="text-primary font-semibold">전인적 (financial planning & holistic wealth) 재정 관리사 지대현</span>입니다.
+                안녕하십니까. 고객님이 매일 편안한 마음으로 잠을 청할수 있도록, 불확실한 내일로부터 가족과 꿈을 지켜드리는 <span className="text-primary font-semibold">전인적 (financial planning & holistic wealth) 재정 관리사 지대현</span>입니다.
               </h2>
               <p className="text-base md:text-lg text-slate-600 leading-relaxed mb-6" style={{ fontFamily: '"Noto Sans KR", "Apple SD Gothic Neo", -apple-system, sans-serif', letterSpacing: '-0.01em' }}>
                 Income protection, investment, retirement and estate planning 같은 까다롭고 민감한 재정 문제는 <span className="text-primary font-semibold">아이비리그 출신 금융 전문가</span>인 저와 저희 팀에게 의지하시고, 고객님께서는 <span className="text-primary font-semibold">더 큰 꿈</span>과 <span className="text-primary font-semibold">의미 있는 삶</span>에 집중하십시오.
