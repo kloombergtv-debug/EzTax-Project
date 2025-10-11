@@ -44,7 +44,7 @@ const Home: React.FC = () => {
                 <div>
                   <p className="font-semibold text-primary mb-2">특히 저 지대현 FA는</p>
                   <ol className="list-decimal list-inside space-y-1 ml-2">
-                    <li>흔치 않은 아이비리그 출신의 재정관리자로써</li>
+                    <li>흔치 않은 아이비리그 출신의 Financial Advisor로써</li>
                     <li>20년이 넘도록 금융시장과 투자관련 분야에서 일해온 경험과</li>
                     <li>회계, 세무영역에서의 전문가로써의 역량을 최대한 발휘하여</li>
                   </ol>
