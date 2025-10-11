@@ -48,7 +48,7 @@ const Home: React.FC = () => {
               <img 
                 src="/ceo-profile-no-bg.png" 
                 alt="CEO Profile"
-                className="w-40 h-auto object-cover cursor-pointer hover:scale-105 transition-transform"
+                className="w-48 h-auto object-cover cursor-pointer hover:scale-105 transition-transform"
                 onClick={() => navigate('/about')}
               />
             </div>
