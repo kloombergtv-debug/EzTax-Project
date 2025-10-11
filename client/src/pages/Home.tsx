@@ -5,11 +5,13 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { File, FileText, Clock, Shield } from 'lucide-react';
 import { useAuth } from '@/hooks/use-auth';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 
 const Home: React.FC = () => {
   const [, navigate] = useLocation();
   const { user } = useAuth();
+  const { t } = useLanguage();
   
   // 자동 데이터 주입 제거 - 사용자가 직접 입력하도록 변경
 
@@ -20,7 +22,7 @@ const Home: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:items-end">
             <div className="lg:col-span-2 text-left">
               <h1 className="text-2xl font-bold text-slate-800 mb-2" style={{ fontFamily: '"Noto Sans KR", "Apple SD Gothic Neo", -apple-system, sans-serif' }}>
-                지대현 Financial Advisor/세무사(EA)
+                {t('지대현 Financial Advisor/세무사(EA)', 'Dae Hyun Jee, Financial Advisor/EA')}
               </h1>
               <p className="text-lg text-slate-600 mb-8" style={{ fontFamily: '"Noto Sans KR", "Apple SD Gothic Neo", -apple-system, sans-serif' }}>
                 Rethink Wealth LLC

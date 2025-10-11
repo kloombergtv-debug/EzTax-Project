@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import Logo from './Logo';
 import { useToast } from "@/hooks/use-toast";
-import { HelpCircle, Save, LogIn, LogOut, User, RefreshCcw, ClipboardCheck, Shield, Home, DollarSign, PiggyBank, FileText, CreditCard, Calculator, Eye, Lock, MessageSquare } from 'lucide-react';
+import { HelpCircle, Save, LogIn, LogOut, User, RefreshCcw, ClipboardCheck, Shield, Home, DollarSign, PiggyBank, FileText, CreditCard, Calculator, Eye, Lock, MessageSquare, Languages } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useLocation } from 'wouter';
 // import { useTaxContext } from '@/context/TaxContext';
 import { useAuth } from '@/hooks/use-auth';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { 
   AlertDialog,
   AlertDialogAction,
@@ -25,6 +26,7 @@ const Header: React.FC = () => {
   // const taxContext = useTaxContext();
   // const { taxData, saveTaxReturn, resetToZero, updateTaxData } = taxContext || {};
   const { user, logoutMutation } = useAuth();
+  const { language, setLanguage } = useLanguage();
   const [isResetting, setIsResetting] = useState(false);
 
   const handleSaveProgress = async () => {
@@ -134,6 +136,17 @@ const Header: React.FC = () => {
         </nav>
 
         <div className="flex items-center space-x-4">
+          {/* Language Toggle Button */}
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-white hover:text-gray-300 flex items-center gap-1"
+            onClick={() => setLanguage(language === 'ko' ? 'en' : 'ko')}
+          >
+            <Languages className="h-4 w-4" />
+            <span className="text-xs">{language === 'ko' ? 'EN' : '한'}</span>
+          </Button>
+
           {user ? (
             <div className="flex items-center gap-2">
               <div className="hidden md:flex items-center text-sm font-medium">

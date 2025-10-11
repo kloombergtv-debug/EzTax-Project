@@ -46,6 +46,7 @@ import BoardDetail from "@/pages/BoardDetail";
 import { AuthProvider } from "@/hooks/use-auth";
 import { ProtectedRoute } from "@/lib/protected-route";
 import { TaxProvider } from "@/context/TaxContext";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 
 function Router() {
   return (
@@ -97,16 +98,18 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <TaxProvider>
-          <TooltipProvider>
-            <div className="flex flex-col min-h-screen">
-              <Header />
-              <main className="py-8 flex-grow">
-                <Router />
-              </main>
-              <Footer />
-            </div>
-            <Toaster />
-          </TooltipProvider>
+          <LanguageProvider>
+            <TooltipProvider>
+              <div className="flex flex-col min-h-screen">
+                <Header />
+                <main className="py-8 flex-grow">
+                  <Router />
+                </main>
+                <Footer />
+              </div>
+              <Toaster />
+            </TooltipProvider>
+          </LanguageProvider>
         </TaxProvider>
       </AuthProvider>
     </QueryClientProvider>
