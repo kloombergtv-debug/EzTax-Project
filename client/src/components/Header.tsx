@@ -26,7 +26,7 @@ const Header: React.FC = () => {
   // const taxContext = useTaxContext();
   // const { taxData, saveTaxReturn, resetToZero, updateTaxData } = taxContext || {};
   const { user, logoutMutation } = useAuth();
-  const { language, setLanguage } = useLanguage();
+  const { language, setLanguage, t } = useLanguage();
   const [isResetting, setIsResetting] = useState(false);
 
   const handleSaveProgress = async () => {
@@ -82,7 +82,7 @@ const Header: React.FC = () => {
             className={`text-xs ${location === '/services' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'text-white hover:text-gray-300'}`}
             onClick={() => navigate('/services')}
           >
-            서비스
+            {t('서비스', 'Services')}
           </Button>
           <Button 
             variant={location === '/about' ? "default" : "ghost"} 
@@ -90,7 +90,7 @@ const Header: React.FC = () => {
             className={`text-xs ${location === '/about' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'text-white hover:text-gray-300'}`}
             onClick={() => navigate('/about')}
           >
-            소개
+            {t('소개', 'About')}
           </Button>
           <Button 
             variant={location === '/personal-info' ? "default" : "ghost"} 
@@ -98,7 +98,7 @@ const Header: React.FC = () => {
             className={`text-xs ${location === '/personal-info' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'text-white hover:text-gray-300'}`}
             onClick={() => navigate('/personal-info')}
           >
-            세금진단
+            {t('세금진단', 'Tax Diagnosis')}
           </Button>
           <Button 
             variant={location === '/retirement-score' ? "default" : "ghost"} 
@@ -106,7 +106,7 @@ const Header: React.FC = () => {
             className={`text-xs ${location === '/retirement-score' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'text-white hover:text-gray-300'}`}
             onClick={() => navigate('/retirement-score')}
           >
-            은퇴준비
+            {t('은퇴준비', 'Retirement')}
           </Button>
           <Button 
             variant={location === '/residency-checker' ? "default" : "ghost"} 
@@ -114,7 +114,7 @@ const Header: React.FC = () => {
             className={`text-xs ${location === '/residency-checker' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'text-white hover:text-gray-300'}`}
             onClick={() => navigate('/residency-checker')}
           >
-            거주자확인
+            {t('거주자확인', 'Residency')}
           </Button>
           <Button 
             variant={location === '/capital-gains' ? "default" : "ghost"} 
@@ -122,7 +122,7 @@ const Header: React.FC = () => {
             className={`text-xs ${location === '/capital-gains' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'text-white hover:text-gray-300'}`}
             onClick={() => navigate('/capital-gains')}
           >
-            자본이득
+            {t('자본이득', 'Capital Gains')}
           </Button>
           <Button 
             variant={location === '/board' ? "default" : "ghost"} 
@@ -131,7 +131,7 @@ const Header: React.FC = () => {
             onClick={() => navigate('/board')}
           >
             <MessageSquare className="h-4 w-4" />
-            게시판
+            {t('게시판', 'Board')}
           </Button>
         </nav>
 
@@ -161,7 +161,7 @@ const Header: React.FC = () => {
                   onClick={() => navigate('/admin')}
                 >
                   <Shield className="h-4 w-4 mr-1" />
-                  관리자
+                  {t('관리자', 'Admin')}
                 </Button>
               )}
 
@@ -172,7 +172,7 @@ const Header: React.FC = () => {
                 onClick={handleLogout}
               >
                 <LogOut className="h-4 w-4 mr-1" />
-                <span>로그아웃(Logout)</span>
+                <span>{t('로그아웃', 'Logout')}</span>
               </Button>
             </div>
           ) : (
@@ -184,7 +184,7 @@ const Header: React.FC = () => {
                 onClick={handleLogin}
               >
                 <LogIn className="h-4 w-4 mr-1" />
-                <span>로그인(Login)</span>
+                <span>{t('로그인', 'Login')}</span>
               </Button>
               <Button 
                 variant="default" 
@@ -193,7 +193,7 @@ const Header: React.FC = () => {
                 onClick={() => navigate('/auth?tab=register')}
               >
                 <User className="h-4 w-4 mr-1" />
-                <span>회원가입</span>
+                <span>{t('회원가입', 'Sign Up')}</span>
               </Button>
             </div>
           )}
