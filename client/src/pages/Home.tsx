@@ -138,7 +138,12 @@ const Home: React.FC = () => {
                 </ul>
               </div>
               <div className="bg-white p-6 rounded-lg border border-gray-200">
-                <h4 className="font-semibold text-lg text-primary-dark mb-3">🏢 Rethink Wealth LLC</h4>
+                <h4 
+                  className="font-semibold text-lg text-primary-dark mb-3 cursor-pointer hover:text-primary transition-colors"
+                  onClick={() => window.open('https://rethinkwealth.com', '_blank')}
+                >
+                  🏢 Rethink Wealth LLC
+                </h4>
                 <ul className="space-y-2 text-sm text-gray-700">
                   <li>📍 <strong>본사/지사:</strong> 텍사스주 오스틴(Austin), 포트워스(Fort Worth), 휴스턴(Houston) 등에 사무소 보유</li>
                   <li>💼 <strong>업종:</strong> 전인적(financial planning & holistic wealth) 금융 계획, 자산 관리, 리스크 관리, 보험 등 종합 재무 서비스 제공</li>
