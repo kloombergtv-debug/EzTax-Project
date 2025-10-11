@@ -1,4 +1,4 @@
-import { users, type User, type InsertUser, taxReturns, type TaxReturn, type InsertTaxReturn, retirementAssessments, type RetirementAssessment, type InsertRetirementAssessment, boardPosts, type BoardPost, type InsertBoardPost } from "@shared/schema";
+import { users, type User, type InsertUser, taxReturns, type TaxReturn, type InsertTaxReturn, retirementAssessments, type RetirementAssessment, type InsertRetirementAssessment, boardPosts, type BoardPost, type InsertBoardPost, boardReplies, type BoardReply, type InsertBoardReply } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, sql } from "drizzle-orm";
 
@@ -43,6 +43,13 @@ export interface IStorage {
   updateBoardPost(id: number, post: Partial<BoardPost>): Promise<BoardPost>;
   deleteBoardPost(id: number): Promise<void>;
   incrementBoardPostViews(id: number): Promise<void>;
+  
+  // Board reply methods
+  getBoardReply(id: number): Promise<BoardReply | undefined>;
+  getBoardRepliesByPostId(postId: number): Promise<BoardReply[]>;
+  createBoardReply(reply: InsertBoardReply): Promise<BoardReply>;
+  updateBoardReply(id: number, reply: Partial<BoardReply>): Promise<BoardReply>;
+  deleteBoardReply(id: number): Promise<void>;
 }
 
 export class DbStorage implements IStorage {
@@ -364,6 +371,75 @@ export class DbStorage implements IStorage {
         updatedAt: new Date()  // Use Date object for timestamp column
       })
       .where(eq(boardPosts.id, id));
+  }
+
+  // Board Reply Methods
+  async getBoardReply(id: number): Promise<BoardReply | undefined> {
+    const [reply] = await db.select().from(boardReplies).where(eq(boardReplies.id, id));
+    return reply || undefined;
+  }
+
+  async getBoardRepliesByPostId(postId: number): Promise<BoardReply[]> {
+    return await db.select().from(boardReplies)
+      .where(eq(boardReplies.postId, postId))
+      .orderBy(boardReplies.createdAt);
+  }
+
+  async createBoardReply(insertReply: InsertBoardReply): Promise<BoardReply> {
+    // Create reply
+    const [reply] = await db
+      .insert(boardReplies)
+      .values({
+        ...insertReply
+      })
+      .returning();
+    
+    // Update post reply count
+    await db
+      .update(boardPosts)
+      .set({ 
+        replies: sql`${boardPosts.replies} + 1`,
+        updatedAt: new Date()
+      })
+      .where(eq(boardPosts.id, insertReply.postId));
+    
+    return reply;
+  }
+
+  async updateBoardReply(id: number, reply: Partial<BoardReply>): Promise<BoardReply> {
+    const [updatedReply] = await db
+      .update(boardReplies)
+      .set({
+        ...reply,
+        updatedAt: new Date()
+      })
+      .where(eq(boardReplies.id, id))
+      .returning();
+    
+    if (!updatedReply) {
+      throw new Error(`답글 ID ${id}를 찾을 수 없습니다`);
+    }
+    
+    return updatedReply;
+  }
+
+  async deleteBoardReply(id: number): Promise<void> {
+    // Get reply to find post ID
+    const reply = await this.getBoardReply(id);
+    
+    if (reply) {
+      // Delete reply
+      await db.delete(boardReplies).where(eq(boardReplies.id, id));
+      
+      // Decrease post reply count
+      await db
+        .update(boardPosts)
+        .set({ 
+          replies: sql`GREATEST(${boardPosts.replies} - 1, 0)`,
+          updatedAt: new Date()
+        })
+        .where(eq(boardPosts.id, reply.postId));
+    }
   }
 }
 

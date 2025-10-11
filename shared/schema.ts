@@ -535,6 +535,27 @@ export const insertBoardPostSchema = createInsertSchema(boardPosts).omit({
 export type InsertBoardPost = InferInsertModel<typeof boardPosts>;
 export type BoardPost = InferSelectModel<typeof boardPosts>;
 
+// Board Replies Schema
+export const boardReplies = pgTable("board_replies", {
+  id: serial("id").primaryKey(),
+  postId: integer("post_id").notNull(),
+  userId: integer("user_id"),
+  content: text("content").notNull(),
+  authorId: text("author_id").notNull(),
+  authorName: text("author_name").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const insertBoardReplySchema = createInsertSchema(boardReplies).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type InsertBoardReply = InferInsertModel<typeof boardReplies>;
+export type BoardReply = InferSelectModel<typeof boardReplies>;
+
 // Retirement Assessment Interfaces
 export interface RetirementAssessmentData {
   currentAge: number;
