@@ -17,7 +17,7 @@ const Home: React.FC = () => {
     <div className="max-w-5xl mx-auto">
       <section className="mb-4 py-12 bg-blue-50 rounded-lg">
         <div className="max-w-5xl mx-auto px-4">
-          <div className="flex flex-col lg:flex-row gap-8 items-start">
+          <div className="flex flex-col lg:flex-row gap-8 items-center lg:items-start">
             <div className="text-left flex-1">
               <h1 className="text-2xl font-bold text-slate-800 mb-2" style={{ fontFamily: '"Noto Sans KR", "Apple SD Gothic Neo", -apple-system, sans-serif' }}>
                 지대현 Financial Advisor/세무사(EA)
