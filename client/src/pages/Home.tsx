@@ -49,7 +49,8 @@ const Home: React.FC = () => {
                     <li>회계, 세무영역에서의 전문가로써의 역량을 최대한 발휘하여</li>
                   </ol>
                   <p className="mt-2">
-                    저의 이익보다는 고객의 이익을 우선해야하는 Fiduciary Investment Advisor로써의 책임을 다하겠습니다. 감사합니다.
+                    저의 이익보다는 고객의 이익을 우선해야하는 Fiduciary Investment Advisor로써의 책임을 다하겠습니다.<br/>
+                    감사합니다.
                   </p>
                 </div>
               </div>
