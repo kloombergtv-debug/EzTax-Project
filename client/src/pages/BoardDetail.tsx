@@ -38,7 +38,7 @@ import {
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import { BoardPost } from "@shared/schema";
+import { BoardPost, BoardReply } from "@shared/schema";
 import rehypeRaw from 'rehype-raw';
 
 // Safe Markdown renderer component
@@ -91,6 +91,9 @@ const BoardDetail = () => {
     category: ''
   });
   const [isEditPreviewMode, setIsEditPreviewMode] = useState(false);
+  const [replyContent, setReplyContent] = useState('');
+  const [editingReplyId, setEditingReplyId] = useState<number | null>(null);
+  const [editingReplyContent, setEditingReplyContent] = useState('');
   
   const { user } = useAuth();
   const { toast } = useToast();
@@ -101,6 +104,12 @@ const BoardDetail = () => {
     queryKey: [`/api/board/posts/${id}`],
     enabled: !!id
   });
+
+  // Fetch replies
+  const { data: replies = [], isLoading: isLoadingReplies } = useQuery({
+    queryKey: [`/api/board/posts/${id}/replies`],
+    enabled: !!id
+  }) as { data: BoardReply[]; isLoading: boolean };
 
   // Update post mutation
   const updatePostMutation = useMutation({
@@ -158,6 +167,88 @@ const BoardDetail = () => {
       toast({
         title: "삭제 실패",
         description: error.message || "게시글 삭제 중 오류가 발생했습니다.",
+        variant: "destructive",
+      });
+    }
+  });
+
+  // Create reply mutation
+  const createReplyMutation = useMutation({
+    mutationFn: async (content: string) => {
+      const response = await apiRequest({
+        url: `/api/board/posts/${id}/replies`,
+        method: 'POST',
+        body: { content }
+      });
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [`/api/board/posts/${id}/replies`] });
+      queryClient.invalidateQueries({ queryKey: [`/api/board/posts/${id}`] });
+      setReplyContent('');
+      toast({
+        title: "답글 작성 완료",
+        description: "답글이 성공적으로 작성되었습니다.",
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "답글 작성 실패",
+        description: error.message || "답글 작성 중 오류가 발생했습니다.",
+        variant: "destructive",
+      });
+    }
+  });
+
+  // Update reply mutation
+  const updateReplyMutation = useMutation({
+    mutationFn: async ({ replyId, content }: { replyId: number; content: string }) => {
+      const response = await apiRequest({
+        url: `/api/board/replies/${replyId}`,
+        method: 'PUT',
+        body: { content }
+      });
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [`/api/board/posts/${id}/replies`] });
+      setEditingReplyId(null);
+      setEditingReplyContent('');
+      toast({
+        title: "답글 수정 완료",
+        description: "답글이 성공적으로 수정되었습니다.",
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "답글 수정 실패",
+        description: error.message || "답글 수정 중 오류가 발생했습니다.",
+        variant: "destructive",
+      });
+    }
+  });
+
+  // Delete reply mutation
+  const deleteReplyMutation = useMutation({
+    mutationFn: async (replyId: number) => {
+      const response = await apiRequest({
+        url: `/api/board/replies/${replyId}`,
+        method: 'DELETE',
+      });
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [`/api/board/posts/${id}/replies`] });
+      queryClient.invalidateQueries({ queryKey: [`/api/board/posts/${id}`] });
+      toast({
+        title: "답글 삭제 완료",
+        description: "답글이 성공적으로 삭제되었습니다.",
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "답글 삭제 실패",
+        description: error.message || "답글 삭제 중 오류가 발생했습니다.",
         variant: "destructive",
       });
     }
@@ -330,6 +421,54 @@ const BoardDetail = () => {
   // Delete post handler
   const handleDelete = () => {
     deletePostMutation.mutate();
+  };
+
+  // Reply handlers
+  const handleReplySubmit = () => {
+    if (!user) {
+      toast({
+        title: "로그인 필요",
+        description: "답글을 작성하려면 로그인해주세요.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (replyContent.trim()) {
+      createReplyMutation.mutate(replyContent);
+    } else {
+      toast({
+        title: "입력 오류",
+        description: "답글 내용을 입력해주세요.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleReplyEdit = (reply: BoardReply) => {
+    setEditingReplyId(reply.id);
+    setEditingReplyContent(reply.content);
+  };
+
+  const handleReplyUpdate = (replyId: number) => {
+    if (editingReplyContent.trim()) {
+      updateReplyMutation.mutate({ replyId, content: editingReplyContent });
+    }
+  };
+
+  const handleReplyDelete = (replyId: number) => {
+    deleteReplyMutation.mutate(replyId);
+  };
+
+  const formatReplyDate = (dateString: string | Date) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('ko-KR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
   };
 
   if (isLoading) {
@@ -726,16 +865,152 @@ const BoardDetail = () => {
         </CardContent>
       </Card>
 
-      {/* Reply Section (placeholder) */}
+      {/* Reply Section */}
       <Card className="mt-8">
         <CardHeader>
-          <CardTitle>답글</CardTitle>
+          <CardTitle className="flex items-center">
+            <MessageSquare className="h-5 w-5 mr-2" />
+            답글 {replies.length > 0 && `(${replies.length})`}
+          </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-center py-8 text-gray-500">
-            <MessageSquare className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <p>답글 기능은 곧 추가될 예정입니다.</p>
+          {/* Reply Form */}
+          <div className="mb-6">
+            <Textarea
+              value={replyContent}
+              onChange={(e) => setReplyContent(e.target.value)}
+              placeholder={user ? "답글을 입력하세요..." : "답글을 작성하려면 로그인해주세요."}
+              disabled={!user}
+              className="mb-2"
+              data-testid="textarea-reply"
+            />
+            <div className="flex justify-end">
+              <Button 
+                onClick={handleReplySubmit}
+                disabled={!user || createReplyMutation.isPending}
+                data-testid="button-submit-reply"
+              >
+                {createReplyMutation.isPending ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                    작성 중...
+                  </>
+                ) : (
+                  "답글 작성"
+                )}
+              </Button>
+            </div>
           </div>
+
+          {/* Replies List */}
+          {isLoadingReplies ? (
+            <div className="text-center py-4">
+              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600 mx-auto"></div>
+            </div>
+          ) : replies.length === 0 ? (
+            <div className="text-center py-8 text-gray-500">
+              <MessageSquare className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+              <p>첫 번째 답글을 작성해보세요!</p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {replies.map((reply) => {
+                const canEditReply = user && (reply.userId === user.id || user.username === 'admin');
+                const isEditing = editingReplyId === reply.id;
+
+                return (
+                  <div key={reply.id} className="border rounded-lg p-4" data-testid={`reply-${reply.id}`}>
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center space-x-2 text-sm text-gray-600">
+                        <User className="h-4 w-4" />
+                        <span data-testid={`reply-author-${reply.id}`}>{reply.authorName}</span>
+                        <span>•</span>
+                        <Calendar className="h-4 w-4" />
+                        <span data-testid={`reply-date-${reply.id}`}>{formatReplyDate(reply.createdAt!)}</span>
+                      </div>
+                      {canEditReply && !isEditing && (
+                        <div className="flex items-center space-x-2">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleReplyEdit(reply)}
+                            data-testid={`button-edit-reply-${reply.id}`}
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                data-testid={`button-delete-reply-${reply.id}`}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>답글 삭제</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  정말로 이 답글을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>취소</AlertDialogCancel>
+                                <AlertDialogAction 
+                                  onClick={() => handleReplyDelete(reply.id)}
+                                  className="bg-red-600 hover:bg-red-700"
+                                  disabled={deleteReplyMutation.isPending}
+                                  data-testid={`button-confirm-delete-reply-${reply.id}`}
+                                >
+                                  {deleteReplyMutation.isPending ? "삭제 중..." : "삭제"}
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        </div>
+                      )}
+                    </div>
+                    {isEditing ? (
+                      <div className="space-y-2">
+                        <Textarea
+                          value={editingReplyContent}
+                          onChange={(e) => setEditingReplyContent(e.target.value)}
+                          className="mb-2"
+                          data-testid={`textarea-edit-reply-${reply.id}`}
+                        />
+                        <div className="flex justify-end space-x-2">
+                          <Button
+                            size="sm"
+                            onClick={() => handleReplyUpdate(reply.id)}
+                            disabled={updateReplyMutation.isPending}
+                            data-testid={`button-save-reply-${reply.id}`}
+                          >
+                            {updateReplyMutation.isPending ? "저장 중..." : "저장"}
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => {
+                              setEditingReplyId(null);
+                              setEditingReplyContent('');
+                            }}
+                            data-testid={`button-cancel-reply-${reply.id}`}
+                          >
+                            취소
+                          </Button>
+                        </div>
+                      </div>
+                    ) : (
+                      <p className="text-gray-700 whitespace-pre-wrap" data-testid={`reply-content-${reply.id}`}>
+                        {reply.content}
+                      </p>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
