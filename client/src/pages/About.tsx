@@ -215,7 +215,7 @@ export default function About() {
                     <li>💼 현 Rethink Wealth 재정관리사</li>
                     <li>📊 FINRA Series 65 투자자문사</li>
                     <li>🧾 IRS 공인 세무사 (Enrolled Agent)</li>
-                    <li>🏭 한화에어로스페이스 재무담당 상무</li>
+                    <li>🏭 한화에어로스페이스 재무IR담당 상무</li>
                     <li>💊 동아제약 IR/PR 담당 이사</li>
                     <li>🏦 교보생명 – 재무실부장</li>
                     <li>🏢 LG전자 – IR팀 과장</li>

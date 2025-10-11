@@ -181,7 +181,7 @@ const Home: React.FC = () => {
                   <li>💼 {t('현 Rethink Wealth 재정관리사', 'Current Financial Advisor at Rethink Wealth')}</li>
                   <li>📊 {t('FINRA Series 65 투자자문사', 'FINRA Series 65 Investment Advisor')}</li>
                   <li>🧾 {t('IRS 공인 세무사 (Enrolled Agent)', 'IRS Enrolled Agent (EA)')}</li>
-                  <li>🏭 {t('한화에어로스페이스 재무담당 상무', 'Executive Director of Finance, Hanwha Aerospace')}</li>
+                  <li>🏭 {t('한화에어로스페이스 재무IR담당 상무', 'Executive Director of Finance & IR, Hanwha Aerospace')}</li>
                   <li>💊 {t('동아제약 IR/PR 담당 이사', 'Director of IR/PR, Dong-A Pharmaceutical')}</li>
                   <li>🏦 {t('교보생명 – 재무실부장', 'General Manager of Finance, Kyobo Life Insurance')}</li>
                   <li>🏢 {t('LG전자 – IR팀 과장', 'Manager of IR Team, LG Electronics')}</li>
