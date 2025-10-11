@@ -36,7 +36,7 @@ const Home: React.FC = () => {
                   className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 cursor-pointer font-medium text-base transition-colors"
                   data-testid="link-services"
                 >
-                  재정관리사 (FA)가 하는일 더 자세히 알아보기
+                  재정관리사 (FA)가 하는일 자세히 알아보기
                   <span className="text-lg">→</span>
                 </span>
               </div>
