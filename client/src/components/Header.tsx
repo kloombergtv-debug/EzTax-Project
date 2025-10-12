@@ -112,7 +112,7 @@ const Header: React.FC = () => {
             variant="ghost"
             size="sm"
             className="text-xs text-white hover:text-gray-300"
-            onClick={() => window.open('https://best-ir.teachable.com/', '_blank', 'noopener,noreferrer')}
+            onClick={() => window.open('https://www.youtube.com/@BESTIR', '_blank', 'noopener,noreferrer')}
           >
             {t('금융교육', 'Financial Education')}
           </Button>
