@@ -201,7 +201,6 @@ export default function About() {
                 세무사/Financial Advisor
               </p>
               <div className="flex flex-wrap gap-2 justify-center lg:justify-start">
-                <Badge variant="outline" className="border-red-300 text-red-700 bg-red-50">FINRA Series 65</Badge>
                 <Badge variant="outline" className="border-blue-300 text-blue-700">IRS EA</Badge>
                 <Badge variant="outline" className="border-blue-300 text-blue-700">저자</Badge>
               </div>
@@ -213,7 +212,7 @@ export default function About() {
                   <h4 className="font-semibold text-blue-800 mb-3">📚 주요 이력</h4>
                   <ul className="text-sm text-blue-700 space-y-2">
                     <li>💼 현 Rethink Wealth 재정관리사</li>
-                    <li>📊 FINRA Series 65 투자자문사</li>
+                    <li>🎓 Midwest 대학 재무회계학 교수/연구원</li>
                     <li>🧾 IRS 공인 세무사 (Enrolled Agent)</li>
                     <li>🏭 한화에어로스페이스 재무IR담당 상무</li>
                     <li>💊 동아제약 IR/PR 담당 이사</li>

@@ -179,7 +179,7 @@ const Home: React.FC = () => {
                 </h4>
                 <ul className="mb-6 space-y-2">
                   <li>💼 {t('현 Rethink Wealth 재정관리사', 'Current Financial Advisor at Rethink Wealth')}</li>
-                  <li>📊 {t('FINRA Series 65 투자자문사', 'FINRA Series 65 Investment Advisor')}</li>
+                  <li>🎓 {t('Midwest 대학 재무회계학 교수/연구원', 'Professor/Researcher of Financial Accounting at Midwest University')}</li>
                   <li>🧾 {t('IRS 공인 세무사 (Enrolled Agent)', 'IRS Enrolled Agent (EA)')}</li>
                   <li>🏭 {t('한화에어로스페이스 재무IR담당 상무', 'Executive Director of Finance & IR, Hanwha Aerospace')}</li>
                   <li>💊 {t('동아제약 IR/PR 담당 이사', 'Director of IR/PR, Dong-A Pharmaceutical')}</li>

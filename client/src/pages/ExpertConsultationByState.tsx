@@ -39,7 +39,7 @@ const expertsByState = {
         hourlyRate: '$150-200',
         responseTime: '2시간 이내',
         bio: 'GTAX Consulting Group 대표이자 재미한인등록세무사협회(NAKAEA) 부회장으로 활동하고 있습니다. 서울대학교 법학박사 출신으로 홍익대학교·중앙대학교에서 강의하며, 대법원 판례평석위원회 위원을 역임했습니다.',
-        certifications: ['FINRA Series 65', 'IRS EA'],
+        certifications: ['IRS EA'],
         education: ['한국외국어대학교 법학 학사', '서울대학교 법학석사 (1990)', '서울대학교 법학박사 (1998)'],
         career: [
           'GTAX Consulting Group 대표 (2021~현재)',
