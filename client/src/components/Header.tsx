@@ -109,22 +109,6 @@ const Header: React.FC = () => {
             {t('은퇴준비', 'Retirement')}
           </Button>
           <Button 
-            variant={location === '/residency-checker' ? "default" : "ghost"} 
-            size="sm"
-            className={`text-xs ${location === '/residency-checker' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'text-white hover:text-gray-300'}`}
-            onClick={() => navigate('/residency-checker')}
-          >
-            {t('거주자확인', 'Residency')}
-          </Button>
-          <Button 
-            variant={location === '/capital-gains' ? "default" : "ghost"} 
-            size="sm"
-            className={`text-xs ${location === '/capital-gains' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'text-white hover:text-gray-300'}`}
-            onClick={() => navigate('/capital-gains')}
-          >
-            {t('자본이득', 'Capital Gains')}
-          </Button>
-          <Button 
             variant={location === '/board' ? "default" : "ghost"} 
             size="sm"
             className={`text-xs flex items-center gap-1 ${location === '/board' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'text-white hover:text-gray-300'}`}
