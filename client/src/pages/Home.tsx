@@ -22,7 +22,7 @@ const Home: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:items-end">
             <div className="lg:col-span-2 text-left">
               <h1 className="text-2xl font-bold text-slate-800 mb-2" style={{ fontFamily: '"Noto Sans KR", "Apple SD Gothic Neo", -apple-system, sans-serif' }}>
-                {t('지대현 재정관리사(Financial Advisor) 세무사(EA)', 'Dae Hyun Jee, Financial Advisor/EA')}
+                {t('지대현 재정관리사(Financial Advisor)/세무사(EA)', 'Dae Hyun Jee, Financial Advisor/EA')}
               </h1>
               <p className="text-lg text-slate-600 mb-8" style={{ fontFamily: '"Noto Sans KR", "Apple SD Gothic Neo", -apple-system, sans-serif' }}>
                 Rethink Wealth LLC
