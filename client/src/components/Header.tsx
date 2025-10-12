@@ -90,7 +90,7 @@ const Header: React.FC = () => {
             className={`text-xs ${location === '/about' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'text-white hover:text-gray-300'}`}
             onClick={() => navigate('/about')}
           >
-            {t('소개', 'About')}
+            {t('연락처', 'Contact')}
           </Button>
           <Button 
             variant={location === '/personal-info' ? "default" : "ghost"} 
