@@ -109,6 +109,14 @@ const Header: React.FC = () => {
             {t('은퇴준비', 'Retirement')}
           </Button>
           <Button 
+            variant="ghost"
+            size="sm"
+            className="text-xs text-white hover:text-gray-300"
+            onClick={() => window.open('https://best-ir.teachable.com/', '_blank', 'noopener,noreferrer')}
+          >
+            {t('금융교육', 'Financial Education')}
+          </Button>
+          <Button 
             variant={location === '/board' ? "default" : "ghost"} 
             size="sm"
             className={`text-xs flex items-center gap-1 ${location === '/board' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'text-white hover:text-gray-300'}`}
