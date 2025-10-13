@@ -402,7 +402,7 @@ export default function About() {
                 </div>
                 <div className="flex items-center justify-center gap-2">
                   <MailIcon className="h-5 w-5 text-primary" />
-                  <span>이메일 상담 가능</span>
+                  <span>이메일 (daehyun.jee@rethinkwealth.com) 상담</span>
                 </div>
               </div>
               <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
