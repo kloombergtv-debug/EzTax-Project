@@ -52,63 +52,28 @@ export default function WealthBuilder() {
   return (
     <div className="min-h-screen bg-white dark:bg-black py-4 px-4">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-4">
-          <h1 className="text-2xl font-bold text-black dark:text-white mb-1">
-            자산 증식 시뮬레이터
-          </h1>
-          <p className="text-sm text-gray-600 dark:text-gray-400">미래의 재정 목표를 시각화하고 계획하세요</p>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 mb-4">
-          <Card className="bg-gray-900 dark:bg-gray-800 text-white border-gray-800">
-            <CardContent className="py-3 px-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-gray-400 text-xs">예상 최종 자산</p>
-                  <p className="text-xl font-bold mt-0.5">${Math.round(finalWealth / 1000)}K</p>
-                </div>
-                <DollarSign className="h-6 w-6 text-gray-500" />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-gray-800 dark:bg-gray-700 text-white border-gray-700">
-            <CardContent className="py-3 px-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-gray-400 text-xs">시뮬레이션 기간</p>
-                  <p className="text-xl font-bold mt-0.5">{studyPeriod}년</p>
-                </div>
-                <TrendingUp className="h-6 w-6 text-gray-500" />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-gray-700 dark:bg-gray-600 text-white border-gray-600">
-            <CardContent className="py-3 px-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-gray-300 text-xs">연평균 수익률</p>
-                  <p className="text-xl font-bold mt-0.5">{returnRate}%</p>
-                </div>
-                <PiggyBank className="h-6 w-6 text-gray-400" />
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <Card className="shadow-xl border-gray-200 dark:border-gray-700">
-            <CardHeader className="bg-black dark:bg-gray-900 text-white">
-              <CardTitle className="flex items-center gap-2">
-                <Calculator className="h-5 w-5" />
-                계산 설정
-              </CardTitle>
-              <CardDescription className="text-gray-400">
-                소득과 지출 정보를 입력하세요
-              </CardDescription>
+            <CardHeader className="bg-black dark:bg-gray-900 text-white py-3">
+              <CardTitle className="text-xl">자산 증식 시뮬레이터</CardTitle>
+              <CardDescription className="text-gray-400 text-xs">미래의 재정 목표를 시각화하고 계획하세요</CardDescription>
             </CardHeader>
-            <CardContent className="pt-6 space-y-6">
+            <CardContent className="pt-4 space-y-4">
+              {/* 통계 카드들 */}
+              <div className="grid grid-cols-3 gap-2">
+                <div className="bg-gray-900 dark:bg-gray-800 text-white border border-gray-800 rounded-lg p-2">
+                  <p className="text-gray-400 text-xs">최종 자산</p>
+                  <p className="text-lg font-bold">${Math.round(finalWealth / 1000)}K</p>
+                </div>
+                <div className="bg-gray-800 dark:bg-gray-700 text-white border border-gray-700 rounded-lg p-2">
+                  <p className="text-gray-400 text-xs">기간</p>
+                  <p className="text-lg font-bold">{studyPeriod}년</p>
+                </div>
+                <div className="bg-gray-700 dark:bg-gray-600 text-white border border-gray-600 rounded-lg p-2">
+                  <p className="text-gray-300 text-xs">수익률</p>
+                  <p className="text-lg font-bold">{returnRate}%</p>
+                </div>
+              </div>
               <div className="space-y-4">
                 <div className="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
                   <h3 className="font-semibold text-black dark:text-white mb-4 flex items-center gap-2">
