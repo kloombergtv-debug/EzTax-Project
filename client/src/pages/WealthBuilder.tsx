@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, ReferenceLine } from 'recharts';
 import { TrendingUp, DollarSign, Calculator, PiggyBank } from 'lucide-react';
 
 interface WealthData {
@@ -54,6 +54,11 @@ export default function WealthBuilder() {
   }, [studyPeriod, yearOneIncome, incomeGrowthRate, returnRate, taxRate, debtRate, lifestyleRate, savingsRate]);
 
   const finalWealth = wealthData[wealthData.length - 1]?.wealth || 0;
+  
+  // Calculate max values for Y-axis domain
+  const maxWealth = Math.max(...wealthData.map(d => d.wealth));
+  const maxExpense = Math.max(...wealthData.map(d => Math.abs(d.taxes + d.debt + d.lifestyle)));
+  const yAxisMax = Math.max(maxWealth, maxExpense) * 1.1;
 
   return (
     <div className="min-h-screen bg-white dark:bg-black py-4 px-4">
@@ -248,10 +253,12 @@ export default function WealthBuilder() {
                       label={{ value: '연도', position: 'insideBottom', offset: -10, fill: '#374151' }}
                     />
                     <YAxis
+                      domain={[-yAxisMax, yAxisMax]}
                       tick={{ fill: '#6b7280', fontSize: 12 }}
                       tickFormatter={(value) => `$${(value / 1000).toFixed(0)}K`}
-                      label={{ value: '누적 자산 ($)', angle: -90, position: 'insideLeft', fill: '#374151' }}
+                      label={{ value: '금액 ($)', angle: -90, position: 'insideLeft', fill: '#374151' }}
                     />
+                    <ReferenceLine y={0} stroke="#000" strokeWidth={2} />
                     <Tooltip
                       formatter={(value: any) => [`$${value.toLocaleString()}`, '누적 자산']}
                       contentStyle={{
