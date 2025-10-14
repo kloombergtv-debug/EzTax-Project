@@ -294,25 +294,31 @@ export default function WealthBuilder() {
                       radius={[8, 8, 0, 0]}
                       maxBarSize={50}
                     />
-                    <Bar
-                      dataKey="taxes"
-                      stackId="negative"
-                      fill="#7F1D1D"
-                      radius={[0, 0, 8, 8]}
-                      maxBarSize={50}
-                    />
-                    <Bar
-                      dataKey="debt"
-                      stackId="negative"
-                      fill="#DC2626"
-                      maxBarSize={50}
-                    />
-                    <Bar
-                      dataKey="lifestyle"
-                      stackId="negative"
-                      fill="#EF4444"
-                      maxBarSize={50}
-                    />
+                    {taxRate > 0 && (
+                      <Bar
+                        dataKey="taxes"
+                        stackId="negative"
+                        fill="#7F1D1D"
+                        radius={[0, 0, 8, 8]}
+                        maxBarSize={50}
+                      />
+                    )}
+                    {debtRate > 0 && (
+                      <Bar
+                        dataKey="debt"
+                        stackId="negative"
+                        fill="#DC2626"
+                        maxBarSize={50}
+                      />
+                    )}
+                    {lifestyleRate > 0 && (
+                      <Bar
+                        dataKey="lifestyle"
+                        stackId="negative"
+                        fill="#EF4444"
+                        maxBarSize={50}
+                      />
+                    )}
                   </BarChart>
                 </ResponsiveContainer>
               </div>
