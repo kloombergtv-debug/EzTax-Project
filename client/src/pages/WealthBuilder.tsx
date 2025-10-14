@@ -252,7 +252,6 @@ export default function WealthBuilder() {
                       textAnchor="end"
                       height={80}
                       tick={{ fill: '#6b7280', fontSize: 12 }}
-                      label={{ value: '연도', position: 'insideBottom', offset: -10, fill: '#374151' }}
                     />
                     <YAxis
                       domain={[-yAxisMax, yAxisMax]}
