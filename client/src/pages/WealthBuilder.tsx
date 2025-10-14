@@ -61,6 +61,10 @@ export default function WealthBuilder() {
   const maxWealth = Math.max(...wealthData.map(d => d.wealth));
   const maxExpense = Math.max(...wealthData.map(d => Math.abs(d.taxes + d.debt + d.lifestyle)));
   const yAxisMax = Math.max(maxWealth, maxExpense) * 1.1;
+  
+  // 지출이 있는지 확인
+  const hasExpenses = taxRate > 0 || debtRate > 0 || lifestyleRate > 0;
+  const yAxisDomain = hasExpenses ? [-yAxisMax, yAxisMax] : [0, yAxisMax];
 
   return (
     <div className="min-h-screen bg-white dark:bg-black py-4 px-4">
@@ -254,12 +258,12 @@ export default function WealthBuilder() {
                       tick={{ fill: '#6b7280', fontSize: 12 }}
                     />
                     <YAxis
-                      domain={[-yAxisMax, yAxisMax]}
+                      domain={yAxisDomain}
                       tick={{ fill: '#6b7280', fontSize: 12 }}
                       tickFormatter={(value) => `$${(value / 1000).toFixed(0)}K`}
                       label={{ value: '금액 ($)', angle: -90, position: 'insideLeft', fill: '#374151' }}
                     />
-                    <ReferenceLine y={0} stroke="#000" strokeWidth={2} />
+                    {hasExpenses && <ReferenceLine y={0} stroke="#000" strokeWidth={2} />}
                     <Tooltip
                       formatter={(value: any, name: any) => {
                         const labels: Record<string, string> = {
