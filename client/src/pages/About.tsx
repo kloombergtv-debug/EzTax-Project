@@ -201,6 +201,7 @@ export default function About() {
                 Financial Advisor/세무사
               </p>
               <div className="flex flex-wrap gap-2 justify-center lg:justify-start">
+                <Badge variant="outline" className="border-blue-300 text-blue-700">FINRA Series 65</Badge>
                 <Badge variant="outline" className="border-blue-300 text-blue-700">IRS EA</Badge>
               </div>
             </div>
