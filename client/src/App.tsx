@@ -41,6 +41,7 @@ import Payment from "@/pages/Payment";
 import FilingStatusChecker from "@/pages/FilingStatusChecker";
 import ResidencyChecker from "@/pages/ResidencyChecker";
 import SocialSecurityCalculator from "@/pages/SocialSecurityCalculator";
+import WealthBuilder from "@/pages/WealthBuilder";
 import Board from "@/pages/Board";
 import BoardDetail from "@/pages/BoardDetail";
 import { AuthProvider } from "@/hooks/use-auth";
@@ -70,6 +71,7 @@ function Router() {
       <ProtectedRoute path="/filing-status-checker" component={FilingStatusChecker} />
       <Route path="/residency-checker" component={ResidencyChecker} />
       <Route path="/social-security-calculator" component={SocialSecurityCalculator} />
+      <Route path="/wealth-builder" component={WealthBuilder} />
       <Route path="/board" component={Board} />
       <Route path="/board/:id" component={BoardDetail} />
       <ProtectedRoute path="/additional-income" component={AdditionalIncomePage} />
