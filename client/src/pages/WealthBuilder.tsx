@@ -9,6 +9,9 @@ import { TrendingUp, DollarSign, Calculator, PiggyBank } from 'lucide-react';
 interface WealthData {
   year: number;
   wealth: number;
+  taxes: number;
+  debt: number;
+  lifestyle: number;
   displayWealth: string;
 }
 
@@ -40,6 +43,9 @@ export default function WealthBuilder() {
       data.push({
         year,
         wealth: Math.round(cumulativeWealth),
+        taxes: -Math.round(taxes),
+        debt: -Math.round(debt),
+        lifestyle: -Math.round(lifestyle),
         displayWealth: `$${(cumulativeWealth / 1000).toFixed(1)}K`
       });
     }
@@ -257,20 +263,39 @@ export default function WealthBuilder() {
                     />
                     <Legend
                       wrapperStyle={{ paddingTop: '10px' }}
-                      formatter={() => '실현 자산'}
+                      formatter={(value) => {
+                        if (value === 'wealth') return '실현 자산';
+                        if (value === 'taxes') return '세금';
+                        if (value === 'debt') return '부채';
+                        if (value === 'lifestyle') return '생활비';
+                        return value;
+                      }}
                     />
                     <Bar
                       dataKey="wealth"
-                      fill="url(#wealthGradient)"
+                      stackId="a"
+                      fill="#22C55E"
                       radius={[8, 8, 0, 0]}
                       maxBarSize={50}
                     />
-                    <defs>
-                      <linearGradient id="wealthGradient" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#000000" stopOpacity={1} />
-                        <stop offset="100%" stopColor="#4B5563" stopOpacity={0.9} />
-                      </linearGradient>
-                    </defs>
+                    <Bar
+                      dataKey="taxes"
+                      stackId="a"
+                      fill="#7F1D1D"
+                      maxBarSize={50}
+                    />
+                    <Bar
+                      dataKey="debt"
+                      stackId="a"
+                      fill="#DC2626"
+                      maxBarSize={50}
+                    />
+                    <Bar
+                      dataKey="lifestyle"
+                      stackId="a"
+                      fill="#EF4444"
+                      maxBarSize={50}
+                    />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
