@@ -50,48 +50,48 @@ export default function WealthBuilder() {
   const finalWealth = wealthData[wealthData.length - 1]?.wealth || 0;
 
   return (
-    <div className="min-h-screen bg-white dark:bg-black py-8 px-4">
+    <div className="min-h-screen bg-white dark:bg-black py-4 px-4">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-black dark:text-white mb-2">
+        <div className="text-center mb-4">
+          <h1 className="text-2xl font-bold text-black dark:text-white mb-1">
             자산 증식 시뮬레이터
           </h1>
-          <p className="text-gray-600 dark:text-gray-400">미래의 재정 목표를 시각화하고 계획하세요</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400">미래의 재정 목표를 시각화하고 계획하세요</p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 mb-4">
           <Card className="bg-gray-900 dark:bg-gray-800 text-white border-gray-800">
-            <CardContent className="pt-6">
+            <CardContent className="py-3 px-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-gray-400 text-sm">예상 최종 자산</p>
-                  <p className="text-3xl font-bold mt-1">${Math.round(finalWealth / 1000)}K</p>
+                  <p className="text-gray-400 text-xs">예상 최종 자산</p>
+                  <p className="text-xl font-bold mt-0.5">${Math.round(finalWealth / 1000)}K</p>
                 </div>
-                <DollarSign className="h-12 w-12 text-gray-500" />
+                <DollarSign className="h-6 w-6 text-gray-500" />
               </div>
             </CardContent>
           </Card>
 
           <Card className="bg-gray-800 dark:bg-gray-700 text-white border-gray-700">
-            <CardContent className="pt-6">
+            <CardContent className="py-3 px-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-gray-400 text-sm">시뮬레이션 기간</p>
-                  <p className="text-3xl font-bold mt-1">{studyPeriod}년</p>
+                  <p className="text-gray-400 text-xs">시뮬레이션 기간</p>
+                  <p className="text-xl font-bold mt-0.5">{studyPeriod}년</p>
                 </div>
-                <TrendingUp className="h-12 w-12 text-gray-500" />
+                <TrendingUp className="h-6 w-6 text-gray-500" />
               </div>
             </CardContent>
           </Card>
 
           <Card className="bg-gray-700 dark:bg-gray-600 text-white border-gray-600">
-            <CardContent className="pt-6">
+            <CardContent className="py-3 px-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-gray-300 text-sm">연평균 수익률</p>
-                  <p className="text-3xl font-bold mt-1">{returnRate}%</p>
+                  <p className="text-gray-300 text-xs">연평균 수익률</p>
+                  <p className="text-xl font-bold mt-0.5">{returnRate}%</p>
                 </div>
-                <PiggyBank className="h-12 w-12 text-gray-400" />
+                <PiggyBank className="h-6 w-6 text-gray-400" />
               </div>
             </CardContent>
           </Card>
