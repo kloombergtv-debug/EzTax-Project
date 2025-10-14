@@ -24,23 +24,43 @@ export default function WealthBuilder() {
   const [debtRate, setDebtRate] = useState(0);
   const [lifestyleRate, setLifestyleRate] = useState(0);
   
+  // 계산된 값들을 저장할 state
+  const [calculatedPeriod, setCalculatedPeriod] = useState(30);
+  const [calculatedIncome, setCalculatedIncome] = useState(100000);
+  const [calculatedIncomeGrowth, setCalculatedIncomeGrowth] = useState(4);
+  const [calculatedReturn, setCalculatedReturn] = useState(0);
+  const [calculatedTax, setCalculatedTax] = useState(0);
+  const [calculatedDebt, setCalculatedDebt] = useState(0);
+  const [calculatedLifestyle, setCalculatedLifestyle] = useState(0);
+  
   // 연간 저축은 자동 계산: 100% - 세금 - 부채 - 생활비
   const savingsRate = 100 - taxRate - debtRate - lifestyleRate;
+  
+  // 계산 버튼 핸들러
+  const handleCalculate = () => {
+    setCalculatedPeriod(studyPeriod);
+    setCalculatedIncome(yearOneIncome);
+    setCalculatedIncomeGrowth(incomeGrowthRate);
+    setCalculatedReturn(returnRate);
+    setCalculatedTax(taxRate);
+    setCalculatedDebt(debtRate);
+    setCalculatedLifestyle(lifestyleRate);
+  };
 
   const wealthData = useMemo(() => {
     const data: WealthData[] = [];
     let cumulativeWealth = 0;
 
-    for (let year = 1; year <= studyPeriod; year++) {
-      const income = yearOneIncome * Math.pow(1 + incomeGrowthRate / 100, year - 1);
-      const taxes = income * (taxRate / 100);
-      const debt = income * (debtRate / 100);
-      const lifestyle = income * (lifestyleRate / 100);
+    for (let year = 1; year <= calculatedPeriod; year++) {
+      const income = calculatedIncome * Math.pow(1 + calculatedIncomeGrowth / 100, year - 1);
+      const taxes = income * (calculatedTax / 100);
+      const debt = income * (calculatedDebt / 100);
+      const lifestyle = income * (calculatedLifestyle / 100);
       
       // 저축액 = 소득 - 세금 - 부채 - 생활비
       const netSavings = income - taxes - debt - lifestyle;
       
-      cumulativeWealth = (cumulativeWealth + netSavings) * (1 + returnRate / 100);
+      cumulativeWealth = (cumulativeWealth + netSavings) * (1 + calculatedReturn / 100);
       
       data.push({
         year,
@@ -53,7 +73,7 @@ export default function WealthBuilder() {
     }
 
     return data;
-  }, [studyPeriod, yearOneIncome, incomeGrowthRate, returnRate, taxRate, debtRate, lifestyleRate]);
+  }, [calculatedPeriod, calculatedIncome, calculatedIncomeGrowth, calculatedReturn, calculatedTax, calculatedDebt, calculatedLifestyle]);
 
   const finalWealth = wealthData[wealthData.length - 1]?.wealth || 0;
   
@@ -63,7 +83,7 @@ export default function WealthBuilder() {
   const yAxisMax = Math.max(maxWealth, maxExpense) * 1.1;
   
   // 지출이 있는지 확인
-  const hasExpenses = taxRate > 0 || debtRate > 0 || lifestyleRate > 0;
+  const hasExpenses = calculatedTax > 0 || calculatedDebt > 0 || calculatedLifestyle > 0;
   const yAxisDomain = hasExpenses ? [-yAxisMax, yAxisMax] : [0, yAxisMax];
 
   return (
@@ -228,6 +248,16 @@ export default function WealthBuilder() {
                     </div>
                   </div>
                 </div>
+
+                {/* 계산 버튼 */}
+                <button
+                  onClick={handleCalculate}
+                  className="w-full bg-black dark:bg-white text-white dark:text-black font-semibold py-3 px-4 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors flex items-center justify-center gap-2"
+                  data-testid="button-calculate"
+                >
+                  <Calculator className="h-5 w-5" />
+                  계산하기
+                </button>
               </div>
             </CardContent>
           </Card>
@@ -298,7 +328,7 @@ export default function WealthBuilder() {
                       radius={[8, 8, 0, 0]}
                       maxBarSize={50}
                     />
-                    {taxRate > 0 && (
+                    {calculatedTax > 0 && (
                       <Bar
                         dataKey="taxes"
                         stackId="negative"
@@ -307,7 +337,7 @@ export default function WealthBuilder() {
                         maxBarSize={50}
                       />
                     )}
-                    {debtRate > 0 && (
+                    {calculatedDebt > 0 && (
                       <Bar
                         dataKey="debt"
                         stackId="negative"
@@ -315,7 +345,7 @@ export default function WealthBuilder() {
                         maxBarSize={50}
                       />
                     )}
-                    {lifestyleRate > 0 && (
+                    {calculatedLifestyle > 0 && (
                       <Bar
                         dataKey="lifestyle"
                         stackId="negative"
