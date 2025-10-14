@@ -23,7 +23,9 @@ export default function WealthBuilder() {
   const [taxRate, setTaxRate] = useState(0);
   const [debtRate, setDebtRate] = useState(0);
   const [lifestyleRate, setLifestyleRate] = useState(0);
-  const [savingsRate, setSavingsRate] = useState(0);
+  
+  // 연간 저축은 자동 계산: 100% - 세금 - 부채 - 생활비
+  const savingsRate = 100 - taxRate - debtRate - lifestyleRate;
 
   const wealthData = useMemo(() => {
     const data: WealthData[] = [];
@@ -215,8 +217,8 @@ export default function WealthBuilder() {
                         id="savings-rate"
                         type="number"
                         value={savingsRate}
-                        onChange={(e) => setSavingsRate(Number(e.target.value))}
-                        className="flex-1"
+                        readOnly
+                        className="flex-1 bg-gray-100 dark:bg-gray-700 cursor-not-allowed"
                         data-testid="input-savings-rate"
                       />
                     </div>
