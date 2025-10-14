@@ -109,6 +109,15 @@ const Header: React.FC = () => {
             {t('은퇴준비', 'Retirement')}
           </Button>
           <Button 
+            variant={location === '/wealth-builder' ? "default" : "ghost"} 
+            size="sm"
+            className={`text-xs flex items-center gap-1 ${location === '/wealth-builder' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'text-white hover:text-gray-300'}`}
+            onClick={() => navigate('/wealth-builder')}
+          >
+            <Calculator className="h-4 w-4" />
+            {t('자산증식시뮬', 'Wealth Builder')}
+          </Button>
+          <Button 
             variant="ghost"
             size="sm"
             className="text-xs text-white hover:text-gray-300"
