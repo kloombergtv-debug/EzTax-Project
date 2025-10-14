@@ -256,17 +256,17 @@ export default function WealthBuilder() {
           </Card>
 
           <Card className="shadow-xl border-gray-200 dark:border-gray-700">
-            <CardHeader className="bg-black dark:bg-gray-900 text-white">
-              <CardTitle className="flex items-center gap-2">
-                <TrendingUp className="h-5 w-5" />
+            <CardHeader className="bg-black dark:bg-gray-900 text-white py-2">
+              <CardTitle className="flex items-center gap-2 text-lg">
+                <TrendingUp className="h-4 w-4" />
                 자산 증식 예측
               </CardTitle>
-              <CardDescription className="text-gray-400">
+              <CardDescription className="text-gray-400 text-xs">
                 {studyPeriod}년간의 자산 성장 시뮬레이션
               </CardDescription>
             </CardHeader>
             <CardContent className="pt-4">
-              <div className="h-[450px]">
+              <div className="h-[600px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart
                     data={wealthData}
@@ -351,15 +351,15 @@ export default function WealthBuilder() {
               </div>
 
               {/* 예상 최종 자산 */}
-              <div className="mt-4 p-4 bg-black dark:bg-gray-900 text-white rounded-lg border border-gray-800">
+              <div className="mt-3 p-3 bg-black dark:bg-gray-900 text-white rounded-lg border border-gray-800">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-400">예상 최종 자산</p>
-                    <p className="text-2xl font-bold mt-1">
+                    <p className="text-xs text-gray-400">예상 최종 자산</p>
+                    <p className="text-xl font-bold mt-0.5">
                       ${finalWealth.toLocaleString()}
                     </p>
                   </div>
-                  <PiggyBank className="h-10 w-10 text-gray-500" />
+                  <PiggyBank className="h-8 w-8 text-gray-500" />
                 </div>
               </div>
             </CardContent>
