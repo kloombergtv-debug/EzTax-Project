@@ -767,7 +767,7 @@ ${message || '상담 요청'}
           console.log('Gmail SMTP connection verified successfully');
           
           // Configure recipient emails
-          const recipients = ['eztax88@gmail.com'];
+          const recipients = ['equitykr@gmail.com'];
           
           // Add additional recipient email if provided in environment variable
           const additionalEmail = process.env.ADDITIONAL_EMAIL;
@@ -805,18 +805,18 @@ ${message || '상담 요청'}
           };
 
           const info = await transporter.sendMail(mailOptions);
-          console.log('✅ Consultation email sent successfully to eztax88@gmail.com');
+          console.log('✅ Consultation email sent successfully to equitykr@gmail.com');
           console.log('Message ID:', info.messageId);
         } catch (emailError) {
           console.error('❌ Failed to send consultation email:', emailError);
           console.log('📧 Consultation Email Content (logged as backup):');
-          console.log('To: eztax88@gmail.com');
+          console.log('To: equitykr@gmail.com');
           console.log('Subject: [EzTax] 새로운 전문가 상담 요청');
           console.log('Content:', emailContent);
         }
       } else {
         console.log('📧 Email credentials not configured - logging consultation request:');
-        console.log('To: eztax88@gmail.com');
+        console.log('To: equitykr@gmail.com');
         console.log('Subject: [EzTax] 새로운 전문가 상담 요청');
         console.log('Content:', emailContent);
       }
