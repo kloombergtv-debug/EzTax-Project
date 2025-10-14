@@ -50,68 +50,68 @@ export default function WealthBuilder() {
   const finalWealth = wealthData[wealthData.length - 1]?.wealth || 0;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-indigo-950 py-8 px-4">
+    <div className="min-h-screen bg-white dark:bg-black py-8 px-4">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-2">
+          <h1 className="text-4xl font-bold text-black dark:text-white mb-2">
             자산 증식 시뮬레이터
           </h1>
           <p className="text-gray-600 dark:text-gray-400">미래의 재정 목표를 시각화하고 계획하세요</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-          <Card className="bg-gradient-to-br from-blue-500 to-blue-600 text-white border-0">
+          <Card className="bg-gray-900 dark:bg-gray-800 text-white border-gray-800">
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-blue-100 text-sm">예상 최종 자산</p>
+                  <p className="text-gray-400 text-sm">예상 최종 자산</p>
                   <p className="text-3xl font-bold mt-1">${Math.round(finalWealth / 1000)}K</p>
                 </div>
-                <DollarSign className="h-12 w-12 text-blue-200" />
+                <DollarSign className="h-12 w-12 text-gray-500" />
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-purple-500 to-purple-600 text-white border-0">
+          <Card className="bg-gray-800 dark:bg-gray-700 text-white border-gray-700">
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-purple-100 text-sm">시뮬레이션 기간</p>
+                  <p className="text-gray-400 text-sm">시뮬레이션 기간</p>
                   <p className="text-3xl font-bold mt-1">{studyPeriod}년</p>
                 </div>
-                <TrendingUp className="h-12 w-12 text-purple-200" />
+                <TrendingUp className="h-12 w-12 text-gray-500" />
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-pink-500 to-pink-600 text-white border-0">
+          <Card className="bg-gray-700 dark:bg-gray-600 text-white border-gray-600">
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-pink-100 text-sm">연평균 수익률</p>
+                  <p className="text-gray-300 text-sm">연평균 수익률</p>
                   <p className="text-3xl font-bold mt-1">{returnRate}%</p>
                 </div>
-                <PiggyBank className="h-12 w-12 text-pink-200" />
+                <PiggyBank className="h-12 w-12 text-gray-400" />
               </div>
             </CardContent>
           </Card>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <Card className="shadow-xl">
-            <CardHeader className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white">
+          <Card className="shadow-xl border-gray-200 dark:border-gray-700">
+            <CardHeader className="bg-black dark:bg-gray-900 text-white">
               <CardTitle className="flex items-center gap-2">
                 <Calculator className="h-5 w-5" />
                 계산 설정
               </CardTitle>
-              <CardDescription className="text-indigo-100">
+              <CardDescription className="text-gray-400">
                 소득과 지출 정보를 입력하세요
               </CardDescription>
             </CardHeader>
             <CardContent className="pt-6 space-y-6">
               <div className="space-y-4">
-                <div className="p-4 bg-indigo-50 dark:bg-indigo-950 rounded-lg">
-                  <h3 className="font-semibold text-indigo-900 dark:text-indigo-100 mb-4 flex items-center gap-2">
+                <div className="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+                  <h3 className="font-semibold text-black dark:text-white mb-4 flex items-center gap-2">
                     <TrendingUp className="h-4 w-4" />
                     소득 정보
                   </h3>
@@ -182,8 +182,8 @@ export default function WealthBuilder() {
                   </div>
                 </div>
 
-                <div className="p-4 bg-purple-50 dark:bg-purple-950 rounded-lg">
-                  <h3 className="font-semibold text-purple-900 dark:text-purple-100 mb-4 flex items-center gap-2">
+                <div className="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+                  <h3 className="font-semibold text-black dark:text-white mb-4 flex items-center gap-2">
                     <DollarSign className="h-4 w-4" />
                     지출 정보
                   </h3>
@@ -250,13 +250,13 @@ export default function WealthBuilder() {
             </CardContent>
           </Card>
 
-          <Card className="shadow-xl">
-            <CardHeader className="bg-gradient-to-r from-pink-500 to-purple-500 text-white">
+          <Card className="shadow-xl border-gray-200 dark:border-gray-700">
+            <CardHeader className="bg-black dark:bg-gray-900 text-white">
               <CardTitle className="flex items-center gap-2">
                 <TrendingUp className="h-5 w-5" />
                 자산 증식 예측
               </CardTitle>
-              <CardDescription className="text-pink-100">
+              <CardDescription className="text-gray-400">
                 {studyPeriod}년간의 자산 성장 시뮬레이션
               </CardDescription>
             </CardHeader>
@@ -285,7 +285,7 @@ export default function WealthBuilder() {
                       formatter={(value: any) => [`$${value.toLocaleString()}`, '누적 자산']}
                       contentStyle={{
                         backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                        border: '2px solid #8b5cf6',
+                        border: '2px solid #000000',
                         borderRadius: '8px',
                         boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
                       }}
@@ -302,23 +302,23 @@ export default function WealthBuilder() {
                     />
                     <defs>
                       <linearGradient id="wealthGradient" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#8b5cf6" stopOpacity={1} />
-                        <stop offset="100%" stopColor="#d946ef" stopOpacity={0.8} />
+                        <stop offset="0%" stopColor="#000000" stopOpacity={1} />
+                        <stop offset="100%" stopColor="#4B5563" stopOpacity={0.9} />
                       </linearGradient>
                     </defs>
                   </BarChart>
                 </ResponsiveContainer>
               </div>
 
-              <div className="mt-6 p-4 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-lg">
+              <div className="mt-6 p-4 bg-black dark:bg-gray-900 text-white rounded-lg border border-gray-800">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-indigo-100">예상 최종 자산</p>
+                    <p className="text-sm text-gray-400">예상 최종 자산</p>
                     <p className="text-2xl font-bold mt-1">
                       ${finalWealth.toLocaleString()}
                     </p>
                   </div>
-                  <PiggyBank className="h-10 w-10 text-indigo-200" />
+                  <PiggyBank className="h-10 w-10 text-gray-500" />
                 </div>
               </div>
             </CardContent>
