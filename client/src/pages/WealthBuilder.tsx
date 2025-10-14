@@ -266,7 +266,7 @@ export default function WealthBuilder() {
               </CardDescription>
             </CardHeader>
             <CardContent className="pt-4">
-              <div className="h-[600px]">
+              <div className="h-[500px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart
                     data={wealthData}
