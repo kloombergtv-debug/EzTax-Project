@@ -245,10 +245,10 @@ export default function WealthBuilder() {
                 {/* 계산 버튼 */}
                 <button
                   onClick={handleCalculate}
-                  className="w-full bg-black dark:bg-white text-white dark:text-black font-semibold py-3 px-4 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors flex items-center justify-center gap-2"
+                  className="w-1/5 bg-blue-600 dark:bg-blue-600 text-white font-semibold py-2 px-3 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
                   data-testid="button-calculate"
                 >
-                  <Calculator className="h-5 w-5" />
+                  <Calculator className="h-4 w-4" />
                   계산하기
                 </button>
               </div>
