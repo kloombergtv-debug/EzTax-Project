@@ -10,10 +10,11 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getQueryFn, apiRequest } from '@/lib/queryClient';
-import { Users, Search, Calendar, Mail, User, Shield, AlertTriangle, Edit, Trash2, Key, FileText, DollarSign, Receipt, CreditCard, Calculator } from 'lucide-react';
+import { Users, Search, Calendar, Mail, User, Shield, AlertTriangle, Edit, Trash2, Key, FileText, DollarSign, Receipt, CreditCard, Calculator, Eye, TrendingUp } from 'lucide-react';
 import { useAuth } from '@/hooks/use-auth';
 import { useLocation } from 'wouter';
 import { useToast } from '@/hooks/use-toast';
+import type { PageViewStats } from '@shared/schema';
 // Remove date-fns import since it's not available
 
 interface AdminUser {
@@ -83,6 +84,13 @@ export default function AdminPanel() {
     queryKey: [`/api/admin/users/${selectedUserId}/tax-data`],
     queryFn: getQueryFn({ on401: "returnNull" }),
     enabled: !!selectedUserId && !!isAdmin,
+  });
+
+  // Query for page view statistics
+  const { data: pageViewStats, isLoading: isStatsLoading } = useQuery<PageViewStats>({
+    queryKey: ['/api/page-views/stats'],
+    queryFn: getQueryFn({ on401: "returnNull" }),
+    enabled: !!isAdmin,
   });
 
   // Mutations for admin actions
@@ -352,6 +360,80 @@ export default function AdminPanel() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Page View Statistics */}
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Eye className="h-5 w-5" />
+            페이지 방문 통계
+          </CardTitle>
+          <CardDescription>웹사이트 방문자 통계 및 페이지별 조회수</CardDescription>
+        </CardHeader>
+        <CardContent>
+          {isStatsLoading ? (
+            <div className="text-center py-8 text-gray-500">
+              통계 데이터를 불러오는 중...
+            </div>
+          ) : (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <div className="p-4 bg-blue-50 rounded-lg">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-medium text-blue-900">총 페이지뷰</span>
+                    <Eye className="h-4 w-4 text-blue-600" />
+                  </div>
+                  <div className="text-2xl font-bold text-blue-900">
+                    {pageViewStats?.totalViews?.toLocaleString() || 0}
+                  </div>
+                  <p className="text-xs text-blue-600 mt-1">전체 기간</p>
+                </div>
+
+                <div className="p-4 bg-green-50 rounded-lg">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-medium text-green-900">최근 30일</span>
+                    <TrendingUp className="h-4 w-4 text-green-600" />
+                  </div>
+                  <div className="text-2xl font-bold text-green-900">
+                    {pageViewStats?.recentViews?.toLocaleString() || 0}
+                  </div>
+                  <p className="text-xs text-green-600 mt-1">지난 한 달</p>
+                </div>
+
+                <div className="p-4 bg-purple-50 rounded-lg">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-medium text-purple-900">순 방문자</span>
+                    <Users className="h-4 w-4 text-purple-600" />
+                  </div>
+                  <div className="text-2xl font-bold text-purple-900">
+                    {pageViewStats?.uniqueUsers?.toLocaleString() || 0}
+                  </div>
+                  <p className="text-xs text-purple-600 mt-1">고유 사용자</p>
+                </div>
+              </div>
+
+              {/* Page breakdown */}
+              {pageViewStats?.pageStats && pageViewStats.pageStats.length > 0 && (
+                <div>
+                  <h3 className="font-semibold mb-3">페이지별 조회수</h3>
+                  <div className="space-y-2">
+                    {pageViewStats.pageStats.slice(0, 10).map((stat, index) => (
+                      <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div className="flex items-center gap-2">
+                          <span className="font-mono text-sm text-gray-600">{stat.page}</span>
+                        </div>
+                        <Badge variant="outline" className="font-mono">
+                          {stat.count.toLocaleString()} 조회
+                        </Badge>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+        </CardContent>
+      </Card>
 
       {/* Search */}
       <Card>

@@ -1,4 +1,4 @@
-import { users, type User, type InsertUser, taxReturns, type TaxReturn, type InsertTaxReturn, retirementAssessments, type RetirementAssessment, type InsertRetirementAssessment, boardPosts, type BoardPost, type InsertBoardPost, boardReplies, type BoardReply, type InsertBoardReply, pageViews, type PageView, type InsertPageView } from "@shared/schema";
+import { users, type User, type InsertUser, taxReturns, type TaxReturn, type InsertTaxReturn, retirementAssessments, type RetirementAssessment, type InsertRetirementAssessment, boardPosts, type BoardPost, type InsertBoardPost, boardReplies, type BoardReply, type InsertBoardReply, pageViews, type PageView, type InsertPageView, type PageViewStats } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, sql } from "drizzle-orm";
 
@@ -53,7 +53,7 @@ export interface IStorage {
   
   // Page view methods
   createPageView(view: InsertPageView): Promise<PageView>;
-  getPageViewStats(): Promise<any>;
+  getPageViewStats(): Promise<PageViewStats>;
 }
 
 export class DbStorage implements IStorage {
@@ -457,7 +457,7 @@ export class DbStorage implements IStorage {
     return view;
   }
 
-  async getPageViewStats(): Promise<any> {
+  async getPageViewStats(): Promise<PageViewStats> {
     // Get total page views
     const totalViews = await db.select({ count: sql<number>`count(*)::int` }).from(pageViews);
     
@@ -487,8 +487,8 @@ export class DbStorage implements IStorage {
       recentViews: recentViews[0]?.count || 0,
       uniqueUsers: uniqueUsers[0]?.count || 0,
       pageStats: pageStats.map(stat => ({
-        page: stat.page,
-        count: stat.count
+        page: stat.page || '',
+        count: stat.count || 0
       }))
     };
   }

@@ -661,3 +661,14 @@ export const insertPageViewSchema = createInsertSchema(pageViews).omit({
 
 export type InsertPageView = InferInsertModel<typeof pageViews>;
 export type PageView = InferSelectModel<typeof pageViews>;
+
+// Page View Statistics Interface
+export interface PageViewStats {
+  totalViews: number;
+  recentViews: number;
+  uniqueUsers: number;
+  pageStats: Array<{
+    page: string;
+    count: number;
+  }>;
+}
