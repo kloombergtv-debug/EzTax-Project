@@ -36,9 +36,9 @@ export default function WealthBuilder() {
       const taxes = income * (taxRate / 100);
       const debt = income * (debtRate / 100);
       const lifestyle = income * (lifestyleRate / 100);
-      const savings = income * (savingsRate / 100);
       
-      const netSavings = income - taxes - debt - lifestyle - savings;
+      // 저축액 = 소득 - 세금 - 부채 - 생활비
+      const netSavings = income - taxes - debt - lifestyle;
       
       cumulativeWealth = (cumulativeWealth + netSavings) * (1 + returnRate / 100);
       
@@ -53,7 +53,7 @@ export default function WealthBuilder() {
     }
 
     return data;
-  }, [studyPeriod, yearOneIncome, incomeGrowthRate, returnRate, taxRate, debtRate, lifestyleRate, savingsRate]);
+  }, [studyPeriod, yearOneIncome, incomeGrowthRate, returnRate, taxRate, debtRate, lifestyleRate]);
 
   const finalWealth = wealthData[wealthData.length - 1]?.wealth || 0;
   
