@@ -50,12 +50,20 @@ export default function WealthBuilder() {
   const wealthData = useMemo(() => {
     const data: WealthData[] = [];
     let cumulativeWealth = 0;
+    let cumulativeTaxes = 0;
+    let cumulativeDebt = 0;
+    let cumulativeLifestyle = 0;
 
     for (let year = 1; year <= calculatedPeriod; year++) {
       const income = calculatedIncome * Math.pow(1 + calculatedIncomeGrowth / 100, year - 1);
       const taxes = income * (calculatedTax / 100);
       const debt = income * (calculatedDebt / 100);
       const lifestyle = income * (calculatedLifestyle / 100);
+      
+      // 누적 비용 계산
+      cumulativeTaxes += taxes;
+      cumulativeDebt += debt;
+      cumulativeLifestyle += lifestyle;
       
       // 저축액 = 소득 - 세금 - 부채 - 생활비
       const netSavings = income - taxes - debt - lifestyle;
@@ -65,9 +73,9 @@ export default function WealthBuilder() {
       data.push({
         year,
         wealth: Math.round(cumulativeWealth),
-        taxes: -Math.round(taxes),
-        debt: -Math.round(debt),
-        lifestyle: -Math.round(lifestyle),
+        taxes: -Math.round(cumulativeTaxes),
+        debt: -Math.round(cumulativeDebt),
+        lifestyle: -Math.round(cumulativeLifestyle),
         displayWealth: `$${(cumulativeWealth / 1000).toFixed(1)}K`
       });
     }
