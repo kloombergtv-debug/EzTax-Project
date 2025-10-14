@@ -99,8 +99,8 @@ export default function WealthBuilder() {
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <Card className="shadow-xl border-gray-200 dark:border-gray-700">
-            <CardHeader className="bg-black dark:bg-gray-900 text-white py-3">
-              <CardTitle className="text-xl">자산 증식 시뮬레이터</CardTitle>
+            <CardHeader className="bg-black dark:bg-gray-900 text-white py-2">
+              <CardTitle className="text-lg">자산 증식 시뮬레이터</CardTitle>
               <CardDescription className="text-gray-400 text-xs">미래의 재정 목표를 시각화하고 계획하세요</CardDescription>
             </CardHeader>
             <CardContent className="pt-4 space-y-4">
