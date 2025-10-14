@@ -643,3 +643,21 @@ export interface TaxData {
   stateIncomeTax?: StateIncomeTax;
   calculatedResults?: CalculatedResults;
 }
+
+// Page Views Schema for Analytics
+export const pageViews = pgTable("page_views", {
+  id: serial("id").primaryKey(),
+  page: text("page").notNull(),
+  ipAddress: text("ip_address"),
+  userAgent: text("user_agent"),
+  userId: integer("user_id"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const insertPageViewSchema = createInsertSchema(pageViews).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertPageView = InferInsertModel<typeof pageViews>;
+export type PageView = InferSelectModel<typeof pageViews>;
