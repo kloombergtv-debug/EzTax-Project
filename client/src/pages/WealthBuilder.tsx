@@ -273,26 +273,27 @@ export default function WealthBuilder() {
                     />
                     <Bar
                       dataKey="wealth"
-                      stackId="a"
+                      stackId="positive"
                       fill="#22C55E"
                       radius={[8, 8, 0, 0]}
                       maxBarSize={50}
                     />
                     <Bar
                       dataKey="taxes"
-                      stackId="a"
+                      stackId="negative"
                       fill="#7F1D1D"
+                      radius={[0, 0, 8, 8]}
                       maxBarSize={50}
                     />
                     <Bar
                       dataKey="debt"
-                      stackId="a"
+                      stackId="negative"
                       fill="#DC2626"
                       maxBarSize={50}
                     />
                     <Bar
                       dataKey="lifestyle"
-                      stackId="a"
+                      stackId="negative"
                       fill="#EF4444"
                       maxBarSize={50}
                     />
