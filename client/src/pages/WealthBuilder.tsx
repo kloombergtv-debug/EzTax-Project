@@ -260,7 +260,15 @@ export default function WealthBuilder() {
                     />
                     <ReferenceLine y={0} stroke="#000" strokeWidth={2} />
                     <Tooltip
-                      formatter={(value: any) => [`$${value.toLocaleString()}`, '누적 자산']}
+                      formatter={(value: any, name: any) => {
+                        const labels: Record<string, string> = {
+                          'wealth': '실현 자산',
+                          'taxes': '누적 세금',
+                          'debt': '누적 부채',
+                          'lifestyle': '누적 생활비'
+                        };
+                        return [`$${Math.abs(value).toLocaleString()}`, labels[name] || name];
+                      }}
                       contentStyle={{
                         backgroundColor: 'rgba(255, 255, 255, 0.95)',
                         border: '2px solid #000000',
