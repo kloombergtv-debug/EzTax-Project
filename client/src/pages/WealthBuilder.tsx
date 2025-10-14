@@ -212,19 +212,6 @@ export default function WealthBuilder() {
                   </div>
                 </div>
               </div>
-
-              {/* 예상 최종 자산 */}
-              <div className="p-4 bg-black dark:bg-gray-900 text-white rounded-lg border border-gray-800">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-gray-400">예상 최종 자산</p>
-                    <p className="text-2xl font-bold mt-1">
-                      ${finalWealth.toLocaleString()}
-                    </p>
-                  </div>
-                  <PiggyBank className="h-10 w-10 text-gray-500" />
-                </div>
-              </div>
             </CardContent>
           </Card>
 
@@ -286,6 +273,19 @@ export default function WealthBuilder() {
                     </defs>
                   </BarChart>
                 </ResponsiveContainer>
+              </div>
+
+              {/* 예상 최종 자산 */}
+              <div className="mt-4 p-4 bg-black dark:bg-gray-900 text-white rounded-lg border border-gray-800">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-gray-400">예상 최종 자산</p>
+                    <p className="text-2xl font-bold mt-1">
+                      ${finalWealth.toLocaleString()}
+                    </p>
+                  </div>
+                  <PiggyBank className="h-10 w-10 text-gray-500" />
+                </div>
               </div>
             </CardContent>
           </Card>
