@@ -259,7 +259,7 @@ export default function About() {
                 </p>
               </div>
 
-              <div className="bg-blue-100/50 p-4 rounded-lg">
+              <div className="bg-blue-100/50 p-4 rounded-lg hidden">
                 <h4 className="font-semibold text-blue-800 mb-3">📖 저서</h4>
                 <p className="text-blue-700 font-medium">
                   『절세로 시작하는 은퇴설계 Less Tax, Better Retirement』
