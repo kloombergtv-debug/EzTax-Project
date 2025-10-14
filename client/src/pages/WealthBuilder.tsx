@@ -81,9 +81,9 @@ export default function WealthBuilder() {
                     소득 정보
                   </h3>
                   
-                  <div className="space-y-4">
-                    <div>
-                      <Label htmlFor="study-period" className="text-sm font-medium">
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3">
+                      <Label htmlFor="study-period" className="text-sm font-medium whitespace-nowrap w-40">
                         연구 기간 (년)
                       </Label>
                       <Input
@@ -91,13 +91,13 @@ export default function WealthBuilder() {
                         type="number"
                         value={studyPeriod}
                         onChange={(e) => setStudyPeriod(Number(e.target.value))}
-                        className="mt-1"
+                        className="flex-1"
                         data-testid="input-study-period"
                       />
                     </div>
 
-                    <div>
-                      <Label htmlFor="year-one-income" className="text-sm font-medium">
+                    <div className="flex items-center gap-3">
+                      <Label htmlFor="year-one-income" className="text-sm font-medium whitespace-nowrap w-40">
                         첫 해 소득 ($)
                       </Label>
                       <Input
@@ -105,13 +105,13 @@ export default function WealthBuilder() {
                         type="number"
                         value={yearOneIncome}
                         onChange={(e) => setYearOneIncome(Number(e.target.value))}
-                        className="mt-1"
+                        className="flex-1"
                         data-testid="input-year-one-income"
                       />
                     </div>
 
-                    <div>
-                      <Label htmlFor="income-growth" className="text-sm font-medium">
+                    <div className="flex items-center gap-3">
+                      <Label htmlFor="income-growth" className="text-sm font-medium whitespace-nowrap w-40">
                         연간 소득 증가율 (%)
                       </Label>
                       <Input
@@ -119,20 +119,20 @@ export default function WealthBuilder() {
                         type="number"
                         value={incomeGrowthRate}
                         onChange={(e) => setIncomeGrowthRate(Number(e.target.value))}
-                        className="mt-1"
+                        className="flex-1"
                         data-testid="input-income-growth"
                       />
                     </div>
 
-                    <div>
-                      <Label htmlFor="return-rate" className="text-sm font-medium">
+                    <div className="flex items-center gap-3">
+                      <Label htmlFor="return-rate" className="text-sm font-medium whitespace-nowrap w-40">
                         세후 수익률 (%)
                       </Label>
                       <Select
                         value={returnRate.toString()}
                         onValueChange={(value) => setReturnRate(Number(value))}
                       >
-                        <SelectTrigger className="mt-1" data-testid="select-return-rate">
+                        <SelectTrigger className="flex-1" data-testid="select-return-rate">
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
@@ -153,9 +153,9 @@ export default function WealthBuilder() {
                     지출 정보
                   </h3>
                   
-                  <div className="space-y-4">
-                    <div>
-                      <Label htmlFor="tax-rate" className="text-sm font-medium">
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3">
+                      <Label htmlFor="tax-rate" className="text-sm font-medium whitespace-nowrap w-40">
                         세금 (%)
                       </Label>
                       <Input
@@ -163,13 +163,13 @@ export default function WealthBuilder() {
                         type="number"
                         value={taxRate}
                         onChange={(e) => setTaxRate(Number(e.target.value))}
-                        className="mt-1"
+                        className="flex-1"
                         data-testid="input-tax-rate"
                       />
                     </div>
 
-                    <div>
-                      <Label htmlFor="debt-rate" className="text-sm font-medium">
+                    <div className="flex items-center gap-3">
+                      <Label htmlFor="debt-rate" className="text-sm font-medium whitespace-nowrap w-40">
                         부채 상환 (%)
                       </Label>
                       <Input
@@ -177,13 +177,13 @@ export default function WealthBuilder() {
                         type="number"
                         value={debtRate}
                         onChange={(e) => setDebtRate(Number(e.target.value))}
-                        className="mt-1"
+                        className="flex-1"
                         data-testid="input-debt-rate"
                       />
                     </div>
 
-                    <div>
-                      <Label htmlFor="lifestyle-rate" className="text-sm font-medium">
+                    <div className="flex items-center gap-3">
+                      <Label htmlFor="lifestyle-rate" className="text-sm font-medium whitespace-nowrap w-40">
                         생활비 (%)
                       </Label>
                       <Input
@@ -191,13 +191,13 @@ export default function WealthBuilder() {
                         type="number"
                         value={lifestyleRate}
                         onChange={(e) => setLifestyleRate(Number(e.target.value))}
-                        className="mt-1"
+                        className="flex-1"
                         data-testid="input-lifestyle-rate"
                       />
                     </div>
 
-                    <div>
-                      <Label htmlFor="savings-rate" className="text-sm font-medium">
+                    <div className="flex items-center gap-3">
+                      <Label htmlFor="savings-rate" className="text-sm font-medium whitespace-nowrap w-40">
                         연간 저축 (%)
                       </Label>
                       <Input
@@ -205,7 +205,7 @@ export default function WealthBuilder() {
                         type="number"
                         value={savingsRate}
                         onChange={(e) => setSavingsRate(Number(e.target.value))}
-                        className="mt-1"
+                        className="flex-1"
                         data-testid="input-savings-rate"
                       />
                     </div>
