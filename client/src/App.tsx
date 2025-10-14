@@ -47,8 +47,10 @@ import { AuthProvider } from "@/hooks/use-auth";
 import { ProtectedRoute } from "@/lib/protected-route";
 import { TaxProvider } from "@/context/TaxContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
+import { usePageTracking } from "@/hooks/usePageTracking";
 
 function Router() {
+  usePageTracking();
   return (
     <Switch>
       <Route path="/" component={Home} />
