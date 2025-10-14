@@ -19,7 +19,7 @@ export default function WealthBuilder() {
   const [studyPeriod, setStudyPeriod] = useState(30);
   const [yearOneIncome, setYearOneIncome] = useState(100000);
   const [incomeGrowthRate, setIncomeGrowthRate] = useState(4);
-  const [returnRate, setReturnRate] = useState(0);
+  const [returnRate, setReturnRate] = useState(3);
   const [taxRate, setTaxRate] = useState(0);
   const [debtRate, setDebtRate] = useState(0);
   const [lifestyleRate, setLifestyleRate] = useState(0);
@@ -28,7 +28,7 @@ export default function WealthBuilder() {
   const [calculatedPeriod, setCalculatedPeriod] = useState(30);
   const [calculatedIncome, setCalculatedIncome] = useState(100000);
   const [calculatedIncomeGrowth, setCalculatedIncomeGrowth] = useState(4);
-  const [calculatedReturn, setCalculatedReturn] = useState(0);
+  const [calculatedReturn, setCalculatedReturn] = useState(3);
   const [calculatedTax, setCalculatedTax] = useState(0);
   const [calculatedDebt, setCalculatedDebt] = useState(0);
   const [calculatedLifestyle, setCalculatedLifestyle] = useState(0);
