@@ -1,4 +1,4 @@
-import { users, type User, type InsertUser, taxReturns, type TaxReturn, type InsertTaxReturn, retirementAssessments, type RetirementAssessment, type InsertRetirementAssessment, boardPosts, type BoardPost, type InsertBoardPost, boardReplies, type BoardReply, type InsertBoardReply } from "@shared/schema";
+import { users, type User, type InsertUser, taxReturns, type TaxReturn, type InsertTaxReturn, retirementAssessments, type RetirementAssessment, type InsertRetirementAssessment, boardPosts, type BoardPost, type InsertBoardPost, boardReplies, type BoardReply, type InsertBoardReply, pageViews, type PageView, type InsertPageView } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, sql } from "drizzle-orm";
 
@@ -50,6 +50,10 @@ export interface IStorage {
   createBoardReply(reply: InsertBoardReply): Promise<BoardReply>;
   updateBoardReply(id: number, reply: Partial<BoardReply>): Promise<BoardReply>;
   deleteBoardReply(id: number): Promise<void>;
+  
+  // Page view methods
+  createPageView(view: InsertPageView): Promise<PageView>;
+  getPageViewStats(): Promise<any>;
 }
 
 export class DbStorage implements IStorage {
@@ -440,6 +444,53 @@ export class DbStorage implements IStorage {
         })
         .where(eq(boardPosts.id, reply.postId));
     }
+  }
+
+  // Page View Methods
+  async createPageView(insertView: InsertPageView): Promise<PageView> {
+    const [view] = await db
+      .insert(pageViews)
+      .values({
+        ...insertView
+      })
+      .returning();
+    return view;
+  }
+
+  async getPageViewStats(): Promise<any> {
+    // Get total page views
+    const totalViews = await db.select({ count: sql<number>`count(*)::int` }).from(pageViews);
+    
+    // Get page views by page
+    const pageStats = await db
+      .select({
+        page: pageViews.page,
+        count: sql<number>`count(*)::int`
+      })
+      .from(pageViews)
+      .groupBy(pageViews.page)
+      .orderBy(desc(sql<number>`count(*)`));
+    
+    // Get recent views (last 30 days)
+    const recentViews = await db
+      .select({ count: sql<number>`count(*)::int` })
+      .from(pageViews)
+      .where(sql`${pageViews.createdAt} >= NOW() - INTERVAL '30 days'`);
+    
+    // Get unique users count (by IP or userId)
+    const uniqueUsers = await db
+      .select({ count: sql<number>`count(DISTINCT COALESCE(${pageViews.userId}::text, ${pageViews.ipAddress}))::int` })
+      .from(pageViews);
+    
+    return {
+      totalViews: totalViews[0]?.count || 0,
+      recentViews: recentViews[0]?.count || 0,
+      uniqueUsers: uniqueUsers[0]?.count || 0,
+      pageStats: pageStats.map(stat => ({
+        page: stat.page,
+        count: stat.count
+      }))
+    };
   }
 }
 

@@ -1268,6 +1268,39 @@ ${message || '상담 요청'}
     }
   });
 
+  // Page View Tracking
+  app.post('/api/page-views', async (req, res) => {
+    try {
+      const { page } = req.body;
+      const ipAddress = req.ip || req.connection.remoteAddress || null;
+      const userAgent = req.get('user-agent') || null;
+      const userId = req.isAuthenticated && req.isAuthenticated() ? (req.user as any).id : null;
+
+      await storage.createPageView({
+        page,
+        ipAddress,
+        userAgent,
+        userId
+      });
+
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Error tracking page view:', error);
+      res.status(500).json({ message: 'Failed to track page view' });
+    }
+  });
+
+  // Get page view statistics
+  app.get('/api/page-views/stats', async (req, res) => {
+    try {
+      const stats = await storage.getPageViewStats();
+      res.json(stats);
+    } catch (error) {
+      console.error('Error getting page view stats:', error);
+      res.status(500).json({ message: 'Failed to get statistics' });
+    }
+  });
+
   // ChatBot API endpoint
   app.post('/api/chat', async (req, res) => {
     try {
