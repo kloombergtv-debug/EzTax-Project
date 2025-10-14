@@ -212,6 +212,19 @@ export default function WealthBuilder() {
                   </div>
                 </div>
               </div>
+
+              {/* 예상 최종 자산 */}
+              <div className="p-4 bg-black dark:bg-gray-900 text-white rounded-lg border border-gray-800">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-gray-400">예상 최종 자산</p>
+                    <p className="text-2xl font-bold mt-1">
+                      ${finalWealth.toLocaleString()}
+                    </p>
+                  </div>
+                  <PiggyBank className="h-10 w-10 text-gray-500" />
+                </div>
+              </div>
             </CardContent>
           </Card>
 
@@ -225,12 +238,12 @@ export default function WealthBuilder() {
                 {studyPeriod}년간의 자산 성장 시뮬레이션
               </CardDescription>
             </CardHeader>
-            <CardContent className="pt-6">
-              <div className="h-[600px]">
+            <CardContent className="pt-4">
+              <div className="h-[450px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart
                     data={wealthData}
-                    margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
+                    margin={{ top: 10, right: 20, left: 10, bottom: 40 }}
                   >
                     <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                     <XAxis
@@ -256,7 +269,7 @@ export default function WealthBuilder() {
                       }}
                     />
                     <Legend
-                      wrapperStyle={{ paddingTop: '20px' }}
+                      wrapperStyle={{ paddingTop: '10px' }}
                       formatter={() => '실현 자산'}
                     />
                     <Bar
@@ -273,18 +286,6 @@ export default function WealthBuilder() {
                     </defs>
                   </BarChart>
                 </ResponsiveContainer>
-              </div>
-
-              <div className="mt-6 p-4 bg-black dark:bg-gray-900 text-white rounded-lg border border-gray-800">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-gray-400">예상 최종 자산</p>
-                    <p className="text-2xl font-bold mt-1">
-                      ${finalWealth.toLocaleString()}
-                    </p>
-                  </div>
-                  <PiggyBank className="h-10 w-10 text-gray-500" />
-                </div>
               </div>
             </CardContent>
           </Card>
