@@ -104,21 +104,6 @@ export default function WealthBuilder() {
               <CardDescription className="text-gray-400 text-xs">미래의 재정 목표를 시각화하고 계획하세요</CardDescription>
             </CardHeader>
             <CardContent className="pt-4 space-y-4">
-              {/* 통계 카드들 */}
-              <div className="grid grid-cols-3 gap-2">
-                <div className="bg-gray-900 dark:bg-gray-800 text-white border border-gray-800 rounded-lg p-2">
-                  <p className="text-gray-400 text-xs">최종 자산</p>
-                  <p className="text-lg font-bold">${Math.round(finalWealth / 1000)}K</p>
-                </div>
-                <div className="bg-gray-800 dark:bg-gray-700 text-white border border-gray-700 rounded-lg p-2">
-                  <p className="text-gray-400 text-xs">기간</p>
-                  <p className="text-lg font-bold">{studyPeriod}년</p>
-                </div>
-                <div className="bg-gray-700 dark:bg-gray-600 text-white border border-gray-600 rounded-lg p-2">
-                  <p className="text-gray-300 text-xs">수익률</p>
-                  <p className="text-lg font-bold">{returnRate}%</p>
-                </div>
-              </div>
               <div className="space-y-4">
                 <div className="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
                   <h3 className="font-semibold text-black dark:text-white mb-4 flex items-center gap-2">
