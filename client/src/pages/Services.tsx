@@ -32,7 +32,11 @@ const Services = () => {
           </CardContent>
         </Card>
 
-        <Card className="hover:shadow-lg transition-shadow">
+        <Card 
+          className="hover:shadow-lg transition-shadow cursor-pointer"
+          onClick={() => window.open('https://youtu.be/YZRRL_sVmKE', '_blank')}
+          data-testid="card-optimal-savings"
+        >
           <CardHeader>
             <div className="flex items-start gap-4">
               <div className="bg-blue-100 p-3 rounded-lg">
