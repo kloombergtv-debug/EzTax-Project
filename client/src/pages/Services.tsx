@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Shield, PiggyBank, TrendingUp, FileText } from 'lucide-react';
+import { Shield, PiggyBank, TrendingUp, FileText, ArrowRight } from 'lucide-react';
 
 const Services = () => {
   return (
@@ -104,6 +104,43 @@ const Services = () => {
             </p>
           </CardContent>
         </Card>
+      </div>
+
+      {/* 서비스 프로세스 섹션 */}
+      <div className="mt-16">
+        <h2 className="text-3xl font-bold text-center text-primary-dark mb-12">
+          서비스 프로세스
+        </h2>
+        
+        <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-4">
+          {/* Step 1 */}
+          <div className="bg-teal-700 text-white rounded-lg p-8 w-full md:w-64 text-center shadow-lg">
+            <h3 className="text-xl font-bold mb-2">Rethink Wealth Service</h3>
+            <p className="text-lg">소개 (15~20분)</p>
+          </div>
+
+          {/* Arrow 1 */}
+          <ArrowRight className="hidden md:block h-12 w-12 text-gray-400 flex-shrink-0" />
+          <ArrowRight className="md:hidden rotate-90 h-8 w-8 text-gray-400" />
+
+          {/* Step 2 */}
+          <div className="bg-teal-700 text-white rounded-lg p-8 w-full md:w-64 text-center shadow-lg">
+            <h3 className="text-xl font-bold mb-2">Discovery Meeting</h3>
+            <p className="text-base">(현상태진단/서비스제안)</p>
+            <p className="text-lg mt-1">(약 1시간)</p>
+          </div>
+
+          {/* Arrow 2 */}
+          <ArrowRight className="hidden md:block h-12 w-12 text-gray-400 flex-shrink-0" />
+          <ArrowRight className="md:hidden rotate-90 h-8 w-8 text-gray-400" />
+
+          {/* Step 3 */}
+          <div className="bg-teal-700 text-white rounded-lg p-8 w-full md:w-64 text-center shadow-lg">
+            <h3 className="text-xl font-bold mb-2">Follow-ups</h3>
+            <p className="text-base">(디스커버리 미팅에서</p>
+            <p className="text-base">파악된 내용을 진행)</p>
+          </div>
+        </div>
       </div>
     </div>
   );
