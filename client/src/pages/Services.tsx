@@ -33,8 +33,7 @@ const Services = () => {
         </Card>
 
         <Card 
-          className="hover:shadow-lg transition-shadow cursor-pointer"
-          onClick={() => window.open('https://youtu.be/YZRRL_sVmKE', '_blank')}
+          className="hover:shadow-lg transition-shadow"
           data-testid="card-optimal-savings"
         >
           <CardHeader>
@@ -53,6 +52,13 @@ const Services = () => {
           <CardContent>
             <p className="text-gray-700 leading-relaxed">
               미국인들과 한국인들 모두 평균적으로 소득의 4% 정도만 저축한다고 합니다. 사실 이 정도로는 아무리 수익률이 높아도 미래를 준비하기에 부족합니다. 그래서 저희는 고객님께 맞는 '적정 저축 수준'을 같이 정하고, 실제로 그 목표에 도달할 수 있게 습관과 도구들을 함께 코칭해드립니다.
+            </p>
+            <p 
+              className="text-blue-600 hover:text-blue-800 cursor-pointer font-medium mt-3 transition-colors"
+              onClick={() => window.open('https://youtu.be/YZRRL_sVmKE', '_blank')}
+              data-testid="link-optimal-savings-video"
+            >
+              최적의 저축률은 얼마일까? →
             </p>
           </CardContent>
         </Card>
