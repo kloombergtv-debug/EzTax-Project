@@ -169,24 +169,6 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      <section className="mb-8">
-        <div className="max-w-4xl mx-auto">
-          <h3 className="text-xl font-bold text-center text-slate-800 mb-4" style={{ fontFamily: '"Noto Sans KR", "Apple SD Gothic Neo", -apple-system, sans-serif' }}>
-            {t('지대현 FA 소개 영상', 'Introduction Video')}
-          </h3>
-          <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
-            <iframe
-              className="absolute top-0 left-0 w-full h-full rounded-lg shadow-lg"
-              src="https://www.youtube.com/embed/SYbBp-MKbxM"
-              title="지대현 FA 소개"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
-          </div>
-        </div>
-      </section>
-
       <section className="mb-12">
         <Card>
           <CardContent className="pt-6">
