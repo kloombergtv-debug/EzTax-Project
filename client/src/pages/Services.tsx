@@ -8,6 +8,19 @@ const Services = () => {
         <h1 className="text-3xl md:text-4xl font-bold text-primary-dark mb-4">
           저와 저희 Rethink Wealth 재정 전문가팀이 도와드리는 것은:
         </h1>
+        
+        {/* YouTube 영상 임베드 */}
+        <div className="mt-8 max-w-3xl mx-auto">
+          <div className="relative" style={{ paddingBottom: '56.25%', height: 0 }}>
+            <iframe
+              className="absolute top-0 left-0 w-full h-full rounded-lg shadow-lg"
+              src="https://www.youtube.com/embed/c3FYOsdyUG8"
+              title="Rethink Wealth Services"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
+        </div>
       </div>
 
       <div className="grid md:grid-cols-2 gap-8">
