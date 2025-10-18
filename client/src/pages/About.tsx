@@ -184,7 +184,7 @@ export default function About() {
       </Card>
 
       {/* Founder & CEO Profile */}
-      <Card className="border-blue-200 bg-gradient-to-r from-blue-50 to-indigo-50">
+      <Card className="border-gray-200 bg-white">
         <CardContent className="pt-8">
           <div className="flex flex-col lg:flex-row gap-8">
             <div className="flex-shrink-0 text-center lg:text-left">
@@ -194,10 +194,10 @@ export default function About() {
                 className="w-48 h-48 object-contain mx-auto lg:mx-0"
                 style={{ objectPosition: 'center 30%' }}
               />
-              <h3 className="text-2xl font-bold text-blue-800 mt-4 mb-2">
+              <h3 className="text-2xl font-bold text-gray-800 mt-4 mb-2">
                 지대현 FA
               </h3>
-              <p className="text-blue-700 font-medium mb-4">
+              <p className="text-gray-700 font-medium mb-4">
                 Financial Advisor/세무사
               </p>
               <div className="flex flex-wrap gap-2 justify-center lg:justify-start">
@@ -209,8 +209,8 @@ export default function About() {
             <div className="flex-1">
               <div className="grid md:grid-cols-2 gap-6 mb-6">
                 <div>
-                  <h4 className="font-semibold text-blue-800 mb-3">📚 주요 이력</h4>
-                  <ul className="text-sm text-blue-700 space-y-2">
+                  <h4 className="font-semibold text-gray-800 mb-3">📚 주요 이력</h4>
+                  <ul className="text-sm text-gray-700 space-y-2">
                     <li>💼 현 Rethink Wealth 재정관리사</li>
                     <li>🎓 Midwest 대학 재무회계학 교수/연구원</li>
                     <li>🧾 IRS 공인 세무사 (Enrolled Agent)</li>
@@ -221,16 +221,16 @@ export default function About() {
                     <li>📈 Nomura Securities – 애널리스트</li>
                   </ul>
                   
-                  <h4 className="font-semibold text-blue-800 mb-3 mt-4">🎓 학력</h4>
-                  <ul className="text-sm text-blue-700 space-y-2">
+                  <h4 className="font-semibold text-gray-800 mb-3 mt-4">🎓 학력</h4>
+                  <ul className="text-sm text-gray-700 space-y-2">
                     <li>🎓 U Penn – 경제학 학사</li>
                     <li>🎓 연세대학교 국제대학원 – MBA</li>
                   </ul>
                 </div>
                 
                 <div>
-                  <h4 className="font-semibold text-blue-800 mb-3">🧠 전문 분야</h4>
-                  <ul className="text-sm text-blue-700 space-y-2">
+                  <h4 className="font-semibold text-gray-800 mb-3">🧠 전문 분야</h4>
+                  <ul className="text-sm text-gray-700 space-y-2">
                     <li>• 미국 개인 및 사업자 세무 상담</li>
                     <li>• 자산관리 및 은퇴 플랜 최적화</li>
                     <li>• 투자전략수립, 자산운용</li>
