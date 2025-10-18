@@ -183,86 +183,61 @@ export default function About() {
       {/* Founder & CEO Profile */}
       <Card className="border-gray-200 bg-white">
         <CardContent className="pt-8">
-          <div className="flex flex-col lg:flex-row gap-8">
-            <div className="flex-shrink-0 text-center lg:text-left">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            {/* 주요 이력 */}
+            <div>
+              <h4 className="font-semibold text-gray-800 mb-3">📚 주요 이력</h4>
+              <ul className="text-sm text-gray-700 space-y-2">
+                <li>💼 현 Rethink Wealth 재정관리사</li>
+                <li>🎓 Midwest 대학 재무회계학 교수/연구원</li>
+                <li>🧾 IRS 공인 세무사 (Enrolled Agent)</li>
+                <li>🏭 한화에어로스페이스 재무IR담당 상무</li>
+                <li>💊 동아제약 IR/PR 담당 이사</li>
+                <li>🏦 교보생명 – 재무실부장</li>
+                <li>🏢 LG전자 – IR팀 과장</li>
+                <li>📈 Nomura Securities – 애널리스트</li>
+              </ul>
+            </div>
+            
+            {/* 학력 */}
+            <div>
+              <h4 className="font-semibold text-gray-800 mb-3">🎓 학력</h4>
+              <ul className="text-sm text-gray-700 space-y-2">
+                <li>🎓 U Penn – 경제학 학사</li>
+                <li>🎓 연세대학교 국제대학원 – MBA</li>
+              </ul>
+            </div>
+            
+            {/* 전문 분야 */}
+            <div>
+              <h4 className="font-semibold text-gray-800 mb-3">🧠 전문 분야</h4>
+              <ul className="text-sm text-gray-700 space-y-2">
+                <li>• 미국 개인 및 사업자 세무 상담</li>
+                <li>• 자산관리 및 은퇴 플랜 최적화</li>
+                <li>• 투자전략수립, 자산운용</li>
+                <li>• 고액자산가 맞춤 절세 전략</li>
+                <li>• 해외자산 및 글로벌 세무 규정 대응</li>
+                <li>• 투자수익 대비 실효세율 분석</li>
+                <li>• 몬테카를로 시뮬레이션 모델링</li>
+              </ul>
+            </div>
+            
+            {/* 사진 및 프로필 */}
+            <div className="text-center">
               <img 
                 src="/ceo-profile-no-bg.png"
                 alt="지대현 FA"
-                className="w-48 h-auto object-contain mx-auto lg:mx-0"
+                className="w-full h-auto object-contain mx-auto"
               />
-              <h3 className="text-2xl font-bold text-gray-800 mt-4 mb-2">
+              <h3 className="text-xl font-bold text-gray-800 mt-4 mb-2">
                 지대현 FA
               </h3>
-              <p className="text-gray-700 font-medium mb-4">
+              <p className="text-gray-700 font-medium mb-3 text-sm">
                 Financial Advisor/세무사
               </p>
-              <div className="flex flex-wrap gap-2 justify-center lg:justify-start">
-                <Badge variant="outline" className="border-blue-300 text-blue-700">FINRA Series 65</Badge>
-                <Badge variant="outline" className="border-blue-300 text-blue-700">IRS EA</Badge>
-              </div>
-            </div>
-            
-            <div className="flex-1">
-              <div className="grid md:grid-cols-2 gap-6 mb-6">
-                <div>
-                  <h4 className="font-semibold text-gray-800 mb-3">📚 주요 이력</h4>
-                  <ul className="text-sm text-gray-700 space-y-2">
-                    <li>💼 현 Rethink Wealth 재정관리사</li>
-                    <li>🎓 Midwest 대학 재무회계학 교수/연구원</li>
-                    <li>🧾 IRS 공인 세무사 (Enrolled Agent)</li>
-                    <li>🏭 한화에어로스페이스 재무IR담당 상무</li>
-                    <li>💊 동아제약 IR/PR 담당 이사</li>
-                    <li>🏦 교보생명 – 재무실부장</li>
-                    <li>🏢 LG전자 – IR팀 과장</li>
-                    <li>📈 Nomura Securities – 애널리스트</li>
-                  </ul>
-                  
-                  <h4 className="font-semibold text-gray-800 mb-3 mt-4">🎓 학력</h4>
-                  <ul className="text-sm text-gray-700 space-y-2">
-                    <li>🎓 U Penn – 경제학 학사</li>
-                    <li>🎓 연세대학교 국제대학원 – MBA</li>
-                  </ul>
-                </div>
-                
-                <div>
-                  <h4 className="font-semibold text-gray-800 mb-3">🧠 전문 분야</h4>
-                  <ul className="text-sm text-gray-700 space-y-2">
-                    <li>• 미국 개인 및 사업자 세무 상담</li>
-                    <li>• 자산관리 및 은퇴 플랜 최적화</li>
-                    <li>• 투자전략수립, 자산운용</li>
-                    <li>• 고액자산가 맞춤 절세 전략</li>
-                    <li>• 해외자산 및 글로벌 세무 규정 대응</li>
-                    <li>• 투자수익 대비 실효세율 분석</li>
-                    <li>• 몬테카를로 시뮬레이션 모델링</li>
-                  </ul>
-                </div>
-              </div>
-              
-              <div className="bg-white/80 p-6 rounded-lg mb-6 hidden">
-                <h4 className="font-semibold text-blue-800 mb-3">💭 CEO 메시지</h4>
-                <p className="text-blue-800 leading-relaxed mb-4">
-                  <strong>📌 "Less Tax, More Wealth"</strong> 철학을 바탕으로 EzTax를 설립했습니다. 
-                  국내외 유수의 금융·기업 그룹에서 재무 및 IR 책임자로 경력을 쌓으며, 
-                  복잡한 세무와 투자의 세계에서 많은 사람들이 겪는 어려움을 목격했습니다.
-                </p>
-                <p className="text-blue-800 leading-relaxed mb-4">
-                  EzTax는 단순한 세무 계산기가 아닙니다. 첨단 AI 기술과 몬테카를로 시뮬레이션을 활용하여 
-                  개인의 재정 상황을 종합적으로 분석하고, 세금 절감과 부의 극대화를 동시에 달성할 수 있는 
-                  맞춤형 전략을 제시합니다.
-                </p>
-                <p className="text-blue-800 leading-relaxed italic font-medium">
-                  "기술로 세상의 세금 고민을 해결하고, 더 풍요로운 은퇴를 만들어갑니다."
-                </p>
-              </div>
-
-              <div className="bg-blue-100/50 p-4 rounded-lg hidden">
-                <h4 className="font-semibold text-blue-800 mb-3">📖 저서</h4>
-                <p className="text-blue-700 font-medium">
-                  『절세로 시작하는 은퇴설계 Less Tax, Better Retirement』
-                </p>
-                <p className="text-sm text-blue-600 mt-1">
-                  실무진이 알려주는 세금 절감과 자산 증대의 비밀
-                </p>
+              <div className="flex flex-wrap gap-2 justify-center">
+                <Badge variant="outline" className="border-blue-300 text-blue-700 text-xs">FINRA Series 65</Badge>
+                <Badge variant="outline" className="border-blue-300 text-blue-700 text-xs">IRS EA</Badge>
               </div>
             </div>
           </div>
