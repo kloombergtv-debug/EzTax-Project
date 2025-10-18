@@ -212,7 +212,6 @@ export default function About() {
             <div>
               <h4 className="font-semibold text-gray-800 mb-3">🧠 전문 분야</h4>
               <ul className="text-sm text-gray-700 space-y-2">
-                <li>• 미국 개인 및 사업자 세무 상담</li>
                 <li>• 자산관리 및 은퇴 플랜 최적화</li>
                 <li>• 투자전략수립, 자산운용</li>
                 <li>• 고액자산가 맞춤 절세 전략</li>
