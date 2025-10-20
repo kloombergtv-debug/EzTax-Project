@@ -21,6 +21,19 @@ const Home: React.FC = () => {
         <div className="max-w-5xl mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:items-end">
             <div className="lg:col-span-2 text-left">
+              {/* YouTube 영상 임베드 */}
+              <div className="mb-8">
+                <div className="relative" style={{ paddingBottom: '56.25%', height: 0 }}>
+                  <iframe
+                    className="absolute top-0 left-0 w-full h-full rounded-lg shadow-lg"
+                    src="https://www.youtube.com/embed/ZMu5Na6PMGY"
+                    title="Rethink Wealth Introduction"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                </div>
+              </div>
+
               <h1 className="text-2xl font-bold text-slate-800 mb-2" style={{ fontFamily: '"Noto Sans KR", "Apple SD Gothic Neo", -apple-system, sans-serif' }}>
                 {t('지대현 재정관리사(Financial Advisor)/세무사(EA)', 'Dae Hyun Jee, Financial Advisor/EA')}
               </h1>
