@@ -101,21 +101,13 @@ const Header: React.FC = () => {
             {t('세금진단', 'Tax Diagnosis')}
           </Button>
           <Button 
-            variant={location === '/retirement-score' ? "default" : "ghost"} 
+            variant={location === '/retirement-score' || location === '/wealth-builder' ? "default" : "ghost"} 
             size="sm"
-            className={`text-xs ${location === '/retirement-score' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'text-white hover:text-gray-300'}`}
+            className={`text-xs flex items-center gap-1 ${location === '/retirement-score' || location === '/wealth-builder' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'text-white hover:text-gray-300'}`}
             onClick={() => navigate('/retirement-score')}
           >
-            {t('은퇴준비', 'Retirement')}
-          </Button>
-          <Button 
-            variant={location === '/wealth-builder' ? "default" : "ghost"} 
-            size="sm"
-            className={`text-xs flex items-center gap-1 ${location === '/wealth-builder' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'text-white hover:text-gray-300'}`}
-            onClick={() => navigate('/wealth-builder')}
-          >
             <Calculator className="h-4 w-4" />
-            {t('자산증식시뮬', 'Wealth Builder')}
+            {t('은퇴준비', 'Retirement')}
           </Button>
           <Button 
             variant="ghost"

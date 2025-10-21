@@ -14,6 +14,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Progress } from "@/components/ui/progress";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useLocation } from "wouter";
 import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -30,8 +31,10 @@ import {
   ChevronLeftIcon,
   Download,
   PhoneIcon,
-  MailIcon
+  MailIcon,
+  Calculator
 } from "lucide-react";
+import WealthBuilder from "./WealthBuilder";
 
 const retirementFormSchema = z.object({
   // 기본 정보
@@ -669,19 +672,37 @@ export default function RetirementScoreStepByStep() {
     form.reset();
   };
 
-  if (analysis) {
-    return (
-      <div className="max-w-4xl mx-auto p-6 space-y-6">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2 flex items-center justify-center gap-2">
-            <TrendingUpIcon className="h-8 w-8 text-primary" />
-            종합 은퇴 준비 점수
-          </h1>
-          <div className="text-5xl font-bold text-primary my-4">
-            {analysis.score}점
-          </div>
-          <Progress value={analysis.score} className="w-full max-w-md mx-auto" />
-        </div>
+  return (
+    <div className="max-w-7xl mx-auto p-6">
+      <Tabs defaultValue="wealth-builder" className="w-full">
+        <TabsList className="grid w-full grid-cols-2 mb-6">
+          <TabsTrigger value="wealth-builder" className="flex items-center gap-2">
+            <Calculator className="h-4 w-4" />
+            자산증식 시뮬레이터
+          </TabsTrigger>
+          <TabsTrigger value="retirement-assessment" className="flex items-center gap-2">
+            <TrendingUpIcon className="h-4 w-4" />
+            은퇴준비 평가
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="wealth-builder">
+          <WealthBuilder />
+        </TabsContent>
+
+        <TabsContent value="retirement-assessment">
+          {analysis ? (
+            <div className="max-w-4xl mx-auto space-y-6">
+              <div className="text-center mb-8">
+                <h1 className="text-3xl font-bold text-gray-900 mb-2 flex items-center justify-center gap-2">
+                  <TrendingUpIcon className="h-8 w-8 text-primary" />
+                  종합 은퇴 준비 점수
+                </h1>
+                <div className="text-5xl font-bold text-primary my-4">
+                  {analysis.score}점
+                </div>
+                <Progress value={analysis.score} className="w-full max-w-md mx-auto" />
+              </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           <Card className="h-full">
@@ -1132,115 +1153,112 @@ export default function RetirementScoreStepByStep() {
           </CardContent>
         </Card>
 
-        <div className="flex flex-col sm:flex-row gap-4">
-          <Button onClick={resetForm} variant="outline" className="flex-1">
-            <RefreshCwIcon className="h-4 w-4 mr-2" />
-            다시 계산하기
-          </Button>
-          <Button onClick={() => navigate('/review')} className="flex-1">
-            세금 신고 완료하기
-          </Button>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="max-w-4xl mx-auto p-6 space-y-6">
-      <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2 flex items-center justify-center gap-2">
-          <TrendingUpIcon className="h-8 w-8 text-primary" />
-          은퇴 준비 상태 진단 (무료)
-        </h1>
-        <p className="text-gray-600">
-          4단계 간단한 질문으로 당신의 은퇴 준비 점수를 확인하고 맞춤 전략을 받아보세요
-        </p>
-      </div>
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <PiggyBankIcon className="h-5 w-5" />
-            {stepTitles[currentStep]}
-          </CardTitle>
-          <CardDescription>
-            {stepDescriptions[currentStep]}
-          </CardDescription>
-        </CardHeader>
-        
-        {/* Save/Load Controls */}
-        <div className="px-6 mb-4">
-          <div className="flex justify-between items-center gap-4">
-            <div className="flex items-center gap-2">
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() => loadLatestData()}
-                className="text-xs"
-              >
-                <Download className="h-3 w-3 mr-1" />
-                데이터 불러오기
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() => saveAssessment(form.getValues())}
-                disabled={saveAssessmentMutation.isPending || saveStatus === 'saving'}
-                className="text-xs"
-              >
-                {saveStatus === 'saving' ? '저장 중...' : 
-                 saveStatus === 'saved' ? '저장됨!' : 
-                 saveStatus === 'error' ? '저장 실패' : '저장하기'}
-              </Button>
-              
-              {loadingAssessment && (
-                <span className="text-xs text-gray-500">데이터 로드 중...</span>
-              )}
-              
-              {latestAssessment?.updatedAt && (
-                <span className="text-xs text-green-600">
-                  최근 저장: {new Date(latestAssessment.updatedAt).toLocaleString('ko-KR')}
-                </span>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Progress Bar */}
-        <div className="px-6 mb-6">
-          <div className="flex justify-between items-center mb-2">
-            <span className="text-sm font-medium text-gray-600">진행 상황</span>
-            <span className="text-sm font-medium text-primary">{currentStep + 1}/4 단계</span>
-          </div>
-          <Progress value={(currentStep + 1) * 25} className="h-2" />
-          
-          {/* Step indicators */}
-          <div className="flex justify-between mt-3">
-            {stepTitles.map((title, index) => (
-              <div key={index} className="flex flex-col items-center space-y-1">
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-                  index === currentStep 
-                    ? 'bg-primary text-white' 
-                    : completedSteps[index] 
-                      ? 'bg-green-500 text-white' 
-                      : 'bg-gray-200 text-gray-500'
-                }`}>
-                  {completedSteps[index] ? '✓' : index + 1}
-                </div>
-                <span className={`text-xs text-center max-w-16 ${
-                  index === currentStep ? 'text-primary font-medium' : 'text-gray-500'
-                }`}>
-                  {title.split(': ')[1]}
-                </span>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Button onClick={resetForm} variant="outline" className="flex-1">
+                  <RefreshCwIcon className="h-4 w-4 mr-2" />
+                  다시 계산하기
+                </Button>
+                <Button onClick={() => navigate('/review')} className="flex-1">
+                  세금 신고 완료하기
+                </Button>
               </div>
-            ))}
-          </div>
-        </div>
+            </div>
+          ) : (
+            <div className="max-w-4xl mx-auto space-y-6">
+              <div className="text-center mb-8">
+                <h1 className="text-3xl font-bold text-gray-900 mb-2 flex items-center justify-center gap-2">
+                  <TrendingUpIcon className="h-8 w-8 text-primary" />
+                  은퇴 준비 상태 진단 (무료)
+                </h1>
+                <p className="text-gray-600">
+                  4단계 간단한 질문으로 당신의 은퇴 준비 점수를 확인하고 맞춤 전략을 받아보세요
+                </p>
+              </div>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <PiggyBankIcon className="h-5 w-5" />
+                    {stepTitles[currentStep]}
+                  </CardTitle>
+                  <CardDescription>
+                    {stepDescriptions[currentStep]}
+                  </CardDescription>
+                </CardHeader>
+                
+                {/* Save/Load Controls */}
+                <div className="px-6 mb-4">
+                  <div className="flex justify-between items-center gap-4">
+                    <div className="flex items-center gap-2">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => loadLatestData()}
+                        className="text-xs"
+                      >
+                        <Download className="h-3 w-3 mr-1" />
+                        데이터 불러오기
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => saveAssessment(form.getValues())}
+                        disabled={saveAssessmentMutation.isPending || saveStatus === 'saving'}
+                        className="text-xs"
+                      >
+                        {saveStatus === 'saving' ? '저장 중...' : 
+                         saveStatus === 'saved' ? '저장됨!' : 
+                         saveStatus === 'error' ? '저장 실패' : '저장하기'}
+                      </Button>
+                      
+                      {loadingAssessment && (
+                        <span className="text-xs text-gray-500">데이터 로드 중...</span>
+                      )}
+                      
+                      {latestAssessment?.updatedAt && (
+                        <span className="text-xs text-green-600">
+                          최근 저장: {new Date(latestAssessment.updatedAt).toLocaleString('ko-KR')}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
 
-        <CardContent>
-          <Form {...form}>
-            <div className="space-y-6">
+                {/* Progress Bar */}
+                <div className="px-6 mb-6">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-sm font-medium text-gray-600">진행 상황</span>
+                    <span className="text-sm font-medium text-primary">{currentStep + 1}/4 단계</span>
+                  </div>
+                  <Progress value={(currentStep + 1) * 25} className="h-2" />
+                  
+                  {/* Step indicators */}
+                  <div className="flex justify-between mt-3">
+                    {stepTitles.map((title, index) => (
+                      <div key={index} className="flex flex-col items-center space-y-1">
+                        <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                          index === currentStep 
+                            ? 'bg-primary text-white' 
+                            : completedSteps[index] 
+                              ? 'bg-green-500 text-white' 
+                              : 'bg-gray-200 text-gray-500'
+                        }`}>
+                          {completedSteps[index] ? '✓' : index + 1}
+                        </div>
+                        <span className={`text-xs text-center max-w-16 ${
+                          index === currentStep ? 'text-primary font-medium' : 'text-gray-500'
+                        }`}>
+                          {title.split(': ')[1]}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <CardContent>
+                  <Form {...form}>
+                    <div className="space-y-6">
               {/* Step 0: 기본 정보 */}
               {currentStep === 0 && (
                 <div className="space-y-4">
@@ -1821,10 +1839,14 @@ export default function RetirementScoreStepByStep() {
                   </AlertDescription>
                 </Alert>
               )}
+                </div>
+              </Form>
+            </CardContent>
+          </Card>
             </div>
-          </Form>
-        </CardContent>
-      </Card>
+          )}
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
